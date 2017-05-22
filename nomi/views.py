@@ -25,11 +25,8 @@ def nomi_apply(request, pk):
     return render(request, 'nomi_done.html', context={'info': info})
 
 
-class ResultView(generic.ListView):
-    template_name = 'result.html'
-    context_object_name = 'all_nominations'
+def result(request, pk):
+    nomination = Nomination.objects.get(pk=pk)
+    users = NominationInstance.objects.filter(nomination=nomination).filter(status__exact='a')
 
-    def get_queryset(self):
-        return NominationInstance.objects.filter(status__exact='a')
-
-
+    return render(request, 'result.html', context={'users': users})

@@ -8,7 +8,7 @@ urlpatterns = [
     # nominations/2
     url(r'^(?P<pk>\d+)/$', views.nomi_apply, name='nomi_apply'),
 
-    # nominations/result
-    url(r'^result/$', views.ResultView.as_view(), name='result')
+    # nominations/result/2
+    url(r'^result/(?P<pk>\d+)/$', views.result, name='result')
 
 ]

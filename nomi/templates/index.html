@@ -120,7 +120,7 @@
                     <h3>{{ nomi.name }}</h3>
 
                     <p><a href="{% url 'nomi_apply' nomi.pk %}">Apply now</a></p>
-                    <p><a href="{% url 'result' %}">View Results</a></p>
+                    <p><a href="{% url 'result' nomi.pk %}">View Results</a></p>
                 </div>
             {% endfor %}
         </div>
