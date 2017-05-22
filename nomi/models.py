@@ -18,8 +18,8 @@ class NominationInstance(models.Model):
     )
 
     nomination = models.ForeignKey('Nomination', on_delete=models.CASCADE, null=True)
-    User = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    status = models.CharField(max_length=1, choices=STATUS, default='a')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    status = models.CharField(max_length=1, choices=STATUS,  null=True, blank=True, default=None)
 
     def __str__(self):
         return str(self.id)
