@@ -19,7 +19,14 @@ def index(request):
 @login_required
 def nomi_apply(request,pk):
     nomination = Nomination.objects.get(pk=pk)
-    Ins = NominationInstance.objects.create(user=request.user,nomination=nomination)
-    return render(request,'nomi_done.html', context={'nomi':nomination})
+    ct=NominationInstance.objects.filter(nomination=nomination).filter(user=request.user).count()
+    if not ct:
+         Ins = NominationInstance.objects.create(user=request.user,nomination=nomination)
+         info="Your application has been recorded"
+         return render(request,'nomi_done.html', context={'info':info})
+    else:
+        info="You have applied for it already."
+
+    return render(request, 'nomi_done.html', context={'info': info})
 
 
