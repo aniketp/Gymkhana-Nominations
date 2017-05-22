@@ -3,7 +3,7 @@ from .models import Nomination, NominationInstance
 
 
 class NominationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description')
+    list_display = ('name', 'description', 'results_declared')
 
 admin.site.register(Nomination, NominationAdmin)
 

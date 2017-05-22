@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 class Nomination(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(max_length=1000, null=True, blank=True)
+    results_declared = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -23,4 +24,5 @@ class NominationInstance(models.Model):
 
     def __str__(self):
         return str(self.user) + ' ' + str(self.id)
+
 
