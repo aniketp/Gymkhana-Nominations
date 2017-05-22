@@ -3,7 +3,6 @@ from .models import Nomination,NominationInstance
 from django.http import HttpResponse , HttpResponseRedirect
 from django.contrib.auth.decorators import login_required ,permission_required
 from django.views.generic.edit import CreateView,UpdateView,DeleteView
-from django.urls import reverse_lazy
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 
