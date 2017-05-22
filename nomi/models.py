@@ -22,5 +22,5 @@ class NominationInstance(models.Model):
     status = models.CharField(max_length=1, choices=STATUS,  null=True, blank=True, default=None)
 
     def __str__(self):
-        return str(self.id)
+        return str(self.user) + ' ' + str(self.id)
 
