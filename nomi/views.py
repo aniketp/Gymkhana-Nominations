@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from .models import Nomination, NominationInstance
 from django.contrib.auth.decorators import login_required ,permission_required
-from django.views import generic
 
 
 def index(request):
@@ -14,7 +13,7 @@ def index(request):
 @login_required
 def nomi_apply(request, pk):
     nomination = Nomination.objects.get(pk=pk)
-    ct=NominationInstance.objects.filter(nomination=nomination).filter(user=request.user).count()
+    ct = NominationInstance.objects.filter(nomination=nomination).filter(user=request.user).count()
     if not ct:
          Ins = NominationInstance.objects.create(user=request.user, nomination=nomination)
          info = "Your application has been recorded"
@@ -30,3 +29,58 @@ def result(request, pk):
     users = NominationInstance.objects.filter(nomination=nomination).filter(status__exact='a')
 
     return render(request, 'result.html', context={'users': users})
+
+
+@permission_required('nomi.admin')
+def application_result(request, pk):
+    nomination = Nomination.objects.filter(pk=pk)
+    applicants = NominationInstance.objects.filter(nomination=nomination)
+
+    return render(request, 'applicants.html', context={'applicants': applicants})
+
+
+@login_required
+@permission_required('nomi.admin')
+def accept_nomination(request, pk):
+    application = NominationInstance.objects.get(pk=pk)
+    id_accept = application.nomination.pk
+    application.status = 'a'
+    application.save()
+
+    return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_accept}))
+
+
+@login_required
+@permission_required('nomi.admin')
+def reject_nomination(request, pk):
+    application = NominationInstance.objects.get(pk=pk)
+    id_reject = application.nomination.pk
+    application.status = 'r'
+    application.save()
+
+    return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_reject}))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

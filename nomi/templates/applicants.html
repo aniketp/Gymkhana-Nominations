@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+    {% block title %} applicants {% endblock %}
+    {% load staticfiles %}
+
+{% block content %}
+    {% for nomi in applicants %}
+        {{ nomi.user }}
+            {% if nomi.status %}
+                {{ nomi.status }}
+            {% else %}
+            Accept
+            Reject
+            {% endif %}
+    {% endfor %}
+{% endblock %}

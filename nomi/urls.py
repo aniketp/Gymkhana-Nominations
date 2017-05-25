@@ -9,6 +9,14 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/$', views.nomi_apply, name='nomi_apply'),
 
     # nominations/result/2
-    url(r'^result/(?P<pk>\d+)/$', views.result, name='result')
+    url(r'^result/(?P<pk>\d+)/$', views.result, name='result'),
+
+    # nominations/applicants/2
+    url(r'^applicants/(?P<pk>\d+)/$', views.application_result, name='applicants'),
+
+    # nominations/applicants/2 (redirect)
+    url(r'^accept/(?P<pk>\d+)/$', views.accept_nomination, name='accept'),
+    url(r'^reject/(?P<pk>\d+)/$', views.reject_nomination, name='reject'),
+
 
 ]
