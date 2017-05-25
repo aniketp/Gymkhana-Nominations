@@ -1,7 +1,7 @@
 from django.db import models
 from django import forms
 from django.contrib.auth.models import User
-from .forms1 import NominationForm
+from .form_dynamic import NominationForm
 
 
 class Questionnaire(models.Model):
@@ -88,3 +88,24 @@ class Question(models.Model):
 
         args.update({'required': True})
         return args
+
+
+
+class FilledForm(models.Model):
+    questionnaire = models.ForeignKey(Questionnaire,null=True)
+    applicant = models.ForeignKey(User,null=True)
+
+    def __str__(self):
+        return self.questionnaire.name
+
+
+
+class AnswerInstance(models.Model):
+    form = models.ForeignKey(FilledForm,null=True)
+    question = models.ForeignKey(Question,null=True)
+    answer = models.CharField(max_length=1000,null=True)
+
+    def __str__(self):
+        return self.answer
+
+
