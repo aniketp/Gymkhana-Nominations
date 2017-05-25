@@ -18,5 +18,8 @@ urlpatterns = [
     url(r'^accept/(?P<pk>\d+)/$', views.accept_nomination, name='accept'),
     url(r'^reject/(?P<pk>\d+)/$', views.reject_nomination, name='reject'),
 
+    # nominations/create
+    url(r'^create/$', views.NominationCreate.as_view(), name='nomi_create')
+
 
 ]

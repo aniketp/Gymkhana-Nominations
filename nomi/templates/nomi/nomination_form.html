@@ -112,46 +112,32 @@
     <br>
     <hr>
 
+ {% block content %}
 
-    {% block content  %}
-        <div class="container">
-            {% if perms.nomi.admin %}
-                <div class="row box">
-                    <h3><a href="{% url 'nomi_create' %}">Create a nomination</h3>
+    <div class="container box">
+        <div class="row">
+            <div class="col-lg-12">
+                <hr>
+                <h2 class="intro-text text-center">
+                    <strong>Add a new Nomination</strong>
+                </h2>
+            <hr>
+
+                <div style="padding: 0 35px;">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <table>
+                            {{form.as_table}}
+                        </table>
+                        <input type="submit" value="submit" />
+                    </form>
                 </div>
-            {% endif %}
-
+            </div>
         </div>
-        <div class="container">
+    </div>
 
-            {% for nomi in all_nominations %}
+{% endblock content %}
 
-                <div class="row box">
-                    <p style="font-size: xx-large">{{ nomi.name.upper }}</p>
-
-                    {% if perms.nomi.admin %}
-                        {% if user.is_authenticated %}
-                            {% if not nomi.results_declared %}
-                                <p><a href="{% url 'applicants' nomi.pk %}">View Applicants</a></p>
-                            {% endif %}
-                        {% endif %}
-                    {% endif %}
-
-                    {% if not perms.nomi.admin %}
-                        {% if user.is_authenticated %}
-                            {% if not nomi.results_declared %}
-                                <p><a href="{% url 'nomi_apply' nomi.pk %}">Apply Now</a></p>
-                            {% endif %}
-                        {% endif %}
-                    {% endif %}
-
-                        <p><a href="{% url 'result' nomi.pk %}">View Results</a></p>
-
-                </div>
-            {% endfor %}
-        </div>
-
-    {% endblock %}
     <hr>
 
 

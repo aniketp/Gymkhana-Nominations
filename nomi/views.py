@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from .models import Nomination, NominationInstance
 from django.contrib.auth.decorators import login_required, permission_required
+from django.views.generic.edit import CreateView
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 
 
 def index(request):
@@ -61,6 +62,12 @@ def reject_nomination(request, pk):
     application.save()
 
     return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_reject}))
+
+
+class NominationCreate(CreateView):
+    model = Nomination
+    fields = ['name', 'description']
+    success_url = reverse_lazy('index')
 
 
 
