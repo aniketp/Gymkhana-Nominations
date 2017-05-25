@@ -1,5 +1,5 @@
 from django import forms
-from dynamic_forms.models import Questionnaire,Question,QUES_TYPES
+from .models import Questionnaire,Question,QUES_TYPES
 
 class BuildForm(forms.Form):
     name = forms.CharField()
