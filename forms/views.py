@@ -27,7 +27,7 @@ def build_form(request):
     if request.method == 'POST':
         form = BuildForm(request.POST)
         if form.is_valid():
-            ques=Questionnaire.objects.create(name=form.cleaned_data['name'], description=form.cleaned_data['description'])
+            ques=Questionnaire.objects.create(name=form.cleaned_data['title'], description=form.cleaned_data['description'])
             pk=ques.id
             return HttpResponseRedirect(reverse('show_form',kwargs={'pk': pk}))
     else:
