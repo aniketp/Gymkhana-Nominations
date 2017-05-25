@@ -153,7 +153,15 @@
                                 <br>
 
                                 <p><a href="{% url 'nomi_update' nomi.pk %}">Update nomination</a></p>
-                                <p><a href="{% url 'nomi_update' nomi.pk %}">Delete nomination</a></p>
+
+                                <form action="{% url 'nomi_delete' nomi.pk %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="nomi_id" value="{{ nomi.pk }}" />
+                                    <button type="submit">Delete</button>
+                                </form>
+
+
+
                             {% endif %}
                         {% endif %}
                     {% endif %}

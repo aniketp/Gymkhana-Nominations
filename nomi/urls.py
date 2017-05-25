@@ -24,5 +24,8 @@ urlpatterns = [
     # nominations/2/update
     url(r'^(?P<pk>\d+)/update/$', views.NominationUpdate.as_view(), name='nomi_update'),
 
+    # nominations/2/delete
+    url(r'^(?P<pk>\d+)/delete/$', views.NominationDelete.as_view(), name='nomi_delete'),
+
 
 ]
