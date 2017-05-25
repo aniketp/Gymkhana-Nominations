@@ -111,66 +111,9 @@
     <div class="address-bar">A PORTAL FOR YOU DEVELOPED BY TWO ENTHUSIATIC CODERS</div>
     <br>
     <hr>
+
     {% block content %}
-            <div class="container">
-            {% if perms.nomi.admin %}
-                <div class="row box">
-                    <h3><a href="{% url 'nomi_create' %}">Create a nomination</h3>
-                </div>
-            {% endif %}
 
-        </div>
-        <div class="container">
-
-            {% for nomi in all_nominations %}
-
-                <div class="row box">
-                    <p style="font-size: xx-large">{{ nomi.name.upper }}</p>
-
-                    {% if perms.nomi.admin %}
-                        {% if user.is_authenticated %}
-                            {% if not nomi.results_declared %}
-                                <p><a href="{% url 'applicants' nomi.pk %}">View Applicants</a></p>
-                            {% endif %}
-                        {% endif %}
-                    {% endif %}
-
-                    {% if not perms.nomi.admin %}
-                        {% if user.is_authenticated %}
-                            {% if not nomi.results_declared %}
-                                <p><a href="{% url 'nomi_apply' nomi.pk %}">Apply Now</a></p>
-                            {% endif %}
-                        {% endif %}
-                    {% endif %}
-
-                        <p><a href="{% url 'result' nomi.pk %}">View Results</a></p>
-
-                    {% if perms.nomi.admin %}
-                        {% if user.is_authenticated %}
-                            {% if not nomi.results_declared %}
-                                <br>
-
-
-                                <form action="{% url 'nomi_update' nomi.pk %}" method="get" style="display: inline">
-                                    {% csrf_token %}
-                                    <button class="btn btn-success" type="submit">Edit</button>
-                                </form>
-
-                                <form action="{% url 'nomi_delete' nomi.pk %}" method="post" style="display: inline">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="nomi_id" value="{{ nomi.pk }}" />
-                                    <button  class="btn btn-danger" type="submit">Delete</button>
-                                </form>
-
-
-
-                            {% endif %}
-                        {% endif %}
-                    {% endif %}
-
-                </div>
-            {% endfor %}
-        </div>
     {% endblock %}
     <hr>
 

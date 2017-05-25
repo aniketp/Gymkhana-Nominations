@@ -127,4 +127,4 @@ ROOT_URLCONF = 'gymkhana.urls'
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-LOGIN_REDIRECT_URL='/nomination'
+LOGIN_REDIRECT_URL = '/nomination'
