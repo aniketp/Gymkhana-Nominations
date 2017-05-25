@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from .models import Nomination, NominationInstance
-from django.contrib.auth.decorators import login_required ,permission_required
+from django.contrib.auth.decorators import login_required, permission_required
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 
 def index(request):
