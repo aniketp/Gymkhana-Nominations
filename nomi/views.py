@@ -73,6 +73,7 @@ class NominationCreate(CreateView):
 class NominationUpdate(UpdateView):
     model = Nomination
     fields = ['name', 'description']
+    success_url = reverse_lazy('index')
 
 
 

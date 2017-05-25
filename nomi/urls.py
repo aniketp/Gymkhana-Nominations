@@ -19,10 +19,10 @@ urlpatterns = [
     url(r'^reject/(?P<pk>\d+)/$', views.reject_nomination, name='reject'),
 
     # nominations/create
-    url(r'^create/$', views.NominationCreate.as_view(), name='nomi_create')
+    url(r'^create/$', views.NominationCreate.as_view(), name='nomi_create'),
 
     # nominations/2/update
-    # url(r'^(?P<pk>\d+)/update/$', views.NominationUpdate.as_view(), name='nomi_update'),
+    url(r'^(?P<pk>\d+)/update/$', views.NominationUpdate.as_view(), name='nomi_update'),
 
 
 ]

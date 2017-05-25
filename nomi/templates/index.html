@@ -147,6 +147,17 @@
 
                         <p><a href="{% url 'result' nomi.pk %}">View Results</a></p>
 
+                    {% if perms.nomi.admin %}
+                        {% if user.is_authenticated %}
+                            {% if not nomi.results_declared %}
+                                <br>
+
+                                <p><a href="{% url 'nomi_update' nomi.pk %}">Update nomination</a></p>
+                                <p><a href="{% url 'nomi_update' nomi.pk %}">Delete nomination</a></p>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+
                 </div>
             {% endfor %}
         </div>
