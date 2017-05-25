@@ -10,7 +10,7 @@ from .forms import BuildForm,BuildQuestion
 
 # Create your views here.
 def index(request):
-    return render(request, 'dynamic_forms/index.html')
+    return render(request, 'forms/index.html')
 
 def show_form(request,pk):
     questionnaire = get_object_or_404(Questionnaire, id=pk)
@@ -19,7 +19,7 @@ def show_form(request,pk):
     if form.is_valid():
         questionnaire.add_answer(request.user, form.cleaned_data)
 
-    return render(request, 'dynamic_forms/d_forms.html', context={'form': form,'questionnnaire':questionnaire,'pk':pk})
+    return render(request, 'forms/d_forms.html', context={'form': form,'questionnnaire':questionnaire,'pk':pk})
 
 
 def build_form(request):
@@ -32,7 +32,7 @@ def build_form(request):
     else:
         form = BuildForm()
 
-    return render(request, 'dynamic_forms/build_form.html',context={'form':form})
+    return render(request, 'forms/build_form.html',context={'form':form})
 
 def add_ques(request,pk):
     questionnaire=Questionnaire.objects.get(pk=pk)
@@ -46,6 +46,6 @@ def add_ques(request,pk):
     else:
         form = BuildQuestion()
 
-    return render(request, 'dynamic_forms/build_ques.html',context={'form':form,'questionnnaire':questionnaire})
+    return render(request, 'forms/build_ques.html',context={'form':form,'questionnaire':questionnaire})
 
 

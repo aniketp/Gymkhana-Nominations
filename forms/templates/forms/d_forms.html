@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>forms</title>
+</head>
+<body>
+<div>
+            <h1>{{ questionnnaire.name  }}</h1>
+            <h3><a href="{% url 'b_ques' pk %}">Add Question</a></h3>
+</div>
+<div style="margin:20px">
+     <form action="" method="post">
+                    {% csrf_token %}
+                    <div>
+                        {{form.as_p}}
+                    </div>
+                    <input type="submit" value="submit" />
+     </form>
+</div>
+</body>
+</html>
