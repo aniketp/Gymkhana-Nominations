@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Nomination, NominationInstance
 from django.contrib.auth.decorators import login_required, permission_required
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 
@@ -68,6 +68,14 @@ class NominationCreate(CreateView):
     model = Nomination
     fields = ['name', 'description']
     success_url = reverse_lazy('index')
+
+
+class NominationUpdate(UpdateView):
+    model = Nomination
+    fields = ['name', 'description']
+
+
+
 
 
 
