@@ -2,15 +2,8 @@ from django import forms
 from .models import Questionnaire,Question,QUES_TYPES
 
 class BuildForm(forms.Form):
-    name = forms.CharField()
+    Title = forms.CharField()
     description = forms.CharField()
-
-from django.forms import ModelForm
-
-class Build(ModelForm):
-    class Meta:
-        model = Question
-        fields = '__all__'
 
 
 class BuildQuestion(forms.Form):

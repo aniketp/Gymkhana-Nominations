@@ -5,6 +5,6 @@ urlpatterns = [
     url(r'^$',views.index, name='index'),
     url(r'^create/$', views.build_form, name='build_form'),
     url(r'^(?P<pk>\d+)/$', views.show_form, name='show_form'),
-    url(r'^create/ques/(?P<pk>\d+)/$', views.add_ques, name='b_ques'),
+    url(r'^create/ques/(?P<pk>\d+)/$', views.add_ques, name='add_ques'),
 
 ]
