@@ -15,6 +15,6 @@ admin.site.register(NominationInstance, NominationInstanceAdmin)
 
 
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('name', 'roll_no', 'programme', 'department')
+    list_display = ('name', 'roll_no', 'year', 'programme', 'department', 'hall', 'room_no')
 
 admin.site.register(UserProfile, UserProfileAdmin)
