@@ -7,14 +7,13 @@ from .form_dynamic import NominationForm
 class Questionnaire(models.Model):
     name = models.CharField(max_length=100, null=True)
     description = models.TextField(max_length=250, default=u"I'm a description!")
-    status = models.CharField(max_length=100, null=True,blank=True)
+    status = models.CharField(max_length=100, null=True, blank=True)
 
     def __unicode__(self):
         return self.name
 
     def __str__(self):
         return self.name
-
 
     def get_form(self, *args, **kwargs):
         fields = []
@@ -24,25 +23,19 @@ class Questionnaire(models.Model):
 
             field_args = question._get_field_args()
 
-            ques_id=question.id
+            ques_id = question.id
 
-            fields.append((label, field, field_args,ques_id))
-
+            fields.append((label, field, field_args, ques_id))
 
         return NominationForm(*args, extra=fields, **kwargs)
-
-
 
     def add_answer(self, applicant, answer_data):
         answerform = FilledForm(questionnaire=self, applicant=applicant)
         answerform.save()
-        id=answerform.id
+        id = answerform.id
         for ques_id in answer_data:
-            ques=Question.objects.get(pk=ques_id)
-            AnswerInstance.objects.create(form=answerform,question=ques,answer=answer_data[ques_id])
-
-
-
+            ques = Question.objects.get(pk=ques_id)
+            AnswerInstance.objects.create(form=answerform, question=ques, answer=answer_data[ques_id])
 
 
 FIELD_TYPES = (
@@ -55,13 +48,14 @@ FIELD_TYPES = (
 )
 
 QUES_TYPES = (
-    ('Short_answer','Short-answer'),
+    ('Short_answer', 'Short-answer'),
     ('Paragraph', 'long-answer'),
     ('Integer', 'Integer-answer'),
     ('ChoiceField', 'Choice'),
-    ('MultipleChoiceField','Multiple-choice'),
-    ('Date','date'),
+    ('MultipleChoiceField', 'Multiple-choice'),
+    ('Date', 'date'),
 )
+
 
 class Question(models.Model):
     questionnaire = models.ForeignKey(Questionnaire, null=True)
@@ -82,28 +76,25 @@ class Question(models.Model):
 
     def _get_field_args(self):
         args = {}
-        if self.question_type =='ChoiceField' or self.question_type== 'MultipleChoiceField':
+        if self.question_type == 'ChoiceField' or self.question_type == 'MultipleChoiceField':
             args['choices'] = enumerate(self.question_choices.split('$'))
-
 
         args.update({'required': True})
         return args
 
 
-
 class FilledForm(models.Model):
-    questionnaire = models.ForeignKey(Questionnaire,null=True)
-    applicant = models.ForeignKey(User,null=True)
+    questionnaire = models.ForeignKey(Questionnaire, null=True)
+    applicant = models.ForeignKey(User, null=True)
 
     def __str__(self):
         return self.questionnaire.name
 
 
-
 class AnswerInstance(models.Model):
-    form = models.ForeignKey(FilledForm,null=True)
-    question = models.ForeignKey(Question,null=True)
-    answer = models.CharField(max_length=1000,null=True)
+    form = models.ForeignKey(FilledForm, null=True)
+    question = models.ForeignKey(Question, null=True)
+    answer = models.CharField(max_length=1000, null=True)
 
     def __str__(self):
         return self.answer
