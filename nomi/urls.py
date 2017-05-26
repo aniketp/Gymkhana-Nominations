@@ -10,8 +10,8 @@ urlpatterns = [
     # nominations/2
     url(r'^(?P<pk>\d+)/$', views.nomi_apply, name='nomi_apply'),
 
-    # nominations/profile
-    # url(r'^profile/$', views.)
+    # nominations/profile/2
+    url(r'^profile/(?P<pk>\d+)/$', views.profile_view, name='profile'),
 
     # nominations/result/2
     url(r'^result/(?P<pk>\d+)/$', views.result, name='result'),
@@ -31,6 +31,5 @@ urlpatterns = [
 
     # nominations/2/delete
     url(r'^(?P<pk>\d+)/delete/$', views.NominationDelete.as_view(), name='nomi_delete'),
-
 
 ]

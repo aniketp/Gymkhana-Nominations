@@ -94,7 +94,7 @@
 
                     {% if user.is_authenticated %}
                         <li><a href="#">{{user.get_username}}</a></li>
-                        <li><a href="{% url 'logout' %}?next={{request.path}}">Profile</a></li>
+                        <li><a href="{% url 'profile' user.pk %}">Profile</a></li>
                         <li><a href="{% url 'logout' %}?next={{request.path}}">Logout</a></li>
 
                     {% else %}
@@ -109,7 +109,7 @@
 
 
     <div class="brand main">Gymkhana Nomination Portal</div>
-    <div class="address-bar">A PORTAL FOR YOU DEVELOPED BY TWO ENTHUSIATIC CODERS</div>
+    <div class="address-bar">A PORTAL FOR IITK JUNTA DEVELOPED BY ACE-CODERS</div>
     <br>
     <hr>
 

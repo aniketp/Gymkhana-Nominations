@@ -4,5 +4,31 @@
 {% block profile %}User's Profile{% endblock %}
 
 {% block content %}
+    <div class="container">
+
+                <div class="row box">
+                    <div class="col-md-6 text-center">Name</div>
+                    <div class="col-md-6 text-center">{{ user.name }}</div>
+                </div>
+
+                <div class="row box">
+                    <div class="col-md-6 text-center">Roll No</div>
+                    <div class="col-md-6 text-center">{{ user.roll_no }}</div>
+                </div>
+
+                <div class="row box">
+                    <div class="col-md-6 text-center">Batch</div>
+                    <div class="col-md-6 text-center">{{ user.year }}</div>
+                </div>
+
+                <div class="row box">
+                    <div class="col-md-6 text-center">Department</div>
+                    <div class="col-md-6 text-center">{{ user.programme }},  {{user.department}}</div>
+                </div>
+
+                <div class="row box">
+                    <div class="col-md-6 text-center">Address</div>
+                    <div class="col-md-6 text-center">{{ user.room_no }}, Hall {{ user.hall }}</div>
+                </div>
 
 {% endblock %}

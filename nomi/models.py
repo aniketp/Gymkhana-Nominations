@@ -27,8 +27,8 @@ class NominationInstance(models.Model):
 
 class UserProfile(models.Model):
     PROGRAMME = (
-        ('bt', 'B.Tech'),
-        ('bs', 'B.S'),
+        ('B.Tech', 'B.Tech'),
+        ('B.S', 'B.S'),
     )
 
     DEPT = (
@@ -65,7 +65,7 @@ class UserProfile(models.Model):
     name = models.CharField(max_length=40, default=user)
     roll_no = models.IntegerField(null=True)
     year = models.CharField(max_length=4, choices=YEAR, default='Y16')
-    programme = models.CharField(max_length=4, choices=PROGRAMME, default='bt')
+    programme = models.CharField(max_length=7, choices=PROGRAMME, default='B.Tech')
     department = models.CharField(max_length=200, choices=DEPT, default=None)
     hall = models.IntegerField(choices=HALL, default=1)
     room_no = models.CharField(max_length=10, null=True)

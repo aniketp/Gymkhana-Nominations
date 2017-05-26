@@ -81,6 +81,14 @@ class NominationDelete(DeleteView):
     success_url = reverse_lazy('index')
 
 
+@login_required
+def profile_view(request, pk):
+    model = UserProfile
+    user = model.objects.get(pk=pk)
+
+    return render(request, 'profile.html', context={'user': user})
+
+
 class UserProfileCreate(CreateView):
     model = UserProfile
     fields = '__all__'
@@ -91,34 +99,4 @@ class UserProfileUpdate(UpdateView):
     model = UserProfile
     fields = '__all__'
     success_url = reverse_lazy('index')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
