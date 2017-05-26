@@ -57,21 +57,11 @@ class UserProfile(models.Model):
     )
 
     HALL = (
-        (1, '1'),
-        (2, '2'),
-        (3, '3'),
-        (4, '4'),
-        (5, '5'),
-        (6, '6'),
-        (7, '7'),
-        (8, '8'),
-        (9, '9'),
-        (10, '10'),
-        (11, '11'),
-        (12, '12'),
+        (1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (6, '6'),
+        (7, '7'), (8, '8'), (9, '9'), (10, '10'), (11, '11'), (12, '12'),
     )
 
-    user = models.ForeignKey(User, unique=True)
+    user = models.OneToOneField(User)
     name = models.CharField(max_length=40, default=user)
     roll_no = models.IntegerField(null=True)
     year = models.CharField(max_length=4, choices=YEAR, default='Y16')

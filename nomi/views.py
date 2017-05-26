@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Nomination, NominationInstance
+from .models import Nomination, NominationInstance, UserProfile
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
@@ -18,7 +18,7 @@ def nomi_apply(request, pk):
     nomination = Nomination.objects.get(pk=pk)
     ct = NominationInstance.objects.filter(nomination=nomination).filter(user=request.user).count()
     if not ct:
-         Ins = NominationInstance.objects.create(user=request.user, nomination=nomination)
+         ins = NominationInstance.objects.create(user=request.user, nomination=nomination)
          info = "Your application has been recorded"
          return render(request, 'nomi_done.html', context={'info': info})
     else:
@@ -79,6 +79,22 @@ class NominationUpdate(UpdateView):
 class NominationDelete(DeleteView):
     model = Nomination
     success_url = reverse_lazy('index')
+
+
+class UserProfileCreate(CreateView):
+    model = UserProfile
+    fields = '__all__'
+    success_url = reverse_lazy('index')
+
+
+class UserProfileUpdate(UpdateView):
+    model = UserProfile
+    fields = '__all__'
+    success_url = reverse_lazy('index')
+
+
+
+
 
 
 
