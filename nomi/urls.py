@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from . import views
 
+# app_name = 'nomi'
 
 urlpatterns = [
     # nominations/
@@ -8,6 +9,9 @@ urlpatterns = [
 
     # nominations/2
     url(r'^(?P<pk>\d+)/$', views.nomi_apply, name='nomi_apply'),
+
+    # nominations/profile
+    # url(r'^profile/$', views.)
 
     # nominations/result/2
     url(r'^result/(?P<pk>\d+)/$', views.result, name='result'),

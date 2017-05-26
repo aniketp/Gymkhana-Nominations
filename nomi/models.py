@@ -15,7 +15,6 @@ class NominationInstance(models.Model):
     STATUS = (
         ('a', 'Accepted'),
         ('r', 'Rejected'),
-
     )
 
     nomination = models.ForeignKey('Nomination', on_delete=models.CASCADE, null=True)
@@ -24,5 +23,53 @@ class NominationInstance(models.Model):
 
     def __str__(self):
         return str(self.user) + ' ' + str(self.id)
+
+
+class UserProfile(models.Model):
+    PROGRAMME = (
+        ('bt', 'B.Tech'),
+        ('bs', 'B.S'),
+    )
+
+    DEPT = (
+        ('Aerospace Engineering', 'AE'),
+        ('Biological Sciences & Engineering', 'BSBE'),
+        ('Chemical Engineering', 'CHE'),
+        ('Civil Engineering', 'CE'),
+        ('Computer Science & Engineering', 'CSE'),
+        ('Electrical Engineering', 'EE'),
+        ('Materials Science & Engineering', 'MSE'),
+        ('Mechanical Engineering', 'ME'),
+        ('Industrial & Management Engineering', 'IME'),
+        ('Chemistry', 'CHM'),
+        ('Mathematics & Scientific Computing', 'MTH'),
+        ('Physics', 'PHY'),
+        ('Earth Sciences', 'ES')
+    )
+
+    YEAR = (
+        ('Y16', 'Y16'),
+        ('Y15', 'Y15'),
+        ('Y14', 'Y14'),
+        ('Y13', 'Y13'),
+        ('Y12', 'Y12'),
+        ('Y11', 'Y11'),
+    )
+
+    HALL = (
+
+    )
+
+    user = models.ForeignKey(User, unique=True)
+    name = models.CharField(max_length=40, default=user)
+    roll_no = models.IntegerField(null=True)
+    year = models.CharField(max_length=4, choices=YEAR, default='Y16')
+    programme = models.CharField(max_length=4, choices=PROGRAMME, default='bt')
+    department = models.CharField(max_length=200, choices=DEPT, default=None)
+    hall = models.IntegerField(choices=HALL, default=1)
+    room_no = models.CharField(max_length=10, null=True)
+
+    def __str__(self):
+        return str(self.name)
 
 

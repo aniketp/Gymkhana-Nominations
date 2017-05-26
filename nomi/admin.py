@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Nomination, NominationInstance
+from .models import Nomination, NominationInstance, UserProfile
 
 
 class NominationAdmin(admin.ModelAdmin):
@@ -12,3 +12,9 @@ class NominationInstanceAdmin(admin.ModelAdmin):
     list_display = ('nomination', 'user', 'status')
 
 admin.site.register(NominationInstance, NominationInstanceAdmin)
+
+
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('name', 'roll_no', 'programme', 'department')
+
+admin.site.register(UserProfile, UserProfileAdmin)

@@ -13,7 +13,7 @@ urlpatterns = [
     # forms/2
     url(r'^(?P<pk>\d+)/$', views.show_form, name='show_form'),
 
-    # fomrs/create/ques/2
+    # forms/create/ques/2
     url(r'^create/ques/(?P<pk>\d+)/$', views.add_ques, name='add_ques'),
 
 ]

@@ -29,10 +29,9 @@ ALLOWED_HOSTS = [
     'gymkhana.pythonanywhere.com',
     'localhost',
     '127.0.0.1',
-
-
 ]
 
+AUTH_PROFILE_MODULE = 'nomi.UserProfile'
 
 # Application definition
 
