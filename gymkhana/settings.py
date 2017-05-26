@@ -25,7 +25,13 @@ SECRET_KEY = '3h%72_w$*4+tn^!6ju50y+3*vtlx0v2b1-a+r&xfswr5l%2!u*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'gymkhana.pythonanywhere.com',
+    'localhost',
+    '127.0.0.1',
+
+
+]
 
 
 # Application definition
