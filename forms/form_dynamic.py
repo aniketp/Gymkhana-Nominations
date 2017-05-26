@@ -1,5 +1,6 @@
 from django import forms
 
+
 class NominationForm(forms.Form):
     def __init__(self, *args, **kwargs):
         extra = kwargs.pop('extra')

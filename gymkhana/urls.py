@@ -8,6 +8,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^nominations/', include('nomi.urls')),
     url(r'^forms/', include('forms.urls')),
-    url(r'^$', RedirectView.as_view(url='/nominations/')),
+    url(r'^$', RedirectView.as_view(url='accounts/login/')),
     url(r'^accounts/', include('django.contrib.auth.urls')),
 ]

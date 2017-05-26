@@ -20,8 +20,9 @@
 
 
             {% if user.is_authenticated %}
-            <p>Please logout first to log in as other user</p>
-            <p><a href="{% url 'logout' %}">Logout</a></p>
+            <h1 class="text-center ">Welcome to The Portal</h1>
+
+            <p class="text-center"><a href="{% url 'index' %}">Go to your profile</a></p>
 
             {% else %}
              <form method="post" action="{% url 'login' %}">
