@@ -1,6 +1,7 @@
 from django import forms
 from .models import Questionnaire,Question,QUES_TYPES
 
+
 class BuildForm(forms.Form):
     title = forms.CharField()
     description = forms.CharField()
