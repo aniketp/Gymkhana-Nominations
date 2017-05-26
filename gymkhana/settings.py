@@ -37,6 +37,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'bootstrapform',
     'nomi.apps.NomiConfig',
     'forms.apps.FormsConfig',
     'django.contrib.admin',
