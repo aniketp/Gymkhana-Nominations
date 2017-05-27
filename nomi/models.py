@@ -6,7 +6,7 @@ class Nomination(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(max_length=1000, null=True, blank=True)
     results_declared = models.BooleanField(default=False)
-    nomi_form=models.ForeignKey('forms.Questionnaire', null=True, blank=True)
+    nomi_form=models.OneToOneField('forms.Questionnaire', null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -21,6 +21,8 @@ class NominationInstance(models.Model):
     nomination = models.ForeignKey('Nomination', on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     status = models.CharField(max_length=1, choices=STATUS,  null=True, blank=True, default=None)
+    filled_form=models.OneToOneField('forms.FilledForm',null=True)
+
 
     def __str__(self):
         return str(self.user) + ' ' + str(self.id)
@@ -78,7 +80,7 @@ class UserProfile(models.Model):
 class Post(models.Model):
     post_name = models.CharField(max_length=500, null=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE)
-    persons = models.ManyToManyField(User, blank=True)
+    post_holders = models.ManyToManyField(User, blank=True)
     nomination = models.OneToOneField(Nomination, null=True, blank=True)
 
 
