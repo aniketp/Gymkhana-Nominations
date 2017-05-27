@@ -1,8 +1,31 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load bootstrap %}
 
 {% block profile %}User's Profile{% endblock %}
 
 {% block content %}
+
+    <div class="container box">
+        <div class="row">
+            <div class="col-lg-12">
+                <hr>
+                <h2 class="intro-text text-center">
+                    <strong>Add a new Nomination</strong>
+                </h2>
+            <hr>
+
+                <div style="padding: 0 35px;">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <table>
+                            {{form|bootstrap}}
+                        </table>
+                        <input type="submit" value="submit" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
