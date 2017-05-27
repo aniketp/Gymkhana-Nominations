@@ -15,8 +15,10 @@ def show_form(request, pk):
     questionnaire = get_object_or_404(Questionnaire, id=pk)
     form = questionnaire.get_form(request.POST or None)
     pk = questionnaire.pk
+    tk=questionnaire.nomination.pk
     if form.is_valid():
         questionnaire.add_answer(request.user, form.cleaned_data)
+        return HttpResponseRedirect(reverse('nomi_apply',kwargs={'pk':tk}))
 
     return render(request, 'forms/d_forms.html', context={'form': form, 'questionnaire':questionnaire,'pk':pk})
 
