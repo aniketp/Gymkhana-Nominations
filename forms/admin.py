@@ -1,8 +1,27 @@
 from django.contrib import admin
-from .models import Questionnaire,Question,FilledForm,AnswerInstance
+from .models import Questionnaire, Question, FilledForm, AnswerInstance
 
-admin.site.register(Questionnaire)
-admin.site.register(Question)
-admin.site.register(FilledForm)
-admin.site.register(AnswerInstance)
+
+class QuestionnaireAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description', 'status')
+
+admin.site.register(Questionnaire, QuestionnaireAdmin)
+
+
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = ('questionnaire', 'question_type', 'question', 'question_choices')
+
+admin.site.register(Question, QuestionAdmin)
+
+
+class FilledFormAdmin(admin.ModelAdmin):
+    list_display = ('questionnaire', 'applicant')
+
+admin.site.register(FilledForm, FilledFormAdmin)
+
+
+class AnswerInstanceAdmin(admin.ModelAdmin):
+    list_display = ('form', 'question', 'answer',)
+
+admin.site.register(AnswerInstance, AnswerInstanceAdmin)
 
