@@ -1,12 +1,9 @@
 from django import forms
-from .models import Nomination
 
+class NominationForm(forms.Form):
+    title = forms.CharField()
+    description = forms.CharField()
 
-
-class NominationForm(forms.ModelForm):
-    class Meta:
-        model = Nomination
-        fields = ['title','description']
 
 
 
