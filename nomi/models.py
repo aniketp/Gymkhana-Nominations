@@ -77,7 +77,7 @@ class UserProfile(models.Model):
 class Post(models.Model):
     post_name=models.CharField(max_length=500,null=True)
     parent=models.ForeignKey('self' ,on_delete=models.CASCADE)
-    persons=models.ManyToManyField(User)
-    
+    persons=models.ManyToManyField(User,null=True)
+
 
 
