@@ -91,6 +91,7 @@
 
                      </li>
                      <li><a href="{% url 'profile' %}" >{{user.get_username}}</a></li>
+
                      <li><a href="{% url 'logout' %}?next={% url 'index' %}">Logout</a></li>
 
                     {% else %}

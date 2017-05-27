@@ -3,8 +3,8 @@
 {% load staticfiles %}
 
 
-    {% block content %}
-            <div class="container">
+{% block content %}
+        <div class="container">
             {% if perms.nomi.admin %}
                 <div class="row box">
                     <h3><a href="{% url 'nomi_create' %}">Create a nomination</a></h3>
