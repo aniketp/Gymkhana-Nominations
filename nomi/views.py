@@ -104,3 +104,5 @@ class UserProfileUpdate(UpdateView):
     fields = '__all__'
     success_url = reverse_lazy('index')
 
+
+
