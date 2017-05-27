@@ -11,7 +11,7 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/$', views.nomi_apply, name='nomi_apply'),
 
     # nominations/profile/2
-    url(r'^profile/(?P<pk>\d+)/$', views.profile_view, name='profile'),
+    url(r'^profile/$', views.profile_view, name='profile'),
 
     # nominations/result/2
     url(r'^result/(?P<pk>\d+)/$', views.result, name='result'),
