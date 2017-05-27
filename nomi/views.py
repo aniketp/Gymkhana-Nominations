@@ -2,8 +2,9 @@ from django.shortcuts import render
 from .models import Nomination, NominationInstance, UserProfile
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.core.exceptions import ObjectDoesNotExist
 
 
 def index(request):
@@ -82,11 +83,14 @@ class NominationDelete(DeleteView):
 
 
 @login_required
-def profile_view(request, pk):
-    model = UserProfile
-    user = model.objects.get(pk=pk)
+def profile_view(request):
+    pk = request.user.pk
 
-    return render(request, 'profile.html', context={'user': user})
+    try:
+        user_profile = UserProfile.objects.get(user__id=pk)
+        return render(request, 'profile.html', context={'user_profile': user_profile})
+    except ObjectDoesNotExist:
+        return HttpResponse("Please Add your Details")
 
 
 class UserProfileCreate(CreateView):
