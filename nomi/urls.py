@@ -13,6 +13,12 @@ urlpatterns = [
     # nominations/profile/
     url(r'^profile/$', views.profile_view, name='profile'),
 
+    # nominations/profile/create
+    url(r'profile/create/$', views.UserProfileCreate.as_view(), name='profile_create'),
+
+    # nominations/profile/update/2
+    url(r'^profile/update/(?P<pk>\d+)/$', views.UserProfileUpdate.as_view(), name='profile_update'),
+
     # nominations/result/2
     url(r'^result/(?P<pk>\d+)/$', views.result, name='result'),
 

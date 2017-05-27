@@ -32,4 +32,10 @@
                     <div class="col-md-6 text-center">{{ user_profile.room_no }}, Hall {{ user_profile.hall }}</div>
                 </div>
 
+                <div class="row box">
+                    <form action="{% url 'profile_update' user_profile.pk %}" method="get" style="display: inline">
+                        {% csrf_token %}
+                        <button class="btn btn-success" type="submit">Edit Your Profile</button>
+                    </form>
+                </div>
 {% endblock %}

@@ -12,7 +12,20 @@
             {% endif %}
 
         </div>
+
         <div class="container">
+            {% if not user.is_authenticated %}
+                <div class="row box">
+                    <h2 class="text-center">Welcome to the portal</h2>
+                    <p class="text-center">Please login to continue</p>
+                </div>
+            {% endif %}
+
+        </div>
+
+        <div class="container">
+
+        {% if user.is_authenticated %}
 
             {% for nomi in all_nominations %}
 
@@ -20,25 +33,24 @@
                     <p style="font-size: xx-large">{{ nomi.name.upper }}</p>
 
                     {% if perms.nomi.admin %}
-                        {% if user.is_authenticated %}
+
                             {% if not nomi.results_declared %}
                                 <p><a href="{% url 'applicants' nomi.pk %}">View Applicants</a></p>
                             {% endif %}
-                        {% endif %}
+
                     {% endif %}
 
                     {% if not perms.nomi.admin %}
-                        {% if user.is_authenticated %}
+
                             {% if not nomi.results_declared %}
                                 <p><a href="{% url 'nomi_apply' nomi.pk %}">Apply Now</a></p>
                             {% endif %}
-                        {% endif %}
+
                     {% endif %}
 
                         <p><a href="{% url 'result' nomi.pk %}">View Results</a></p>
 
                     {% if perms.nomi.admin %}
-                        {% if user.is_authenticated %}
                             {% if not nomi.results_declared %}
                                 <br>
 
@@ -57,11 +69,13 @@
 
 
                             {% endif %}
-                        {% endif %}
+
                     {% endif %}
 
                 </div>
             {% endfor %}
+
+        {% endif %}
         </div>
  
     {% endblock %}
