@@ -5,6 +5,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
+from .forms import NominationForm
+from forms.models import Questionnaire
 
 
 def index(request):
@@ -65,18 +67,6 @@ def reject_nomination(request, pk):
     return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_reject}))
 
 
-class NominationCreate(CreateView):
-    model = Nomination
-    fields = ['name', 'description']
-    success_url = reverse_lazy('index')
-
-
-class NominationUpdate(UpdateView):
-    model = Nomination
-    fields = ['name', 'description']
-    success_url = reverse_lazy('index')
-
-
 class NominationDelete(DeleteView):
     model = Nomination
     success_url = reverse_lazy('index')
@@ -103,6 +93,23 @@ class UserProfileUpdate(UpdateView):
     model = UserProfile
     fields = '__all__'
     success_url = reverse_lazy('index')
+
+
+
+def nomination_package(request, pk):
+    questionnaire = get_object_or_404(Questionnaire, id=pk)
+    if request.method == 'POST':
+        pk = questionnaire.pk
+        title_form = NominationForm(request.POST)
+        form = questionnaire.get_form(request.POST)
+        if form.is_valid():
+            questionnaire.add_answer(request.user, form.cleaned_data)
+
+    else:
+
+
+    return render(request, 'forms/d_forms.html', context={'form': form, 'questionnaire':questionnaire,'pk':pk})
+
 
 
 
