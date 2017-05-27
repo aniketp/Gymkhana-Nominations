@@ -62,7 +62,7 @@ class UserProfile(models.Model):
         (7, '7'), (8, '8'), (9, '9'), (10, '10'), (11, '11'), (12, '12'),
     )
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, default=User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=40, blank=True)
     roll_no = models.IntegerField(null=True)
     year = models.CharField(max_length=4, choices=YEAR, default='Y16')
