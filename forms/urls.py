@@ -16,4 +16,7 @@ urlpatterns = [
     # forms/create/ques/2
     url(r'^create/ques/(?P<pk>\d+)/$', views.add_ques, name='add_ques'),
 
+    # forms/ans/2
+    url(r'^ans/(?P<pk>\d+)/$', views.show_answer_form, name='ans_form'),
+
 ]
