@@ -86,17 +86,12 @@ class Question(models.Model):
 class FilledForm(models.Model):
     questionnaire = models.ForeignKey(Questionnaire, null=True)
     applicant = models.ForeignKey(User, null=True)
+    data = models.CharField(max_length=10000, null=True, blank=True)
 
     def __str__(self):
         return self.questionnaire.name
 
 
-class AnswerInstance(models.Model):
-    form = models.ForeignKey(FilledForm, null=True)
-    question = models.ForeignKey(Question, null=True)
-    answer = models.CharField(max_length=1000, null=True)
 
-    def __str__(self):
-        return self.answer
 
 
