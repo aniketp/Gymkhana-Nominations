@@ -2,6 +2,7 @@ from django.db import models
 from django import forms
 from django.contrib.auth.models import User
 from .form_dynamic import NominationForm
+import json
 
 
 class Questionnaire(models.Model):
@@ -30,12 +31,9 @@ class Questionnaire(models.Model):
         return NominationForm(*args, extra=fields, **kwargs)
 
     def add_answer(self, applicant, answer_data):
-        answerform = FilledForm(questionnaire=self, applicant=applicant)
+        json_data = json.dumps(answer_data)
+        answerform = FilledForm(questionnaire=self, applicant=applicant,data=json_data)
         answerform.save()
-        id = answerform.id
-        for ques_id in answer_data:
-            ques = Question.objects.get(pk=ques_id)
-            AnswerInstance.objects.create(form=answerform, question=ques, answer=answer_data[ques_id])
 
 
 FIELD_TYPES = (
@@ -44,7 +42,7 @@ FIELD_TYPES = (
     ('Integer', forms.IntegerField),
     ('ChoiceField', forms.ChoiceField),
     ('MultipleChoiceField', forms.MultipleChoiceField),
-    ('Date', forms.DateField),
+    #('Date', forms.DateField),
 )
 
 QUES_TYPES = (
@@ -53,7 +51,7 @@ QUES_TYPES = (
     ('Integer', 'Integer-answer'),
     ('ChoiceField', 'Choice'),
     ('MultipleChoiceField', 'Multiple-choice'),
-    ('Date', 'date'),
+    #('Date', 'date'),
 )
 
 
