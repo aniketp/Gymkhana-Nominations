@@ -21,8 +21,7 @@ class NominationInstance(models.Model):
     nomination = models.ForeignKey('Nomination', on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     status = models.CharField(max_length=1, choices=STATUS,  null=True, blank=True, default=None)
-    filled_form=models.OneToOneField('forms.FilledForm',null=True)
-
+    filled_form = models.OneToOneField('forms.FilledForm', null=True)
 
     def __str__(self):
         return str(self.user) + ' ' + str(self.id)
