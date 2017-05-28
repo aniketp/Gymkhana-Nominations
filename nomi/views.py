@@ -20,12 +20,19 @@ def index(request):
 def nomi_apply(request, pk):
     nomination = Nomination.objects.get(pk=pk)
     ct = NominationInstance.objects.filter(nomination=nomination).filter(user=request.user).count()
-    if not ct:
-         ins = NominationInstance.objects.create(user=request.user, nomination=nomination)
-         info = "Your application has been recorded"
-         return render(request, 'nomi_done.html', context={'info': info})
+
+    if not request.user.is_superuser:
+        if not ct:
+             ins = NominationInstance.objects.create(user=request.user, nomination=nomination)
+             info = "Your application has been recorded"
+             return render(request, 'nomi_done.html', context={'info': info})
+        else:
+            info = "You have applied for it already."
+
     else:
-        info = "You have applied for it already."
+        ins = NominationInstance.objects.create(user=request.user, nomination=nomination)
+        info = "The nomination for your post has been created and is awaiting responses"
+        return render(request, 'nomi_done.html', context={'info': info})
 
     return render(request, 'nomi_done.html', context={'info': info})
 
