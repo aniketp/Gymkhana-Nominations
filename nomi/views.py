@@ -73,11 +73,6 @@ def reject_nomination(request, pk):
     return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_reject}))
 
 
-class NominationDelete(DeleteView):
-    model = Nomination
-    success_url = reverse_lazy('index')
-
-
 @login_required
 def profile_view(request):
     pk = request.user.pk
@@ -101,7 +96,6 @@ class UserProfileUpdate(UpdateView):
     success_url = reverse_lazy('index')
 
 
-
 def nomination_create(request):
 
     if request.method == 'POST':
@@ -110,7 +104,7 @@ def nomination_create(request):
 
             questionnaire = Questionnaire.objects.create(name=title_form.cleaned_data['title'],
                                                          description=title_form.cleaned_data['description'])
-            nomination=Nomination.objects.create(name=title_form.cleaned_data['title'],
+            nomination = Nomination.objects.create(name=title_form.cleaned_data['title'],
                                                  description=title_form.cleaned_data['description'],
                                                  nomi_form=questionnaire)
             pk=questionnaire.pk
@@ -119,14 +113,17 @@ def nomination_create(request):
     else:
         title_form=NominationForm()
 
-
     return render(request, 'nomi/nomination_form.html', context={'form': title_form})
-
 
 
 class NominationUpdate(UpdateView):
     model = Nomination
     fields = ['name', 'description']
+    success_url = reverse_lazy('index')
+
+
+class NominationDelete(DeleteView):
+    model = Nomination
     success_url = reverse_lazy('index')
 
 
