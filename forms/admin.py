@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Questionnaire, Question, FilledForm, AnswerInstance
+from .models import Questionnaire, Question, FilledForm
 
 
 class QuestionnaireAdmin(admin.ModelAdmin):
@@ -20,8 +20,5 @@ class FilledFormAdmin(admin.ModelAdmin):
 admin.site.register(FilledForm, FilledFormAdmin)
 
 
-class AnswerInstanceAdmin(admin.ModelAdmin):
-    list_display = ('form', 'question', 'answer',)
 
-admin.site.register(AnswerInstance, AnswerInstanceAdmin)
 
