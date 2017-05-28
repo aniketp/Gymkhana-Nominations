@@ -30,7 +30,6 @@ def nomi_apply(request, pk):
             info = "You have applied for it already."
 
     else:
-        ins = NominationInstance.objects.create(user=request.user, nomination=nomination)
         info = "The nomination for your post has been created and is awaiting responses"
         return render(request, 'nomi_done.html', context={'info': info})
 
