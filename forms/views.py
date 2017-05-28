@@ -2,8 +2,9 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
-from .models import Questionnaire, Question,FilledForm,AnswerInstance,QUES_TYPES
+from .models import Questionnaire, Question,FilledForm,QUES_TYPES
 from .forms import BuildForm, BuildQuestion
+import json
 
 
 def index(request):
@@ -23,6 +24,16 @@ def show_form(request, pk):
         return HttpResponseRedirect(reverse('nomi_apply',kwargs={'pk':tk}))
 
     return render(request, 'forms/d_forms.html', context={'form': form, 'questionnaire':questionnaire,'pk':pk})
+
+def show_answer_form(request,pk):
+    questionnaire = get_object_or_404(Questionnaire, id=pk)
+    filled_form = FilledForm.objects.filter(questionnaire=questionnaire).filter(applicant=request.user)
+    actual_form = filled_form[0]
+    data = json.loads(actual_form.data)
+    form = questionnaire.get_form(data)
+    return render(request, 'forms/ans_form.html', context={'form': form})
+
+
 
 
 def build_form(request):
