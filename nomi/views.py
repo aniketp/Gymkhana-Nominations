@@ -1,19 +1,29 @@
 from django.shortcuts import render
-from .models import Nomination, NominationInstance, UserProfile
+from .models import Nomination, NominationInstance, UserProfile,Post
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
-from .forms import NominationForm
+from .forms import NominationForm,PostForm
 from forms.models import Questionnaire
 
-
+@login_required
 def index(request):
     nominations = Nomination.objects.all()
     all_nominations = nominations[::-1]
+    posts=Post.objects.filter(post_holders=request.user)
+    return render(request, 'index.html', context={'all_nominations': all_nominations,'posts':posts})
 
-    return render(request, 'index.html', context={'all_nominations': all_nominations})
+@login_required
+def post_view(request,pk):
+    post=Post.objects.get(pk=pk)
+    child_posts=Post.objects.filter(parent=post)
+
+    return render(request, 'post.html', context={'post': post, 'child_posts': child_posts})
+
+
+
 
 
 @login_required
@@ -96,17 +106,20 @@ class UserProfileUpdate(UpdateView):
     success_url = reverse_lazy('index')
 
 
-def nomination_create(request):
+def nomination_create(request,pk):
 
     if request.method == 'POST':
         title_form = NominationForm(request.POST)
         if title_form.is_valid():
+            post=Post.objects.get(pk=pk)
 
             questionnaire = Questionnaire.objects.create(name=title_form.cleaned_data['title'],
                                                          description=title_form.cleaned_data['description'])
             nomination = Nomination.objects.create(name=title_form.cleaned_data['title'],
                                                  description=title_form.cleaned_data['description'],
                                                  nomi_form=questionnaire)
+            post.nomination=nomination
+            post.save()
             pk=questionnaire.pk
             return HttpResponseRedirect(reverse('forms:show_form', kwargs={'pk': pk}))
 
@@ -125,5 +138,19 @@ class NominationUpdate(UpdateView):
 class NominationDelete(DeleteView):
     model = Nomination
     success_url = reverse_lazy('index')
+
+
+def post_create(request,pk):
+    if request.method == 'POST':
+        parent=Post.objects.get(pk=pk)
+        post_form = PostForm(request.POST)
+        if post_form.is_valid():
+            post=Post.objects.create(post_name=post_form.cleaned_data['post_title'],parent=parent)
+            return HttpResponseRedirect(reverse('nomi_create',kwargs={'pk':pk}))
+
+    else:
+        post_form = PostForm()
+
+    return render(request, 'nomi/post_form.html', context={'form': post_form})
 
 
