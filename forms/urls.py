@@ -19,4 +19,6 @@ urlpatterns = [
     # forms/ans/2
     url(r'^ans/(?P<pk>\d+)/$', views.show_answer_form, name='ans_form'),
 
+
+
 ]
