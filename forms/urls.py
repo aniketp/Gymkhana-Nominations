@@ -13,8 +13,12 @@ urlpatterns = [
     # forms/2
     url(r'^(?P<pk>\d+)/$', views.show_form, name='show_form'),
 
+    url(r'^creator/(?P<pk>\d+)/$', views.creator_form, name='creator_form'),
+
     # forms/create/ques/2
     url(r'^create/ques/(?P<pk>\d+)/$', views.add_ques, name='add_ques'),
+
+    url(r'^update/ques/(?P<pk>\d+)/$',views.QuestionUpdate.as_view(),name='ques_update'),
 
     # forms/ans/2
     url(r'^ans/(?P<pk>\d+)/$', views.show_answer_form, name='ans_form'),
