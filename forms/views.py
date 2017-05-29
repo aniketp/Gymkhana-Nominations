@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from .models import Questionnaire, Question,FilledForm,QUES_TYPES
 from .forms import BuildForm, BuildQuestion
 import json
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 
 def index(request):
@@ -16,8 +17,9 @@ def creator_form(request, pk):
     questionnaire = get_object_or_404(Questionnaire, id=pk)
     form = questionnaire.get_form(request.POST or None)
     pk = questionnaire.pk
+    questions=Question.objects.filter(questionnaire=questionnaire)
 
-    return render(request, 'forms/d_forms.html', context={'form': form, 'questionnaire':questionnaire,'pk':pk})
+    return render(request, 'forms/creator_form.html', context={'form': form, 'questionnaire':questionnaire,'pk':pk})
 
 
 def show_form(request, pk):
@@ -79,4 +81,8 @@ def add_ques(request, pk):
 
     return render(request, 'forms/build_ques.html', context={'form': form, 'questionnaire': questionnaire})
 
+class QuestionUpdate(UpdateView):
+    model = Question
+    fields = ['question','question_type','question_choices']
+    template_name='forms/ques_update.html'
 
