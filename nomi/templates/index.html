@@ -5,13 +5,19 @@
 
 {% block content %}
         <div class="container">
-            {% if perms.nomi.admin %}
-                <div class="row box">
-                    <h3><a href="{% url 'nomi_create' %}">Create a nomination</a></h3>
+            {% if posts %}
+            {% for post in posts %}
+
+                 <div class="row box">
+                    <h3><a href="{% url 'post_view' post.pk %}" >{{post.post_name}}</a></h3>
                 </div>
+
+
+            {% endfor %}
             {% endif %}
 
         </div>
+
 
         <div class="container">
             {% if not user.is_authenticated %}
@@ -32,13 +38,10 @@
                 <div class="row box">
                     <p style="font-size: xx-large">{{ nomi.name.upper }}</p>
 
-                    {% if perms.nomi.admin %}
 
-                            {% if not nomi.results_declared %}
                                 <p><a href="{% url 'applicants' nomi.pk %}">View Applicants</a></p>
-                            {% endif %}
 
-                    {% endif %}
+
 
                     {% if not perms.nomi.admin %}
 
