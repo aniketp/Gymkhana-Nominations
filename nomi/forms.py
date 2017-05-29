@@ -6,9 +6,8 @@ class NominationForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea)
 
 
-
 class PostForm(forms.Form):
-    post_title=forms.CharField()
+    post_title = forms.CharField()
 
 
 

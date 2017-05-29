@@ -81,6 +81,7 @@ class Post(models.Model):
     parent = models.ForeignKey('self', on_delete=models.CASCADE,null=True,blank=True)
     post_holders = models.ManyToManyField(User, blank=True)
     nomination = models.OneToOneField(Nomination, null=True, blank=True)
-    approvals = models.ManyToManyField('self',blank=True)
+    approvals = models.ManyToManyField('self', blank=True)
 
-
+    def __str__(self):
+        return self.post_name

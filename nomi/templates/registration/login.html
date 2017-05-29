@@ -9,17 +9,6 @@
                  <p>Please try again.Username or Password didn't match</p>
             {% endif %}
 
-            {% if next %}
-                {% if user.is_authenticated %}
-                    <p>No access</p>
-                {% else %}
-                    <p>PLEASE LOGIN</p>
-                {% endif %}
-
-            {% endif %}
-
-
-
             {% if user.is_authenticated %}
             <h1 class="text-center ">Welcome to The Portal</h1>
 

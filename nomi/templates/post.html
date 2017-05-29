@@ -6,29 +6,24 @@
 {% block content %}
         <div class="container box "}
 
-                 <div class="row text-center">
-                    <h3>{{post.post_name}}</h3>
+                 <div class="row box ">
+                    <h3 class="text-center">{{post.post_name}}</h3>
                 </div>
         </div>
 
         <div class="container box"}
-                <div class="row text-center">
-                    <h3><a href="{% url 'post_create' post.pk %}">Create a new child post</a></h3>
+                <div class="row box">
+                    <h3 class="text-center"><a href="{% url 'post_create' post.pk %}">Create a new child post</a></h3>
                 </div>
         </div>
 
             {% for post in child_posts %}
 
        <div class="container box">
-
-
-
-                <div class="row">
-                    <h3>{{ post.post_name }}</h3>
-                </div>
-
-
-        </div>
+           <div class="row">
+               <h3 class="text-center">{{ post.post_name }}</h3>
+           </div>
+       </div>
         {% endfor %}
 
 

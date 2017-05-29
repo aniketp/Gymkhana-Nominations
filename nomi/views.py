@@ -5,7 +5,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
-from .forms import NominationForm,PostForm
+from .forms import NominationForm, PostForm
 from forms.models import Questionnaire
 
 @login_required
