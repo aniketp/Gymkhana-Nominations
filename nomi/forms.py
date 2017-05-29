@@ -7,4 +7,10 @@ class NominationForm(forms.Form):
 
 
 
+class PostForm(forms.Form):
+    post_title=forms.CharField()
+
+
+
+
 
