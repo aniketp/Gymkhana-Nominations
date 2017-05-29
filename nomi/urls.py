@@ -30,12 +30,15 @@ urlpatterns = [
     url(r'^reject/(?P<pk>\d+)/$', views.reject_nomination, name='reject'),
 
     # nominations/create
-    url(r'^create/$', views.nomination_create, name='nomi_create'),
+    url(r'^create/(?P<pk>\d+)/$', views.nomination_create, name='nomi_create'),
 
     # nominations/2/update
     url(r'^(?P<pk>\d+)/update/$', views.NominationUpdate.as_view(), name='nomi_update'),
 
     # nominations/2/delete
     url(r'^(?P<pk>\d+)/delete/$', views.NominationDelete.as_view(), name='nomi_delete'),
+
+    url(r'^post/(?P<pk>\d+)/$',views.post_view,name='post_view'),
+    url(r'^createpost/(?P<pk>\d+)/$',views.post_create,name='post_create'),
 
 ]
