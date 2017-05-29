@@ -21,41 +21,33 @@ form view
                 </h4>
                 <hr>
 
-            <div style="margin:25px">
-                <form class="form-horizontal" action="" method="POST" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>
-                {% csrf_token %}
-                    {% if form.errors %}
-                    <div class="alert alert-error">
-                    <ul>
-                        {% for error in form.non_field_errors %}
-                        <li>{{ error }}</li>
-                        {% endfor %}
-                    </ul>
+            <div class="col-lg-6 box" style="margin:25px">
+                    <form>
+                        {% csrf_token %}
+                        <p>
+                            {{form|bootstrap}}
+                        </p>
+
+                    </form>
+            </div>
+            <br>
+            <br>
+
+
+
+            <div class="col-lg-5 box">
+                <br>
+
+                {% for question in questions %}
+                <a href="{% url 'forms:ques_update' pk=question.pk qk=pk %}">
+                    <br>
+                    <div class="text-center">
+                        <strong>{{question.question}}</strong>
                     </div>
-                    {% endif %}
+                </a>
 
 
-                    {% for field in form.visible_fields %}
-                    <div
-                    <div class="control-group {{ field.html_name }} {% if field.errors %}error{% endif %}">
-                            <label class="control-label">{{ field.label }}{% if field.field.required %} {% endif %}</label>
-                        <div class="controls">
-                            {{ field }}
-                             {% if field.errors %}<span class="help-inline">{{ field.errors.as_text }}</span>{% endif %}
-                        </div>
-                    </div>
-                    {% endfor %}
-                    {% for field in form.hidden_fields %}
-                            {{ field }}
-                    {% endfor %}
-
-                    {% block formsets %}
-                     {% for formset in inlines %}
-                            {% include "inline_formset.html" with formset=formset %}
-                     {% endfor %}
-                    {% endblock formsets %}
-
-                </form>
+                {% endfor %}
             </div>
 
         </div>

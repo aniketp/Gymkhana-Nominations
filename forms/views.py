@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse,reverse_lazy
 from .models import Questionnaire, Question,FilledForm,QUES_TYPES
 from .forms import BuildForm, BuildQuestion
 import json
@@ -19,7 +19,7 @@ def creator_form(request, pk):
     pk = questionnaire.pk
     questions=Question.objects.filter(questionnaire=questionnaire)
 
-    return render(request, 'forms/creator_form.html', context={'form': form, 'questionnaire':questionnaire,'pk':pk})
+    return render(request, 'forms/creator_form.html', context={'form': form,'questions':questions, 'questionnaire':questionnaire,'pk':pk})
 
 
 def show_form(request, pk):
@@ -85,4 +85,9 @@ class QuestionUpdate(UpdateView):
     model = Question
     fields = ['question','question_type','question_choices']
     template_name='forms/ques_update.html'
+
+    def get_success_url(self):
+        
+        qk = self.kwargs['qk']
+        return reverse('forms:creator_form', kwargs={'pk': qk})
 
