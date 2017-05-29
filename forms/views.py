@@ -12,6 +12,14 @@ def index(request):
     return render(request, 'forms/index.html', context={'forms': forms})
 
 
+def creator_form(request, pk):
+    questionnaire = get_object_or_404(Questionnaire, id=pk)
+    form = questionnaire.get_form(request.POST or None)
+    pk = questionnaire.pk
+
+    return render(request, 'forms/d_forms.html', context={'form': form, 'questionnaire':questionnaire,'pk':pk})
+
+
 def show_form(request, pk):
     questionnaire = get_object_or_404(Questionnaire, id=pk)
     form = questionnaire.get_form(request.POST or None)
@@ -22,6 +30,16 @@ def show_form(request, pk):
         return HttpResponseRedirect(reverse('nomi_apply',kwargs={'pk':tk}))
 
     return render(request, 'forms/d_forms.html', context={'form': form, 'questionnaire':questionnaire,'pk':pk})
+
+
+
+
+
+
+
+
+
+
 
 def show_answer_form(request,pk):
     questionnaire = get_object_or_404(Questionnaire, id=pk)
