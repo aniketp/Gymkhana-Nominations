@@ -78,9 +78,9 @@ class UserProfile(models.Model):
 
 class Post(models.Model):
     post_name = models.CharField(max_length=500, null=True)
-    parent = models.ForeignKey('self', on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE,null=True,blank=True)
     post_holders = models.ManyToManyField(User, blank=True)
     nomination = models.OneToOneField(Nomination, null=True, blank=True)
-
+    approvals=models.ManyToManyField('self',blank=True)
 
 

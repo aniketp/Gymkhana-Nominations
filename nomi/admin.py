@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Nomination, NominationInstance, UserProfile
+from .models import Nomination, NominationInstance, UserProfile, Post
 
 
 class UserProfileAdmin(admin.ModelAdmin):
@@ -19,4 +19,4 @@ class NominationInstanceAdmin(admin.ModelAdmin):
 
 admin.site.register(NominationInstance, NominationInstanceAdmin)
 
-
+admin.site.register(Post)
