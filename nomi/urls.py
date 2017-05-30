@@ -38,7 +38,10 @@ urlpatterns = [
     # nominations/2/delete
     url(r'^(?P<pk>\d+)/delete/$', views.NominationDelete.as_view(), name='nomi_delete'),
 
-    url(r'^post/(?P<pk>\d+)/$',views.post_view,name='post_view'),
-    url(r'^createpost/(?P<pk>\d+)/$',views.post_create,name='post_create'),
+    # nominations/post/2
+    url(r'^post/(?P<pk>\d+)/$', views.post_view, name='post_view'),
+
+    # nominations/createpost/2
+    url(r'^createpost/(?P<pk>\d+)/$', views.post_create, name='post_create'),
 
 ]
