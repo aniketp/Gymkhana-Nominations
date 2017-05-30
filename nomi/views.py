@@ -20,8 +20,16 @@ def index(request):
 
 
 @login_required
-def post_view(request,pk):
+def post_view(request, pk):
     post = Post.objects.get(pk=pk)
+    child_posts = Post.objects.filter(parent=post)
+
+    return render(request, 'post.html', context={'post': post, 'child_posts': child_posts})
+
+
+@login_required
+def club_view(request, pk):
+    club = Post.objects.get(pk=pk)
     child_posts = Post.objects.filter(parent=post)
 
     return render(request, 'post.html', context={'post': post, 'child_posts': child_posts})
