@@ -29,10 +29,10 @@ def post_view(request, pk):
 
 @login_required
 def club_view(request, pk):
-    club = Post.objects.get(pk=pk)
-    child_posts = Post.objects.filter(parent=post)
+    club = Club.objects.get(pk=pk)
+    child_clubs = Club.objects.filter(club_parent=club)
 
-    return render(request, 'post.html', context={'post': post, 'child_posts': child_posts})
+    return render(request, 'club.html', context={'club': club, 'child_clubs': child_clubs})
 
 
 @login_required
@@ -149,12 +149,12 @@ class NominationDelete(DeleteView):
     success_url = reverse_lazy('index')
 
 
-def post_create(request, pk):
+def post_create(request, pk):     # TODO
     if request.method == 'POST':
         parent = Post.objects.get(pk=pk)
         post_form = PostForm(request.POST)
         if post_form.is_valid():
-            post = Post.objects.create(post_name=post_form.cleaned_data['post_title'],parent=parent)
+            post = Post.objects.create(post_name=post_form.cleaned_data['post_title'], parent=parent)
             return HttpResponseRedirect(reverse('nomi_create', kwargs={'pk': pk}))
 
     else:
