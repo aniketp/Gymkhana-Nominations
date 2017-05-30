@@ -1,7 +1,7 @@
 # Gymkhana Nomination Portal
 
 
-A dynamic nomination portal for gymkhana posts and elections in Django. Created by [Ashish](https://github.com/aasis21) and [Aniket](https://github.com/lordaniket06) as the project during summer camp.
+A dynamic nomination portal for gymkhana posts and elections in Django. Created by [Ashish](https://github.com/aasis21) and [Aniket](https://github.com/aniketp41) as the project during summer camp.
 
 ## Webpage
 Live project is available [here](https://gymkhana.pythonanywhere.com).
@@ -32,4 +32,4 @@ See the [Django Documentation](https://docs.djangoproject.com/en/1.11/) for more
 
 
 
-*All rights reserved. Copyright © 2017, [Aniket](https://github.com/lordaniket06) and [Ashish](https://github.com/aasis21)*
+*All rights reserved. Copyright © 2017, [Aniket](https://github.com/aniketp41) and [Ashish](https://github.com/aasis21)*
