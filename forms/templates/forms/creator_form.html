@@ -7,6 +7,22 @@ form view
 {% load staticfiles %}
 
 
+{% block css %}
+
+body {
+    font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    background: url({% static 'bla.jpg' %}) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+
+
+{% endblock %}
+
+
 {% block content %}
 
 <div class="container box">
@@ -45,7 +61,6 @@ form view
                         <strong>{{question.question}}</strong>
                     </div>
                 </a>
-
 
                 {% endfor %}
             </div>

@@ -87,7 +87,7 @@ class QuestionUpdate(UpdateView):
     template_name='forms/ques_update.html'
 
     def get_success_url(self):
-        
+
         qk = self.kwargs['qk']
         return reverse('forms:creator_form', kwargs={'pk': qk})
 
