@@ -2,8 +2,17 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class Club(models.Model):
+    club_name = models.CharField(max_length=100, null=True)
+    club_parent = models.ForeignKey('self', null=True, blank=True)
+
+    def __str__(self):
+        return self.club_name
+
+
 class Nomination(models.Model):
     name = models.CharField(max_length=200)
+    club_nomi = models.ForeignKey(max_length=100, to=Club, null=True)
     description = models.TextField(max_length=1000, null=True, blank=True)
     results_declared = models.BooleanField(default=False)
     nomi_form = models.OneToOneField('forms.Questionnaire', null=True, blank=True)
@@ -25,6 +34,18 @@ class NominationInstance(models.Model):
 
     def __str__(self):
         return str(self.user) + ' ' + str(self.id)
+
+
+class Post(models.Model):
+    post_name = models.CharField(max_length=500, null=True)
+    club = models.ForeignKey(Club, on_delete=models.CASCADE, null=True, blank=True)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    post_holders = models.ManyToManyField(User, blank=True)
+    nomination = models.OneToOneField(Nomination, null=True, blank=True)
+    approvals = models.ManyToManyField('self', blank=True)
+
+    def __str__(self):
+        return self.post_name
 
 
 class UserProfile(models.Model):
@@ -76,21 +97,4 @@ class UserProfile(models.Model):
         return str(self.name)
 
 
-class Club(models.Model):
-    club_name = models.CharField(max_length=100, null=True)
-    club_parent = models.ForeignKey('self', null=True, blank=True)
 
-    def __str__(self):
-        return self.club_name
-
-
-class Post(models.Model):
-    post_name = models.CharField(max_length=500, null=True)
-    club = models.ForeignKey(Club, on_delete=models.CASCADE, null=True, blank=True)
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
-    post_holders = models.ManyToManyField(User, blank=True)
-    nomination = models.OneToOneField(Nomination, null=True, blank=True)
-    approvals = models.ManyToManyField('self', blank=True)
-
-    def __str__(self):
-        return self.post_name
