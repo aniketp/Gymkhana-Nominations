@@ -16,13 +16,20 @@
                 </div>
         </div>
 
-            {% for club in child_clubs %}
-
-       <div class="container box">
+    {% for club in child_clubs %}
+        <div class="container box">
            <div class="row">
                <h3 class="text-center">{{ club.club_name }}</h3>
            </div>
        </div>
-        {% endfor %}
+    {% endfor %}
+
+    {% for post in posts %}
+        <div class="container box">
+            <div class="row">
+                <h4 class="text-center">{{ post.post_name }}</h4>
+            </div>
+        </div>
+    {% endfor %}
 
 {% endblock %}

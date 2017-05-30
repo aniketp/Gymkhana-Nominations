@@ -31,8 +31,9 @@ def post_view(request, pk):
 def club_view(request, pk):
     club = Club.objects.get(pk=pk)
     child_clubs = Club.objects.filter(club_parent=club)
+    posts = Post.objects.filter(post_holders=request.user)
 
-    return render(request, 'club.html', context={'club': club, 'child_clubs': child_clubs})
+    return render(request, 'club.html', context={'club': club, 'child_clubs': child_clubs, 'posts': posts})
 
 
 @login_required
