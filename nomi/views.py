@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from .models import Nomination, NominationInstance, UserProfile,Post
+from .models import Nomination, NominationInstance, UserProfile, Post, Club
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
 from .forms import NominationForm, PostForm
@@ -13,14 +13,16 @@ from forms.models import Questionnaire
 def index(request):
     nominations = Nomination.objects.all()
     all_nominations = nominations[::-1]
-    posts=Post.objects.filter(post_holders=request.user)
-    return render(request, 'index.html', context={'all_nominations': all_nominations,'posts':posts})
+    posts = Post.objects.filter(post_holders=request.user)
+    clubs = Club.objects.filter(club_members=request.user)
+
+    return render(request, 'index.html', context={'all_nominations': all_nominations, 'posts': posts, 'clubs': clubs})
 
 
 @login_required
 def post_view(request,pk):
-    post=Post.objects.get(pk=pk)
-    child_posts=Post.objects.filter(parent=post)
+    post = Post.objects.get(pk=pk)
+    child_posts = Post.objects.filter(parent=post)
 
     return render(request, 'post.html', context={'post': post, 'child_posts': child_posts})
 

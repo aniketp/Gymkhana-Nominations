@@ -5,6 +5,17 @@
 
 {% block content %}
         <div class="container">
+            {% if clubs %}
+            {% for club in clubs %}
+
+                 <div class="row box">
+                    <h3 class="text-center"><a href="#" >{{club.club_name}}</a></h3>
+                </div>
+
+
+            {% endfor %}
+            {% endif %}
+
             {% if posts %}
             {% for post in posts %}
 
