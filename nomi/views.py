@@ -8,6 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from .forms import NominationForm, PostForm
 from forms.models import Questionnaire
 
+
 @login_required
 def index(request):
     nominations = Nomination.objects.all()
@@ -15,15 +16,13 @@ def index(request):
     posts=Post.objects.filter(post_holders=request.user)
     return render(request, 'index.html', context={'all_nominations': all_nominations,'posts':posts})
 
+
 @login_required
 def post_view(request,pk):
     post=Post.objects.get(pk=pk)
     child_posts=Post.objects.filter(parent=post)
 
     return render(request, 'post.html', context={'post': post, 'child_posts': child_posts})
-
-
-
 
 
 @login_required
