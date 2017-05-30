@@ -52,6 +52,9 @@
          {
              text-transform:capitalise;
          }
+        {% block css %}
+
+        {% endblock %}
 
 
     </style>
@@ -104,12 +107,19 @@
         <!-- /.container-fluid -->
     </nav>
 
+
  {% endblock %}
+
+ {% block heading %}
 
     <div class="brand main">Gymkhana Nomination Portal</div>
     <div class="address-bar">A PORTAL FOR IITK JUNTA DEVELOPED BY ACE-CODERS</div>
     <br>
     <hr>
+
+ {% endblock %}
+
+
 
     {% block content %}
 
