@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load bootstrap %}
 
 {% block content %}
 <div class="container box">
@@ -17,13 +17,11 @@
             {% else %}
              <form method="post" action="{% url 'login' %}">
                 {% csrf_token  %}
-                <div >
-                    <td>{{form.username.label_tag}}</td>
-                    <td>{{form.username}}</td>
+                <div>
+                    <td>{{form.username|bootstrap}}</td>
                 </div>
                 <div>
-                    <td>{{form.password.label_tag}}</td>
-                    <td>{{form.password}}</td>
+                    <td>{{form.password|bootstrap}}</td>
                 </div>
                 <div>
                     <input type="submit" value="login" />

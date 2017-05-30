@@ -139,13 +139,13 @@ class NominationDelete(DeleteView):
     success_url = reverse_lazy('index')
 
 
-def post_create(request,pk):
+def post_create(request, pk):
     if request.method == 'POST':
-        parent=Post.objects.get(pk=pk)
+        parent = Post.objects.get(pk=pk)
         post_form = PostForm(request.POST)
         if post_form.is_valid():
-            post=Post.objects.create(post_name=post_form.cleaned_data['post_title'],parent=parent)
-            return HttpResponseRedirect(reverse('nomi_create',kwargs={'pk':pk}))
+            post = Post.objects.create(post_name=post_form.cleaned_data['post_title'],parent=parent)
+            return HttpResponseRedirect(reverse('nomi_create', kwargs={'pk': pk}))
 
     else:
         post_form = PostForm()
