@@ -31,7 +31,7 @@ def show_form(request, pk):
         questionnaire.add_answer(request.user, form.cleaned_data)
         return HttpResponseRedirect(reverse('nomi_apply',kwargs={'pk':tk}))
 
-    return render(request, 'forms/d_forms.html', context={'form': form, 'questionnaire':questionnaire,'pk':pk})
+    return render(request, 'forms/show_form.html', context={'form': form, 'questionnaire':questionnaire,'pk':pk})
 
 
 
@@ -60,7 +60,7 @@ def build_form(request):
         if form.is_valid():
             ques = Questionnaire.objects.create(name=form.cleaned_data['title'], description=form.cleaned_data['description'])
             pk = ques.id
-            return HttpResponseRedirect(reverse('forms:show_form', kwargs={'pk': pk}))
+            return HttpResponseRedirect(reverse('forms:creator_form', kwargs={'pk': pk}))
     else:
         form = BuildForm()
 
@@ -75,7 +75,7 @@ def add_ques(request, pk):
         if form.is_valid():
             Question.objects.create(questionnaire=questionnaire, question_type=form.cleaned_data['question_type'], question=form.cleaned_data['question'], question_choices=form.cleaned_data['question_choices'])
 
-            return HttpResponseRedirect(reverse('forms:show_form', kwargs={'pk': pk}))
+            return HttpResponseRedirect(reverse('forms:creator_form', kwargs={'pk': pk}))
     else:
         form = BuildQuestion()
 

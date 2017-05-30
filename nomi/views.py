@@ -121,7 +121,7 @@ def nomination_create(request,pk):
             post.nomination=nomination
             post.save()
             pk=questionnaire.pk
-            return HttpResponseRedirect(reverse('forms:show_form', kwargs={'pk': pk}))
+            return HttpResponseRedirect(reverse('forms:creator_form', kwargs={'pk': pk}))
 
     else:
         title_form=NominationForm()
