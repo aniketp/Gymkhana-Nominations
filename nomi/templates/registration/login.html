@@ -2,7 +2,7 @@
 {% load bootstrap %}
 
 {% block content %}
-<div class="container box">
+<div class="container">
     <div class="row">
         <div class="col-lg-12">
             {% if form.errors  %}
@@ -17,21 +17,19 @@
             {% else %}
              <form method="post" action="{% url 'login' %}">
                 {% csrf_token  %}
-                <div>
-                    <td>{{form.username|bootstrap}}</td>
-                </div>
-                <div>
-                    <td>{{form.password|bootstrap}}</td>
-                </div>
-                <div>
-                    <input type="submit" value="login" />
-                    <input type="hidden" name="next" value="{{next}}">
-                </div>
+                 <div class="row ">
+                    <div class="col-lg-3"></div>
+                    <div class="col-lg-6 box">
+                        {{form|bootstrap}}
+                        <div>
+                            <input type="submit" value="login" />
+                            <input type="hidden" name="next" value="{{next}}">
+                        </div>
+                    </div>
+                    <div class="col-lg-3"></div>
+                 </div>
 
-            </form>
-            <p>
-                <a href="{% url 'password_reset' %}">Lost password?</a>
-            </p>
+             </form>
             {% endif %}
 
 
