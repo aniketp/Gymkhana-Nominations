@@ -37,12 +37,21 @@ class NominationInstance(models.Model):
 
 
 class Post(models.Model):
+    STATUS = (
+        ('Nomination created', 'Nomination created'),
+        ('Nomination out', 'Nomination out'),
+        ('Interview period', 'Interview period'),
+        ('Assigned', 'Assigned'),
+
+    )
     post_name = models.CharField(max_length=500, null=True)
     club = models.ForeignKey(Club, on_delete=models.CASCADE, null=True, blank=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     post_holders = models.ManyToManyField(User, blank=True)
     nomination = models.OneToOneField(Nomination, null=True, blank=True)
     approvals = models.ManyToManyField('self', blank=True)
+    status = models.CharField(max_length=50, choices=STATUS, default='Nomination created')
+
 
 
     def __str__(self):
