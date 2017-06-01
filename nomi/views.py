@@ -23,8 +23,9 @@ def index(request):
 def post_view(request, pk):
     post = Post.objects.get(pk=pk)
     child_posts = Post.objects.filter(parent=post)
+    approval_request=Post.objects.filter(approvals=post)
 
-    return render(request, 'post.html', context={'post': post, 'child_posts': child_posts})
+    return render(request, 'post.html', context={'post': post, 'child_posts': child_posts,'approval_request':approval_request})
 
 
 @login_required
