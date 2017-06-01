@@ -9,7 +9,7 @@ admin.site.register(UserProfile, UserProfileAdmin)
 
 
 class NominationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'club_nomi', 'description')
+    list_display = ('name', 'description')
 
 admin.site.register(Nomination, NominationAdmin)
 
