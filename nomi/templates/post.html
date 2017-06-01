@@ -20,237 +20,34 @@
 
 
 
-       <div class="container">
-                {% for post in child_posts %}
+       <div class="container box">
+
                <div class="col-lg-6 box">
                    <h3 class="text-center">Child posts</h3>
                    <hr>
-                   <div class="text-center"><strong>{{ post.post_name }}</strong></div>
+                    {% for post in child_posts %}
+                   <div class="text-center">
+                       <h4>{{ post.post_name }}</h4>
+                       {{post.status}}
+                       <a href="{% url 'send_to_parent' post.pk %}"></a>
+                   </div>
+                    {% endfor %}
                </div>
-               {% endfor %}
 
-               {% for post in approval_request %}
+
+
                 <div class="col-lg-6 box">
                     <h3 class="text-center">Approval requests</h3>
                     <hr>
-                    <div class="text-center"><strong>{{ post.post_name }}</strong></div>
+                    {% for post in approval_request %}
+                    <div class="text-center">
+                        <h4>{{ post.post_name }}</h4>
+                         {{post.status}}
+                    </div>
+                     {% endfor %}
                </div>
-               {% endfor %}
+
 
        </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     {% endblock %}

@@ -108,3 +108,5 @@ class UserProfile(models.Model):
 
 
 
+##there is some changes to be done in model,we would remove nomination from post and
+        # make post foreignkey in nomination model and some other changes also..
