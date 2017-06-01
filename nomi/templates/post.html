@@ -16,14 +16,31 @@
                 </div>
         </div>
 
-            {% for post in child_posts %}
 
-       <div class="container box">
-           <div class="row">
-               <h3 class="text-center">{{ post.post_name }}</h3>
-           </div>
+
+
+
+       <div class="container">
+                {% for post in child_posts %}
+               <div class="col-lg-6 box">
+                   <h3 class="text-center">Child posts</h3>
+                   <hr>
+                   <div class="text-center"><strong>{{ post.post_name }}</strong></div>
+               </div>
+               {% endfor %}
+
+               {% for post in approval_request %}
+                <div class="col-lg-6 box">
+                    <h3 class="text-center">Approval requests</h3>
+                    <hr>
+                    <div class="text-center"><strong>{{ post.post_name }}</strong></div>
+               </div>
+               {% endfor %}
+
        </div>
-        {% endfor %}
+
+
+
 
 
 
