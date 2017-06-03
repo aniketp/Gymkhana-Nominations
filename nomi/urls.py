@@ -49,4 +49,7 @@ urlpatterns = [
 
     # nominations/createclub/2
     # url(r'^createpost/(?P<pk>\d+)/$', views.club_create, name='club_create'),
+
+    # nominations/filter
+    url(r'^filter/$', views.universal_filter, name='universal_filter'),
 ]

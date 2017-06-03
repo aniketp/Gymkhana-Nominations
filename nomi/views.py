@@ -172,5 +172,5 @@ def post_create(request, pk):     # TODO
 @login_required
 def universal_filter(request):
     filter = UserProfileFilter(request.GET, queryset=UserProfile.objects.all())
-    return render(request, 'filter.html', {'filter': filter})
+    return render(request, 'filters.html', {'filter': filter})
 
