@@ -52,8 +52,6 @@ class Post(models.Model):
     approvals = models.ManyToManyField('self', blank=True)
     status = models.CharField(max_length=50, choices=STATUS, default='Nomination created')
 
-
-
     def __str__(self):
         return self.post_name
 
@@ -107,6 +105,7 @@ class UserProfile(models.Model):
         return str(self.name)
 
 
+# there is some changes to be done in model,we would remove nomination from post and
+# make post foreignkey in nomination model and some other changes also..
 
-##there is some changes to be done in model,we would remove nomination from post and
-        # make post foreignkey in nomination model and some other changes also..
+# What is approval?
