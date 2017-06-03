@@ -53,6 +53,7 @@ body {
 
             <div class="col-lg-5 box">
                 <br>
+                <p class="text-warning text-center" style="font-size: xx-large">Edit Questions</p>
 
                 {% for question in questions %}
                 <a href="{% url 'forms:ques_update' pk=question.pk qk=pk %}">
@@ -69,7 +70,7 @@ body {
     </div>
 </div>
 
-<!--
+
 
 
 
