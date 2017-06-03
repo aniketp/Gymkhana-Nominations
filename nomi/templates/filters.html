@@ -3,17 +3,22 @@
 
 {% block content %}
 
-    <div class="container box">
-        <div class="row">
+    <div class="container">
+    <div class="row">
+        <div class="col-lg-7 box">
             <form action="" method="get">
                 {{ filter.form|bootstrap }}
                 <input type="submit" />
             </form>
-
+        </div>
+    </div>
+    <div class="row">
+        <div class=" col-lg-7  box">
             {% for obj in filter.qs %}
-                {{ obj.name }} - ${{ obj.roll_no }}<br />
+                <p class="text-inverse">{{ obj.name }}</p>
             {% endfor %}
         </div>
+    </div>
     </div>
 
 {% endblock %}
