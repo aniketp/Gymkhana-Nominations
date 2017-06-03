@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
 from .forms import NominationForm, PostForm
 from forms.models import Questionnaire
+from .filters import UserProfileFilter
 
 
 @login_required
@@ -118,6 +119,7 @@ class UserProfileUpdate(UpdateView):
     success_url = reverse_lazy('index')
 
 
+@login_required
 def nomination_create(request,pk):
 
     if request.method == 'POST':
@@ -152,6 +154,7 @@ class NominationDelete(DeleteView):
     success_url = reverse_lazy('index')
 
 
+@login_required
 def post_create(request, pk):     # TODO
     if request.method == 'POST':
         parent = Post.objects.get(pk=pk)
@@ -165,4 +168,9 @@ def post_create(request, pk):     # TODO
 
     return render(request, 'nomi/post_form.html', context={'form': post_form})
 
+
+@login_required
+def universal_filter(request):
+    filter = UserProfileFilter(request.GET, queryset=UserProfile.objects.all())
+    return render(request, 'filter.html', {'filter': filter})
 
