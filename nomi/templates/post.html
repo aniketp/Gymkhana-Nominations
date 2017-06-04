@@ -20,32 +20,42 @@
 
 
 
-       <div class="container box">
+       <div class="container">
 
-               <div class="col-lg-6">
+               <div class="col-lg-12 box">
                    <h3 class="text-center">Child posts</h3>
                    <hr>
                     {% for post in child_posts %}
                    <div class="text-center">
-                       <h4>{{ post.post_name }}</h4>
-                       {{post.status}}
-                       <a href=""></a>
+                       <h4><a href="{% url 'child_post' post.pk %}">{{ post.post_name }}</a></h4>
+
+
                    </div>
                     {% endfor %}
                </div>
 
 
 
-                <div class="col-lg-6">
-                    <h3 class="text-center">Approval requests</h3>
+                <div class="col-lg-12 box">
+                    <h3 class="text-center">Posts to be approved</h3>
                     <hr>
-                    {% for post in approval_request %}
+                    {% for post in post_approval %}
                     <div class="text-center">
                         <h4>{{ post.post_name }}</h4>
                          {{post.status}}
                     </div>
                      {% endfor %}
                </div>
+                <div class="col-lg-12 box">
+                    <h3 class="text-center">Nomination to be approved</h3>
+                    <hr>
+                    {% for nomi in nomi_approval %}
+                    <div class="text-center">
+                        <h4>{{ nomi.name }}</h4>
+                    </div>
+                     {% endfor %}
+                </div>
+
 
 
        </div>

@@ -11,12 +11,40 @@ class Club(models.Model):
         return self.club_name
 
 
+
+
+class Post(models.Model):
+    STATUS = (
+        ('Nomination created', 'Nomination created'),
+        ('Nomination out', 'Nomination out'),
+        ('Interview period', 'Interview period'),
+        ('Assigned', 'Assigned'),
+
+    )
+    post_name = models.CharField(max_length=500, null=True)
+    club = models.ForeignKey(Club, on_delete=models.CASCADE, null=True, blank=True)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    post_holders = models.ManyToManyField(User, blank=True)
+    post_approvals = models.ManyToManyField('self', blank=True)
+    status = models.CharField(max_length=50, choices=STATUS, default='Nomination created')
+
+    def __str__(self):
+        return self.post_name
+
+
 class Nomination(models.Model):
+    STATUS = (
+        ('Nomination created', 'Nomination created'),
+        ('Nomination out', 'Nomination out'),
+        ('Interview period', 'Interview period'),
+        ('Compiled', 'Compiled'),
+    )
     name = models.CharField(max_length=200)
     description = models.TextField(max_length=1000, null=True, blank=True)
     results_declared = models.BooleanField(default=False)
-    nomi_post=models.ForeignKey('Post',null=True)
+    nomi_post=models.ForeignKey(Post,null=True)
     nomi_form = models.OneToOneField('forms.Questionnaire', null=True, blank=True)
+    status=models.CharField(max_length=50, choices=STATUS, default='Nomination created')
 
     def __str__(self):
         return self.name
@@ -37,23 +65,7 @@ class NominationInstance(models.Model):
         return str(self.user) + ' ' + str(self.id)
 
 
-class Post(models.Model):
-    STATUS = (
-        ('Nomination created', 'Nomination created'),
-        ('Nomination out', 'Nomination out'),
-        ('Interview period', 'Interview period'),
-        ('Assigned', 'Assigned'),
 
-    )
-    post_name = models.CharField(max_length=500, null=True)
-    club = models.ForeignKey(Club, on_delete=models.CASCADE, null=True, blank=True)
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
-    post_holders = models.ManyToManyField(User, blank=True)
-    approvals = models.ManyToManyField('self', blank=True)
-    status = models.CharField(max_length=50, choices=STATUS, default='Nomination created')
-
-    def __str__(self):
-        return self.post_name
 
 
 class UserProfile(models.Model):

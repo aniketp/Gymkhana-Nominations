@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Child_post{% endblock %}
+
+    {% block content  %}
+        <div class="container box text-center">
+
+            <h3>{{post.post_name}}</h3>
+            <h4>{{post.status}}</h4>
+            <h4>
+               {% for post_holder in post.post_holders.all %}
+                    {{post_holder.userprofile.name}},
+                {% endfor %}
+            </h4>
+            <h4><a href="{% url 'post_approval' post_pk=post.pk parent_pk=parent_pk %}">send to parent for approval</a></h4>
+            <h4><a href="">add a nomination</a></h4>
+
+        </div>
+
+    {% endblock %}
+

@@ -24,10 +24,10 @@ def index(request):
 def post_view(request, pk):
     post = Post.objects.get(pk=pk)
     child_posts = Post.objects.filter(parent=post)
-    approval_request = Post.objects.filter(approvals=post)
+    post_approval = Post.objects.filter(post_approvals=post)
 
     return render(request, 'post.html', context={'post': post, 'child_posts': child_posts,
-                                                 'approval_request': approval_request})
+                                                 'post_approval': post_approval})
 
 
 @login_required
@@ -174,3 +174,15 @@ def universal_filter(request):
     filter = UserProfileFilter(request.GET, queryset=UserProfile.objects.all())
     return render(request, 'filters.html', {'filter': filter})
 
+def post_approval(request,parent_pk,post_pk):
+    post=Post.objects.get(pk=post_pk)
+    parent=Post.objects.get(pk=parent_pk)
+    to_add=parent.parent
+    post.post_approvals.add(to_add)
+    return HttpResponseRedirect(reverse('child_post' , kwargs={'pk':post_pk}))
+
+
+def child_post_view(request,pk):
+    post=Post.objects.get(pk=pk)
+    parent_pk=post.parent.pk
+    return render(request,'child_post.html',{'post':post,'parent_pk':parent_pk})
