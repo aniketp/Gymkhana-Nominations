@@ -1,0 +1,51 @@
+\documentclass[12pt,a4paper]{scrartcl}
+
+\usepackage[top=1.5in]{geometry}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks, linkcolor=brown
+}
+
+\title{\textbf{Gymkhana Nominations Portal}}
+\subtitle{Summer Project - Programming Club}
+\date{27 May 2017}
+\author{Aniket Pandey}
+
+\begin{document}
+\maketitle
+
+\section{Acknowledgement}
+\textit{I would like to thank Programming Club for giving me the opportunity to create the portal and learn about backend web development in Django}.
+
+\section{Repository}
+The project repository can be found \textbf{\href{https://github.com/SummerCamp17/Gymkhana-Nominations}{here}} and the live project is hosted \textbf{\href{https://gymkhana.pythonanywhere.com}{here}}.
+
+\subsection{Mentors}
+\begin{itemize}
+	\item Kunal Kapila
+	\item Yash Srivastav
+	\item Pratham Verma
+\end{itemize}
+
+
+\section{Description}
+The main aim of the project is to develop a portal through which admins can release nominations for their child posts. The target group can apply for the same. The portal can keep track of each and every process the application goes through, e.g release, submission, approval from higher authority, interview remarks, final selection and increment in power if selected. The detailed documentation can be found \textit{here}. 
+
+\section{Timeline}
+\subsection{Week 1}
+\begin{enumerate}
+	\item We started off by creating a simple web-app about a library through which normal users can issue a book and depending on the availability, librarian (aka admin) can either reject or accept the issuance. This was meant as an exercise for the actual project, and to get familiar with django.
+	\item Learnt about custom backends and integrated IIT K user authentication by overriding the default authentication. So that users can login through their \textsc{cc} id. However, we were not able to fetch their profile data, e.g Name, Roll No, etc.
+	\item Decided to implement Model Forms and Generic Views in the code. This decision led to easy editing and adding of user profile (fixed \#2).
+	\item Extended user model by importing current user and adding few required fields. Final code till now looks clean and user friendly.
+\end{enumerate}
+
+\subsection{Week 2}
+\begin{enumerate}
+	\item After creating the basic template, we implemented \textit{Dynamic Forms} as a separate app. It is possible to add various kind of questions in the form. After the form was finished, we integrated it into the nominations app. 
+	\item Created the topmost(independent) Club Model. Interlinked Users, Clubs and Posts. Now user can create multiple post nominations within a particular club. 
+	\item Created a filter for User Profile so that while releasing a nomination, it is possible to specify the target group (e.g users who are supposed to apply for the post). It remains to combine Forms and Filters for a nomination request.
+\end{enumerate}
+
+\end{document}
