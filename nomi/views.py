@@ -24,11 +24,11 @@ def index(request):
 def post_view(request, pk):
     post = Post.objects.get(pk=pk)
     child_posts = Post.objects.filter(parent=post)
+    child_posts_reverse = child_posts[::-1]
     post_approval = Post.objects.filter(post_approvals=post)
 
-    return render(request, 'post.html', context={'post': post, 'child_posts': child_posts,
+    return render(request, 'post.html', context={'post': post, 'child_posts': child_posts_reverse,
                                                  'post_approval': post_approval})
-
 
 @login_required
 def club_view(request, pk):
@@ -120,9 +120,9 @@ class UserProfileUpdate(UpdateView):
 
 
 @login_required
-def nomination_create(request,pk):
+def nomination_create(request, pk):
 
-    if request.method == 'POST':
+    if request.method == 'post':
         title_form = NominationForm(request.POST)
         if title_form.is_valid():
             post=Post.objects.get(pk=pk)
@@ -134,13 +134,14 @@ def nomination_create(request,pk):
                                                  nomi_form=questionnaire)
             post.nomination=nomination
             post.save()
-            pk=questionnaire.pk
+            pk = questionnaire.pk
             return HttpResponseRedirect(reverse('forms:creator_form', kwargs={'pk': pk}))
 
     else:
-        title_form=NominationForm()
+        title_form = NominationForm()
+        post = Post.objects.get(pk=pk)
 
-    return render(request, 'nomi/nomination_form.html', context={'form': title_form})
+    return render(request, 'nomi/nomination_form.html', context={'form': title_form, 'post': post})
 
 
 class NominationUpdate(UpdateView):
@@ -159,6 +160,7 @@ def post_create(request, pk):     # TODO
     if request.method == 'POST':
         parent = Post.objects.get(pk=pk)
         post_form = PostForm(request.POST)
+        club_name = Club.objects.filter(club_members=request.user)
         if post_form.is_valid():
             post = Post.objects.create(post_name=post_form.cleaned_data['post_title'], parent=parent)
             return HttpResponseRedirect(reverse('nomi_create', kwargs={'pk': pk}))

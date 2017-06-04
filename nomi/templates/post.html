@@ -27,9 +27,8 @@
                    <hr>
                     {% for post in child_posts %}
                    <div class="text-center">
+
                        <h4><a href="{% url 'child_post' post.pk %}">{{ post.post_name }}</a></h4>
-
-
                    </div>
                     {% endfor %}
                </div>

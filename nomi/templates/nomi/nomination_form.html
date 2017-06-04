@@ -18,12 +18,16 @@
             <hr>
 
                 <div style="padding: 0 35px;">
-                    <form action="" method="post">
+                    <form action="" method="post" style="display: inline">
                         {% csrf_token %}
                         <table>
                             {{form|bootstrap}}
                         </table>
-                        <input type="submit" value="submit and start adding question in form" />
+                        <input class="btn btn-success" type="submit" value="submit and start adding question in form" />
+                    </form>
+
+                    <form action="{% url 'post_view' post.pk %}"  style="display: inline">
+                        <button  class="btn btn-info" type="submit">Continue without creating Nomination</button>
                     </form>
                 </div>
             </div>
