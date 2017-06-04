@@ -24,9 +24,10 @@ def index(request):
 def post_view(request, pk):
     post = Post.objects.get(pk=pk)
     child_posts = Post.objects.filter(parent=post)
+    child_posts_reverse = child_posts[::-1]
     approval_request = Post.objects.filter(approvals=post)
 
-    return render(request, 'post.html', context={'post': post, 'child_posts': child_posts,
+    return render(request, 'post.html', context={'post': post, 'child_posts': child_posts_reverse,
                                                  'approval_request': approval_request})
 
 
