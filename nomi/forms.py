@@ -7,7 +7,7 @@ class NominationForm(forms.Form):
 
 
 class PostForm(forms.Form):
-    club_name = forms.CharField()
+    # club_name = forms.CharField()
     post_title = forms.CharField()
 
 
