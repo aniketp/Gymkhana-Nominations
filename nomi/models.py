@@ -17,7 +17,6 @@ class Post(models.Model):
     STATUS = (
         ('Nomination created', 'Nomination created'),
         ('Nomination out', 'Nomination out'),
-        ('Interview period', 'Interview period'),
         ('Assigned', 'Assigned'),
 
     )
