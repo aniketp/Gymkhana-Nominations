@@ -24,7 +24,7 @@ class Post(models.Model):
     club = models.ForeignKey(Club, on_delete=models.CASCADE, null=True, blank=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     post_holders = models.ManyToManyField(User, blank=True)
-    post_approvals = models.ManyToManyField('self', blank=True)
+    post_approvals = models.ManyToManyField('self',related_name = 'approvals',symmetrical=False, blank=True)
     status = models.CharField(max_length=50, choices=STATUS, default='Nomination created')
 
     def __str__(self):
