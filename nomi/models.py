@@ -32,14 +32,12 @@ class Nomination(models.Model):
     nomi_form = models.OneToOneField('forms.Questionnaire', null=True, blank=True)
     status = models.CharField(max_length=50, choices=STATUS, default='Nomination created')
 
+    year_choice = models.CharField(max_length=10, choices=YEAR_1, null=True)
+    hall_choice = models.CharField(max_length=10, choices=HALL_1, null=True)
+    dept_choice = models.CharField(max_length=10, choices=DEPT_1, null=True)
+
     def __str__(self):
         return self.name
-
-
-class NominationChoice(models.Model):
-    year_choice = models.ForeignKey(Nomination, related_name='year', choices=YEAR_1, null=True)
-    hall_choice = models.ForeignKey(Nomination, related_name='hall', choices=HALL_1, null=True)
-    dept_choice = models.ForeignKey(Nomination, related_name='dept', choices=DEPT_1, null=True)
 
 
 class NominationInstance(models.Model):
