@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from .choices import *
 
 
 class Club(models.Model):
@@ -9,8 +10,6 @@ class Club(models.Model):
 
     def __str__(self):
         return self.club_name
-
-
 
 
 class Post(models.Model):
@@ -33,21 +32,19 @@ class Post(models.Model):
 
 
 class Nomination(models.Model):
-    STATUS = (
-        ('Nomination created', 'Nomination created'),
-        ('Nomination out', 'Nomination out'),
-        ('Interview period', 'Interview period'),
-        ('Compiled', 'Compiled'),
-    )
     name = models.CharField(max_length=200)
     description = models.TextField(max_length=1000, null=True, blank=True)
     results_declared = models.BooleanField(default=False)
-    nomi_post=models.ForeignKey(Post,null=True)
+    nomi_post = models.ForeignKey(Post, null=True)
     nomi_form = models.OneToOneField('forms.Questionnaire', null=True, blank=True)
-    status=models.CharField(max_length=50, choices=STATUS, default='Nomination created')
+    status = models.CharField(max_length=50, choices=STATUS, default='Nomination created')
 
     def __str__(self):
         return self.name
+
+
+class NominationChoice(models.Model):
+    pass
 
 
 class NominationInstance(models.Model):
@@ -66,40 +63,6 @@ class NominationInstance(models.Model):
 
 
 class UserProfile(models.Model):
-    PROGRAMME = (
-        ('B.Tech', 'B.Tech'),
-        ('B.S', 'B.S'),
-    )
-
-    DEPT = (
-        ('Aerospace Engineering', 'AE'),
-        ('Biological Sciences & Engineering', 'BSBE'),
-        ('Chemical Engineering', 'CHE'),
-        ('Civil Engineering', 'CE'),
-        ('Computer Science & Engineering', 'CSE'),
-        ('Electrical Engineering', 'EE'),
-        ('Materials Science & Engineering', 'MSE'),
-        ('Mechanical Engineering', 'ME'),
-        ('Industrial & Management Engineering', 'IME'),
-        ('Chemistry', 'CHM'),
-        ('Mathematics & Scientific Computing', 'MTH'),
-        ('Physics', 'PHY'),
-        ('Earth Sciences', 'ES')
-    )
-
-    YEAR = (
-        ('Y16', 'Y16'),
-        ('Y15', 'Y15'),
-        ('Y14', 'Y14'),
-        ('Y13', 'Y13'),
-        ('Y12', 'Y12'),
-        ('Y11', 'Y11'),
-    )
-
-    HALL = (
-        (1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5'), (6, '6'),
-        (7, '7'), (8, '8'), (9, '9'), (10, '10'), (11, '11'), (12, '12'),
-    )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=40, blank=True)
