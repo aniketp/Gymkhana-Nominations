@@ -51,7 +51,7 @@
         {% if user.is_authenticated %}
 
             {% for nomi in all_nominations %}
-
+            {% if nomi.year_choice == username.year %}
                 <div class="row box">
                     <p style="font-size: xx-large">{{ nomi.name.upper }}</p>
 
@@ -93,6 +93,7 @@
                     {% endif %}
 
                 </div>
+            {% endif %}
             {% endfor %}
 
         {% endif %}

@@ -16,7 +16,7 @@ def index(request):
     all_nominations = nominations[::-1]
     posts = Post.objects.filter(post_holders=request.user)
     clubs = Club.objects.filter(club_members=request.user)
-    username = UserProfile.objects.filter(user=request.user)
+    username = UserProfile.objects.get(user=request.user)
 
     return render(request, 'index.html', context={'all_nominations': all_nominations, 'posts': posts,
                                                   'clubs': clubs, 'username': username})
@@ -135,9 +135,9 @@ def nomination_create(request, pk):
             nomination = Nomination.objects.create(name=title_form.cleaned_data['title'],
                                                    description=title_form.cleaned_data['description'],
                                                    nomi_form=questionnaire, nomi_post=post,
-                                                   year_choice=title_form.cleaned_data['year'],
-                                                   hall_choice=title_form.cleaned_data['hall'],
-                                                   dept_choice=title_form.cleaned_data['department'],
+                                                   year_choice=title_form.cleaned_data['year_choice'],
+                                                   hall_choice=title_form.cleaned_data['hall_choice'],
+                                                   dept_choice=title_form.cleaned_data['dept_choice'],
                                                    )
 
             pk = questionnaire.pk
