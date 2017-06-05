@@ -32,9 +32,9 @@ class Nomination(models.Model):
     nomi_form = models.OneToOneField('forms.Questionnaire', null=True, blank=True)
     status = models.CharField(max_length=50, choices=STATUS, default='Nomination created')
 
-    year_choice = models.CharField(max_length=10, choices=YEAR_1, null=True)
-    hall_choice = models.CharField(max_length=10, choices=HALL_1, null=True)
-    dept_choice = models.CharField(max_length=10, choices=DEPT_1, null=True)
+    year_choice = models.CharField(max_length=100, choices=YEAR_1, null=True)
+    hall_choice = models.CharField(max_length=100, choices=HALL_1, null=True)
+    dept_choice = models.CharField(max_length=100, choices=DEPT_1, null=True)
 
     def __str__(self):
         return self.name
@@ -58,7 +58,7 @@ class UserProfile(models.Model):
     year = models.CharField(max_length=4, choices=YEAR, default='Y16')
     programme = models.CharField(max_length=7, choices=PROGRAMME, default='B.Tech')
     department = models.CharField(max_length=200, choices=DEPT, default=None)
-    hall = models.IntegerField(choices=HALL, default=1)
+    hall = models.CharField(max_length=10, choices=HALL, default=1)
     room_no = models.CharField(max_length=10, null=True)
 
     def __str__(self):
