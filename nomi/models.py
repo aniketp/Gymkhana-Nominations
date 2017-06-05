@@ -15,8 +15,9 @@ class Club(models.Model):
 
 class Post(models.Model):
     STATUS = (
-        ('Nomination created', 'Nomination created'),
-        ('Nomination out', 'Nomination out'),
+        ('Post created', 'Post created'),
+        ('Approved', 'Approved'),
+        ('rejected','rejected'),
         ('Assigned', 'Assigned'),
 
     )
@@ -116,7 +117,3 @@ class UserProfile(models.Model):
         return str(self.name)
 
 
-# there is some changes to be done in model,we would remove nomination from post and
-# make post foreignkey in nomination model and some other changes also..
-
-# What is approval?
