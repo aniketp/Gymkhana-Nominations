@@ -158,9 +158,9 @@ def post_create(request, pk):     # TODO
     if request.method == 'POST':
         parent = Post.objects.get(pk=pk)
         post_form = PostForm(request.POST)
-        club_name = Club.objects.filter(club_members=request.user)
+        club_name = parent.club
         if post_form.is_valid():
-            post = Post.objects.create(post_name=post_form.cleaned_data['post_title'], parent=parent)
+            post = Post.objects.create(post_name=post_form.cleaned_data['post_title'], parent=parent,club=club,)
             return HttpResponseRedirect(reverse('nomi_create', kwargs={'pk': pk}))
 
     else:
