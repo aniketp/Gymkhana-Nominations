@@ -41,11 +41,6 @@ class NominationChoice(models.Model):
 
 
 class NominationInstance(models.Model):
-    NOMI_STATUS = (
-        ('a', 'Accepted'),
-        ('r', 'Rejected'),
-    )
-
     nomination = models.ForeignKey('Nomination', on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     status = models.CharField(max_length=1, choices=NOMI_STATUS,  null=True, blank=True, default=None)

@@ -33,6 +33,11 @@ HALL = (
     (7, '7'), (8, '8'), (9, '9'), (10, '10'), (11, '11'), (12, '12'),
 )
 
+NOMI_STATUS = (
+        ('a', 'Accepted'),
+        ('r', 'Rejected'),
+)
+
 STATUS = (
         ('Nomination created', 'Nomination created'),
         ('Nomination out', 'Nomination out'),
