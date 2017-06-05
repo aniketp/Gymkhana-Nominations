@@ -52,8 +52,8 @@ urlpatterns = [
 
     # nominations/filter
     url(r'^filter/$', views.universal_filter, name='universal_filter'),
-    url(r'^post_approve/(?P<post_pk>\d+)/(?P<parent_pk>\d+)/$',views.post_approval,name='post_approval'),
-    url(r'^child_post/(?P<pk>\d+)/$',views.child_post_view,name='child_post'),
+    url(r'^post_approve/(?P<post_pk>\d+)/(?P<view_pk>\d+)/$',views.post_approval,name='post_approval'),
+    url(r'^child_post/(?P<pk>\d+)/(?P<view_pk>\d+)/$',views.child_post_view,name='child_post'),
 
 
 
