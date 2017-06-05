@@ -122,7 +122,7 @@ class UserProfileUpdate(UpdateView):
 @login_required
 def nomination_create(request, pk):
 
-    if request.method == 'post':
+    if request.method == 'POST':
         title_form = NominationForm(request.POST)
         if title_form.is_valid():
             post=Post.objects.get(pk=pk)
