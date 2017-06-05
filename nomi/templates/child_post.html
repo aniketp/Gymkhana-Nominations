@@ -3,17 +3,56 @@
 {% block title %}Child_post{% endblock %}
 
     {% block content  %}
-        <div class="container box text-center">
-
+        <div class="container box">
+            <div class="col-lg-8 text-center box">
+                <br>
+                <br>
             <h3>{{post.post_name}}</h3>
-            <h4>{{post.status}}</h4>
-            <h4>
-               {% for post_holder in post.post_holders.all %}
+                <p>{{post.status}}
+
+                </p>
+                <h4>Parent Post : {{post.parent.post_name}}</h4>
+                <h4>Club : {{post.club.club_name}}</h4>
+                <hr>
+                <p>
+
+                {% if post.post_holders.all %}
+                    assigned:
+                {% for post_holder in post.post_holders.all %}
                     {{post_holder.userprofile.name}},
                 {% endfor %}
-            </h4>
-            <h4><a href="{% url 'post_approval' post_pk=post.pk parent_pk=parent_pk %}">send to parent for approval</a></h4>
-            <h4><a href="">add a nomination</a></h4>
+                {% else %}
+                    no one assigned
+
+                    {% endif %}
+                </p>
+            </div>
+
+            <div class="col-lg-4 text-center">
+                  <div class="row">
+                     <div class="team-member text-center">
+                        <p class="text-muted">Actions</p>
+                     </div>
+                  </div>
+
+                  <div>
+                     <ul class="list-group">
+                         {% if ap %}
+                         <li class="list-group-item">
+                             {% if approval %}
+                             <a class="list-group-item">Approval request sent to parent</a>
+                             {% else%}
+                             <a class="list-group-item" href="">send to parent for approval</a>
+                             {% endif %}
+                         </li>
+                          {% endif %}
+                         <li class="list-group-item" ><a class="list-group-item" href="">All nominations</a></li>
+                         <li class="list-group-item"><a class="list-group-item" href="">Add new nominations</a></li>
+
+                     </ul>
+                  </div>
+            </div>
+
 
         </div>
 
