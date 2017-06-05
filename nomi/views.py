@@ -30,6 +30,7 @@ def post_view(request, pk):
     return render(request, 'post.html', context={'post': post, 'child_posts': child_posts_reverse,
                                                  'post_approval': post_approval})
 
+
 @login_required
 def club_view(request, pk):
     club = Club.objects.get(pk=pk)

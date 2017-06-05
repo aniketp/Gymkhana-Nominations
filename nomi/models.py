@@ -65,9 +65,6 @@ class NominationInstance(models.Model):
         return str(self.user) + ' ' + str(self.id)
 
 
-
-
-
 class UserProfile(models.Model):
     PROGRAMME = (
         ('B.Tech', 'B.Tech'),
