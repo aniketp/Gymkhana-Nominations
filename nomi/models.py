@@ -37,7 +37,9 @@ class Nomination(models.Model):
 
 
 class NominationChoice(models.Model):
-    pass
+    year_choice = models.ForeignKey(Nomination, related_name='year', choices=YEAR_1, null=True)
+    hall_choice = models.ForeignKey(Nomination, related_name='hall', choices=HALL_1, null=True)
+    dept_choice = models.ForeignKey(Nomination, related_name='dept', choices=DEPT_1, null=True)
 
 
 class NominationInstance(models.Model):
