@@ -125,13 +125,13 @@ def nomination_create(request, pk):
     if request.method == 'POST':
         title_form = NominationForm(request.POST)
         if title_form.is_valid():
-            post=Post.objects.get(pk=pk)
+            post = Post.objects.get(pk=pk)
 
             questionnaire = Questionnaire.objects.create(name=title_form.cleaned_data['title'],
                                                          description=title_form.cleaned_data['description'])
             nomination = Nomination.objects.create(name=title_form.cleaned_data['title'],
-                                                 description=title_form.cleaned_data['description'],
-                                                 nomi_form=questionnaire,nomi_post=post)
+                                                   description=title_form.cleaned_data['description'],
+                                                   nomi_form=questionnaire, nomi_post=post)
             pk = questionnaire.pk
             return HttpResponseRedirect(reverse('forms:creator_form', kwargs={'pk': pk}))
 
