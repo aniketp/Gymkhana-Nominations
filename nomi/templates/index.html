@@ -4,6 +4,7 @@
 
 
 {% block content %}
+    {% if not perms.nomi.admin %}
         <div class="container">
             {% if clubs %}
             {% for club in clubs %}
@@ -33,7 +34,7 @@
             {% endif %}
 
         </div>
-
+    {% endif %}
 
         <div class="container">
             {% if not user.is_authenticated %}
