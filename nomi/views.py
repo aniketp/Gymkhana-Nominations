@@ -121,8 +121,8 @@ class UserProfileUpdate(UpdateView):
 
 @login_required
 def nomination_create(request, pk):
-
-    if request.method == 'Post':
+    post = Post.objects.get(pk=pk)
+    if request.method == 'POST':
         title_form = NominationForm(request.POST)
         if title_form.is_valid():
             post=Post.objects.get(pk=pk)
@@ -131,9 +131,7 @@ def nomination_create(request, pk):
                                                          description=title_form.cleaned_data['description'])
             nomination = Nomination.objects.create(name=title_form.cleaned_data['title'],
                                                  description=title_form.cleaned_data['description'],
-                                                 nomi_form=questionnaire)
-            post.nomination=nomination
-            post.save()
+                                                 nomi_form=questionnaire,nomi_post=post)
             pk = questionnaire.pk
             return HttpResponseRedirect(reverse('forms:creator_form', kwargs={'pk': pk}))
 
