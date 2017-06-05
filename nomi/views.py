@@ -137,7 +137,6 @@ def nomination_create(request, pk):
 
     else:
         title_form = NominationForm()
-        post = Post.objects.get(pk=pk)
 
     return render(request, 'nomi/nomination_form.html', context={'form': title_form, 'post': post})
 
