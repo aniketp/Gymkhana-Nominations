@@ -174,6 +174,7 @@ def universal_filter(request):
     filter = UserProfileFilter(request.GET, queryset=UserProfile.objects.all())
     return render(request, 'filters.html', {'filter': filter})
 
+
 def post_approval(request,view_pk,post_pk):
     post=Post.objects.get(pk=post_pk)
     viewer=Post.objects.get(pk=view_pk)

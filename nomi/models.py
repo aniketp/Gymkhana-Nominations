@@ -13,18 +13,11 @@ class Club(models.Model):
 
 
 class Post(models.Model):
-    STATUS = (
-        ('Post created', 'Post created'),
-        ('Approved', 'Approved'),
-        ('rejected','rejected'),
-        ('Assigned', 'Assigned'),
-
-    )
     post_name = models.CharField(max_length=500, null=True)
     club = models.ForeignKey(Club, on_delete=models.CASCADE, null=True, blank=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     post_holders = models.ManyToManyField(User, blank=True)
-    post_approvals = models.ManyToManyField('self',related_name = 'approvals',symmetrical=False, blank=True)
+    post_approvals = models.ManyToManyField('self', related_name='approvals', symmetrical=False, blank=True)
     status = models.CharField(max_length=50, choices=STATUS, default='Post created')
 
     def __str__(self):
@@ -48,14 +41,14 @@ class NominationChoice(models.Model):
 
 
 class NominationInstance(models.Model):
-    STATUS = (
+    NOMI_STATUS = (
         ('a', 'Accepted'),
         ('r', 'Rejected'),
     )
 
     nomination = models.ForeignKey('Nomination', on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    status = models.CharField(max_length=1, choices=STATUS,  null=True, blank=True, default=None)
+    status = models.CharField(max_length=1, choices=NOMI_STATUS,  null=True, blank=True, default=None)
     filled_form = models.OneToOneField('forms.FilledForm', null=True)
 
     def __str__(self):
