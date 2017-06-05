@@ -52,9 +52,9 @@
 
             {% for nomi in all_nominations %}
 
-            {% if nomi.year_choice == username.year or nomi.year_choice == 'All' %}
-                {% if nomi.hall_choice == username.hall or nomi.hall_choice == 'All' %}
-                    {% if nomi.dept_choice == username.department or nomi.dept_choice == 'All' %}
+            {% if nomi.year_choice == username.year or nomi.year_choice == 'All' or perms.nomi.admin %}
+                {% if nomi.hall_choice == username.hall or nomi.hall_choice == 'All' or perms.nomi.admin %}
+                    {% if nomi.dept_choice == username.department or nomi.dept_choice == 'All' or perms.nomi.admin %}
 
                         <div class="row box">
                             <p style="font-size: xx-large">{{ nomi.name.upper }}</p>
