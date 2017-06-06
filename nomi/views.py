@@ -186,7 +186,7 @@ class NominationDelete(DeleteView):
 
 
 @login_required
-def post_create(request, pk):     # TODO
+def post_create(request, pk):
     if request.method == 'POST':
         parent = Post.objects.get(pk=pk)
         post_form = PostForm(request.POST)

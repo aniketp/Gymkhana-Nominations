@@ -35,7 +35,7 @@
                                     <li class="List-group-item">
                                         <div class="">
                                          <a class="list-group-item" href="{% url 'forms:creator_form' nomination.nomi_form.pk %}">{{nomination.name}}</a>
-                                            <a href="#" class="btn btn-info" role="button"  >All applicants</a>
+                                            <a href="{% url 'applicants' nomination.pk %}" class="btn btn-info" role="button"  >All applicants</a>
                                         </div>
 
                                     </li>
