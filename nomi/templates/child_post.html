@@ -17,7 +17,7 @@
                 <p>
 
                 {% if post.post_holders.all %}
-                    assigned:
+                    Assigned:
                 {% for post_holder in post.post_holders.all %}
                     {{post_holder.userprofile.name}},
                 {% endfor %}
@@ -39,7 +39,6 @@
                      <ul class="list-group">
                          {% if ap %}
                          <li class="list-group-item">
-                             {{power_to_approve }}
                              {% if power_to_approve %}
 
                                         <a class="list-group-item" href="{% url 'final_post_approval' post_pk=post.pk view_pk=view_pk %}">Approve the post</a>

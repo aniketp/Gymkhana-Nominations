@@ -212,6 +212,8 @@ def child_post_view(request,pk,view_pk):
 def final_post_approval(request,view_pk,post_pk):
     post = Post.objects.get(pk=post_pk)
     viewer = Post.objects.get(pk=view_pk)
+    to_add = viewer
+    post.post_approvals.add(to_add)
     post.status='Post approved'
     post.save()
     return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk, 'view_pk': view_pk}))
