@@ -27,7 +27,7 @@ def post_view(request, pk):
     post = Post.objects.get(pk=pk)
     child_posts = Post.objects.filter(parent=post)
     child_posts_reverse = child_posts[::-1]
-    post_approval = Post.objects.filter(post_approvals=post)
+    post_approval = Post.objects.filter(post_approvals=post).filter(status='Post created')
 
     return render(request, 'post.html', context={'post': post, 'child_posts': child_posts_reverse,
                                                  'post_approval': post_approval})

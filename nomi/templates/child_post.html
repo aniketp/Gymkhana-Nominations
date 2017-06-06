@@ -42,7 +42,7 @@
                              {% if approval %}
                              <a class="list-group-item">Approval request sent to parent</a>
                              {% else%}
-                             <a class="list-group-item" href="">send to parent for approval</a>
+                             <a class="list-group-item" href="{% url 'post_approval' post_pk=post.pk view_pk=view_pk %}">send to parent for approval</a>
                              {% endif %}
                          </li>
                           {% endif %}
