@@ -11,9 +11,10 @@
                     {% if nomi.status %}
                         <div class="col-md-8 text-center"><a href="#">{{ nomi.status }}</a></div>
                     {% else %}
-                        <div class="col-md-2 text-center"><a href="{% url 'nomi_answer' nomi.pk %}">Answer</a></div>
-                        <div class="col-md-3 text-center"><a href="{% url 'accept' nomi.pk %}">Accept</a></div>
-                        <div class="col-md-3 text-center"><a href="{% url 'reject' nomi.pk %}">Reject</a></div>
+                        <div class="col-md-8 text-center"><a href="{% url 'nomi_answer' nomi.pk %}">View Application</a></div>
+
+                    <!--    <div class="col-md-3 text-center"><a href="{% url 'accept' nomi.pk %}">Accept</a></div>
+                        <div class="col-md-3 text-center"><a href="{% url 'reject' nomi.pk %}">Reject</a></div>  -->
                     {% endif %}
                 </div>
             {% endfor %}

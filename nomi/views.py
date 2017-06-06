@@ -248,6 +248,7 @@ def child_post_view(request, pk, view_pk):
                                                'approval': approval, 'power_to_approve': power_to_approve,
                                                'nominations': nominations})
 
+
 @login_required
 def final_post_approval(request, view_pk, post_pk):
     post = Post.objects.get(pk=post_pk)
