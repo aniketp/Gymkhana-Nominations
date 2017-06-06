@@ -209,14 +209,17 @@ def universal_filter(request):
     return render(request, 'filters.html', {'filter': filter})
 
 
+@login_required
 def post_approval(request, view_pk, post_pk):
     post = Post.objects.get(pk=post_pk)
     viewer = Post.objects.get(pk=view_pk)
     to_add = viewer.parent
     post.post_approvals.add(to_add)
+
     return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk, 'view_pk': view_pk}))
 
 
+@login_required
 def child_post_view(request, pk, view_pk):
     post = Post.objects.get(pk=pk)
     nominations = Nomination.objects.filter(nomi_post=post)
@@ -240,16 +243,18 @@ def child_post_view(request, pk, view_pk):
         approval = 1
     else:
         approval = 0
+
     return render(request, 'child_post.html', {'post': post, 'view_pk': view_pk, 'ap': approved,
                                                'approval': approval, 'power_to_approve': power_to_approve,
                                                'nominations': nominations})
 
-
-def final_post_approval(request,view_pk,post_pk):
+@login_required
+def final_post_approval(request, view_pk, post_pk):
     post = Post.objects.get(pk=post_pk)
     viewer = Post.objects.get(pk=view_pk)
     to_add = viewer
     post.post_approvals.add(to_add)
-    post.status='Post approved'
+    post.status = 'Post approved'
     post.save()
+
     return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk, 'view_pk': view_pk}))
