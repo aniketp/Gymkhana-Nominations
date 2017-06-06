@@ -52,6 +52,12 @@ POST_STATUS = (
         ('Post on work', 'Post on work'),
 )
 
+POST_PERMS = (
+    ("normal","normal"),
+    ("can approve the post", "can approve the post"),
+    ("can send nominations to users","can send nominations to users"),
+)
+
 HALL_1 = (
     ('All', 'All'), ('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'), ('6', '6'),
     ('7', '7'), ('8', '8'), ('9', '9'), ('10', '10'), ('11', '11'), ('12', '12'),
