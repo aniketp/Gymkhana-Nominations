@@ -20,6 +20,9 @@ class Post(models.Model):
     post_approvals = models.ManyToManyField('self', related_name='approvals', symmetrical=False, blank=True)
     status = models.CharField(max_length=50, choices=POST_STATUS, default='Post created')
 
+    class Meta:
+        permissions = (("can approve the post", "can approve the post"), ("can send nominations to users", "can send nominations to users"))
+
     def __str__(self):
         return self.post_name
 
