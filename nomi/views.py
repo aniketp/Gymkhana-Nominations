@@ -63,13 +63,11 @@ def nomi_apply(request, pk):
             return render(request, 'forms/show_form.html',
                           context={'form': form, 'form_confirm': form_confirm, 'questionnaire': questionnaire,'pk': pk})
         else:
-            info = "You have applied for it already."
-            return render(request, 'nomi_done.html', context={'info': info})
-
-
-
-
-
+            form_confirm = ConfirmApplication(request.POST or None)
+            if form_confirm.is_valid():
+                NominationInstance.objects.create(user=request.user, nomination=nomination)
+                info = "Your application has been recorded"
+                return render(request, 'nomi_done.html', context={'info': info})
 
     else:
         info = "You have applied for it already."
