@@ -55,7 +55,7 @@ POST_STATUS = (
 POST_PERMS = (
     ("normal","normal"),
     ("can approve the post", "can approve the post"),
-    ("can send nominations to users","can send nominations to users"),
+    ("can approve post and send nominations to users","can approve post and send nominations to users"),
 )
 
 HALL_1 = (
