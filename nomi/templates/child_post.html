@@ -16,15 +16,23 @@
                 <hr>
                 <p>
 
-                {% if post.post_holders.all %}
-                    Assigned:
-                {% for post_holder in post.post_holders.all %}
-                    {{post_holder.userprofile.name}},
-                {% endfor %}
-                {% else %}
-                    no one assigned
-
+                    {% if post.post_holders.all %}
+                        Assigned:
+                        {% for post_holder in post.post_holders.all %}
+                            {{post_holder.userprofile.name}},
+                        {% endfor %}
+                    {% else %}
+                        No one assigned
                     {% endif %}
+
+                    {% if nominations %}
+                        {% for nomination in nominations %}
+                            {{nomination.name}}
+                        {% endfor %}
+                    {% else %}
+                        NO nominations
+                    {% endif %}
+                    
                 </p>
             </div>
 
