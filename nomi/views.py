@@ -198,9 +198,20 @@ def child_post_view(request,pk,view_pk):
         ap=0
     view_pk=view_pk
     view=Post.objects.get(pk=view_pk)
+    if view.perms == 'normal':
+        power_to_approve=0
+    else:
+        power_to_approve=1
     view_parent=Post.objects.get(pk=view.parent.pk)
     if view_parent in post.post_approvals.all():
         approval=1
     else:
         approval=0
-    return render(request,'child_post.html',{'post':post,'view_pk':view_pk,'ap':ap,'approval':approval})
+    return render(request,'child_post.html',{'post':post,'view_pk':view_pk,'ap':ap,'approval':approval,'power_to_approve':power_to_approve})
+
+def final_post_approval(request,view_pk,post_pk):
+    post = Post.objects.get(pk=post_pk)
+    viewer = Post.objects.get(pk=view_pk)
+    post.status='Post approved'
+    post.save()
+    return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk, 'view_pk': view_pk}))
