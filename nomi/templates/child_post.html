@@ -31,7 +31,7 @@
                     {% if nominations %}
                         {% for nomination in nominations %}
                             <div>
-                            {{nomination.name}}
+                                <a href="{% url 'forms:creator_form' nomination.nomi_form.pk %}">{{nomination.name}}</a>
                             </div>
                         {% endfor %}
                     {% else %}
