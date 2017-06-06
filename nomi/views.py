@@ -116,10 +116,11 @@ def reject_nomination(request, pk):
 @login_required
 def nomination_answers(request, nomi_pk,user_pk,):
     application = NominationInstance.objects.get(pk=pk)
-    applicant = application.user
-    answer = FilledForm.objects.filter(applicant=applicant)
+    applicants = application.user
+    answer = FilledForm.objects.get(applicant=applicants)
+    answers = answer.data
 
-    return render(request, 'nomi-answer.html', context={'answer': answer})
+    return render(request, 'nomi-answer.html', context={'answer': answers})
 
 
 @login_required
