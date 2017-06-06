@@ -8,7 +8,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
 
     # nominations/2
-    url(r'^(?P<pk>\d+)/$', views.nomi_apply, name='nomi_apply'),
+    url(r'^apply/(?P<pk>\d+)/$', views.nomi_apply, name='nomi_apply'),
 
     # nominations/profile/
     url(r'^profile/$', views.profile_view, name='profile'),

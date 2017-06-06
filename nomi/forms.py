@@ -16,5 +16,7 @@ class PostForm(forms.Form):
 
 
 
+class ConfirmApplication(forms.Form):
+    Tick_the_box=forms.CharField(max_length=100,widget=forms.CheckboxInput())
 
 

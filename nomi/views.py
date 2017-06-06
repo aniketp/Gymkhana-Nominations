@@ -6,7 +6,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
-from .forms import NominationForm, PostForm
+from .forms import NominationForm, PostForm, ConfirmApplication
 from forms.models import Questionnaire
 from .filters import UserProfileFilter
 
@@ -47,20 +47,33 @@ def club_view(request, pk):
 def nomi_apply(request, pk):
     nomination = Nomination.objects.get(pk=pk)
     ct = NominationInstance.objects.filter(nomination=nomination).filter(user=request.user).count()
+    if not ct:
+        if nomination.nomi_form:
+            questionnaire = nomination.nomi_form
+            form = questionnaire.get_form(request.POST or None)
+            form_confirm = ConfirmApplication(request.POST or None)
 
-    if not request.user.is_superuser:
-        if not ct:
-             ins = NominationInstance.objects.create(user=request.user, nomination=nomination)
-             info = "Your application has been recorded"
-             return render(request, 'nomi_done.html', context={'info': info})
+            if form_confirm.is_valid():
+                if form.is_valid():
+                    filled_form=questionnaire.add_answer(request.user, form.cleaned_data)
+                    NominationInstance.objects.create(user=request.user, nomination=nomination,filled_form=filled_form)
+                    info = "Your application has been recorded"
+                    return render(request, 'nomi_done.html', context={'info': info})
+
+            return render(request, 'forms/show_form.html',
+                          context={'form': form, 'form_confirm': form_confirm, 'questionnaire': questionnaire,'pk': pk})
         else:
             info = "You have applied for it already."
+            return render(request, 'nomi_done.html', context={'info': info})
+
+
+
+
+
 
     else:
-        info = "The nomination for your post has been created and is awaiting responses"
+        info = "You have applied for it already."
         return render(request, 'nomi_done.html', context={'info': info})
-
-    return render(request, 'nomi_done.html', context={'info': info})
 
 
 def result(request, pk):
@@ -101,7 +114,7 @@ def reject_nomination(request, pk):
 
 
 @login_required
-def nomination_answers(request, pk):
+def nomination_answers(request, nomi_pk,user_pk,):
     application = NominationInstance.objects.get(pk=pk)
     applicant = application.user
     answer = FilledForm.objects.filter(applicant=applicant)
