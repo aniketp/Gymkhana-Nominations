@@ -46,8 +46,8 @@ def club_view(request, pk):
 @login_required
 def nomi_apply(request, pk):
     nomination = Nomination.objects.get(pk=pk)
-    ct = NominationInstance.objects.filter(nomination=nomination).filter(user=request.user).count()
-    if not ct:
+    count = NominationInstance.objects.filter(nomination=nomination).filter(user=request.user).count()
+    if not count:
         if nomination.nomi_form:
             questionnaire = nomination.nomi_form
             form = questionnaire.get_form(request.POST or None)
@@ -55,15 +55,16 @@ def nomi_apply(request, pk):
 
             if form_confirm.is_valid():
                 if form.is_valid():
-                    filled_form=questionnaire.add_answer(request.user, form.cleaned_data)
-                    NominationInstance.objects.create(user=request.user, nomination=nomination,filled_form=filled_form)
+                    filled_form = questionnaire.add_answer(request.user, form.cleaned_data)
+                    NominationInstance.objects.create(user=request.user, nomination=nomination, filled_form=filled_form)
                     info = "Your application has been recorded"
                     return render(request, 'nomi_done.html', context={'info': info})
 
-            return render(request, 'forms/show_form.html',
-                          context={'form': form, 'form_confirm': form_confirm, 'questionnaire': questionnaire,'pk': pk})
+            return render(request, 'forms/show_form.html', context={'form': form, 'form_confirm': form_confirm,
+                                                                    'questionnaire': questionnaire, 'pk': pk})
         else:
             form_confirm = ConfirmApplication(request.POST or None)
+
             if form_confirm.is_valid():
                 NominationInstance.objects.create(user=request.user, nomination=nomination)
                 info = "Your application has been recorded"
