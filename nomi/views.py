@@ -151,7 +151,7 @@ def nomination_create(request, pk):
 
 class NominationUpdate(UpdateView):
     model = Nomination
-    fields = ['name', 'description']
+    fields = ['name', 'description', 'year_choice', 'hall_choice', 'dept_choice']
     success_url = reverse_lazy('index')
 
 
