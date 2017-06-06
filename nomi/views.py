@@ -113,11 +113,12 @@ def reject_nomination(request, pk):
 
 
 @login_required
-def nomination_answer(request,pk):
+def nomination_answer(request, pk):
     application = NominationInstance.objects.get(pk=pk)
     form1 = application.filled_form
     data = json.loads(form1.data)
-    questionnaire=application.nomination.nomi_form
+
+    questionnaire = application.nomination.nomi_form
     form = questionnaire.get_form(data)
 
     return render(request, 'nomi_answer.html', context={'form': form})
@@ -192,8 +193,8 @@ def post_create(request, pk):     # TODO
 
         if post_form.is_valid():
             post = Post.objects.create(post_name=post_form.cleaned_data['post_title'], parent=parent)
-            post_pk=post.pk
-            #bug fixed
+            post_pk = post.pk
+
             return HttpResponseRedirect(reverse('nomi_create', kwargs={'pk': post_pk}))
 
     else:
@@ -208,33 +209,41 @@ def universal_filter(request):
     return render(request, 'filters.html', {'filter': filter})
 
 
-def post_approval(request,view_pk,post_pk):
-    post=Post.objects.get(pk=post_pk)
-    viewer=Post.objects.get(pk=view_pk)
-    to_add=viewer.parent
+def post_approval(request, view_pk, post_pk):
+    post = Post.objects.get(pk=post_pk)
+    viewer = Post.objects.get(pk=view_pk)
+    to_add = viewer.parent
     post.post_approvals.add(to_add)
-    return HttpResponseRedirect(reverse('child_post' , kwargs={'pk':post_pk,'view_pk':view_pk}))
+    return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk, 'view_pk': view_pk}))
 
 
-def child_post_view(request,pk,view_pk):
-    post=Post.objects.get(pk=pk)
-    nominations=Nomination.objects.filter(nomi_post=post)
+def child_post_view(request, pk, view_pk):
+    post = Post.objects.get(pk=pk)
+    nominations = Nomination.objects.filter(nomi_post=post)
+
     if post.status == 'Post created':
-        ap=1
+        approved = 1
     else:
-        ap=0
-    view_pk=view_pk
-    view=Post.objects.get(pk=view_pk)
+        approved = 0
+
+    view_pk = view_pk
+    view = Post.objects.get(pk=view_pk)
+
     if view.perms == 'normal':
-        power_to_approve=0
+        power_to_approve = 0
     else:
-        power_to_approve=1
-    view_parent=Post.objects.get(pk=view.parent.pk)
+        power_to_approve = 1
+
+    view_parent = Post.objects.get(pk=view.parent.pk)
+
     if view_parent in post.post_approvals.all():
-        approval=1
+        approval = 1
     else:
-        approval=0
-    return render(request,'child_post.html',{'post':post,'view_pk':view_pk,'ap':ap,'approval':approval,'power_to_approve':power_to_approve,'nominations':nominations})
+        approval = 0
+    return render(request, 'child_post.html', {'post': post, 'view_pk': view_pk, 'ap': approved,
+                                               'approval': approval, 'power_to_approve': power_to_approve,
+                                               'nominations': nominations})
+
 
 def final_post_approval(request,view_pk,post_pk):
     post = Post.objects.get(pk=post_pk)
