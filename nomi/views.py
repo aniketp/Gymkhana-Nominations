@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from forms.models import FilledForm
 from .models import Nomination, NominationInstance, UserProfile, Post, Club
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -102,7 +103,8 @@ def reject_nomination(request, pk):
 @login_required
 def nomination_answers(request, pk):
     application = NominationInstance.objects.get(pk=pk)
-    answer = application.filled_form
+    applicant = application.user
+    answer = FilledForm.objects.filter(applicant=applicant)
 
     return render(request, 'nomi-answer.html', context={'answer': answer})
 
