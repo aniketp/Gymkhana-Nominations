@@ -192,6 +192,7 @@ def post_approval(request,view_pk,post_pk):
 
 def child_post_view(request,pk,view_pk):
     post=Post.objects.get(pk=pk)
+    nominations=Nomination.objects.filter(nomi_post=post)
     if post.status == 'Post created':
         ap=1
     else:
@@ -207,7 +208,7 @@ def child_post_view(request,pk,view_pk):
         approval=1
     else:
         approval=0
-    return render(request,'child_post.html',{'post':post,'view_pk':view_pk,'ap':ap,'approval':approval,'power_to_approve':power_to_approve})
+    return render(request,'child_post.html',{'post':post,'view_pk':view_pk,'ap':ap,'approval':approval,'power_to_approve':power_to_approve,'nominations':nominations})
 
 def final_post_approval(request,view_pk,post_pk):
     post = Post.objects.get(pk=post_pk)

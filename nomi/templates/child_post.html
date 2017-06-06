@@ -25,15 +25,22 @@
                         No one assigned
                     {% endif %}
 
+                </p>
+                <div>
+
                     {% if nominations %}
                         {% for nomination in nominations %}
+                            <div>
                             {{nomination.name}}
+                            </div>
                         {% endfor %}
                     {% else %}
                         NO nominations
                     {% endif %}
-                    
-                </p>
+
+                </div>
+
+
             </div>
 
             <div class="col-lg-4 text-center">
