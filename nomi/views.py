@@ -176,7 +176,9 @@ def post_create(request, pk):     # TODO
 
         if post_form.is_valid():
             post = Post.objects.create(post_name=post_form.cleaned_data['post_title'], parent=parent)
-            return HttpResponseRedirect(reverse('nomi_create', kwargs={'pk': pk}))
+            post_pk=post.pk
+            #bug fixed
+            return HttpResponseRedirect(reverse('nomi_create', kwargs={'pk': post_pk}))
 
     else:
         post_form = PostForm()

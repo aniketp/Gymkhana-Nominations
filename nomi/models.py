@@ -30,6 +30,7 @@ class Post(models.Model):
 class Nomination(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(max_length=1000, null=True, blank=True)
+    results_declared = models.BooleanField(default=False)
     nomi_post = models.ForeignKey(Post, null=True)
     nomi_form = models.OneToOneField('forms.Questionnaire', null=True, blank=True)
     status = models.CharField(max_length=50, choices=STATUS, default='Nomination created')
