@@ -34,6 +34,8 @@ class Questionnaire(models.Model):
         json_data = json.dumps(answer_data)
         answerform = FilledForm(questionnaire=self, applicant=applicant,data=json_data)
         answerform.save()
+        return answerform
+
 
 
 FIELD_TYPES = (
