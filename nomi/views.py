@@ -100,6 +100,14 @@ def reject_nomination(request, pk):
 
 
 @login_required
+def nomination_answers(request, pk):
+    application = NominationInstance.objects.get(pk=pk)
+    answer = application.filled_form
+
+    return render(request, 'nomi-answer.html', context={'answer': answer})
+
+
+@login_required
 def profile_view(request):
     pk = request.user.pk
 
