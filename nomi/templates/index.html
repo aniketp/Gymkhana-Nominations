@@ -66,7 +66,7 @@
 
 
                             {% if not perms.nomi.admin %}
-                                        <p><a href="{% url 'forms:show_form' nomi.nomi_form.pk %}">See Details and Apply</a></p>
+                                        <p><a href="{% url 'nomi_apply' nomi.pk %}">See Details and Apply</a></p>
                             {% endif %}
 
                                 <p><a href="{% url 'result' nomi.pk %}">View Results</a></p>
