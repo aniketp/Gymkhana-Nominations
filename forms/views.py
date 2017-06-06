@@ -25,13 +25,15 @@ def creator_form(request, pk):
 def show_form(request, pk):
     questionnaire = get_object_or_404(Questionnaire, id=pk)
     form = questionnaire.get_form(request.POST or None)
+    form_confirm=ConfirmApplication(request.POST or None)
     pk = questionnaire.pk
     tk=questionnaire.nomination.pk
-    if form.is_valid():
-        questionnaire.add_answer(request.user, form.cleaned_data)
-        return HttpResponseRedirect(reverse('nomi_apply',kwargs={'pk':tk}))
+    if form_confirm.is_valid():
+        if form.is_valid():
+            questionnaire.add_answer(request.user, form.cleaned_data)
+            return HttpResponseRedirect(reverse('nomi_apply',kwargs={'pk':tk}))
 
-    return render(request, 'forms/show_form.html', context={'form': form, 'questionnaire':questionnaire,'pk':pk})
+    return render(request, 'forms/show_form.html', context={'form': form,'form_confirm':form_confirm,'questionnaire':questionnaire,'pk':pk})
 
 
 def show_answer_form(request,pk):

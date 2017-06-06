@@ -21,6 +21,7 @@ form view
                             {% csrf_token %}
                         <p>
                             {{form|bootstrap}}
+                            {{form_confirm|bootstrap}}
                         </p>
                         <input  class="btn btn-primary btn-large" type="submit" value="Confirm Submission" />
                     </form>
