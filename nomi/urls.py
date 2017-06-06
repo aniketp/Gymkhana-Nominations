@@ -58,6 +58,7 @@ urlpatterns = [
 
 
     url(r'^final_post_approve/(?P<post_pk>\d+)/(?P<view_pk>\d+)/$',views.final_post_approval,name='final_post_approval'),
+
     # nominations/child_post/2/8
     url(r'^child_post/(?P<pk>\d+)/(?P<view_pk>\d+)/$',views.child_post_view,name='child_post'),
 ]
