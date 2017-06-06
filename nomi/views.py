@@ -9,6 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from .forms import NominationForm, PostForm, ConfirmApplication
 from forms.models import Questionnaire
 from .filters import UserProfileFilter
+import json
 
 
 @login_required
@@ -112,13 +113,14 @@ def reject_nomination(request, pk):
 
 
 @login_required
-def nomination_answers(request, nomi_pk,user_pk,):
+def nomination_answer(request,pk):
     application = NominationInstance.objects.get(pk=pk)
-    applicants = application.user
-    answer = FilledForm.objects.get(applicant=applicants)
-    answers = answer.data
+    form1 = application.filled_form
+    data = json.loads(form1.data)
+    questionnaire=application.nomination.nomi_form
+    form = questionnaire.get_form(data)
 
-    return render(request, 'nomi-answer.html', context={'answer': answers})
+    return render(request, 'nomi_answer.html', context={'form': form})
 
 
 @login_required

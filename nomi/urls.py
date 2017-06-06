@@ -25,7 +25,7 @@ urlpatterns = [
     # nominations/applicants/2
     url(r'^applicants/(?P<pk>\d+)/$', views.application_result, name='applicants'),
 
-    url(r'^answers/(?P<pk>\d+)/$', views.nomination_answers, name='nomi_answer'),
+    url(r'^answers/(?P<pk>\d+)/$', views.nomination_answer, name='nomi_answer'),
 
     # nominations/applicants/2 (redirect)
     url(r'^accept/(?P<pk>\d+)/$', views.accept_nomination, name='accept'),
