@@ -121,7 +121,7 @@ def nomination_answer(request, pk):
     questionnaire = application.nomination.nomi_form
     form = questionnaire.get_form(data)
 
-    return render(request, 'nomi_answer.html', context={'form': form})
+    return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application})
 
 
 @login_required
