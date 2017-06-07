@@ -29,7 +29,10 @@ def club_view(request, pk):
     child_clubs = Club.objects.filter(club_parent=club)
     posts = Post.objects.filter(post_holders=request.user)
 
-    return render(request, 'club.html', context={'club': club, 'child_clubs': child_clubs, 'posts': posts})
+    club_approvals = Club.objects.filter(club_approvals=club).filter(status='Club created')
+
+    return render(request, 'club.html', context={'club': club, 'child_clubs': child_clubs,
+                                                 'posts': posts, 'club_approval': club_approvals})
 
 
 @login_required

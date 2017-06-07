@@ -8,6 +8,9 @@ class Club(models.Model):
     club_parent = models.ForeignKey('self', null=True, blank=True)
     club_members = models.ManyToManyField(User, blank=True)
 
+    status = models.CharField(max_length=50, choices=CLUB_STATUS, default='Club created')
+    club_approvals = models.ManyToManyField('self', related_name='approvals', symmetrical=False, blank=True)
+
     def __str__(self):
         return self.club_name
 
@@ -19,7 +22,7 @@ class Post(models.Model):
     post_holders = models.ManyToManyField(User, blank=True)
     post_approvals = models.ManyToManyField('self', related_name='approvals', symmetrical=False, blank=True)
     status = models.CharField(max_length=50, choices=POST_STATUS, default='Post created')
-    perms=models.CharField(max_length=200,choices=POST_PERMS,default='normal')
+    perms = models.CharField(max_length=200,choices=POST_PERMS, default='normal')
     class Meta:
         permissions = (("can approve the post", "can approve the post"), ("can send nominations to users", "can send nominations to users"))
 

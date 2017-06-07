@@ -52,6 +52,13 @@ POST_STATUS = (
         ('Post on work', 'Post on work'),
 )
 
+CLUB_STATUS = (
+        ('Post created', 'Post created'),
+        ('Post approved', 'Post approved'),
+        ('Post rejected', 'Post rejected'),
+        ('Post on work', 'Post on work'),
+)
+
 POST_PERMS = (
     ("normal","normal"),
     ("can approve the post", "can approve the post"),
