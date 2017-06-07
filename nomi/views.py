@@ -82,9 +82,8 @@ def result(request, pk):
     return render(request, 'result.html', context={'users': users})
 
 
-@permission_required('nomi.admin')
 def application_result(request, pk):
-    nomination = Nomination.objects.filter(pk=pk)
+    nomination = Nomination.objects.get(pk=pk)
     applicants = NominationInstance.objects.filter(nomination=nomination)
 
     return render(request, 'applicants.html', context={'applicants': applicants})
@@ -284,3 +283,11 @@ def final_post_approval(request, view_pk, post_pk,nomi_pk):
     nomi.save()
 
     return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk, 'view_pk': view_pk}))
+
+
+def nomi_detail(request,view_pk,post_pk,nomi_pk):
+    nomi=Nomination.objects.get(pk=nomi_pk)
+    questionnaire = nomi.nomi_form
+    form = questionnaire.get_form(request.POST or None)
+
+    return render(request, 'nomi_detail.html',context={'nomi':nomi, 'form': form,'view_pk':view_pk,'post_pk':post_pk})
