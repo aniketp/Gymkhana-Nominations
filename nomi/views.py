@@ -77,7 +77,7 @@ def club_create(request, pk):
     else:
         club_form = ClubForm()
 
-    return render(request, 'nomi/club_form.html', context={'form': clubg_form})
+    return render(request, 'nomi/club_form.html', context={'form': club_form})
 
 
 @login_required
