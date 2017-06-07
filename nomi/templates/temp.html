@@ -40,7 +40,7 @@
                          <li class="list-group-item">
                              {% if power_to_approve %}
 
-                                        <a class="list-group-item" href="{% url 'final_post_approval' post_pk=post.pk view_pk=view_pk %}">Approve the post</a>
+                                        <a class="list-group-item" href="{% url 'final_post_approval' club_pk=club.pk view_pk=view_pk %}">Approve the post</a>
                              {% else %}
                                     {% if approval %}
                                          <a class="list-group-item">Approval request sent to parent</a>
