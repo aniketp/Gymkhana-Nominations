@@ -24,7 +24,7 @@ img{max-width:100%;}
 /*end reset*/
 body{
 	font-family:"Century Gothic" Geneva Helvetica, sans-serif;
-	background: url('../images/bg.png');
+	background: url('../img/bg.png');
 }
 .wrap{
 	margin:0 auto; 
