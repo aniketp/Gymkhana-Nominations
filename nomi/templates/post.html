@@ -50,7 +50,7 @@
                     <hr>
                     {% for nomi in nomi_approval %}
                     <div class="text-center">
-                        <h4>{{ nomi.name }}</h4>
+                        <h4><a href="{% url 'nomi_detail' post_pk=nomi.nomi_post.pk view_pk=post.pk nomi_pk=nomi.pk %}">{{ nomi.name }}</a></h4>
                     </div>
                      {% endfor %}
                 </div>

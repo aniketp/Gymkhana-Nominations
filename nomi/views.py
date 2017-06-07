@@ -5,7 +5,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
-from .forms import NominationForm, PostForm, ConfirmApplication, NomiEdit
+from .forms import NominationForm, PostForm, ConfirmApplication
 from forms.models import Questionnaire
 from .filters import UserProfileFilter
 import json
@@ -13,7 +13,7 @@ import json
 # the main view
 @login_required
 def index(request):
-    nominations = Nomination.objects.all()
+    nominations = Nomination.objects.filter(status='Nomination out')
     all_nominations = nominations[::-1]
     posts = Post.objects.filter(post_holders=request.user)
     clubs = Club.objects.filter(club_members=request.user)
@@ -40,9 +40,10 @@ def post_view(request, pk):
     child_posts = Post.objects.filter(parent=post)
     child_posts_reverse = child_posts[::-1]
     post_approval = Post.objects.filter(post_approvals=post).filter(status='Post created')
+    nomi_approval = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
 
     return render(request, 'post.html', context={'post': post, 'child_posts': child_posts_reverse,
-                                                 'post_approval': post_approval})
+                                                 'post_approval': post_approval ,'nomi_approval':nomi_approval})
 # new child post creation
 @login_required
 def post_create(request, pk):
@@ -170,7 +171,7 @@ def nomi_detail(request,view_pk,post_pk,nomi_pk):
     if view.perms == 'normal':
         power_to_send = 0
     else:
-        power_to_send = 0
+        power_to_send = 1
 
 
     view_parent = Post.objects.get(pk=view.parent.pk)
