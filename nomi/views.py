@@ -290,11 +290,21 @@ def nomi_detail(request, view_pk, post_pk, nomi_pk):
     else:
         approval = 0
 
-    return render(request, 'nomi_detail.html', context={'nomi': nomi, 'form': form, 'view_pk': view_pk,
+    access = False
+    for apv_post in nomi.nomi_post.post_approvals.all():
+        if request.user in apv_post.post_holders.all():
+            access = True
+            break
+
+    if access or request.user in nomi.post.parent.post_holders.all():
+        return render(request, 'nomi_detail.html', context={'nomi': nomi, 'form': form, 'view_pk': view_pk,
                                                         'post_pk': post_pk, 'ap': approved,
                                                         'approval': approval, 'power_to_send': power_to_send})
+    else:
+        return render(request, 'no_access.html')
 
 
+    
 @login_required
 def nomi_approval(request, view_pk, post_pk, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
