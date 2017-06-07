@@ -82,6 +82,7 @@ def result(request, pk):
     return render(request, 'result.html', context={'users': users})
 
 
+@login_required
 def application_result(request, pk):
     nomination = Nomination.objects.get(pk=pk)
     applicants = NominationInstance.objects.filter(nomination=nomination)
@@ -300,14 +301,12 @@ def nomi_detail(request,view_pk,post_pk,nomi_pk):
     else:
         power_to_send = 0
 
-
     view_parent = Post.objects.get(pk=view.parent.pk)
 
     if view_parent in nomi.nomi_approvals.all():
         approval = 1
     else:
         approval = 0
-
 
     return render(request, 'nomi_detail.html',context={'nomi':nomi, 'form': form,'view_pk':view_pk,'post_pk':post_pk,'ap': ap,
                                                'approval': approval, 'power_to_send': power_to_send,})
