@@ -51,7 +51,7 @@ urlpatterns = [
     url(r'^club/(?P<pk>\d+)/$', views.club_view, name='club_view'),
 
     # nominations/createclub/2
-    # url(r'^createpost/(?P<pk>\d+)/$', views.club_create, name='club_create'),
+    url(r'^createclub/(?P<pk>\d+)/$', views.club_create, name='club_create'),
 
     # nominations/filter
     url(r'^filter/$', views.universal_filter, name='universal_filter'),
