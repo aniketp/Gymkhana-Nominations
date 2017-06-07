@@ -181,7 +181,16 @@ def post_approval(request, view_pk, post_pk):
 
     post.post_approvals.add(to_add)
 
-    return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk, 'view_pk': view_pk}))
+    access = False
+    for pt in post.post_approvals.all():
+        if request.user in pt.post_holders.all():
+            access = True
+            break
+
+    if access or request.user in post.parent.post_holders.all():
+        return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk, 'view_pk': view_pk}))
+    else:
+        return render(request,'no_access.html')
 
 
 @login_required
