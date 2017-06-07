@@ -68,16 +68,16 @@ def club_create(request, pk):
         parent = Club.objects.get(pk=pk)
         club_form = ClubForm(request.POST)
 
-        if post_form.is_valid():
-            post = Post.objects.create(post_name=post_form.cleaned_data['post_title'], club=club, parent=parent)
-            post_pk = post.pk
+        if club_form.is_valid():
+            club = Club.objects.create(club_name=club_form.cleaned_data['club_name'], parent=parent)
+            club_pk = club.pk
 
-            return HttpResponseRedirect(reverse('nomi_create', kwargs={'pk': post_pk}))
+            return HttpResponseRedirect(reverse('nomi_create', kwargs={'pk': club_pk}))
 
     else:
-        post_form = PostForm()
+        club_form = ClubForm()
 
-    return render(request, 'nomi/post_form.html', context={'form': post_form})
+    return render(request, 'nomi/club_form.html', context={'form': clubg_form})
 
 
 @login_required
