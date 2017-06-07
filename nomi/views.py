@@ -90,7 +90,6 @@ def application_result(request, pk):
 
 
 @login_required
-@permission_required('nomi.admin')
 def accept_nomination(request, pk):
     application = NominationInstance.objects.get(pk=pk)
     id_accept = application.nomination.pk
@@ -101,7 +100,6 @@ def accept_nomination(request, pk):
 
 
 @login_required
-@permission_required('nomi.admin')
 def reject_nomination(request, pk):
     application = NominationInstance.objects.get(pk=pk)
     id_reject = application.nomination.pk
