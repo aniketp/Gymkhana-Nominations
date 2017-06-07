@@ -6,13 +6,13 @@
         <div class="container box "}>
 
                  <div class="row">
-                    <h3 class="text-center">{{post.post_name}}</h3>
+                    <h3 class="text-center">{{club.club_name}}</h3>
                 </div>
         </div>
 
         <div class="container box"}>
                 <div class="row">
-                    <h3 class="text-center"><a href="{% url 'post_create' post.pk %}">Create a new child post</a></h3>
+                    <h3 class="text-center"><a href="{% url 'club_create' club.pk %}">Create a new child Club</a></h3>
                 </div>
         </div>
 
@@ -54,9 +54,6 @@
                     </div>
                      {% endfor %}
                 </div>
-
-
-
        </div>
 
     {% endblock %}
