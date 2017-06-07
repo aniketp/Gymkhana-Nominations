@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}nomination detail{% endblock %}
+{% load bootstrap %}
+{% load staticfiles %}
+
+{% block heading %}
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+{% endblock %}
+
+
+    {% block content  %}
+        <div class="container box">
+            <div class="col-lg-12 text-center box">
+                <br>
+                <br>
+                    <h3>{{nomi.name}}</h3>
+                        <p>{{nomi.status}}
+                            <h4>Post : {{nomi.nomi_post}}</h4>
+                            <hr>
+
+                <strong>BATCH : {{nomi.year_choice}}  || Hall : {{nomi.hall_choice}} || DEPT : {{nomi.dept_choice}}</strong>
+                        </p>
+            </div>
+        </div>
+
+
+        <div class="container box">
+            <div class="col-lg-7  box" style="margin:25px">
+                  <form>
+                      <div class="text-center">{{nomi.name}}</div>
+                      <hr>
+                        {% csrf_token %}
+                        <p>
+                            {{form|bootstrap}}
+                        </p>
+
+                    </form>
+
+
+            </div>
+
+            <div class="col-lg-4 text-center">
+                  <div class="row">
+                     <div class="team-member text-center">
+                        <p class="text-muted">Actions</p>
+                     </div>
+                  </div>
+
+                  <div>
+                     <ul class="list-group">
+                         <li class="list-group-item">
+
+                                        <a class="list-group-item" href="">send to parent for approval</a>
+
+                         </li>
+                         <li class="list-group-item" ><a class="list-group-item">All Applications</a></li>
+                         <li class="list-group-item"><a class="list-group-item" href="">Edit the nomination</a></li>
+                         <li></li>
+
+                     </ul>
+                  </div>
+            </div>
+
+
+        </div>
+
+    {% endblock %}
+
