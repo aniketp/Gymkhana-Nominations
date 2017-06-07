@@ -39,23 +39,14 @@
                 <div class="col-lg-12 box">
                     <h3 class="text-center">Clubs to be approved</h3>
                     <hr>
-                    {% for ch_post in post_approval %}
+                    {% for club in club_approval %}
                     <div class="text-center">
-                        <h4><a href="{% url 'child_post' pk=ch_post.pk view_pk=post.pk %}">{{ ch_post.post_name }}</a></h4>
+                        <h4><a href="{% url 'child_post' pk=ch_post.pk view_pk=post.pk %}">{{ club.club_name }}</a></h4>
                          {{ch_post.status}}
                     </div>
                      {% endfor %}
                </div>
 
-                <div class="col-lg-12 box">
-                    <h3 class="text-center">Nomination to be approved</h3>
-                    <hr>
-                    {% for nomi in nomi_approval %}
-                    <div class="text-center">
-                        <h4><a href="{% url 'nomi_detail' post_pk=nomi.nomi_post.pk view_pk=post.pk nomi_pk=nomi.pk %}">{{ nomi.name }}</a></h4>
-                    </div>
-                     {% endfor %}
-                </div>
        </div>
 
     {% endblock %}
