@@ -63,6 +63,24 @@ def post_create(request, pk):
 
 
 @login_required
+def club_create(request, pk):
+    if request.method == 'POST':
+        parent = Post.objects.get(pk=pk)
+        post_form = PostForm(request.POST)
+
+        if post_form.is_valid():
+            post = Post.objects.create(post_name=post_form.cleaned_data['post_title'], club=club, parent=parent)
+            post_pk = post.pk
+
+            return HttpResponseRedirect(reverse('nomi_create', kwargs={'pk': post_pk}))
+
+    else:
+        post_form = PostForm()
+
+    return render(request, 'nomi/post_form.html', context={'form': post_form})
+
+
+@login_required
 def child_post_view(request, pk, view_pk):
     post = Post.objects.get(pk=pk)
     nominations = Nomination.objects.filter(nomi_post=post)
@@ -176,9 +194,9 @@ def nomi_detail(request, view_pk, post_pk, nomi_pk):
     else:
         approval = 0
 
-
-    return render(request, 'nomi_detail.html',context={'nomi':nomi, 'form': form,'view_pk':view_pk,'post_pk':post_pk,'ap': ap,
-                                               'approval': approval, 'power_to_send': power_to_send,})
+    return render(request, 'nomi_detail.html',context={'nomi':nomi, 'form': form,'view_pk':view_pk,
+                                                       'post_pk':post_pk,'ap': ap,
+                                                       'approval': approval, 'power_to_send': power_to_send,})
 
 
 @login_required
