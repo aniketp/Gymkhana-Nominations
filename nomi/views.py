@@ -304,7 +304,7 @@ def nomi_detail(request, view_pk, post_pk, nomi_pk):
         return render(request, 'no_access.html')
 
 
-    
+
 @login_required
 def nomi_approval(request, view_pk, post_pk, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
