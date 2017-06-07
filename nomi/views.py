@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Nomination, NominationInstance, UserProfile, Post, Club
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
