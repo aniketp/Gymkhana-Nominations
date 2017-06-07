@@ -27,11 +27,12 @@ def index(request):
 def club_view(request, pk):
     club = Club.objects.get(pk=pk)
     child_clubs = Club.objects.filter(club_parent=club)
+    child_clubs_reverse = child_clubs[::-1]
     posts = Post.objects.filter(post_holders=request.user)
 
     club_approvals = Club.objects.filter(club_approvals=club).filter(status='Club created')
 
-    return render(request, 'club.html', context={'club': club, 'child_clubs': child_clubs,
+    return render(request, 'club.html', context={'club': club, 'child_clubs': child_clubs_reverse,
                                                  'posts': posts, 'club_approval': club_approvals})
 
 

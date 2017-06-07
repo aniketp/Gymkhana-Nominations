@@ -41,8 +41,8 @@
                     <hr>
                     {% for club in club_approval %}
                     <div class="text-center">
-                        <h4><a href="{% url 'child_post' pk=ch_post.pk view_pk=post.pk %}">{{ club.club_name }}</a></h4>
-                         {{ch_post.status}}
+                        <h4><a href="{% url 'child_club' pk=ch_post.pk view_pk=post.pk %}">{{ club.club_name }}</a></h4>
+                         {{club.status}}
                     </div>
                      {% endfor %}
                </div>
