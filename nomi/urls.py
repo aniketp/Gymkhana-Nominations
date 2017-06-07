@@ -63,5 +63,13 @@ urlpatterns = [
 
     # nominations/child_post/2/8
     url(r'^child_post/(?P<pk>\d+)/(?P<view_pk>\d+)/$',views.child_post_view,name='child_post'),
-    url(r'^nomi_detail/(?P<view_pk>\d+)/(?P<post_pk>\d+)/(?P<nomi_pk>\d+)/$',views.nomi_detail,name='nomi_detail')
+    url(r'^nomi_detail/(?P<view_pk>\d+)/(?P<post_pk>\d+)/(?P<nomi_pk>\d+)/$',views.nomi_detail,name='nomi_detail'),
+
+    # nominations/post_approve/2/34
+    url(r'^nomi_approve/(?P<view_pk>\d+)/(?P<post_pk>\d+)/(?P<nomi_pk>\d+)/$', views.nomi_approval, name='nomi_approval'),
+
+    url(r'^final_nomi_approve/(?P<view_pk>\d+)/(?P<post_pk>\d+)/(?P<nomi_pk>\d+)/$', views.final_nomi_approval,
+        name='final_nomi_approval'),
+
+
 ]
