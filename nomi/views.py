@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from forms.models import Question
 from .models import Nomination, NominationInstance, UserProfile, Post, Club
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
