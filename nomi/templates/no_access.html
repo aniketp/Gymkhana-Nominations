@@ -1,17 +1,19 @@
 
 <!DOCTYPE HTML>
+{% load staticfiles %}
+
 <html>
 <head>
 <title>No Access</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<link rel="stylesheet" href="css/style.css">
+<link href="{% static 'nomi/css/style.css' %}" rel="stylesheet">
 </head>
 <body>
 <div class="wrap">
 	<h1>Gymkhana nominations</h1>
 	<div class="banner">
-		<img src="images/banner.png" alt="" />
+		<img src="{% static 'img/banner.png' %}" alt="" />
 	</div>
 	<div class="page">
 		<h2>Dude,This page is not meant for you!</h2>
