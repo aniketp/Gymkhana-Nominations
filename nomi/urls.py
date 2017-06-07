@@ -25,6 +25,7 @@ urlpatterns = [
     # nominations/applicants/2
     url(r'^applicants/(?P<pk>\d+)/$', views.applications, name='applicants'),
 
+    # nominations/answers/2
     url(r'^answers/(?P<pk>\d+)/$', views.nomination_answer, name='nomi_answer'),
 
     # nominations/applicants/2 (redirect)
@@ -58,16 +59,19 @@ urlpatterns = [
     # nominations/post_approve/2/34
     url(r'^post_approve/(?P<post_pk>\d+)/(?P<view_pk>\d+)/$',views.post_approval,name='post_approval'),
 
-
-    url(r'^final_post_approve/(?P<post_pk>\d+)/(?P<view_pk>\d+)/$',views.final_post_approval,name='final_post_approval'),
+    # nominations/final_post_approve/2/43
+    url(r'^final_post_approve/(?P<post_pk>\d+)/(?P<view_pk>\d+)/$', views.final_post_approval, name='final_post_approval'),
 
     # nominations/child_post/2/8
-    url(r'^child_post/(?P<pk>\d+)/(?P<view_pk>\d+)/$',views.child_post_view,name='child_post'),
-    url(r'^nomi_detail/(?P<view_pk>\d+)/(?P<post_pk>\d+)/(?P<nomi_pk>\d+)/$',views.nomi_detail,name='nomi_detail'),
+    url(r'^child_post/(?P<pk>\d+)/(?P<view_pk>\d+)/$', views.child_post_view, name='child_post'),
+
+    # nominations/nomi_detail/2/34/6
+    url(r'^nomi_detail/(?P<view_pk>\d+)/(?P<post_pk>\d+)/(?P<nomi_pk>\d+)/$', views.nomi_detail, name='nomi_detail'),
 
     # nominations/post_approve/2/34
     url(r'^nomi_approve/(?P<view_pk>\d+)/(?P<post_pk>\d+)/(?P<nomi_pk>\d+)/$', views.nomi_approval, name='nomi_approval'),
 
+    # nominations/final_nomi_approve/2/43/21
     url(r'^final_nomi_approve/(?P<view_pk>\d+)/(?P<post_pk>\d+)/(?P<nomi_pk>\d+)/$', views.final_nomi_approval,
         name='final_nomi_approval'),
 
