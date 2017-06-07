@@ -20,3 +20,7 @@ class ConfirmApplication(forms.Form):
     Tick_the_box_for_confirmation=forms.CharField(max_length=100,widget=forms.CheckboxInput())
 
 
+class NomiEdit(forms.Form):
+    year_choice = forms.ChoiceField(choices=YEAR_1, label="Batch", initial='All', widget=forms.Select(), required=True)
+    dept_choice = forms.ChoiceField(choices=DEPT_1, label="Dept", initial='All', widget=forms.Select(), required=True)
+    hall_choice = forms.ChoiceField(choices=HALL_1, label="Hall", initial=0, widget=forms.Select(), required=True)

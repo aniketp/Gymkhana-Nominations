@@ -5,7 +5,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
-from .forms import NominationForm, PostForm, ConfirmApplication
+from .forms import NominationForm, PostForm, ConfirmApplication, NomiEdit
 from forms.models import Questionnaire
 from .filters import UserProfileFilter
 import json
@@ -313,3 +313,15 @@ def nomi_detail(request,view_pk,post_pk,nomi_pk):
 
     return render(request, 'nomi_detail.html',context={'nomi':nomi, 'form': form,'view_pk':view_pk,'post_pk':post_pk,'ap': ap,
                                                'approval': approval, 'power_to_send': power_to_send,})
+
+
+
+def nomi_edit(request, view_pk, post_pk,nomi_pk):
+    nomi=Nomination.objects.get(pk=nomi_pk)
+    questionnaire = nomi.nomi_form
+    form = questionnaire.get_form()
+    pk = questionnaire.pk
+    questions = Question.objects.filter(questionnaire=questionnaire)
+
+    return render(request, 'nomi_edit.html',
+                  context={'form': form, 'questions': questions, 'nomi':nomi , view_pk:view_pk , post_pk:post_pk})
