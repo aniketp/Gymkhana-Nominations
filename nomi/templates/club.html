@@ -26,9 +26,9 @@
                    <h3 class="text-center">Child Clubs</h3>
                    <hr>
 
-                   {% for club in child_clubs %}
+                   {% for ch_club in child_clubs %}
                        <div class="text-center">
-                           <h4><a href="">{{ club.club_name }}</a></h4>
+                           <h4><a href="{% url 'child_club' pk=ch_club.pk view_pk=club.pk %}">{{ ch_club.club_name }}</a></h4>
                        </div>
                    {% endfor %}
 

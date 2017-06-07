@@ -109,7 +109,7 @@ def child_club_view(request, pk, view_pk):
     else:
         approval = 0
 
-    return render(request, 'child_club.html', {'club': club, 'view_pk': view_pk, 'ap': approved,
+    return render(request, 'temp.html', {'club': club, 'view_pk': view_pk, 'ap': approved,
                                                'approval': approval, 'power_to_approve': power_to_approve})
 
 
