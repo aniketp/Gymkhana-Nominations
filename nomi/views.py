@@ -244,13 +244,9 @@ def nomi_apply(request, pk):
 
 
 
-<<<<<<< HEAD
 # list of filled forms
-def applications(request, pk):
-=======
 @login_required
-def application_result(request, pk):
->>>>>>> a8feea9d87144abf478276d28b4aae7bf9c8595a
+def applications(request, pk):
     nomination = Nomination.objects.get(pk=pk)
     applicants = NominationInstance.objects.filter(nomination=nomination)
 
@@ -325,65 +321,6 @@ class UserProfileUpdate(UpdateView):
     success_url = reverse_lazy('index')
 
 
-<<<<<<< HEAD
-=======
-@login_required
-def nomination_create(request, pk):
-    post = Post.objects.get(pk=pk)
-    if request.method == 'POST':
-        title_form = NominationForm(request.POST)
-        if title_form.is_valid():
-            post = Post.objects.get(pk=pk)
-
-            questionnaire = Questionnaire.objects.create(name=title_form.cleaned_data['title'],
-                                                         description=title_form.cleaned_data['description'])
-            nomination = Nomination.objects.create(name=title_form.cleaned_data['title'],
-                                                   description=title_form.cleaned_data['description'],
-                                                   nomi_form=questionnaire, nomi_post=post,
-                                                   year_choice=title_form.cleaned_data['year_choice'],
-                                                   hall_choice=title_form.cleaned_data['hall_choice'],
-                                                   dept_choice=title_form.cleaned_data['dept_choice'],
-                                                   )
-
-            pk = questionnaire.pk
-            return HttpResponseRedirect(reverse('forms:creator_form', kwargs={'pk': pk}))
-
-    else:
-        title_form = NominationForm()
-
-    return render(request, 'nomi/nomination_form.html', context={'form': title_form, 'post': post})
-
-
-class NominationUpdate(UpdateView):
-    model = Nomination
-    fields = ['name', 'description', 'year_choice', 'hall_choice', 'dept_choice']
-    success_url = reverse_lazy('index')
-
-
-class NominationDelete(DeleteView):
-    model = Nomination
-    success_url = reverse_lazy('index')
-
-
-@login_required
-def post_create(request, pk):
-    if request.method == 'POST':
-        parent = Post.objects.get(pk=pk)
-        post_form = PostForm(request.POST)
-        club = parent.club
-
-        if post_form.is_valid():
-            post = Post.objects.create(post_name=post_form.cleaned_data['post_title'],
-                                       club=club, parent=parent)
-            post_pk = post.pk
-
-            return HttpResponseRedirect(reverse('nomi_create', kwargs={'pk': post_pk}))
-
-    else:
-        post_form = PostForm()
-
-    return render(request, 'nomi/post_form.html', context={'form': post_form})
->>>>>>> a8feea9d87144abf478276d28b4aae7bf9c8595a
 
 
 @login_required
@@ -398,35 +335,9 @@ def universal_filter(request):
 def nomi_edit(request, view_pk, post_pk,nomi_pk):
     nomi=Nomination.objects.get(pk=nomi_pk)
     questionnaire = nomi.nomi_form
-<<<<<<< HEAD
     form = questionnaire.get_form()
     pk = questionnaire.pk
     questions = Question.objects.filter(questionnaire=questionnaire)
 
     return render(request, 'nomi_edit.html',
                   context={'form': form, 'questions': questions, 'nomi':nomi , view_pk:view_pk , post_pk:post_pk})
-=======
-    form = questionnaire.get_form(request.POST or None)
-
-    if nomi.status == 'Nomination created':
-        ap=1
-    else:
-        ap=0
-
-    view = Post.objects.get(pk=view_pk)
-
-    if view.perms == 'normal':
-        power_to_send = 0
-    else:
-        power_to_send = 0
-
-    view_parent = Post.objects.get(pk=view.parent.pk)
-
-    if view_parent in nomi.nomi_approvals.all():
-        approval = 1
-    else:
-        approval = 0
-
-    return render(request, 'nomi_detail.html',context={'nomi':nomi, 'form': form,'view_pk':view_pk,'post_pk':post_pk,'ap': ap,
-                                               'approval': approval, 'power_to_send': power_to_send,})
->>>>>>> a8feea9d87144abf478276d28b4aae7bf9c8595a
