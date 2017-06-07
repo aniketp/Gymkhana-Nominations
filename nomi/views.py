@@ -263,6 +263,7 @@ def reject_nomination(request, pk):
     return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_reject}))
 
 
+@login_required
 def result(request, pk):
     nomination = Nomination.objects.get(pk=pk)
     users = NominationInstance.objects.filter(nomination=nomination).filter(status__exact='a')
