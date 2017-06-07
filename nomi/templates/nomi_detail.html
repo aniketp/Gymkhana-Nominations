@@ -59,20 +59,20 @@
                          <li class="list-group-item">
                              {% if power_to_send %}
 
-                                        <a class="list-group-item" href="">Approve and send to User</a>
+                                        <a class="list-group-item" href="{% url 'final_nomi_approval' post_pk=post_pk view_pk=view_pk nomi_pk=nomi.pk %}">Approve and send to User</a>
                              {% else %}
                                     {% if approval %}
-                                         <a class="list-group-item">Approval request sent to parent</a>
+                                         <a class="list-group-item" href="">Approval request sent to parent</a>
                                     {% else%}
-                                        <a class="list-group-item" href="">send to parent for approval</a>
+                                        <a class="list-group-item" href="{% url 'nomi_approval' post_pk=post_pk view_pk=view_pk nomi_pk=nomi.pk %}">send to parent for approval</a>
                                     {% endif %}
                              {% endif %}
                          </li>
                           {% endif %}
 
-                         <li class="list-group-item" ><a class="list-group-item">All Applications</a></li>
-                         <li class="list-group-item"><a class="list-group-item" href="">Edit the nomination</a></li>
-                         
+                         <li class="list-group-item" ><a class="list-group-item" href="{% url 'applicants' nomi.pk %}">All Applications</a></li>
+                         <li class="list-group-item"><a class="list-group-item" href="{% url 'forms:creator_form' nomi.nomi_form.pk %}">Edit the nomination</a></li>
+
 
                      </ul>
                   </div>

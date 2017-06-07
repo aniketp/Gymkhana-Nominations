@@ -268,13 +268,13 @@ def nomi_approval(request, view_pk,post_pk,nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     viewer = Post.objects.get(pk=view_pk)
     to_add = viewer.parent
-    nomi.post_approvals.add(to_add)
+    nomi.nomi_approvals.add(to_add)
 
-    return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk, 'view_pk': view_pk}))
+    return HttpResponseRedirect(reverse('nomi_detail', kwargs={'post_pk': post_pk, 'view_pk': view_pk,'nomi_pk':nomi_pk}))
 
 
 @login_required
-def final_post_approval(request, view_pk, post_pk,nomi_pk):
+def final_nomi_approval(request, view_pk, post_pk,nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     viewer = Post.objects.get(pk=view_pk)
     to_add = viewer
@@ -282,7 +282,7 @@ def final_post_approval(request, view_pk, post_pk,nomi_pk):
     nomi.status = 'Nomination out'
     nomi.save()
 
-    return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk, 'view_pk': view_pk}))
+    return HttpResponseRedirect(reverse('nomi_detail', kwargs={'post_pk': post_pk, 'view_pk': view_pk,'nomi_pk':nomi_pk}))
 
 
 def nomi_detail(request,view_pk,post_pk,nomi_pk):
