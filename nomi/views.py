@@ -37,11 +37,30 @@ def post_view(request, pk):
     post = Post.objects.get(pk=pk)
     child_posts = Post.objects.filter(parent=post)
     child_posts_reverse = child_posts[::-1]
-    post_approval = Post.objects.filter(post_approvals=post).filter(status='Post created')
-    nomi_approval = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
+
+    post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
+    nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
 
     return render(request, 'post.html', context={'post': post, 'child_posts': child_posts_reverse,
-                                                 'post_approval': post_approval ,'nomi_approval':nomi_approval})
+                                                 'post_approval': post_approvals, 'nomi_approval': nomi_approvals})
+
+
+@login_required
+def club_create(request, pk):
+    if request.method == 'POST':
+        parent = Club.objects.get(pk=pk)
+        club_form = ClubForm(request.POST)
+
+        if club_form.is_valid():
+            club = Club.objects.create(club_name=club_form.cleaned_data['club_name'], club_parent=parent)
+            club_pk = club.pk
+
+            return HttpResponseRedirect(reverse('index'))
+
+    else:
+        club_form = ClubForm()
+
+    return render(request, 'nomi/club_form.html', context={'form': club_form})
 
 
 @login_required
@@ -61,23 +80,6 @@ def post_create(request, pk):
 
     return render(request, 'nomi/post_form.html', context={'form': post_form})
 
-
-@login_required
-def club_create(request, pk):
-    if request.method == 'POST':
-        parent = Club.objects.get(pk=pk)
-        club_form = ClubForm(request.POST)
-
-        if club_form.is_valid():
-            club = Club.objects.create(club_name=club_form.cleaned_data['club_name'], club_parent=parent)
-            club_pk = club.pk
-
-            return HttpResponseRedirect(reverse('index'))
-
-    else:
-        club_form = ClubForm()
-
-    return render(request, 'nomi/club_form.html', context={'form': club_form})
 
 
 @login_required
