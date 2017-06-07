@@ -236,9 +236,9 @@ def nomi_detail(request, view_pk, post_pk, nomi_pk):
     form = questionnaire.get_form(request.POST or None)
 
     if nomi.status == 'Nomination created':
-        ap=1
+        approved = 1
     else:
-        ap=0
+        approved = 0
 
     view = Post.objects.get(pk=view_pk)
 
@@ -254,19 +254,20 @@ def nomi_detail(request, view_pk, post_pk, nomi_pk):
     else:
         approval = 0
 
-    return render(request, 'nomi_detail.html',context={'nomi':nomi, 'form': form,'view_pk':view_pk,
-                                                       'post_pk':post_pk,'ap': ap,
-                                                       'approval': approval, 'power_to_send': power_to_send,})
+    return render(request, 'nomi_detail.html', context={'nomi': nomi, 'form': form, 'view_pk': view_pk,
+                                                        'post_pk': post_pk, 'ap': approved,
+                                                        'approval': approval, 'power_to_send': power_to_send})
 
 
 @login_required
-def nomi_approval(request, view_pk,post_pk,nomi_pk):
+def nomi_approval(request, view_pk, post_pk, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     viewer = Post.objects.get(pk=view_pk)
     to_add = viewer.parent
     nomi.nomi_approvals.add(to_add)
 
-    return HttpResponseRedirect(reverse('nomi_detail', kwargs={'post_pk': post_pk, 'view_pk': view_pk,'nomi_pk':nomi_pk}))
+    return HttpResponseRedirect(reverse('nomi_detail', kwargs={'post_pk': post_pk, 'view_pk': view_pk,
+                                                               'nomi_pk': nomi_pk}))
 
 
 @login_required
@@ -387,8 +388,8 @@ class UserProfileUpdate(UpdateView):
 
 @login_required
 def universal_filter(request):
-    filter = UserProfileFilter(request.GET, queryset=UserProfile.objects.all())
-    return render(request, 'filters.html', {'filter': filter})
+    filters = UserProfileFilter(request.GET, queryset=UserProfile.objects.all())
+    return render(request, 'filters.html', {'filter': filters})
 
 
 @login_required
@@ -396,7 +397,7 @@ def nomi_edit(request, view_pk, post_pk,nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     questionnaire = nomi.nomi_form
     form = questionnaire.get_form()
-    pk = questionnaire.pk
+    ques_pk = questionnaire.pk
     questions = Question.objects.filter(questionnaire=questionnaire)
 
     return render(request, 'nomi_edit.html',
