@@ -69,10 +69,10 @@ def club_create(request, pk):
         club_form = ClubForm(request.POST)
 
         if club_form.is_valid():
-            club = Club.objects.create(club_name=club_form.cleaned_data['club_name'], parent=parent)
+            club = Club.objects.create(club_name=club_form.cleaned_data['club_name'], club_parent=parent)
             club_pk = club.pk
 
-            return HttpResponseRedirect(reverse('nomi_create', kwargs={'pk': club_pk}))
+            return HttpResponseRedirect(reverse('index'))
 
     else:
         club_form = ClubForm()
