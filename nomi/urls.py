@@ -56,11 +56,19 @@ urlpatterns = [
     # nominations/filter
     url(r'^filter/$', views.universal_filter, name='universal_filter'),
 
+    # nominations/club_approve/2/34
+    url(r'^club_approve/(?P<club_pk>\d+)/(?P<view_pk>\d+)/$', views.club_approval, name='club_approval'),
+
     # nominations/post_approve/2/34
-    url(r'^post_approve/(?P<post_pk>\d+)/(?P<view_pk>\d+)/$',views.post_approval,name='post_approval'),
+    url(r'^post_approve/(?P<post_pk>\d+)/(?P<view_pk>\d+)/$', views.post_approval, name='post_approval'),
+
+    # nominations/final_club_approve/2/43
+    url(r'^final_club_approve/(?P<club_pk>\d+)/(?P<view_pk>\d+)/$', views.final_club_approval,
+        name='final_club_approval'),
 
     # nominations/final_post_approve/2/43
-    url(r'^final_post_approve/(?P<post_pk>\d+)/(?P<view_pk>\d+)/$', views.final_post_approval, name='final_post_approval'),
+    url(r'^final_post_approve/(?P<post_pk>\d+)/(?P<view_pk>\d+)/$', views.final_post_approval,
+        name='final_post_approval'),
 
     # nominations/child_post/2/8
     url(r'^child_post/(?P<pk>\d+)/(?P<view_pk>\d+)/$', views.child_post_view, name='child_post'),
