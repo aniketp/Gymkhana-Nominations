@@ -182,8 +182,8 @@ def post_approval(request, view_pk, post_pk):
     post.post_approvals.add(to_add)
 
     access = False
-    for pt in post.post_approvals.all():
-        if request.user in pt.post_holders.all():
+    for apv_post in post.post_approvals.all():
+        if request.user in apv_post.post_holders.all():
             access = True
             break
 
