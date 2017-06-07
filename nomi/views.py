@@ -85,6 +85,34 @@ def post_create(request, pk):
     return render(request, 'nomi/post_form.html', context={'form': post_form})
 
 
+@login_required
+def child_club_view(request, pk, view_pk):
+    club = Club.objects.get(pk=pk)
+
+    if club.status == 'Club created':
+        approved = 1
+    else:
+        approved = 0
+
+    view_pk = view_pk
+    view = Club.objects.get(pk=view_pk)
+
+    if view.perms == 'normal':
+        power_to_approve = 0
+    else:
+        power_to_approve = 1
+
+    view_parent = Post.objects.get(pk=view.parent.pk)
+
+    if view_parent in post.post_approvals.all():
+        approval = 1
+    else:
+        approval = 0
+
+    return render(request, 'child_post.html', {'post': post, 'view_pk': view_pk, 'ap': approved,
+                                               'approval': approval, 'power_to_approve': power_to_approve,
+                                               'nominations': nominations})
+
 
 @login_required
 def child_post_view(request, pk, view_pk):
