@@ -215,7 +215,16 @@ def final_post_approval(request, view_pk, post_pk):
     post.status = 'Post approved'
     post.save()
 
-    return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk, 'view_pk': view_pk}))
+    access = False
+    for apv_post in post.post_approvals.all():
+        if request.user in apv_post.post_holders.all():
+            access = True
+            break
+
+    if access or request.user in post.parent.post_holders.all():
+        return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk, 'view_pk': view_pk}))
+    else:
+        return render(request, 'no_access.html')
 
 
 @login_required
