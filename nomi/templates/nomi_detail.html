@@ -55,14 +55,24 @@
 
                   <div>
                      <ul class="list-group">
+                             {% if ap %}
                          <li class="list-group-item">
+                             {% if power_to_send %}
 
+                                        <a class="list-group-item" href="">Approve and send to User</a>
+                             {% else %}
+                                    {% if approval %}
+                                         <a class="list-group-item">Approval request sent to parent</a>
+                                    {% else%}
                                         <a class="list-group-item" href="">send to parent for approval</a>
-
+                                    {% endif %}
+                             {% endif %}
                          </li>
+                          {% endif %}
+
                          <li class="list-group-item" ><a class="list-group-item">All Applications</a></li>
                          <li class="list-group-item"><a class="list-group-item" href="">Edit the nomination</a></li>
-                         <li></li>
+                         
 
                      </ul>
                   </div>

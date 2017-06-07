@@ -290,4 +290,26 @@ def nomi_detail(request,view_pk,post_pk,nomi_pk):
     questionnaire = nomi.nomi_form
     form = questionnaire.get_form(request.POST or None)
 
-    return render(request, 'nomi_detail.html',context={'nomi':nomi, 'form': form,'view_pk':view_pk,'post_pk':post_pk})
+    if nomi.status == 'Nomination created':
+        ap=1
+    else:
+        ap=0
+
+    view = Post.objects.get(pk=view_pk)
+
+    if view.perms == 'normal':
+        power_to_send = 0
+    else:
+        power_to_send = 0
+
+
+    view_parent = Post.objects.get(pk=view.parent.pk)
+
+    if view_parent in nomi.nomi_approvals.all():
+        approval = 1
+    else:
+        approval = 0
+
+
+    return render(request, 'nomi_detail.html',context={'nomi':nomi, 'form': form,'view_pk':view_pk,'post_pk':post_pk,'ap': ap,
+                                               'approval': approval, 'power_to_send': power_to_send,})
