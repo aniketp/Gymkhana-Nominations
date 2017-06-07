@@ -102,16 +102,15 @@ def child_club_view(request, pk, view_pk):
     else:
         power_to_approve = 1
 
-    view_parent = Post.objects.get(pk=view.parent.pk)
+    view_parent = Club.objects.get(pk=view.club_parent.pk)
 
-    if view_parent in post.post_approvals.all():
+    if view_parent in club.club_approvals.all():
         approval = 1
     else:
         approval = 0
 
-    return render(request, 'child_post.html', {'post': post, 'view_pk': view_pk, 'ap': approved,
-                                               'approval': approval, 'power_to_approve': power_to_approve,
-                                               'nominations': nominations})
+    return render(request, 'child_club.html', {'club': club, 'view_pk': view_pk, 'ap': approved,
+                                               'approval': approval, 'power_to_approve': power_to_approve})
 
 
 @login_required

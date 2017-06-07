@@ -21,12 +21,14 @@ class Post(models.Model):
     club = models.ForeignKey(Club, on_delete=models.CASCADE, null=True, blank=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     post_holders = models.ManyToManyField(User, blank=True)
+
     post_approvals = models.ManyToManyField('self', related_name='approvals', symmetrical=False, blank=True)
     status = models.CharField(max_length=50, choices=POST_STATUS, default='Post created')
     perms = models.CharField(max_length=200, choices=POST_PERMS, default='normal')
 
     class Meta:
-        permissions = (("can approve the post", "can approve the post"), ("can send nominations to users", "can send nominations to users"))
+        permissions = (("can approve the post", "can approve the post"),
+                       ("can send nominations to users", "can send nominations to users"))
 
     def __str__(self):
         return self.post_name
@@ -39,6 +41,7 @@ class Nomination(models.Model):
     nomi_form = models.OneToOneField('forms.Questionnaire', null=True, blank=True)
     status = models.CharField(max_length=50, choices=STATUS, default='Nomination created')
     nomi_approvals = models.ManyToManyField(Post, related_name='nomi_approvals', symmetrical=False, blank=True)
+
     year_choice = models.CharField(max_length=100, choices=YEAR_1, null=True)
     hall_choice = models.CharField(max_length=100, choices=HALL_1, null=True)
     dept_choice = models.CharField(max_length=100, choices=DEPT_1, null=True)
@@ -51,8 +54,8 @@ class NominationInstance(models.Model):
     nomination = models.ForeignKey('Nomination', on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     status = models.CharField(max_length=1, choices=NOMI_STATUS,  null=True, blank=True, default=None)
-    comments=models.CharField(max_length=500,null=True,blank=True)
-    filled_form=models.OneToOneField('forms.FilledForm',null=True,blank=True)
+    comments = models.CharField(max_length=500, null=True, blank=True)
+    filled_form = models.OneToOneField('forms.FilledForm', null=True, blank=True)
 
     def __str__(self):
         return str(self.user) + ' ' + str(self.id)
