@@ -5,7 +5,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
-from .forms import NominationForm, PostForm, ConfirmApplication
+from .forms import NominationForm, PostForm, ConfirmApplication, ClubForm
 from forms.models import Questionnaire
 from .filters import UserProfileFilter
 import json
@@ -65,8 +65,8 @@ def post_create(request, pk):
 @login_required
 def club_create(request, pk):
     if request.method == 'POST':
-        parent = Post.objects.get(pk=pk)
-        post_form = PostForm(request.POST)
+        parent = Club.objects.get(pk=pk)
+        club_form = ClubForm(request.POST)
 
         if post_form.is_valid():
             post = Post.objects.create(post_name=post_form.cleaned_data['post_title'], club=club, parent=parent)
