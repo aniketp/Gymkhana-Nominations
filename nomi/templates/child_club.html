@@ -1,59 +1,62 @@
 {% extends 'base.html' %}
 
-{% block title %}Child_post{% endblock %}
+{% block title %}Child Club{% endblock %}
 
-    {% block content  %}
+{% block content  %}
         <div class="container box">
             <div class="col-lg-8 text-center box">
                 <br>
                 <br>
-            <h3>{{club.post_name}}</h3>
-                <p>{{post.status}}
+            <h3>{{club.club_name}}</h3>
+                <p>{{club.status}}
 
                 </p>
-                <h4>Parent Post : {{post.parent.post_name}}</h4>
-                <h4>Club : {{post.club.club_name}}</h4>
+                <h4>Parent Club : {{club.club_parent.club_name}}</h4>
                 <hr>
                 <p>
 
-                    {% if post.post_holders.all %}
+                    {% if club.club_members.all %}
                         Assigned:
-                        {% for post_holder in post.post_holders.all %}
-                            {{post_holder.userprofile.name}},
+                        {% for club_member in club.club_members.all %}
+                            {{club_member.userprofile.name}},
                         {% endfor %}
                     {% else %}
                         No one assigned
                     {% endif %}
-
                 </p>
-                <div>
-
-                    {% if nominations %}
-                        {% for nomination in nominations %}
-                            <div>
-                                <ul class="List-group">
-                                    <li class="List-group-item">
-                                        <div class="">
-                                         <a class="list-group-item" href="{% url 'nomi_detail' view_pk=view_pk post_pk=post.pk nomi_pk=nomination.pk %}">{{nomination.name}}</a>
-                                        </div>
-
-                                    </li>
-                                </ul>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        NO nominations
-                    {% endif %}
-
-                </div>
-
 
             </div>
 
+              <div class="col-lg-4 text-center">
+                  <div class="row">
+                     <div class="team-member text-center">
+                        <p class="text-muted">Actions</p>
+                     </div>
+                  </div>
+
+                  <div>
+                     <ul class="list-group">
+                         {% if ap %}
+                         <li class="list-group-item">
+                             {% if power_to_approve %}
+
+                                        <a class="list-group-item" href="{% url 'final_post_approval' club_pk=club.pk view_pk=view_pk %}">Approve the post</a>
+                             {% else %}
+                                    {% if approval %}
+                                         <a class="list-group-item">Approval request sent to parent</a>
+                                    {% else%}
+                                        <a class="list-group-item" href="">send to parent for approval</a>
+                                    {% endif %}
+                             {% endif %}
+                         </li>
+                          {% endif %}
 
 
+                     </ul>
+                  </div>
+            </div>
 
         </div>
 
-    {% endblock %}
+{% endblock %}
 
