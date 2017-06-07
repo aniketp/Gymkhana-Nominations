@@ -315,7 +315,7 @@ def nomi_detail(request,view_pk,post_pk,nomi_pk):
                                                'approval': approval, 'power_to_send': power_to_send,})
 
 
-
+### no use as of now
 def nomi_edit(request, view_pk, post_pk,nomi_pk):
     nomi=Nomination.objects.get(pk=nomi_pk)
     questionnaire = nomi.nomi_form
