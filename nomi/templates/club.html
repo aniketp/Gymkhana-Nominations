@@ -3,33 +3,60 @@
 {% load staticfiles %}
 
 {% block content %}
-        <div class="container box "}
+        <div class="container box "}>
 
-                 <div class="row box ">
-                    <h3 class="text-center">{{club.club_name}}</h3>
+                 <div class="row">
+                    <h3 class="text-center">{{post.post_name}}</h3>
                 </div>
         </div>
 
-        <div class="container box"}
-                <div class="row box">
-                    <h3 class="text-center"><a href="{% url 'club_create' club %}">Create a new child club</a></h3>
+        <div class="container box"}>
+                <div class="row">
+                    <h3 class="text-center"><a href="{% url 'post_create' post.pk %}">Create a new child post</a></h3>
                 </div>
         </div>
 
-    {% for club in child_clubs %}
-        <div class="container box">
-           <div class="row">
-               <h3 class="text-center">{{ club.club_name }}</h3>
-           </div>
+
+
+
+
+       <div class="container">
+
+               <div class="col-lg-12 box">
+                   <h3 class="text-center">Child posts</h3>
+                   <hr>
+                    {% for ch_post in child_posts %}
+                   <div class="text-center">
+
+                       <h4><a href="{% url 'child_post' pk=ch_post.pk view_pk=post.pk  %}">{{ ch_post.post_name }}</a></h4>
+                   </div>
+                    {% endfor %}
+               </div>
+
+
+
+                <div class="col-lg-12 box">
+                    <h3 class="text-center">Posts to be approved</h3>
+                    <hr>
+                    {% for ch_post in post_approval %}
+                    <div class="text-center">
+                        <h4><a href="{% url 'child_post' pk=ch_post.pk view_pk=post.pk %}">{{ ch_post.post_name }}</a></h4>
+                         {{ch_post.status}}
+                    </div>
+                     {% endfor %}
+               </div>
+                <div class="col-lg-12 box">
+                    <h3 class="text-center">Nomination to be approved</h3>
+                    <hr>
+                    {% for nomi in nomi_approval %}
+                    <div class="text-center">
+                        <h4><a href="{% url 'nomi_detail' post_pk=nomi.nomi_post.pk view_pk=post.pk nomi_pk=nomi.pk %}">{{ nomi.name }}</a></h4>
+                    </div>
+                     {% endfor %}
+                </div>
+
+
+
        </div>
-    {% endfor %}
 
-    {% for post in posts %}
-        <div class="container box">
-            <div class="row">
-                <h4 class="text-center"><a href="{% url 'post_view' post.pk %}">{{ post.post_name }}</a></h4>
-            </div>
-        </div>
-    {% endfor %}
-
-{% endblock %}
+    {% endblock %}
