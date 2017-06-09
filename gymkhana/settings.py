@@ -36,7 +36,6 @@ AUTH_PROFILE_MODULE = 'nomi.UserProfile'
 # Application definition
 
 INSTALLED_APPS = [
-    'django_filters',
     'bootstrapform',
     'nomi.apps.NomiConfig',
     'forms.apps.FormsConfig',

@@ -8,7 +8,6 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
 from .forms import NominationForm, PostForm, ConfirmApplication, ClubForm
 from forms.models import Questionnaire
-from .filters import UserProfileFilter
 import json
 
 
