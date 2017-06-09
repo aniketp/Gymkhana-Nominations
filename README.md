@@ -10,6 +10,9 @@ Live project is available [here](https://gymkhana.pythonanywhere.com).
 Clone the repository on your local environment <br>
 ` git clone https://github.com/SummerCamp17/Gymkhana-Nominations.git `
 
+Install the required dependencies <br>
+` pip install -r requirements.txt `
+
 Navigate to the folder <br>
 ` cd Gymkhana-Nominations `
 
