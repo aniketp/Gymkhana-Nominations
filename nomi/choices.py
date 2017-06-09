@@ -45,14 +45,14 @@ STATUS = (
         ('Compiled', 'Compiled'),
 )
 
-POST_STATUS = (
+CLUB_STATUS = (
         ('Club created', 'Club created'),
         ('Club approved', 'Club approved'),
         ('Club rejected', 'Club rejected'),
         ('Club on work', 'Club on work'),
 )
 
-CLUB_STATUS = (
+POST_STATUS = (
         ('Post created', 'Post created'),
         ('Post approved', 'Post approved'),
         ('Post rejected', 'Post rejected'),
