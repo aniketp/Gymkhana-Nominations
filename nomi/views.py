@@ -72,8 +72,8 @@ def club_create(request, pk):
 
 @login_required
 def post_create(request, pk):
+    parent = Post.objects.get(pk=pk)
     if request.method == 'POST':
-        parent = Post.objects.get(pk=pk)
         post_form = PostForm(request.POST)
         club = parent.club
         if post_form.is_valid():
@@ -295,7 +295,7 @@ def nomi_detail(request, view_pk, post_pk, nomi_pk):
             access = True
             break
 
-    if access or request.user in nomi.post.parent.post_holders.all():
+    if access or request.user in nomi.nomi_post.parent.post_holders.all():
         return render(request, 'nomi_detail.html', context={'nomi': nomi, 'form': form, 'view_pk': view_pk,
                                                         'post_pk': post_pk, 'ap': approved,
                                                         'approval': approval, 'power_to_send': power_to_send})
