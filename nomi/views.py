@@ -24,6 +24,11 @@ def index(request):
 
 
 @login_required
+def club_list(request):
+    pass
+
+
+@login_required
 def club_view(request, pk):
     club = Club.objects.get(pk=pk)
     child_clubs = Club.objects.filter(club_parent=club)
@@ -45,11 +50,11 @@ def post_view(request, pk):
     post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
     nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
 
-    if  request.user in post.post_holders.all():
+    if request.user in post.post_holders.all():
         return render(request, 'post.html', context={'post': post, 'child_posts': child_posts_reverse,
-                                                 'post_approval': post_approvals, 'nomi_approval': nomi_approvals})
+                                                     'post_approval': post_approvals, 'nomi_approval': nomi_approvals})
     else:
-        return render(request,'no_access.html')
+        return render(request, 'no_access.html')
 
 
 @login_required

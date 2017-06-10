@@ -7,6 +7,9 @@ urlpatterns = [
     # nominations/
     url(r'^$', views.index, name='index'),
 
+    # nominations/clubs
+    url(r'^clubs', views.club_list, name='club_list'),
+
     # nominations/2
     url(r'^apply/(?P<pk>\d+)/$', views.nomi_apply, name='nomi_apply'),
 
