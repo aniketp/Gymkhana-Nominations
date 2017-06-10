@@ -25,7 +25,10 @@ def index(request):
 
 @login_required
 def club_list(request):
-    pass
+    admin_club = Club.objects.get(club_name="Admin")
+    clubs = Club.objects.filter(club_parent=admin_club)
+
+    return render(request, 'clubs/council_clubs.html', context={'clubs': clubs})
 
 
 @login_required

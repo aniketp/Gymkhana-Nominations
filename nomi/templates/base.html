@@ -82,19 +82,9 @@
                     <li><a href="{% url 'index' %}">Home</a></li>
 
                     {% if user.is_authenticated %}
-                     <li class="dropdown">
-                         <a class="btn btn-link dropdown-toggle" data-toggle="dropdown"type="button">Notifications<span class="caret"></span></a>
-                         <ul class="dropdown-menu notifications">
-                          <!--   {% for each in notice%}
-                                 <li class=" lc">{{each}}</li>
-                                 <li class="divider"></li>
-                             {% endfor %} -->
-                             <li><a><b >See all notifications</b></a></li>
-                         </ul>
 
-                     </li>
+                     <li><a href="{% url 'club_list' %}">View Clubs</a></li>
                      <li><a href="{% url 'profile' %}" >{{user.get_username}}</a></li>
-
                      <li><a href="{% url 'logout' %}?next={% url 'index' %}">Logout</a></li>
 
                     {% else %}
