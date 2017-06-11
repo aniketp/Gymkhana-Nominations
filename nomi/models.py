@@ -37,7 +37,7 @@ class PostHistory(models.Model):
     post=models.ForeignKey(Post, on_delete=models.CASCADE ,null=True)
     user=models.ForeignKey(User,on_delete=models.CASCADE ,null=True)
     start=models.DateField(auto_now_add=True)
-    end=models.DateField()
+    end=models.DateField(blank=True,editable=True)
 
 
 
@@ -59,7 +59,7 @@ class Nomination(models.Model):
     def append(self):
         selected=NominationInstance.objects.filter(nomination=self,status='Accepted')
         for each in selected:
-
+            PostHistory.objects.create(Post=nomi_post,user=each.user)
             self.nomi_post.post_holders.add(each.user)
 
         return self.nomi_post.post_holders
