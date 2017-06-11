@@ -49,6 +49,17 @@ class Nomination(models.Model):
     def __str__(self):
         return self.name
 
+    def append(self):
+        selected=NominationInstance.objects.filter(nomination=self,status='Accepted')
+        for each in selected:
+            self.nomi_post.post_holders.add(each.user)
+
+        return self.nomi_post
+    
+    def replace(self):
+        selected=NominationInstance.objects.filter(nomination=self,status='Accepted')
+
+
 
 class NominationInstance(models.Model):
     nomination = models.ForeignKey('Nomination', on_delete=models.CASCADE, null=True)

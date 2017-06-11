@@ -443,6 +443,8 @@ def universal_filter(request):
     filters = UserProfileFilter(request.GET, queryset=UserProfile.objects.all())
     return render(request, 'filters.html', {'filter': filters})
 
+
+
 # not in use
 @login_required
 def nomi_edit(request, view_pk, post_pk,nomi_pk):
