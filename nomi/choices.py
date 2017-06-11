@@ -34,8 +34,8 @@ HALL = (
 )
 
 NOMI_STATUS = (
-        ('a', 'Accepted'),
-        ('r', 'Rejected'),
+        ('Accepted', 'Accepted'),
+        ('Rejected', 'Rejected'),
 )
 
 STATUS = (

@@ -380,7 +380,7 @@ def applications(request, pk):
 def accept_nomination(request, pk):
     application = NominationInstance.objects.get(pk=pk)
     id_accept = application.nomination.pk
-    application.status = 'a'
+    application.status = 'Accepted'
     application.save()
 
     return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_accept}))
@@ -390,7 +390,7 @@ def accept_nomination(request, pk):
 def reject_nomination(request, pk):
     application = NominationInstance.objects.get(pk=pk)
     id_reject = application.nomination.pk
-    application.status = 'r'
+    application.status = 'Rejected'
     application.save()
 
     return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_reject}))
@@ -399,8 +399,7 @@ def reject_nomination(request, pk):
 @login_required
 def result(request, pk):
     nomination = Nomination.objects.get(pk=pk)
-    users = NominationInstance.objects.filter(nomination=nomination).filter(status__exact='a')
-
+    users = NominationInstance.objects.filter(nomination=nomination).filter(status__exact='Accepted')
     return render(request, 'result.html', context={'users': users})
 
 
@@ -444,7 +443,7 @@ def universal_filter(request):
     filters = UserProfileFilter(request.GET, queryset=UserProfile.objects.all())
     return render(request, 'filters.html', {'filter': filters})
 
-
+# not in use
 @login_required
 def nomi_edit(request, view_pk, post_pk,nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
