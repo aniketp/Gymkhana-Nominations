@@ -144,3 +144,17 @@ body {
 .btn-info {
     margin-left: 25%;
 }
+
+
+/* Right Column */
+.right-column {
+    width: 300px;
+    margin-left: 1000px;
+    position: fixed;
+    margin-top: 33px;
+    background-color: white;
+}
+
+.right-profile-userpic {
+    margin-top: 20px;
+}
