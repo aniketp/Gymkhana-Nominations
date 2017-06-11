@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Nomination, NominationInstance, UserProfile, Post, Club
+from .models import Nomination, NominationInstance, UserProfile, Post, Club,PostHistory
 
 
 class UserProfileAdmin(admin.ModelAdmin):
@@ -30,3 +30,7 @@ class ClubAdmin(admin.ModelAdmin):
     list_display = ('club_name', 'club_parent')
 
 admin.site.register(Club, ClubAdmin)
+
+class PostHistoryAdmin(admin.ModelAdmin):
+    list_display = ('post', 'user','start','end')
+admin.site.register(PostHistory,PostHistoryAdmin)

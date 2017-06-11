@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from .choices import *
+from datetime import datetime
 
 
 class Club(models.Model):
@@ -33,11 +34,26 @@ class Post(models.Model):
     def __str__(self):
         return self.post_name
 
+
+    def remove_holders(self):
+        for holder in self.post_holders.all():
+            history = PostHistory.objects.get(post=self,user=holder)
+            history.end = datetime.now()
+            history.save()
+
+        self.post_holders.clear()
+        return self.post_holders
+
+
+
+
+
 class PostHistory(models.Model):
     post=models.ForeignKey(Post, on_delete=models.CASCADE ,null=True)
     user=models.ForeignKey(User,on_delete=models.CASCADE ,null=True)
     start=models.DateField(auto_now_add=True)
-    end=models.DateField(blank=True,editable=True)
+    end=models.DateField(null=True,blank=True,editable=True)
+
 
 
 
@@ -57,18 +73,23 @@ class Nomination(models.Model):
         return self.name
 
     def append(self):
-        selected=NominationInstance.objects.filter(nomination=self,status='Accepted')
+        selected = NominationInstance.objects.filter(nomination=self,status='Accepted')
         for each in selected:
-            PostHistory.objects.create(Post=nomi_post,user=each.user)
+            PostHistory.objects.create(post=self.nomi_post,user=each.user)
             self.nomi_post.post_holders.add(each.user)
 
         return self.nomi_post.post_holders
 
     def replace(self):
-        selected=NominationInstance.objects.filter(nomination=self,status='Accepted')
+        for holder in self.nomi_post.post_holders.all():
+            history = PostHistory.objects.get(post=self.nomi_post,user=holder)
+            history.end = datetime.now()
+            history.save()
+
         self.nomi_post.post_holders.clear()
         self.append()
         return self.nomi_post.post_holders
+
 
 
 class NominationInstance(models.Model):
