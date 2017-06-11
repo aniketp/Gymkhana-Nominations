@@ -33,6 +33,13 @@ class Post(models.Model):
     def __str__(self):
         return self.post_name
 
+class PostHistory(models.Model):
+    post=models.ForeignKey(Post, on_delete=models.CASCADE ,null=True)
+    user=models.ForeignKey(User,on_delete=models.CASCADE ,null=True)
+    start=models.DateField(auto_now_add=True)
+    end=models.DateField()
+
+
 
 class Nomination(models.Model):
     name = models.CharField(max_length=200)
@@ -52,6 +59,7 @@ class Nomination(models.Model):
     def append(self):
         selected=NominationInstance.objects.filter(nomination=self,status='Accepted')
         for each in selected:
+
             self.nomi_post.post_holders.add(each.user)
 
         return self.nomi_post.post_holders
@@ -61,7 +69,6 @@ class Nomination(models.Model):
         self.nomi_post.post_holders.clear()
         self.append()
         return self.nomi_post.post_holders
-
 
 
 class NominationInstance(models.Model):
