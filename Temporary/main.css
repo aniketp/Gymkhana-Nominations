@@ -118,3 +118,29 @@ body {
     background: #fff;
     min-height: 460px;
 }
+
+.jumbotron-title {
+
+}
+
+.jumbotron-club {
+
+}
+
+.jumbotron-description {
+    background-color: white;
+    padding: 20px 20px 30px 20px;
+    text-align: justify;
+}
+
+.btn {
+    width: 150px;
+}
+
+.btn-success {
+    margin-left: 20%;
+}
+
+.btn-info {
+    margin-left: 25%;
+}
