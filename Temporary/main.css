@@ -30,7 +30,7 @@ body {
     background: #fff;
     position: fixed;
     width: 300px;
-    margin-top: 32px;
+    margin-top: 50px;
 }
 
 .profile-userpic img {
@@ -84,30 +84,16 @@ body {
     margin-top: 30px;
 }
 
-.profile-usermenu ul li {
-    border-bottom: 1px solid #f0f4f7;
+.profile-usermenu table thead tr th {
+    text-align: center;
 }
 
-.profile-usermenu ul li:hover {
-    background-color: #25b8f7;
+.profile-usermenu table tbody tr td {
+    text-align: center;
 }
 
-.profile-usermenu ul li:last-child {
-    border-bottom: none;
-}
-
-.profile-usermenu ul li p {
-    color: #93a3b5;
-    font-size: 14px;
-    font-weight: 400;
-    margin-left: 30px;
-}
-
-.profile-usermenu ul li.active a {
-    color: #5b9bd1;
-    background-color: #f6f9fb;
-    border-left: 2px solid #5b9bd1;
-    margin-left: -2px;
+#topic {
+    font-weight: bolder;
 }
 
 /* Profile Content */
