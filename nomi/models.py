@@ -64,10 +64,13 @@ class Nomination(models.Model):
     nomi_form = models.OneToOneField('forms.Questionnaire', null=True, blank=True)
     status = models.CharField(max_length=50, choices=STATUS, default='Nomination created')
     nomi_approvals = models.ManyToManyField(Post, related_name='nomi_approvals', symmetrical=False, blank=True)
+    opening_date = models.DateField(null=True, blank=True)
+    closing_date = models.DateField(null=True, blank=True, editable=True)
 
     year_choice = models.CharField(max_length=100, choices=YEAR_1, null=True)
     hall_choice = models.CharField(max_length=100, choices=HALL_1, null=True)
     dept_choice = models.CharField(max_length=100, choices=DEPT_1, null=True)
+
 
     def __str__(self):
         return self.name
@@ -89,6 +92,14 @@ class Nomination(models.Model):
         self.nomi_post.post_holders.clear()
         self.append()
         return self.nomi_post.post_holders
+
+
+    def open_to_users(self):
+        self.status = 'Nomination out'
+        self.opening_date = datetime.now()
+        self.save()
+        return self.status
+
 
 
 

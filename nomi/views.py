@@ -329,7 +329,7 @@ def final_nomi_approval(request, view_pk, post_pk,nomi_pk):
     viewer = Post.objects.get(pk=view_pk)
     to_add = viewer
     nomi.nomi_approvals.add(to_add)
-    nomi.status = 'Nomination out'
+    nomi.open_to_users()
     nomi.save()
 
     return HttpResponseRedirect(reverse('nomi_detail', kwargs={'post_pk': post_pk, 'view_pk': view_pk,
