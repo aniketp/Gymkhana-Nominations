@@ -54,10 +54,13 @@ class Nomination(models.Model):
         for each in selected:
             self.nomi_post.post_holders.add(each.user)
 
-        return self.nomi_post
-    
+        return self.nomi_post.post_holders
+
     def replace(self):
         selected=NominationInstance.objects.filter(nomination=self,status='Accepted')
+        self.nomi_post.post_holders.clear()
+        self.append()
+        return self.nomi_post.post_holders
 
 
 
