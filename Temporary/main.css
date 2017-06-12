@@ -138,12 +138,20 @@ body {
 
 /* Nomination Panel */
 
+.panel-body p span{
+    margin-bottom: 20px;
+}
+
 .panel-success {
     transition: box-shadow 0.2s;
 }
 
 .panel-success:hover {
     box-shadow: 0 0 18px rgba(0, 0, 0, 0.5);
+}
+
+.label {
+    margin-right: 3px;
 }
 
 /* Right Column */
