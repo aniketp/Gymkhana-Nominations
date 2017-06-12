@@ -21,7 +21,7 @@ def index(request):
     clubs = Club.objects.filter(club_members=request.user)
     username = UserProfile.objects.get(user=request.user)
 
-    return render(request, 'index.html', context={'all_nominations': all_nominations, 'posts': posts,
+    return render(request, 'index1.html', context={'all_nominations': all_nominations, 'posts': posts,
                                                   'clubs': clubs, 'username': username,'filter':f})
 
 

@@ -1,28 +1,26 @@
-{% extends 'base1.html' %}
-
+{% extends 'base2.html' %}
 {% load staticfiles %}
 
-
 {% block content %}
-
-<!-- hey let it live for now it actually helps in checking features,may be removed later -->
-
+<div class="profile-content">
 {% for nomi in all_nominations %}
 
-<div class="panel panel-primary">
+<div class="panel panel-success">
     <div class="panel-heading">
-        <h3 class="panel-title">{{ nomi.name }}</h3>
+        <h3 class="panel-title">Nomination Title</h3>
+        <p>opened on 29-19-3039</p>
     </div>
     <div class="panel-body">
-        Panel content
+        <span style="font-weight: bolder">Preference : </span>
+        <span class="label label-primary">Y16</span>
+        <span class="label label-success">MTH</span>
+        <p><span style="font-weight: bolder"> Expiry Date :</span> 29-20-3039  </p>
+        <p>Intro detail Intro detail Intro detail Intro detail Intro detail Intro detail Intro detail
+            Intro detail Intro detail Intro detail Intro detail Intro detail ...</p>
+        <a href="#" class="btn btn-sm read-more-button btn-danger">Read More</a>
     </div>
 </div>
 
 {% endfor %}
-
-
-
-
-
-
+</div>
 {% endblock %}

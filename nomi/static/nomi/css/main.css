@@ -16,7 +16,7 @@
 }
 
 body {
-    background: #F1F3FA;
+    background: #ffffff;
 }
 
 /* Profile container */
@@ -27,7 +27,7 @@ body {
 /* Profile sidebar */
 .profile-sidebar {
     padding: 20px 0 10px 0;
-    background: #fff;
+    background: #45faff;
     position: fixed;
     width: 300px;
     margin-top: 50px;
@@ -101,16 +101,13 @@ body {
     z-index: 0;
     margin-top: 32px;
     padding: 20px;
-    background: #fff;
+    background: #ffffff;
     min-height: 460px;
 }
 
-.jumbotron-title {
-
-}
-
-.jumbotron-club {
-
+.jumbotron {
+    padding-top: 10px;
+    padding-bottom: 20px;
 }
 
 .jumbotron-description {
@@ -119,18 +116,48 @@ body {
     text-align: justify;
 }
 
+.well-lg {
+    padding-top: 2px;
+}
+
+.well-lg h1 {
+    padding-bottom: 15px;
+}
+
 .btn {
     width: 150px;
 }
 
-.btn-success {
-    margin-left: 20%;
+.read-more-button {
+    margin-top: 10px;
+    width: 100px;
 }
 
-.btn-info {
-    margin-left: 25%;
+#apply-button {
+    margin-left: 16%;
 }
 
+#go-back-button {
+    margin-left: 30%;
+}
+
+/* Nomination Panel */
+
+.panel-body p span{
+    margin-bottom: 20px;
+}
+
+.panel-success {
+    transition: box-shadow 0.2s;
+}
+
+.panel-success:hover {
+    box-shadow: 0 0 18px rgba(0, 0, 0, 0.5);
+}
+
+.label {
+    margin-right: 3px;
+}
 
 /* Right Column */
 .right-column {
@@ -143,4 +170,20 @@ body {
 
 .right-profile-userpic {
     margin-top: 20px;
+}
+
+/* Post Profile View */
+
+.jumbotron-post {
+    background-color: #e3f7bb;
+    margin-bottom: 10px;
+}
+
+#create-post {
+    padding-top: 12px;
+    padding-bottom: 2px;
+    background-color: #36eaf7;
+    text-align: center;
+    font-size: large;
+    border-radius: 7px;
 }
