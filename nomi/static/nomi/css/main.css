@@ -22,12 +22,13 @@ body {
 /* Profile container */
 .profile {
     margin: 20px 0;
+
 }
 
 /* Profile sidebar */
 .profile-sidebar {
     padding: 20px 0 10px 0;
-    background: #45faff;
+    background: ;
     position: fixed;
     width: 300px;
     margin-top: 50px;

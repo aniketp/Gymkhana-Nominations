@@ -16,14 +16,14 @@ from .filters import NominationFilter
 def index(request):
     nominations = Nomination.objects.filter(status='Nomination out')
     all_nominations = nominations[::-1]
-    f = NominationFilter(request.GET, queryset=Nomination.objects.filter(status='Nomination out'))
+    filter = NominationFilter(request.GET, queryset=Nomination.objects.filter(status='Nomination out'))
     posts = Post.objects.filter(post_holders=request.user)
     clubs = Club.objects.filter(club_members=request.user)
     username = UserProfile.objects.get(user=request.user)
-
-    return render(request, 'index1.html', context={'all_nominations': all_nominations, 'posts': posts,
-                                                  'clubs': clubs, 'username': username,'filter':f})
-
+    if request.user.is_authenticated:
+        return render(request, 'index1.html', context={'all_nominations': all_nominations, 'posts': posts,'clubs': clubs, 'username': username,'filter':filter})
+    else:
+        return HttpResponseRedirect(reverse('login'))
 
 @login_required
 def club_list(request):

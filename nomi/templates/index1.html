@@ -1,23 +1,35 @@
 {% extends 'base2.html' %}
 {% load staticfiles %}
 
+
+{% block posts%}
+    {% if posts %}
+        {% for post in posts %}
+            <div class="row box">
+                <h3 class="text-center"><a href="{% url 'post_view' post.pk %}" >{{post.post_name}}</a></h3>
+            </div>
+
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+
 {% block content %}
 <div class="profile-content">
 {% for nomi in all_nominations %}
 
 <div class="panel panel-success">
     <div class="panel-heading">
-        <h3 class="panel-title">Nomination Title</h3>
-        <p>opened on 29-19-3039</p>
+        <h3 class="panel-title">{{ nomi.name.upper }}</h3>
+
     </div>
     <div class="panel-body">
         <span style="font-weight: bolder">Preference : </span>
-        <span class="label label-primary">Y16</span>
-        <span class="label label-success">MTH</span>
-        <p><span style="font-weight: bolder"> Expiry Date :</span> 29-20-3039  </p>
-        <p>Intro detail Intro detail Intro detail Intro detail Intro detail Intro detail Intro detail
-            Intro detail Intro detail Intro detail Intro detail Intro detail ...</p>
-        <a href="#" class="btn btn-sm read-more-button btn-danger">Read More</a>
+        <span class="label label-primary">{{nomi.year_choice}}</span>
+        <span class="label label-success">{{nomi.dept_choice}}</span>
+        <p><span style="font-weight: bolder"> Expiry Date :  </span>{{nomi.closing_date}}</p>
+        <p>{{nomi.description}}</p>
+        <a href="{% url 'nomi_apply' nomi.pk %}" class="btn btn-sm read-more-button btn-danger">Read More</a>
     </div>
 </div>
 
