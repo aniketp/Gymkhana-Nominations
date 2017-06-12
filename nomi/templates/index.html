@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load staticfiles %}
+{% load bootstrap %}
 
 
 {% block content %}
@@ -17,6 +18,24 @@
 
             {% endfor %}
             {% endif %}
+
+
+           <form action="" method="get">
+                {% for field in filter.form %}
+                <div class="fieldWrapper">
+                 {{ field.errors }}
+                     {{ field.label_tag }} {{ field }}
+                    </div>
+                {% endfor %}
+
+                <input type="submit" />
+             </form>
+
+
+
+
+
+
         </div>
 
 
@@ -35,7 +54,10 @@
 
         {% if user.is_authenticated %}
 
-            {% for nomi in all_nominations %}
+
+
+
+            {% for nomi in filter.qs %}
 
             {% if nomi.year_choice == username.year or nomi.year_choice == 'All' or perms.nomi.admin %}
                 {% if nomi.hall_choice == username.hall or nomi.hall_choice == 'All' or perms.nomi.admin %}
