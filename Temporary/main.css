@@ -123,6 +123,11 @@ body {
     width: 150px;
 }
 
+.read-more-button {
+    margin-top: 10px;
+    width: 100px;
+}
+
 .btn-success {
     margin-left: 20%;
 }
@@ -131,6 +136,15 @@ body {
     margin-left: 25%;
 }
 
+/* Nomination Panel */
+
+.panel-success {
+    transition: box-shadow 0.2s;
+}
+
+.panel-success:hover {
+    box-shadow: 0 0 18px rgba(0, 0, 0, 0.5);
+}
 
 /* Right Column */
 .right-column {
