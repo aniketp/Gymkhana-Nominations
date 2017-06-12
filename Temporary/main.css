@@ -105,18 +105,23 @@ body {
     min-height: 460px;
 }
 
-.jumbotron-title {
-
-}
-
-.jumbotron-club {
-
+.jumbotron {
+    padding-top: 10px;
+    padding-bottom: 20px;
 }
 
 .jumbotron-description {
     background-color: white;
     padding: 20px 20px 30px 20px;
     text-align: justify;
+}
+
+.well-lg {
+    padding-top: 2px;
+}
+
+.well-lg h1 {
+    padding-bottom: 15px;
 }
 
 .btn {
@@ -128,12 +133,12 @@ body {
     width: 100px;
 }
 
-.btn-success {
-    margin-left: 20%;
+#apply-button {
+    margin-left: 16%;
 }
 
-.btn-info {
-    margin-left: 25%;
+#go-back-button {
+    margin-left: 30%;
 }
 
 /* Nomination Panel */
