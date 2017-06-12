@@ -6,7 +6,7 @@
     {% if posts %}
         {% for post in posts %}
             <div class="row box">
-                <h3 class="text-center"><a href="{% url 'post_view' post.pk %}" >{{post.post_name}}</a></h3>
+                <h4 class="text-center"><a href="{% url 'post_view' post.pk %}" >{{post.post_name}}</a></h4>
             </div>
 
         {% endfor %}
