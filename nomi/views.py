@@ -9,18 +9,20 @@ from django.core.exceptions import ObjectDoesNotExist
 from .forms import NominationForm, PostForm, ConfirmApplication, ClubForm
 from forms.models import Questionnaire
 import json
+from .filters import NominationFilter
 
 
 @login_required
 def index(request):
     nominations = Nomination.objects.filter(status='Nomination out')
     all_nominations = nominations[::-1]
+    f = NominationFilter(request.GET, queryset=Nomination.objects.filter(status='Nomination out'))
     posts = Post.objects.filter(post_holders=request.user)
     clubs = Club.objects.filter(club_members=request.user)
     username = UserProfile.objects.get(user=request.user)
 
     return render(request, 'index.html', context={'all_nominations': all_nominations, 'posts': posts,
-                                                  'clubs': clubs, 'username': username})
+                                                  'clubs': clubs, 'username': username,'filter':f})
 
 
 @login_required
@@ -330,7 +332,6 @@ def final_nomi_approval(request, view_pk, post_pk,nomi_pk):
     to_add = viewer
     nomi.nomi_approvals.add(to_add)
     nomi.open_to_users()
-    nomi.save()
 
     return HttpResponseRedirect(reverse('nomi_detail', kwargs={'post_pk': post_pk, 'view_pk': view_pk,
                                                                'nomi_pk': nomi_pk}))

@@ -1,0 +1,28 @@
+{% extends 'base1.html' %}
+
+{% load staticfiles %}
+
+
+{% block content %}
+
+<!-- hey let it live for now it actually helps in checking features,may be removed later -->
+
+{% for nomi in all_nominations %}
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">{{ nomi.name }}</h3>
+    </div>
+    <div class="panel-body">
+        Panel content
+    </div>
+</div>
+
+{% endfor %}
+
+
+
+
+
+
+{% endblock %}
