@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from .choices import *
 from datetime import datetime
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+
 
 
 class Club(models.Model):
@@ -128,4 +131,15 @@ class UserProfile(models.Model):
     def __str__(self):
         return str(self.name)
 
+
+
+
+
+@receiver(post_save,sender=Nomination)
+def ensure_parent_in_approvals(sender, **kwargs):
+    nomi=kwargs.get('instance')
+    post=nomi.nomi_post
+    if post:
+        parent=post.parent
+        nomi.nomi_approvals.add(parent)
 
