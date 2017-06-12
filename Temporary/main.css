@@ -16,7 +16,7 @@
 }
 
 body {
-    background: #F1F3FA;
+    background: #ffffff;
 }
 
 /* Profile container */
@@ -27,7 +27,7 @@ body {
 /* Profile sidebar */
 .profile-sidebar {
     padding: 20px 0 10px 0;
-    background: #fff;
+    background: #45faff;
     position: fixed;
     width: 300px;
     margin-top: 50px;
@@ -101,7 +101,7 @@ body {
     z-index: 0;
     margin-top: 32px;
     padding: 20px;
-    background: #fff;
+    background: #ffffff;
     min-height: 460px;
 }
 
@@ -170,4 +170,20 @@ body {
 
 .right-profile-userpic {
     margin-top: 20px;
+}
+
+/* Post Profile View */
+
+.jumbotron-post {
+    background-color: #e3f7bb;
+    margin-bottom: 10px;
+}
+
+#create-post {
+    padding-top: 12px;
+    padding-bottom: 2px;
+    background-color: #36eaf7;
+    text-align: center;
+    font-size: large;
+    border-radius: 7px;
 }
