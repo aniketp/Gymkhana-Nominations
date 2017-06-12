@@ -1,0 +1,67 @@
+{% extends 'base2.html' %}
+
+{% load staticfiles %}
+{% block title %} Gymkhana Nominations {% endblock %}
+
+{% block content %}
+
+
+            <div class="profile-content">
+                <div class="jumbotron jumbotron-post">
+                    <div class="jumbotron-title">
+                        <h1 style="text-align: center">{{post.post_name}}</h1>
+                    </div>
+                    <div class="jumbotron-club">
+                        <h3 style="font-size: 35px; text-align: center">Club name</h3>
+                    </div>
+                </div>
+
+                <div id="create-post">
+                    <p><a href="{% url 'post_create' post.pk %}">Create a New Post</a></p>
+                </div>
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="jumbotron jumbotron-child-list">
+
+                                <div>
+                                    <h2>Post Under You</h2>
+                                    <p><br></p>
+                                </div>
+
+                                <div>
+                                    {% for ch_post in child_posts %}
+                                    <h4><a href="{% url 'child_post' pk=ch_post.pk view_pk=post.pk  %}">{{ ch_post.post_name }}</a></h4>
+                                    {% endfor %}
+                                </div>
+                                <div>
+                                    <h2>Posts to be approved</h2>
+                                    <p><br></p>
+                                </div>
+                                <div>
+                                    {% for ch_post in post_approval %}
+                                        <h4><a href="{% url 'child_post' pk=ch_post.pk view_pk=post.pk %}">{{ ch_post.post_name }}</a></h4>
+                                    {% endfor %}
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="jumbotron jumbotron-nomi-list">
+                                <div>
+                                    <h2>Nominations to be Approved</h2>
+                                    <p><br></p>
+                                </div>
+                                <div>
+                                    {% for nomi in nomi_approval %}
+                                        <h4><a href="{% url 'nomi_detail' post_pk=nomi.nomi_post.pk view_pk=post.pk nomi_pk=nomi.pk %}">{{ nomi.name }}</a></h4>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{% endblock %}
