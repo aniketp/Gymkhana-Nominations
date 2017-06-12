@@ -168,10 +168,52 @@ body {
 
 .jumbotron-child-list {
     margin-left: -14px;
+    min-height: 250px;
+}
+
+.jumbotron-child-list div h4 {
+    text-align: center;
+    color: black;
+}
+
+.jumbotron-child-list div h3 {
+    padding-top: -15px;
+    margin-top: -10px;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+.jumbotron-child-list div h2 {
+    text-align: center;
+    color: black;
+}
+
+.jumbotron-child-list div p {
+    width: 330px;
+    margin-left: -30px;
+    border-top: 1px solid #000000;
+    height: 1px;
 }
 
 .jumbotron-nomi-list {
     margin-right: -14px;
+    min-height: 250px;
+}
+
+.jumbotron-nomi-list div h4 {
+    text-align: center;
+}
+
+.jumbotron-nomi-list div h2 {
+    text-align: center;
+    color: black;
+}
+
+.jumbotron-nomi-list div p {
+    width: 330px;
+    margin-left: -30px;
+    border-top: 1px solid #000000;
+    height: 1px;
 }
 
 #create-post {
