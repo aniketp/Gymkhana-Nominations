@@ -8,12 +8,14 @@
             <div class="panel-body">
                 <div class="form-group">
                     <form action="" method="get">
-                        {% for field in filter.form %}
-                        <div class="col-lg-3">
-                            <label >{{ field.label_tag }}</label>
-                            {{ field }}
+                        <label class="col-lg-1 control-label">Club</label>
+                        <div class="col-lg-3 ">
+                            {{filter.form.nomi_approvals__club}}
                         </div>
-                        {% endfor %}
+                        <label class="col-lg-1 control-label">Batch</label>
+                        <div class="col-lg-3 ">
+                            {{filter.form.year_choice}}
+                        </div>
                         <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
                     </form>
                 </div>
