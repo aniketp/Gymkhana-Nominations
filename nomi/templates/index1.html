@@ -1,5 +1,6 @@
 {% extends 'base2.html' %}
 {% load staticfiles %}
+{% load bootstrap %}
 
 {% block content %}
 <div class="profile-content">
@@ -7,38 +8,43 @@
         <div class="panel-heading">Filter Nominations</div>
             <div class="panel-body">
                 <div class="form-group">
+
                     <form action="" method="get">
                         <label class="col-lg-1 control-label">Club</label>
-                        <div class="col-lg-3 ">
-                            {{filter.form.nomi_approvals__club}}
+                        <div class="col-lg-3">
+                            {{filter.form|bootstrap_inline}}
                         </div>
-                        <label class="col-lg-1 control-label">Batch</label>
+
+                 <!--       <label class="col-lg-1 control-label">Batch</label>
                         <div class="col-lg-3 ">
                             {{filter.form.year_choice}}
-                        </div>
+                        </div>  -->
+
                         <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
                     </form>
+
                 </div>
             </div>
     </div>
 </div>
 
+
 {% for nomi in filter.qs %}
 
-<div class="panel panel-success">
-    <div class="panel-heading">
-        <h3 class="panel-title">{{ nomi.name.upper }}</h3>
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ nomi.name.upper }}</h3>
+        </div>
 
+        <div class="panel-body">
+            <span style="font-weight: bolder">Preference : </span>
+            <span class="label label-primary">{{nomi.year_choice}}</span>
+            <span class="label label-success">{{nomi.dept_choice}}</span>
+            <p><span style="font-weight: bolder"> Expiry Date :  </span>{{nomi.closing_date}}</p>
+            <p>{{nomi.description}}</p>
+            <a href="{% url 'nomi_apply' nomi.pk %}" class="btn btn-sm read-more-button btn-danger">Read More</a>
+        </div>
     </div>
-    <div class="panel-body">
-        <span style="font-weight: bolder">Preference : </span>
-        <span class="label label-primary">{{nomi.year_choice}}</span>
-        <span class="label label-success">{{nomi.dept_choice}}</span>
-        <p><span style="font-weight: bolder"> Expiry Date :  </span>{{nomi.closing_date}}</p>
-        <p>{{nomi.description}}</p>
-        <a href="{% url 'nomi_apply' nomi.pk %}" class="btn btn-sm read-more-button btn-danger">Read More</a>
-    </div>
-</div>
 
 {% endfor %}
 </div>

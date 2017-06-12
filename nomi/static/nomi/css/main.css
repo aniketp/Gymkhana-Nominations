@@ -27,7 +27,6 @@ body {
 /* Profile sidebar */
 .profile-sidebar {
     padding: 20px 0 10px 0;
-    background: ;
     position: fixed;
     width: 300px;
     margin-top: 50px;
@@ -142,6 +141,10 @@ body {
 }
 
 /* Nomination Panel */
+
+.panel-default {
+    padding-bottom: 0px;
+}
 
 .panel-default .panel-heading {
     text-align: center;
