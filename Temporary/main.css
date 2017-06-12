@@ -159,19 +159,6 @@ body {
     margin-right: 3px;
 }
 
-/* Right Column */
-.right-column {
-    width: 300px;
-    margin-left: 1000px;
-    position: fixed;
-    margin-top: 33px;
-    background-color: white;
-}
-
-.right-profile-userpic {
-    margin-top: 20px;
-}
-
 /* Post Profile View */
 
 .jumbotron-post {
@@ -179,9 +166,18 @@ body {
     margin-bottom: 10px;
 }
 
+.jumbotron-child-list {
+    margin-left: -14px;
+}
+
+.jumbotron-nomi-list {
+    margin-right: -14px;
+}
+
 #create-post {
     padding-top: 12px;
     padding-bottom: 2px;
+    margin-bottom: 12px;
     background-color: #36eaf7;
     text-align: center;
     font-size: large;
