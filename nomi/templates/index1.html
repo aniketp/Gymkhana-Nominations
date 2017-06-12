@@ -3,29 +3,25 @@
 
 {% block content %}
 <div class="profile-content">
-
-
-
-
-
-                <div class="panel panel-default">
-                    <div class="panel-heading">Filter Nominations</div>
-                    <div class="panel-body">
-                        <div class="form-group">
-                             <form action="" method="get">
-                                 {% for field in filter.form %}
-                            <label for="select" class="col-lg-1 control-label">{{ field.label_tag }}</label>
-                            <div class="col-lg-3">
-                              {{ field.errors }}{{ field }}
-                            </div>
-                                 {% endfor %}
-                                  <input type="submit" class="btn btn-success nomi-filter" />
-                             </form>
-                            </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">Filter Nominations</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <form action="" method="get">
+                        {% for field in filter.form %}
+                        <div class="col-lg-3">
+                            <label >{{ field.label_tag }}</label>
+                            {{ field }}
                         </div>
-                    </div>
+                        {% endfor %}
+                        <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
+                    </form>
                 </div>
-    {% for nomi in filter.qs %}
+            </div>
+    </div>
+</div>
+
+{% for nomi in filter.qs %}
 
 <div class="panel panel-success">
     <div class="panel-heading">
