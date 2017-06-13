@@ -275,42 +275,39 @@ class NominationDelete(DeleteView):
     success_url = reverse_lazy('index')
 
 
-def nomi_detail(request, view_pk, post_pk, nomi_pk):
+def nomi_detail(request,nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     questionnaire = nomi.nomi_form
     form = questionnaire.get_form(request.POST or None)
 
     if nomi.status == 'Nomination created':
-        approved = 1
+        created = 1
     else:
-        approved = 0
+        created = 0
 
-    view = Post.objects.get(pk=view_pk)
-
-    if view.perms == 'normal':
-        power_to_send = 0
+    if nomi.status =='Nomination Out':
+        out=1
     else:
-        power_to_send = 1
-
-    view_parent = Post.objects.get(pk=view.parent.pk)
-
-    if view_parent in nomi.nomi_approvals.all():
-        approval = 1
-    else:
-        approval = 0
+        out=0
 
     access = False
-    for apv_post in nomi.nomi_post.post_approvals.all():
+    view_post=0
+    for apv_post in nomi.nomi_approvals.all():
         if request.user in apv_post.post_holders.all():
             access = True
+            view_post=apv_post
             break
 
-    if access or request.user in nomi.nomi_post.parent.post_holders.all():
-        return render(request, 'nomi_detail.html', context={'nomi': nomi, 'form': form, 'view_pk': view_pk,
+    if access:
+        return render(request, 'nomi_detail1.html', context={'nomi': nomi, 'form': form, 'view_pk': view_pk,
                                                         'post_pk': post_pk, 'ap': approved,
                                                         'approval': approval, 'power_to_send': power_to_send})
     else:
-        return render(request, 'no_access.html')
+        if out:
+            return render(request, 'nomi_detail_user.html', context={'nomi': nomi,})
+        else:
+            return render(request, 'no_access.html')
+
 
 
 
