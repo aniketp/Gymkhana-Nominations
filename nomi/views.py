@@ -12,12 +12,11 @@ import json
 from .filters import NominationFilter
 
 
-@login_required
 def index(request):
-    filter = NominationFilter(request.GET, queryset=Nomination.objects.filter(status='Nomination out'))
-    posts = Post.objects.filter(post_holders=request.user)
-    username = UserProfile.objects.get(user=request.user)
     if request.user.is_authenticated:
+        filter = NominationFilter(request.GET, queryset=Nomination.objects.filter(status='Nomination out'))
+        posts = Post.objects.filter(post_holders=request.user)
+        username = UserProfile.objects.get(user=request.user)
         return render(request, 'index1.html', context={'posts': posts, 'username': username,'filter':filter})
     else:
         return HttpResponseRedirect(reverse('login'))
