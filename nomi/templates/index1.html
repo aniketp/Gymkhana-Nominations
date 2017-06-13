@@ -4,32 +4,29 @@
 
 {% block content %}
 <div class="profile-content">
+
     <div class="panel panel-default">
-        <div class="panel-heading">Filter Nominations</div>
-            <div class="panel-body">
-                <div class="form-group">
-
-                    <form action="" method="get">
-                        <label class="col-lg-1 control-label">Club</label>
-                      <!-- <div class="col-lg-3">
-                            {{filter.form|bootstrap}}
-                        </div>-->
-                        <div class="col-lg-3">
-                            {{filter.form.nomi_approvals__club}}
-                        </div>
-
-                       <label class="col-lg-1 control-label">Batch</label>
-                        <div class="col-lg-3 ">
-                            {{filter.form.year_choice}}
-                        </div>
-
-                        <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
-                    </form>
-
+      <div class="panel-heading">Filter Nominations</div>
+      <div class="panel-body">
+        <form action="" method="get">
+            <label class="col-lg-1 control-label">Club</label>
+                  <!-- <div class="col-lg-3">
+                        {{filter.form|bootstrap}}
+                    </div>-->
+                <div class="col-lg-3">
+                    {{filter.form.nomi_approvals__club}}
                 </div>
-            </div>
+
+            <label class="col-lg-1 control-label">Batch</label>
+                <div class="col-lg-3 ">
+                    {{filter.form.year_choice}}
+                </div>
+
+            <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
+        </form>
+      </div>
     </div>
-</div>
+
 
 
 {% for nomi in filter.qs %}
