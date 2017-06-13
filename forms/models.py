@@ -48,8 +48,8 @@ FIELD_TYPES = (
 )
 
 QUES_TYPES = (
-    ('Short_answer', 'Short-answer'),
-    ('Paragraph', 'long-answer'),
+    ('Short_answer', 'One Line Answer'),
+    ('Paragraph', 'Multiple Line Answer'),
     ('Integer', 'Integer-answer'),
     ('ChoiceField', 'Choice'),
     ('MultipleChoiceField', 'Multiple-choice'),
@@ -82,7 +82,7 @@ class Question(models.Model):
         if self.question_type == 'MultipleChoiceField':
             args['widget']=forms.CheckboxSelectMultiple
 
-        if self.question_type == 'Short_answer' or self.question_type == 'Paragraph':
+        if self.question_type == 'Paragraph':
             args['widget']=forms.Textarea
 
 
