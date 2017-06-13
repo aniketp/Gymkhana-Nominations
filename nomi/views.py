@@ -160,7 +160,7 @@ def child_post_view(request, pk, view_pk):
             break
 
     if access or request.user in post.parent.post_holders.all():
-        return render(request, 'child_post.html', {'post': post, 'view_pk': view_pk, 'ap': approved,
+        return render(request, 'child_post1.html', {'post': post, 'view_pk': view_pk, 'ap': approved,
                                                'approval': approval, 'power_to_approve': power_to_approve,
                                                'nominations': nominations})
     else:
