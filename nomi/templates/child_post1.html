@@ -1,20 +1,19 @@
 {% extends 'base2.html' %}
 {% load staticfiles %}
 {% load bootstrap %}
-
-
+{% block title %}Child_post{% endblock %}
 {% block content %}
             <div class="profile-content">
                 <div class="container-fluid child-post-container">
                     <div class="row box">
                         <div>
-                            <h1>Child Post Name</h1>
+                            <h1>{{post.post_name}}</h1>
                         </div>
                         <div class="col-lg-6 col-sm-6">
-                            <h3>Parent post name</h3>
+                            <h3>{{post.status}}</h3>
                         </div>
                         <div class="col-lg-6 col-sm-6">
-                            <h3>Club Name</h3>
+                            <h3> {{post.club.club_name}}</h3>
                         </div>
                     </div>
                     <br>
@@ -25,20 +24,18 @@
                         <h2>Nominations for the post</h2>
                         <div class="row">
                             <div class="col-lg-12 text-center">
-                                <a href="#" class="btn btn-primary nomi-button">Create a New Nomination</a>
+                                <a href="{% url 'nomi_create' post.pk %}" class="btn btn-primary nomi-button">Create a New Nomination</a>
                             </div>
                         </div>
                         <br>
-                        <div class="panel panel-default">
+
+                        {% for nomination in nominations %}
+                            <div class="panel panel-default">
                             <div class="panel-body">
-                                Nomination 1
+                                <a  href="{% url 'nomi_detail' nomi_pk=nomination.pk %}">{{nomination.name}}</a>
                             </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                Nomination 2
                             </div>
-                        </div>
+                        {% endfor %}
                     </div>
                     <div class="col-lg-5 col-sm-6">
                         <div class="post-holder-list">
@@ -47,21 +44,9 @@
 
                         <div class="scroll-area">
                             <ol>
-                                <li>Aniket Pandey</li>
-                                <li>Ashish Kumar</li>
-                                <li>Vardhan Gupta</li>
-                                <li>Chitral Gupta</li>
-                                <li>Aryaman Jha</li>
-                                <li>Aniket Pandey</li>
-                                <li>Ashish Kumar</li>
-                                <li>Vardhan Gupta</li>
-                                <li>Chitral Gupta</li>
-                                <li>Aryaman Jha</li>
-                                <li>Aniket Pandey</li>
-                                <li>Ashish Kumar</li>
-                                <li>Vardhan Gupta</li>
-                                <li>Chitral Gupta</li>
-                                <li>Aryaman Jha</li>
+                                {% for post_holder in post.post_holders.all %}
+                                <li>{{post_holder.userprofile.name}}</li>
+                                {% endfor %}
 
                             </ol>
                         </div>
