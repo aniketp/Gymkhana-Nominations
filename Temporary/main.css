@@ -253,3 +253,21 @@ body {
     font-size: large;
     border-radius: 7px;
 }
+
+/* Child Post View */
+
+.child-post-container {
+    background-color: lavenderblush;
+}
+
+.child-post-container div h2 {
+    text-align: center;
+}
+
+.child-post-container div h4 {
+    text-align: center;
+}
+
+.nomi-button {
+    width: auto;
+}
