@@ -37,7 +37,7 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="{% url 'index' %}" id="brand">Gymkhana Nominations</a></li>
+                <li><a href="{% url 'index' %} " id="brand">Gymkhana Nominations</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
@@ -51,6 +51,15 @@
 <div class="container">
     <div class="col-md-4"></div>
     <div class="col-md-4 profile-content">
+        {% if user.is_authenticated %}
+        <div style="padding-top:50px">
+           <h2 class="form-signin-heading">Welcome to the Portal</h2>
+            <br>
+            <br>
+            <a href="{% url 'logout' %}?next={% url 'login' %}" class="btn btn-md center-block btn-primary btn-block">Logout</a>
+        </div>
+        {% else %}
+
            <form class="form-signin" method="post" action="{% url 'login' %}">
                <h2 class="form-signin-heading">Login to Portal</h2>
                 {% csrf_token  %}
@@ -66,6 +75,7 @@
                <input class="btn btn-primary "type="submit" value="login" />
                <input type="hidden" name="next" value="{{next}}">
            </form>
+        {% endif %}
     </div>
     <div class="col-md-4"></div>
 </div> <!-- /container -->
