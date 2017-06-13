@@ -324,15 +324,22 @@ def nomi_approval(request,nomi_pk):
 
 
 @login_required
-def final_nomi_approval(request, view_pk, post_pk,nomi_pk):
+def final_nomi_approval(request,nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
-    viewer = Post.objects.get(pk=view_pk)
-    to_add = viewer
-    nomi.nomi_approvals.add(to_add)
-    nomi.open_to_users()
-
-    return HttpResponseRedirect(reverse('nomi_detail', kwargs={'post_pk': post_pk, 'view_pk': view_pk,
-                                                               'nomi_pk': nomi_pk}))
+    access = False
+    view_post = 0
+    for apv_post in nomi.nomi_approvals.all():
+        if request.user in apv_post.post_holders.all():
+            access = True
+            view_post = apv_post
+            break
+    if access:
+        to_add = view_post
+        nomi.nomi_approvals.add(to_add)
+        nomi.open_to_users()
+        return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
+    else:
+        return render(request, 'no_access.html')
 
 
 @login_required
