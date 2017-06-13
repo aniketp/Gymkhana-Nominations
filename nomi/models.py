@@ -74,6 +74,8 @@ class Nomination(models.Model):
     dept_choice = models.CharField(max_length=100, choices=DEPT_1, null=True)
 
 
+
+
     def __str__(self):
         return self.name
 

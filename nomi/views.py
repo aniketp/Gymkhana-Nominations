@@ -14,7 +14,7 @@ from .filters import NominationFilter
 
 def index(request):
     if request.user.is_authenticated:
-        filter = NominationFilter(request.GET, queryset=Nomination.objects.filter(status='Nomination out'))
+        filter = NominationFilter(request.GET, queryset=Nomination.objects.filter(status='Nomination out').order_by('-opening_date'))
         posts = Post.objects.filter(post_holders=request.user)
         username = UserProfile.objects.get(user=request.user)
         return render(request, 'index1.html', context={'posts': posts, 'username': username,'filter':filter})
