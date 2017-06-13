@@ -77,7 +77,7 @@ class Question(models.Model):
     def _get_field_args(self):
         args = {}
         if self.question_type == 'ChoiceField' or self.question_type == 'MultipleChoiceField':
-            args['choices'] = enumerate(self.question_choices.split('$'))
+            args['choices'] = enumerate(self.question_choices.split('\n'))
 
         args.update({'required': True})
         return args
