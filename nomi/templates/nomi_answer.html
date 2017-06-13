@@ -71,7 +71,7 @@ form view
             <hr>
             <hr>
             <div style="margin:25px">
-                    <form  action="" method="post">
+                <form  action="" method="post">
                             {% csrf_token %}
                         <p>
                             {{form|bootstrap}}
@@ -83,6 +83,14 @@ form view
     <div class="row">
         <div class="btn btn-sm read-more-button " ><a href="{% url 'accept' nomi.pk %} ">Accept</a></div>
         <div class="btn btn-sm read-more-button "><a href="{% url 'reject' nomi.pk %}">Reject</a></div>
+    </div>
+    <div style="margin:25px">
+                    <form  action="" method="post">
+                            {% csrf_token %}
+                            {{comment_form|bootstrap}}
+
+                        <input type="submit" value="Submit"/>
+                    </form>
     </div>
 </div>
 

@@ -6,7 +6,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
-from .forms import NominationForm, PostForm, ConfirmApplication, ClubForm
+from .forms import NominationForm, PostForm, ConfirmApplication, ClubForm, CommentForm
 from forms.models import Questionnaire
 import json
 from .filters import NominationFilter
@@ -412,8 +412,14 @@ def nomination_answer(request, pk):
     applicant=application.user.userprofile
     questionnaire = application.nomination.nomi_form
     form = questionnaire.get_form(data)
+    comment_form = CommentForm(request.POST or None, instance=application)
 
-    return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application,'nomi_user':applicant})
+    if comment_form.is_valid():
+        comment_form.save()
+        return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,'comment_form':comment_form})
+
+
+    return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application,'nomi_user':applicant,'comment_form':comment_form})
 
 
 @login_required
