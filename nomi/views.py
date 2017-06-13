@@ -57,7 +57,7 @@ def post_view(request, pk):
 
     if request.user in post.post_holders.all():
         return render(request, 'post1.html', context={'post': post, 'child_posts': child_posts_reverse,
-                                                     'post_approval': post_approvals, 'nomi_approval': nomi_approvals})
+                                                      'post_approval': post_approvals, 'nomi_approval': nomi_approvals})
     else:
         return render(request, 'no_access.html')
 

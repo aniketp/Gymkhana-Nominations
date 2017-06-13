@@ -6,7 +6,6 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 
 
-
 class Club(models.Model):
     club_name = models.CharField(max_length=100, null=True)
     club_parent = models.ForeignKey('self', null=True, blank=True)
