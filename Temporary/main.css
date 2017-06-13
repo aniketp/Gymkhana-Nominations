@@ -133,27 +133,6 @@ body {
     width: 100px;
 }
 
-#apply-button {
-    margin-left: 16%;
-}
-
-#go-back-button {
-    margin-left: 30%;
-}
-
-#admin-view-button {
-    margin-left: 10%;
-}
-
-#admin-nomi-button {
-    margin-left: 10%;
-    width: auto;
-}
-
-#admin-go-back {
-    margin-left: 10%;
-}
-
 /* Nomination Panel */
 
 .panel-default .panel-heading {
