@@ -5,6 +5,11 @@
     margin-right: 30px;
 }
 
+.scroll-container {
+    height: 380px;
+    overflow-y:scroll ;
+}
+
 #navbar-links{
     font-size: large;
 }
@@ -27,8 +32,7 @@ body {
 /* Profile sidebar */
 .profile-sidebar {
     padding: 20px 0 10px 0;
-    background: #45faff;
-    position: fixed;
+    background: #27ffe4;
     width: 300px;
     margin-top: 50px;
 }
