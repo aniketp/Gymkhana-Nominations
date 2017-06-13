@@ -42,7 +42,7 @@
             <span class="label label-success">{{nomi.dept_choice}}</span>
             <p><span style="font-weight: bolder"> Expiry Date :  </span>{{nomi.closing_date}}</p>
             <p>{{nomi.description}}</p>
-            <a href="{% url 'nomi_apply' nomi.pk %}" class="btn btn-sm read-more-button btn-danger">Read More</a>
+            <a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}" class="btn btn-sm read-more-button btn-danger">Read More</a>
         </div>
     </div>
 
