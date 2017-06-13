@@ -199,17 +199,6 @@ def post_approval(request, view_pk, post_pk):
         return render(request,'no_access.html')
 
 
-@login_required
-def final_club_approval(request, view_pk, club_pk):
-    club = Club.objects.get(pk=club_pk)
-    viewer = Club.objects.get(pk=view_pk)
-    to_add = viewer
-
-    club.club_approvals.add(to_add)
-    club.status = 'Club approved'
-    club.save()
-
-    return HttpResponseRedirect(reverse('child_club', kwargs={'pk': club_pk, 'view_pk': view_pk}))
 
 
 @login_required
@@ -305,7 +294,7 @@ def nomi_detail(request,nomi_pk):
         else:
             sent_to_parent=0
 
-        return render(request, 'nomi_detail_admin.html', context={'nomi': nomi, 'form': form, 'created':created,'sent_to_parent':sent_to_parent, 'power_to_send': power_to_send})
+        return render(request, 'nomi_detail_admin.html', context={'nomi': nomi, 'form': form, 'created':created,'sent_to_parent':sent_to_parent, 'power_to_send': power_to_send,'out':out})
     else:
         if out:
             return render(request, 'nomi_detail_user.html', context={'nomi': nomi,})
@@ -316,14 +305,22 @@ def nomi_detail(request,nomi_pk):
 
 
 @login_required
-def nomi_approval(request, view_pk, post_pk, nomi_pk):
+def nomi_approval(request,nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
-    viewer = Post.objects.get(pk=view_pk)
-    to_add = viewer.parent
-    nomi.nomi_approvals.add(to_add)
+    access = False
+    view_post = 0
+    for apv_post in nomi.nomi_approvals.all():
+        if request.user in apv_post.post_holders.all():
+            access = True
+            view_post = apv_post
+            break
+    if access:
+        to_add = view_post.parent
+        nomi.nomi_approvals.add(to_add)
+        return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
+    else:
+        return render(request, 'no_access.html')
 
-    return HttpResponseRedirect(reverse('nomi_detail', kwargs={'post_pk': post_pk, 'view_pk': view_pk,
-                                                               'nomi_pk': nomi_pk}))
 
 
 @login_required
