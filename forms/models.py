@@ -82,6 +82,11 @@ class Question(models.Model):
         if self.question_type == 'MultipleChoiceField':
             args['widget']=forms.CheckboxSelectMultiple
 
+        if self.question_type == 'Short_answer' or self.question_type == 'Paragraph':
+            args['widget']=forms.Textarea
+
+
+
         args.update({'required': True})
         return args
 
