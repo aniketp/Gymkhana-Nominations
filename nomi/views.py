@@ -409,11 +409,11 @@ def nomination_answer(request, pk):
     application = NominationInstance.objects.get(pk=pk)
     form1 = application.filled_form
     data = json.loads(form1.data)
-
+    applicant=application.user.userprofile
     questionnaire = application.nomination.nomi_form
     form = questionnaire.get_form(data)
 
-    return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application})
+    return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application,'nomi_user':applicant})
 
 
 @login_required
