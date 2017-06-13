@@ -282,7 +282,7 @@ body {
 }
 
 .scroll-area {
-    height: 200px;
+    height: 300px;
     overflow: scroll;
 }
 
