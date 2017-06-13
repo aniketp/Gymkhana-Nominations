@@ -11,14 +11,17 @@
 
                     <form action="" method="get">
                         <label class="col-lg-1 control-label">Club</label>
+                      <!-- <div class="col-lg-3">
+                            {{filter.form|bootstrap}}
+                        </div>-->
                         <div class="col-lg-3">
-                            {{filter.form|bootstrap_inline}}
+                            {{filter.form.nomi_approvals__club}}
                         </div>
 
-                 <!--       <label class="col-lg-1 control-label">Batch</label>
+                       <label class="col-lg-1 control-label">Batch</label>
                         <div class="col-lg-3 ">
                             {{filter.form.year_choice}}
-                        </div>  -->
+                        </div>
 
                         <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
                     </form>
