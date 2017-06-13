@@ -60,8 +60,8 @@ QUES_TYPES = (
 class Question(models.Model):
     questionnaire = models.ForeignKey(Questionnaire, null=True)
     question_type = models.CharField(max_length=50, choices=QUES_TYPES, null=True)
-    question = models.CharField(max_length=300, null=True)
-    question_choices = models.TextField(max_length=512, null=True, blank=True, help_text='add dollar($) symbol between two choices')
+    question = models.CharField(max_length=1000, null=True)
+    question_choices = models.TextField(max_length=600, null=True, blank=True, help_text='make new line for new option')
 
     def __unicode__(self):
         return self.question
@@ -78,6 +78,9 @@ class Question(models.Model):
         args = {}
         if self.question_type == 'ChoiceField' or self.question_type == 'MultipleChoiceField':
             args['choices'] = enumerate(self.question_choices.split('\n'))
+
+        if self.question_type == 'MultipleChoiceField':
+            args['widget']=forms.CheckboxSelectMultiple
 
         args.update({'required': True})
         return args
