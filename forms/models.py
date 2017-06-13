@@ -50,7 +50,7 @@ FIELD_TYPES = (
 QUES_TYPES = (
     ('Short_answer', 'One Line Answer'),
     ('Paragraph', 'Multiple Line Answer'),
-    ('Integer', 'Integer-answer'),
+    ('Integer', 'Integer Answer'),
     ('ChoiceField', 'Choice'),
     ('MultipleChoiceField', 'Multiple-choice'),
     #('Date', 'date'),
@@ -79,6 +79,8 @@ class Question(models.Model):
         if self.question_type == 'ChoiceField' or self.question_type == 'MultipleChoiceField':
             args['choices'] = enumerate(self.question_choices.split('\n'))
 
+
+
         if self.question_type == 'MultipleChoiceField':
             args['widget']=forms.CheckboxSelectMultiple
 
@@ -94,7 +96,7 @@ class Question(models.Model):
 class FilledForm(models.Model):
     questionnaire = models.ForeignKey(Questionnaire, null=True)
     applicant = models.ForeignKey(User, null=True)
-    data = models.CharField(max_length=10000, null=True, blank=True)
+    data = models.CharField(max_length=20000, null=True, blank=True)
 
     def __str__(self):
         return self.questionnaire.name
