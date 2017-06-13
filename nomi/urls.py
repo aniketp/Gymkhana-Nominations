@@ -86,8 +86,6 @@ urlpatterns = [
     url(r'^nomi_approve/(?P<nomi_pk>\d+)/$', views.nomi_approval, name='nomi_approval'),
 
     # nominations/final_nomi_approve/2/43/21
-    url(r'^final_nomi_approve/(?P<view_pk>\d+)/(?P<post_pk>\d+)/(?P<nomi_pk>\d+)/$', views.final_nomi_approval,
-        name='final_nomi_approval'),
-
+    url(r'^final_nomi_approve/(?P<nomi_pk>\d+)/$', views.final_nomi_approval, name='final_nomi_approval'),
 
 ]
