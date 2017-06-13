@@ -5,6 +5,10 @@
     margin-right: 30px;
 }
 
+.scroll-container {
+    overflow-y:scroll ;
+}
+
 #navbar-links{
     font-size: large;
 }
@@ -28,6 +32,7 @@ body {
 .profile-sidebar {
     padding: 20px 0 10px 0;
     position: fixed;
+    background: ;
     width: 300px;
     margin-top: 50px;
 }
@@ -132,19 +137,7 @@ body {
     width: 100px;
 }
 
-#apply-button {
-    margin-left: 16%;
-}
-
-#go-back-button {
-    margin-left: 30%;
-}
-
 /* Nomination Panel */
-
-.panel-default {
-    padding-bottom: 0px;
-}
 
 .panel-default .panel-heading {
     text-align: center;
@@ -242,4 +235,49 @@ body {
     text-align: center;
     font-size: large;
     border-radius: 7px;
+}
+
+/* Child Post View */
+
+.child-post-container {
+    background-color: lavenderblush;
+    margin-bottom: 20px;
+}
+
+.child-post-container:nth-child(2) {
+    padding-top: 10px;
+}
+
+.child-post-container div h1 {
+    text-align: center;
+}
+
+.child-post-container div h2 {
+    text-align: center;
+}
+
+.child-post-container div h3 {
+    text-align: center;
+}
+
+.nomi-button {
+    width: auto;
+}
+
+.scroll-area {
+    height: 300px;
+    overflow: scroll;
+}
+
+.scroll-area ol li {
+    font-size: medium;
+}
+
+.post-holder-list {
+    text-align: center;
+
+}
+
+.post-holder-list h2 {
+    color: #f76750;
 }
