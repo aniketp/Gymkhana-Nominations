@@ -65,9 +65,6 @@ urlpatterns = [
     # nominations/post_approve/2/34
     url(r'^post_approve/(?P<post_pk>\d+)/(?P<view_pk>\d+)/$', views.post_approval, name='post_approval'),
 
-    # nominations/final_club_approve/2/43
-    url(r'^final_club_approve/(?P<club_pk>\d+)/(?P<view_pk>\d+)/$', views.final_club_approval,
-        name='final_club_approval'),
 
     # nominations/final_post_approve/2/43
     url(r'^final_post_approve/(?P<post_pk>\d+)/(?P<view_pk>\d+)/$', views.final_post_approval,
