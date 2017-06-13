@@ -80,7 +80,7 @@ urlpatterns = [
     url(r'^child_club/(?P<pk>\d+)/(?P<view_pk>\d+)/$', views.child_club_view, name='child_club'),
 
     # nominations/nomi_detail/2/34/6
-    url(r'^nomi_detail/(?P<view_pk>\d+)/(?P<post_pk>\d+)/(?P<nomi_pk>\d+)/$', views.nomi_detail, name='nomi_detail'),
+    url(r'^nomi_detail/(?P<nomi_pk>\d+)/$', views.nomi_detail, name='nomi_detail'),
 
     # nominations/post_approve/2/34
     url(r'^nomi_approve/(?P<view_pk>\d+)/(?P<post_pk>\d+)/(?P<nomi_pk>\d+)/$', views.nomi_approval, name='nomi_approval'),

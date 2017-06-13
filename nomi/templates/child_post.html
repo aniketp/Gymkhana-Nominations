@@ -34,7 +34,7 @@
                                 <ul class="List-group">
                                     <li class="List-group-item">
                                         <div class="">
-                                         <a class="list-group-item" href="{% url 'nomi_detail' view_pk=view_pk post_pk=post.pk nomi_pk=nomination.pk %}">{{nomination.name}}</a>
+                                         <a class="list-group-item" href="{% url 'nomi_detail' nomi_pk=nomination.pk %}">{{nomination.name}}</a>
                                         </div>
 
                                     </li>
