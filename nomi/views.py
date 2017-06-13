@@ -14,14 +14,11 @@ from .filters import NominationFilter
 
 @login_required
 def index(request):
-    nominations = Nomination.objects.filter(status='Nomination out')
-    all_nominations = nominations[::-1]
     filter = NominationFilter(request.GET, queryset=Nomination.objects.filter(status='Nomination out'))
     posts = Post.objects.filter(post_holders=request.user)
-    clubs = Club.objects.filter(club_members=request.user)
     username = UserProfile.objects.get(user=request.user)
     if request.user.is_authenticated:
-        return render(request, 'index1.html', context={'all_nominations': all_nominations, 'posts': posts,'clubs': clubs, 'username': username,'filter':filter})
+        return render(request, 'index1.html', context={'posts': posts, 'username': username,'filter':filter})
     else:
         return HttpResponseRedirect(reverse('login'))
 
@@ -285,7 +282,7 @@ def nomi_detail(request,nomi_pk):
     else:
         created = 0
 
-    if nomi.status =='Nomination Out':
+    if nomi.status =='Nomination out':
         out=1
     else:
         out=0
@@ -299,9 +296,16 @@ def nomi_detail(request,nomi_pk):
             break
 
     if access:
-        return render(request, 'nomi_detail1.html', context={'nomi': nomi, 'form': form, 'view_pk': view_pk,
-                                                        'post_pk': post_pk, 'ap': approved,
-                                                        'approval': approval, 'power_to_send': power_to_send})
+        if view_post.perms == 'normal':
+            power_to_send=0
+        else:
+            power_to_send=1
+        if view_post.parent in nomi.nomi_approvals.all():
+            sent_to_parent=1
+        else:
+            sent_to_parent=0
+
+        return render(request, 'nomi_detail_admin.html', context={'nomi': nomi, 'form': form, 'created':created,'sent_to_parent':sent_to_parent, 'power_to_send': power_to_send})
     else:
         if out:
             return render(request, 'nomi_detail_user.html', context={'nomi': nomi,})
