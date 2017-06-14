@@ -97,9 +97,9 @@ form view
     </div>
 
     {% if nomi.nomination.status == 'Interview period' %}
-        <div class="row">
-            <div class="btn btn-sm read-more-button " ><a href="{% url 'accept' nomi.pk %} ">Accept</a></div>
-            <div class="btn btn-sm read-more-button "><a href="{% url 'reject' nomi.pk %}">Reject</a></div>
+        <div class="row text-center">
+            <div class="btn btn-info read-more-button " ><a href="{% url 'accept' nomi.pk %} ">Accept</a></div>
+            <div class="btn btn-danger read-more-button "><a href="{% url 'reject' nomi.pk %}">Reject</a></div>
         </div>
     {% endif %}
 
