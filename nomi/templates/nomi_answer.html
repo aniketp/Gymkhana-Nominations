@@ -86,21 +86,23 @@ form view
             </div>
         </div>
 
-    {% if not nomi.status == 'Interview period' %}
+
+    <div style="margin:25px">
+        <form  action="" method="post">
+            {% csrf_token %}
+            {{comment_form|bootstrap}}
+
+            <input type="submit" class="btn btn-warning" value="Submit"/>
+        </form>
+    </div>
+
+    {% if nomi.nomination.status == 'Interview period' %}
         <div class="row">
             <div class="btn btn-sm read-more-button " ><a href="{% url 'accept' nomi.pk %} ">Accept</a></div>
             <div class="btn btn-sm read-more-button "><a href="{% url 'reject' nomi.pk %}">Reject</a></div>
         </div>
     {% endif %}
 
-    <div style="margin:25px">
-                    <form  action="" method="post">
-                            {% csrf_token %}
-                            {{comment_form|bootstrap}}
-
-                        <input type="submit" value="Submit"/>
-                    </form>
-    </div>
 </div>
 
 {% endblock content %}
