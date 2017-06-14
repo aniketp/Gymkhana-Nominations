@@ -116,7 +116,8 @@ class UserProfile(models.Model):
     department = models.CharField(max_length=200, choices=DEPT, default=None)
     hall = models.CharField(max_length=10, choices=HALL, default=1)
     room_no = models.CharField(max_length=10, null=True)
-    contact_no = models.IntegerField(null=True,blank=True)
+    contact = models.CharField(max_length=10, null=True, blank=True)
+
 
     def __str__(self):
         return str(self.name)
@@ -134,7 +135,7 @@ def ensure_parent_in_approvals(sender, **kwargs):
 
     if nomi.description:
         if not nomi.brief_desc:
-            nomi.brief_desc=nomi.description[:300]
+            nomi.brief_desc = nomi.description[:50]
             nomi.save()
 
 
