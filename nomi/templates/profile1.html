@@ -2,6 +2,61 @@
 {% load staticfiles %}
 {% load bootstrap %}
 
+{% block profile %}
+    <div class="profile-sidebar">
+
+        <div class="profile-userpic">
+            <img src="{% static 'nomi/img/logo.gif' %}" class="img-responsive" alt="">
+        </div>
+
+        <div class="profile-usertitle">
+            <div class="profile-usertitle-name">
+                {{my_profile.name}}
+            </div>
+
+            <div class="profile-usertitle-job">
+                {{my_profile.programme}} <br> {{my_profile.department}}
+            </div>
+        </div>
+
+        <div class="profile-usermenu">
+            <table class="table table-striped table-hover ">
+                <tbody>
+                <tr>
+                    <td id="topic">Batch</td>
+                    <td>{{my_profile.year}} </td>
+                </tr>
+                <tr>
+                    <td id="topic">Roll No.</td>
+                    <td>{{my_profile.roll_no}} </td>
+                </tr>
+                <tr>
+                    <td id="topic">Address</td>
+                    <td>{{my_profile.room_no}} , Hall-{{my_profile.hall}}</td>
+                </tr>
+                <tr>
+                    <td id="topic">Contact No.</td>
+                    <td>9599881876</td>
+                </tr>
+                <tr>
+                    <td id="topic">Email ID</td>
+                    <td>{{my_profile.user}}@iitk.ac.in</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <div class="row box text-center">
+                <form action="{% url 'profile_update' user_profile.pk %}" method="get" style="display: inline">
+                    {% csrf_token %}
+                    <button class="btn btn-success" type="submit">Edit Your Profile</button>
+                </form>
+            </div>
+        </div>
+                <!-- END MENU -->
+    </div>
+{% endblock %}
+
 {% block content %}
     <div class="profile-content">
                 <ul class="nav nav-tabs">
