@@ -131,14 +131,13 @@ def child_post_view(request, pk):
     nominations = Nomination.objects.filter(nomi_post=post)
 
     access = False
-    view=0
     for pt in post.post_approvals.all():
         if request.user in pt.post_holders.all():
+            view = pt
             access=True
-            view=pt
             break
 
-    if access or request.user in post.parent.post_holders.all():
+    if access:
         if post.status == 'Post created':
             approved = 1
         else:
