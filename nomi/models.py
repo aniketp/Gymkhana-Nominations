@@ -24,7 +24,6 @@ class Post(models.Model):
     club = models.ForeignKey(Club, on_delete=models.CASCADE, null=True, blank=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     post_holders = models.ManyToManyField(User, blank=True)
-
     post_approvals = models.ManyToManyField('self', related_name='approvals', symmetrical=False, blank=True)
     status = models.CharField(max_length=50, choices=POST_STATUS, default='Post created')
     perms = models.CharField(max_length=200, choices=POST_PERMS, default='normal')
@@ -61,9 +60,9 @@ class Nomination(models.Model):
     nomi_form = models.OneToOneField('forms.Questionnaire', null=True, blank=True)
     status = models.CharField(max_length=50, choices=STATUS, default='Nomination created')
     nomi_approvals = models.ManyToManyField(Post, related_name='nomi_approvals', symmetrical=False, blank=True)
+    club_search = models.ManyToManyField(Post, related_name='all_clubs', symmetrical=False, blank=True)
     opening_date = models.DateField(null=True, blank=True)
     closing_date = models.DateField(null=True, blank=True, editable=True)
-
     year_choice = models.CharField(max_length=100, choices=YEAR_1, null=True)
     hall_choice = models.CharField(max_length=100, choices=HALL_1, null=True)
     dept_choice = models.CharField(max_length=100, choices=DEPT_1, null=True)
@@ -129,6 +128,8 @@ def ensure_parent_in_approvals(sender, **kwargs):
     if post:
         parent = post.parent
         nomi.nomi_approvals.add(parent)
+        nomi.club_search.add(post)
+        nomi.club_search.add(parent)
 
     if nomi.description:
         if not nomi.brief_desc:

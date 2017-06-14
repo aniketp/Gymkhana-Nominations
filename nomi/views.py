@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from forms.models import Question
-from .models import Nomination, NominationInstance, UserProfile, Post, Club
+from .models import Nomination, NominationInstance, UserProfile, Post, Club, PostHistory
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
@@ -245,8 +245,7 @@ def nomination_create(request, pk):
         if title_form.is_valid():
             post = Post.objects.get(pk=pk)
 
-            questionnaire = Questionnaire.objects.create(name=title_form.cleaned_data['title'],
-                                                         description=title_form.cleaned_data['description'])
+            questionnaire = Questionnaire.objects.create(name=title_form.cleaned_data['title'])
 
             nomination = Nomination.objects.create(name=title_form.cleaned_data['title'],
                                                    description=title_form.cleaned_data['description'],
@@ -336,6 +335,7 @@ def nomi_approval(request,nomi_pk):
     if access:
         to_add = view_post.parent
         nomi.nomi_approvals.add(to_add)
+        nomi.club_search.add(to_add)
         return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
     else:
         return render(request, 'no_access.html')
@@ -355,6 +355,7 @@ def final_nomi_approval(request,nomi_pk):
     if access:
         to_add = view_post
         nomi.nomi_approvals.add(to_add)
+        nomi.club_search.add(to_add)
         nomi.open_to_users()
         return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
     else:
@@ -449,10 +450,11 @@ def nomination_answer(request, pk):
 @login_required
 def profile_view(request):
     pk = request.user.pk
-
+    history=PostHistory.objects.filter(user=request.user)
+    pending_nomi=NominationInstance.objects.filter(user=request.user).filter(nomination__status='Nomination out')
     try:
         user_profile = UserProfile.objects.get(user__id=pk)
-        return render(request, 'profile1.html', context={'user_profile': user_profile})
+        return render(request, 'profile1.html', context={'user_profile': user_profile ,'history':history,'pending_nomi':pending_nomi})
     except ObjectDoesNotExist:
         return HttpResponseRedirect('create')
 

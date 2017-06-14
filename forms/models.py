@@ -7,8 +7,6 @@ import json
 
 class Questionnaire(models.Model):
     name = models.CharField(max_length=100, null=True)
-    description = models.TextField(max_length=1000)
-    status = models.CharField(max_length=100, null=True, blank=True)
 
     def __unicode__(self):
         return self.name
@@ -58,7 +56,7 @@ QUES_TYPES = (
 
 
 class Question(models.Model):
-    questionnaire = models.ForeignKey(Questionnaire, null=True)
+    questionnaire = models.ForeignKey(Questionnaire,on_delete=models.CASCADE, null=True)
     question_type = models.CharField(max_length=50, choices=QUES_TYPES, null=True)
     question = models.CharField(max_length=1000, null=True)
     question_choices = models.TextField(max_length=600, null=True, blank=True, help_text='make new line for new option')

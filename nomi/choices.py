@@ -41,7 +41,6 @@ NOMI_STATUS = (
 STATUS = (
         ('Nomination created', 'Nomination created'),
         ('Nomination out', 'Nomination out'),
-        ('Interview period', 'Interview period'),
         ('Compiled', 'Compiled'),
 )
 
