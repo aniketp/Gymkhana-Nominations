@@ -402,14 +402,15 @@ def applications(request, pk):
     out=0
     form_confirm = ConfirmApplication(request.POST or None)
     if nomination.status == 'Nomination out':
-        out=1
+        out = 1
         if form_confirm.is_valid():
-            nomination.status='Interview period'
+            nomination.status = 'Interview period'
             nomination.save()
-            return render(request, 'applicants.html', context={'applicants': applicants,'form_confirm':form_confirm,'out':out})
+            return render(request, 'applicants.html', context={'applicants': applicants,
+                                                               'form_confirm': form_confirm, 'out': out})
 
-
-    return render(request, 'applicants.html', context={'applicants': applicants,'form_confirm':form_confirm,'out':out})
+    return render(request, 'applicants.html', context={'applicants': applicants,
+                                                       'form_confirm': form_confirm, 'out': out})
 
 
 @login_required
@@ -444,7 +445,7 @@ def nomination_answer(request, pk):
     application = NominationInstance.objects.get(pk=pk)
     form1 = application.filled_form
     data = json.loads(form1.data)
-    applicant=application.user.userprofile
+    applicant = application.user.userprofile
     questionnaire = application.nomination.nomi_form
     form = questionnaire.get_form(data)
     comment_form = CommentForm(request.POST or None, instance=application)
@@ -461,8 +462,8 @@ def nomination_answer(request, pk):
 @login_required
 def profile_view(request):
     pk = request.user.pk
-    history=PostHistory.objects.filter(user=request.user)
-    pending_nomi=NominationInstance.objects.filter(user=request.user).filter(nomination__status='Nomination out')
+    history = PostHistory.objects.filter(user=request.user)
+    pending_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Nomination out')
     try:
         user_profile = UserProfile.objects.get(user__id=pk)
         return render(request, 'profile.html', context={'user_profile': user_profile, 'history': history,

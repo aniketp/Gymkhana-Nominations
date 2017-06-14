@@ -35,14 +35,13 @@ class Questionnaire(models.Model):
         return answerform
 
 
-
 FIELD_TYPES = (
     ('Short_answer', forms.CharField),
     ('Paragraph', forms.CharField),
     ('Integer', forms.IntegerField),
     ('ChoiceField', forms.ChoiceField),
     ('MultipleChoiceField', forms.MultipleChoiceField),
-    #('Date', forms.DateField),
+    # ('Date', forms.DateField),
 )
 
 QUES_TYPES = (
@@ -51,7 +50,7 @@ QUES_TYPES = (
     ('Integer', 'Integer Answer'),
     ('ChoiceField', 'Choice'),
     ('MultipleChoiceField', 'Multiple-choice'),
-    #('Date', 'date'),
+    # ('Date', 'date'),
 )
 
 
@@ -77,15 +76,11 @@ class Question(models.Model):
         if self.question_type == 'ChoiceField' or self.question_type == 'MultipleChoiceField':
             args['choices'] = enumerate(self.question_choices.split('\n'))
 
-
-
         if self.question_type == 'MultipleChoiceField':
             args['widget']=forms.CheckboxSelectMultiple
 
         if self.question_type == 'Paragraph':
-            args['widget']=forms.Textarea
-
-
+            args['widget'] =forms.Textarea
 
         args.update({'required': True})
         return args
