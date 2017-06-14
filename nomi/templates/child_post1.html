@@ -52,7 +52,9 @@
                                             <input class="btn btn-success btn-block" type="submit" value="submit" />
                                          </form>
                                     </li>
-                                    <li>
+                                    <li>{% if info %}
+                                        <div class="text-center"> <strong>{{info}}</strong></div>
+                                        {% endif %}
                                     </li>
                                 </ul>
                             </div>
