@@ -5,12 +5,12 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.core.exceptions import ObjectDoesNotExist
 from .forms import NominationForm, PostForm, ConfirmApplication, ClubForm, CommentForm, UserId
 from forms.models import Questionnaire
 import json
 from .filters import NominationFilter
 from django.core.exceptions import ObjectDoesNotExist
+
 
 def index(request):
     if request.user.is_authenticated:
