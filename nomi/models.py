@@ -55,7 +55,7 @@ class PostHistory(models.Model):
 
 class Nomination(models.Model):
     name = models.CharField(max_length=200)
-    description = models.TextField(max_length=1000, null=True, blank=True)
+    description = models.TextField(max_length=20000, null=True, blank=True)
     brief_desc = models.TextField(max_length=100, null=True, blank=True)
     nomi_post = models.ForeignKey(Post, null=True)
     nomi_form = models.OneToOneField('forms.Questionnaire', null=True, blank=True)
@@ -129,6 +129,14 @@ def ensure_parent_in_approvals(sender, **kwargs):
     if post:
         parent = post.parent
         nomi.nomi_approvals.add(parent)
+
+    if nomi.description:
+        if not nomi.brief_desc:
+            nomi.brief_desc=nomi.description[:300]
+            nomi.save()
+
+
+
 
 
 @receiver(post_save,sender=Post)

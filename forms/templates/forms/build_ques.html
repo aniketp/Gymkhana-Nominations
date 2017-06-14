@@ -1,8 +1,7 @@
-{% extends "index.html" %}
+{% extends "base2.html" %}
 {% block title %}
 add ques
 {% endblock %}
-
 
 {% load staticfiles %}
 {% load bootstrap %}
@@ -23,21 +22,19 @@ body {
 
 {% block navigation %}
 {% endblock %}
+{% block profile %}
+{% endblock %}
 
-{% block heading %}
+
 <div class="brand"><h4>Add question in "{{ questionnaire.name }}" form</h4></div>
 
-{% endblock %}
 
 {% block content %}
 
-<div class="container ">
-    <div class="row">
-        <div class="col-lg-2">
 
-        </div>
+        <div class="profile-content">
+            <div class="brand"><h2 class="text-center">Add question in "{{ questionnaire.name }}" </h2></div>
 
-        <div class="col-lg-8 box">
             <div style="margin:25px">
                     <form action="" method="post">
                             {% csrf_token %}
@@ -49,12 +46,6 @@ body {
             </div>
 
         </div>
-    </div>
-</div>
-
-
-
-
 
 {% endblock content %}
 
