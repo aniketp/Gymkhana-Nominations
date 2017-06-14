@@ -450,9 +450,10 @@ def nomination_answer(request, pk):
 def profile_view(request):
     pk = request.user.pk
     history=PostHistory.objects.filter(user=request.user)
+    pending_nomi=NominationInstance.objects.filter(user=request.user).filter(nomination__status='Nomination out')
     try:
         user_profile = UserProfile.objects.get(user__id=pk)
-        return render(request, 'profile1.html', context={'user_profile': user_profile ,'history':history})
+        return render(request, 'profile1.html', context={'user_profile': user_profile ,'history':history,'pending_nomi':pending_nomi})
     except ObjectDoesNotExist:
         return HttpResponseRedirect('create')
 
