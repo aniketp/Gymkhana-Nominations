@@ -3,7 +3,7 @@ from .models import Questionnaire, Question, FilledForm
 
 
 class QuestionnaireAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'status')
+    list_display = ('name',)
 
 admin.site.register(Questionnaire, QuestionnaireAdmin)
 

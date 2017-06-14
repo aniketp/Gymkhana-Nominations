@@ -245,8 +245,7 @@ def nomination_create(request, pk):
         if title_form.is_valid():
             post = Post.objects.get(pk=pk)
 
-            questionnaire = Questionnaire.objects.create(name=title_form.cleaned_data['title'],
-                                                         description=title_form.cleaned_data['description'])
+            questionnaire = Questionnaire.objects.create(name=title_form.cleaned_data['title'])
 
             nomination = Nomination.objects.create(name=title_form.cleaned_data['title'],
                                                    description=title_form.cleaned_data['description'],
