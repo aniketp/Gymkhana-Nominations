@@ -31,9 +31,20 @@
                                 </div>
 
                                 <div>
-                                    {% for ch_post in child_posts %}
-                                    <h4><a href="{% url 'child_post' pk=ch_post.pk %}">{{ ch_post.post_name }} : {{ch_post.status}}</a></h4>
-                                    {% endfor %}
+                                    <table class="table table-hover">
+                                        <tbody>
+                                        {% for ch_post in child_posts %}
+                                            <tr>
+                                                <td style="text-align: center">
+                                                    <a href="{% url 'child_post' pk=ch_post.pk %}">
+                                                        {{ ch_post.post_name }}</a>
+                                                </td>
+
+                                                <td style="text-align: center">{{ch_post.status}}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
                                 </div>
                                 <div>
                                     <h2>Posts to be approved</h2>
