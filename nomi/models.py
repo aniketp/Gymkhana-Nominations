@@ -128,6 +128,8 @@ def ensure_parent_in_approvals(sender, **kwargs):
     if post:
         parent = post.parent
         nomi.nomi_approvals.add(parent)
+        nomi.club_search.add(post)
+        nomi.club_search.add(parent)
 
     if nomi.description:
         if not nomi.brief_desc:
