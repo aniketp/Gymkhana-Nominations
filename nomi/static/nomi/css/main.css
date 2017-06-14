@@ -32,8 +32,6 @@ body {
 /* Profile sidebar */
 .profile-sidebar {
     padding: 20px 0 10px 0;
-    position: fixed;
-    background: ;
     width: 300px;
     margin-top: 50px;
 }
