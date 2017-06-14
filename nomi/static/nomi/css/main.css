@@ -266,7 +266,7 @@ body {
 
 .scroll-area {
     height: 300px;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 .scroll-area ol li {
