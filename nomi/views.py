@@ -421,6 +421,15 @@ def accept_nomination(request, pk):
 
     return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_accept}))
 
+@login_required
+def mark_as_interviewed(request, pk):
+    application = NominationInstance.objects.get(pk=pk)
+    id_nomi = application.nomination.pk
+    application.interview_status = 'Interview Done'
+    application.save()
+
+    return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_nomi}))
+
 
 @login_required
 def reject_nomination(request, pk):
@@ -487,14 +496,3 @@ class UserProfileUpdate(UpdateView):
     success_url = reverse_lazy('index')
 
 
-# not in use
-@login_required
-def nomi_edit(request, view_pk, post_pk,nomi_pk):
-    nomi = Nomination.objects.get(pk=nomi_pk)
-    questionnaire = nomi.nomi_form
-    form = questionnaire.get_form()
-    ques_pk = questionnaire.pk
-    questions = Question.objects.filter(questionnaire=questionnaire)
-
-    return render(request, 'nomi_edit.html',
-                  context={'form': form, 'questions': questions, 'nomi': nomi, view_pk: view_pk, post_pk: post_pk})
