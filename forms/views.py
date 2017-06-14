@@ -19,7 +19,7 @@ def creator_form(request, pk):
     pk = questionnaire.pk
     questions=Question.objects.filter(questionnaire=questionnaire)
 
-    return render(request, 'forms/creator_form.html', context={'form': form,'questions':questions, 'questionnaire':questionnaire,'pk':pk})
+    return render(request, 'forms/creator_form1.html', context={'form': form,'questions':questions, 'questionnaire':questionnaire,'pk':pk})
 
 
 # used to add ques in forms
