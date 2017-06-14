@@ -131,8 +131,11 @@ def ensure_parent_in_approvals(sender, **kwargs):
         nomi.nomi_approvals.add(parent)
 
     if nomi.description:
-        nomi.brief_desc=nomi.description[:80]
-        nomi.save()
+        if not nomi.brief_desc:
+            nomi.brief_desc=nomi.description[:300]
+            nomi.save()
+
+
 
 
 
