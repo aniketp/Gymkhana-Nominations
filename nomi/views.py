@@ -393,8 +393,17 @@ def nomi_apply(request, pk):
 def applications(request, pk):
     nomination = Nomination.objects.get(pk=pk)
     applicants = NominationInstance.objects.filter(nomination=nomination)
+    out=0
+    form_confirm = ConfirmApplication(request.POST or None)
+    if nomination.status == 'Nomination out':
+        out=1
+        if form_confirm.is_valid():
+            nomination.status='Interview period'
+            nomination.save()
+            return render(request, 'applicants.html', context={'applicants': applicants,'form_confirm':form_confirm,'out':out})
 
-    return render(request, 'applicants.html', context={'applicants': applicants})
+
+    return render(request, 'applicants.html', context={'applicants': applicants,'form_confirm':form_confirm,'out':out})
 
 
 @login_required
