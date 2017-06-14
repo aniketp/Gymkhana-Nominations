@@ -133,25 +133,17 @@
 
                     <div class="tab-pane fade profile-nominations" id="pending">
                         <br>
+                        {% for p_nomi in pending_nomi %}
                         <div class="panel panel-success">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Nomination Name</h3>
+                                <h3 class="panel-title">{{p_nomi.nomination.name}}</h3>
                             </div>
                             <div class="panel-body">
-                                <p><span>Status:</span> Status</p>
+                                <p><span>Status: </span>RESULT AWAITED</p>
                                 <a href="#" class="btn btn-warning" style="width: auto">View Your Application</a>
                             </div>
                         </div>
-
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Nomination Name</h3>
-                            </div>
-                            <div class="panel-body">
-                                <p><span>Status:</span> Status</p>
-                                <a href="#" class="btn btn-warning" style="width: auto">View Your Application</a>
-                            </div>
-                        </div>
+                        {% endfor %}
 
                     </div>
 
