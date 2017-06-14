@@ -119,7 +119,6 @@ class UserProfile(models.Model):
     room_no = models.CharField(max_length=10, null=True,blank=True)
     contact = models.CharField(max_length=10, null=True, blank=True)
 
-
     def __str__(self):
         return str(self.name)
 
@@ -140,14 +139,11 @@ def ensure_parent_in_approvals(sender, **kwargs):
             nomi.save()
 
 
-
-
-
-@receiver(post_save,sender=Post)
+@receiver(post_save, sender=Post)
 def ensure_parent_in_post_approvals(sender, **kwargs):
-    post=kwargs.get('instance')
+    post = kwargs.get('instance')
     if post:
-        parent=post.parent
+        parent = post.parent
         post.post_approvals.add(parent)
         
 

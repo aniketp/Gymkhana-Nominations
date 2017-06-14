@@ -84,22 +84,35 @@ form view
 
                     </form>
             </div>
-        </div>
-
+    </div>
     {% if not inst_user %}
-    <div class="row">
-        <div class="btn btn-success read-more-button " ><a href="{% url 'accept' nomi.pk %} ">Accept</a></div>
-        <div class="btn btn-danger read-more-button "><a href="{% url 'reject' nomi.pk %}">Reject</a></div>
-    </div>
-    <div style="margin:25px">
-                    <form  action="" method="post">
-                            {% csrf_token %}
-                            {{comment_form|bootstrap}}
 
-                        <input type="submit" value="Submit"/>
-                        <a class="btn btn-danger" href="{% url 'interviewed' nomi.pk %}">Mark as interviewed</a>
-                    </form>
+    <div style="margin:25px">
+        <form  action="" method="post">
+            {% csrf_token %}
+            {{comment_form|bootstrap}}
+
+            <div class="text-center">
+                <input type="submit" class="btn btn-warning" value="Add Comment"/>
+            </div>
+        </form>
     </div>
+
+    {% if nomi.nomination.status == 'Interview period' %}
+        <div class="row text-center">
+            <div class="col-lg-4">
+                <div class="btn btn-info read-more-button " ><a href="{% url 'accept' nomi.pk %} ">Accept</a></div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="btn btn-danger read-more-button "><a href="{% url 'reject' nomi.pk %}">Reject</a></div>
+            </div>
+            <div class="col-lg-4">
+                <div class="btn btn-danger read-more-button "><a href="{% url 'interviewed' nomi.pk %}">Interviewed</a></div>
+            </div>
+
+        </div>
+    {% endif %}
     {% endif %}
 </div>
 

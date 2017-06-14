@@ -35,24 +35,45 @@
                          {% if created %}
                         <div class="row">
                             {% if power_to_send %}
+
                             <div class="col-lg-4 text-center">
-                                <a href="{% url 'final_nomi_approval' nomi_pk=nomi.pk %}" class="btn btn-success">Approve And Send To User</a>
+                                <a href="{% url 'final_nomi_approval' nomi_pk=nomi.pk %}" style="width: auto" class="btn btn-success">Approve And Send To User</a>
                             </div>
-                            {% else %}
+
                             <div class="col-lg-4 text-center">
-                                {% if sent_to_parent %}
-                                <a class="list-group-item" href="">Approval request sent to parent</a>
-                                {% else%}
-                                <a class="list-group-item" href="{% url 'nomi_approval' nomi_pk=nomi.pk %}">send to parent for approval</a>
-                                {% endif %}
-                            </div>
-                            {% endif %}
-                             <div class="col-lg-4 text-center">
                                 <a href="{% url 'forms:creator_form' nomi.nomi_form.pk %}" class="btn btn-warning">Edit Nomination</a>
                             </div>
+
                             <div class="col-lg-4 text-center">
                                 <a href="" class="btn btn-info">Go Back</a>
                             </div>
+
+                            {% else %}
+                                {% if sent_to_parent %}
+                                    <div class="col-lg-6 text-center">
+                                        <a class="list-group-item btn btn-success" style="width: auto" href="">Approval request sent to parent</a>
+                                    </div>
+
+                                    <div class="col-lg-6 text-center">
+                                        <a href="" class="btn btn-info">Go Back</a>
+                                    </div>
+                                {% else%}
+                                    <div>
+                                        <a class="list-group-item btn btn-success" style="width: auto" href="{% url 'nomi_approval' nomi_pk=nomi.pk %}">send to parent for approval</a>
+                                    </div>
+
+                                    <div class="col-lg-4 text-center">
+                                        <a href="{% url 'forms:creator_form' nomi.nomi_form.pk %}" class="btn btn-warning">Edit Nomination</a>
+                                    </div>
+
+                                    <div class="col-lg-4 text-center">
+                                        <a href="" class="btn btn-info">Go Back</a>
+                                    </div>
+
+                                {% endif %}
+
+                            {% endif %}
+
                         </div>
                          {% endif %}
                          {% if out %}

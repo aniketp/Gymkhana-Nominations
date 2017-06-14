@@ -1,0 +1,65 @@
+{% extends "base2.html" %}
+{% block title %}
+Nomination Form
+{% endblock %}
+
+{% load bootstrap %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="profile-content">
+                <div class="jumbotron jumbotron-post">
+                    <div class="jumbotron-title">
+                        <h1 style="text-align: center">Questionnaire Name</h1>
+                    </div>
+                    <div class="jumbotron-club">
+                        <h3 style="font-size: 35px; text-align: center">Post Name</h3>
+                    </div>
+                </div>
+
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#edit-questions" data-toggle="tab">Edit Form Questions</a></li>
+                    <li><a href="#preview" data-toggle="tab">Preview Nomination Form</a></li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade active in" id="edit-questions">
+                        <br>
+
+                        <div class="col-lg-6">
+                            <div>
+                                <h4> Click on a Question to Edit</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 btn btn-danger">
+                            <a href="{% url 'forms:add_ques' pk %}">Add New Question</a></strong>
+                        </div>
+                        <hr>
+
+                        {% for question in questions %}
+                        <a href="{% url 'forms:ques_update' pk=question.pk qk=pk %}">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div>
+                                        <p style="font-size: x-large">{{question.question}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+
+                    <div class="tab-pane fade" id="preview">
+                        <div class="form-group">
+                            <div class="col-lg-10 box" style="margin:25px">
+                                <form>
+
+                                    {% csrf_token %}
+                                    <p>{{form|bootstrap}}</p>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{% endblock %}
