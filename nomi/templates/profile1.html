@@ -14,6 +14,7 @@
 
                     <div class="tab-pane fade active in profile-nominations" id="current-posts">
                         <br>
+                        
                         <div class="panel panel-info">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Club Name</h3>
@@ -52,42 +53,27 @@
 
                     <div class="tab-pane fade profile-nominations" id="post-history">
                         <br>
-
+                        {% for his in history %}
+                        {% if his.end %}
                         <div class="panel panel-info">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Club Name</h3>
+                                <h3 class="panel-title">{{his.post.club}}</h3>
                             </div>
                             <div class="panel-body">
-                                <p class="profile-post-name"><span>Post:</span> Post-Name</p>
+                                <p class="profile-post-name"><span>Post: </span>{{his.post.post_name}}</p>
 
                                 <div class="row">
                                     <div class="col-lg-6">
-                                        <p><span>Start:</span> Start-date</p>
+                                        <p><span>Start: </span>{{his.start}}</p>
                                     </div>
                                     <div class="col-lg-6">
-                                        <p><span>End:</span> End-date</p>
+                                        <p><span>End: </span>{{his.end}}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Club Name</h3>
-                            </div>
-                            <div class="panel-body">
-                                <p class="profile-post-name"><span>Post:</span> Post-Name</p>
-
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <p><span>Start:</span> Start-date</p>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <p><span>End:</span> End-date</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {% endif %}
+                        {% endfor %}
                     </div>
 
                     <div class="tab-pane fade profile-nominations" id="pending">
