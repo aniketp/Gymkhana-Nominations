@@ -6,6 +6,7 @@
 }
 
 .scroll-container {
+    height: 380px;
     overflow-y:scroll ;
 }
 

@@ -242,6 +242,10 @@ def nomination_create(request, pk):
                                                    dept_choice=title_form.cleaned_data['dept_choice'],
                                                    )
 
+            # Fix this bit of code
+            # nomination.brief_desc = title_form.cleaned_data['description'][:50]
+            # nomination.save()
+
             pk = questionnaire.pk
             return HttpResponseRedirect(reverse('forms:creator_form', kwargs={'pk': pk}))
 
