@@ -295,6 +295,8 @@ def nomi_detail(request,nomi_pk):
 
     if nomi.status =='Nomination out':
         out=1
+    elif nomi.status =='Interview period' :
+        out=1
     else:
         out=0
 
