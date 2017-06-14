@@ -448,14 +448,17 @@ def nomination_answer(request, pk):
     questionnaire = application.nomination.nomi_form
     form = questionnaire.get_form(data)
     comment_form = CommentForm(request.POST or None, instance=application)
+    inst_user=0
+    if application.user==request.user:
+        inst_user=1
 
     if comment_form.is_valid():
         comment_form.save()
         return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
-                                                            'comment_form': comment_form})
+                                                            'comment_form': comment_form,'inst_user':inst_user})
 
     return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
-                                                        'comment_form': comment_form})
+                                                        'comment_form': comment_form,'inst_user':inst_user})
 
 
 @login_required
