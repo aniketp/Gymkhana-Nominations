@@ -71,7 +71,7 @@ urlpatterns = [
         name='final_post_approval'),
 
     # nominations/child_post/2/8
-    url(r'^child_post/(?P<pk>\d+)/(?P<view_pk>\d+)/$', views.child_post_view, name='child_post'),
+    url(r'^child_post/(?P<pk>\d+)/$', views.child_post_view, name='child_post'),
 
     # nominations/child_post/2/8
     url(r'^child_club/(?P<pk>\d+)/(?P<view_pk>\d+)/$', views.child_club_view, name='child_club'),
