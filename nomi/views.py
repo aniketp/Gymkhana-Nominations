@@ -85,12 +85,13 @@ def post_create(request, pk):
         post_form = PostForm(request.POST)
         club = parent.club
         if post_form.is_valid():
-            post = Post.objects.create(post_name=post_form.cleaned_data['post_title'], club=club, parent=parent)
+            post = Post.objects.create(post_name=post_form.cleaned_data['post_name'], club=post_form.cleaned_data['club'], parent=parent)
             post_pk = post.pk
 
-            return HttpResponseRedirect(reverse('nomi_create', kwargs={'pk': post_pk}))
+            return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
 
     else:
+        club = parent.club
         post_form = PostForm()
 
     if  request.user in parent.post_holders.all():
