@@ -452,7 +452,7 @@ def profile_view(request):
 
     try:
         user_profile = UserProfile.objects.get(user__id=pk)
-        return render(request, 'profile.html', context={'user_profile': user_profile})
+        return render(request, 'profile1.html', context={'user_profile': user_profile})
     except ObjectDoesNotExist:
         return HttpResponseRedirect('create')
 

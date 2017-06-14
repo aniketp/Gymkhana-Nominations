@@ -284,3 +284,11 @@ body {
 
 /* Separate Profile View */
 
+.profile-nominations div div p span {
+    font-weight: bold;
+}
+
+.profile-post-name {
+    font-size: medium;
+}
+
