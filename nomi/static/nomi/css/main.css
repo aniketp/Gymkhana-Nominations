@@ -6,6 +6,7 @@
 }
 
 .scroll-container {
+    height: 380px;
     overflow-y:scroll ;
 }
 
@@ -31,8 +32,6 @@ body {
 /* Profile sidebar */
 .profile-sidebar {
     padding: 20px 0 10px 0;
-    position: fixed;
-    background: ;
     width: 300px;
     margin-top: 50px;
 }
@@ -266,7 +265,7 @@ body {
 
 .scroll-area {
     height: 300px;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 .scroll-area ol li {

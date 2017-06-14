@@ -36,10 +36,9 @@ class Post(models.Model):
     def __str__(self):
         return self.post_name
 
-
     def remove_holders(self):
         for holder in self.post_holders.all():
-            history = PostHistory.objects.get(post=self,user=holder)
+            history = PostHistory.objects.get(post=self, user=holder)
             history.end = datetime.now()
             history.save()
 
@@ -47,21 +46,17 @@ class Post(models.Model):
         return self.post_holders
 
 
-
-
-
 class PostHistory(models.Model):
-    post=models.ForeignKey(Post, on_delete=models.CASCADE ,null=True)
-    user=models.ForeignKey(User,on_delete=models.CASCADE ,null=True)
-    start=models.DateField(auto_now_add=True)
-    end=models.DateField(null=True,blank=True,editable=True)
-
-
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    start = models.DateField(auto_now_add=True)
+    end = models.DateField(null=True, blank=True, editable=True)
 
 
 class Nomination(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(max_length=1000, null=True, blank=True)
+    brief_desc = models.TextField(max_length=51, null=True, blank=True)
     nomi_post = models.ForeignKey(Post, null=True)
     nomi_form = models.OneToOneField('forms.Questionnaire', null=True, blank=True)
     status = models.CharField(max_length=50, choices=STATUS, default='Nomination created')
@@ -73,23 +68,20 @@ class Nomination(models.Model):
     hall_choice = models.CharField(max_length=100, choices=HALL_1, null=True)
     dept_choice = models.CharField(max_length=100, choices=DEPT_1, null=True)
 
-
-
-
     def __str__(self):
         return self.name
 
     def append(self):
-        selected = NominationInstance.objects.filter(nomination=self,status='Accepted')
+        selected = NominationInstance.objects.filter(nomination=self, status='Accepted')
         for each in selected:
-            PostHistory.objects.create(post=self.nomi_post,user=each.user)
+            PostHistory.objects.create(post=self.nomi_post, user=each.user)
             self.nomi_post.post_holders.add(each.user)
 
         return self.nomi_post.post_holders
 
     def replace(self):
         for holder in self.nomi_post.post_holders.all():
-            history = PostHistory.objects.get(post=self.nomi_post,user=holder)
+            history = PostHistory.objects.get(post=self.nomi_post, user=holder)
             history.end = datetime.now()
             history.save()
 
@@ -97,14 +89,11 @@ class Nomination(models.Model):
         self.append()
         return self.nomi_post.post_holders
 
-
     def open_to_users(self):
         self.status = 'Nomination out'
         self.opening_date = datetime.now()
         self.save()
         return self.status
-
-
 
 
 class NominationInstance(models.Model):
@@ -133,15 +122,12 @@ class UserProfile(models.Model):
         return str(self.name)
 
 
-
-
-
-@receiver(post_save,sender=Nomination)
+@receiver(post_save, sender=Nomination)
 def ensure_parent_in_approvals(sender, **kwargs):
-    nomi=kwargs.get('instance')
-    post=nomi.nomi_post
+    nomi = kwargs.get('instance')
+    post = nomi.nomi_post
     if post:
-        parent=post.parent
+        parent = post.parent
         nomi.nomi_approvals.add(parent)
 
 

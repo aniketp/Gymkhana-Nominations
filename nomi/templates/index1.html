@@ -28,9 +28,9 @@
     </div>
 
 
-
-{% for nomi in filter.qs %}
-
+    <div class="scroll-container">
+        {% for nomi in filter.qs %}
+        
     <div class="panel panel-success">
         <div class="panel-heading">
             <h3 class="panel-title">{{ nomi.name.upper }}</h3>
@@ -38,16 +38,18 @@
         </div>
 
 
-        <div class="panel-body">
-            <span style="font-weight: bolder">Preference : </span>
-            <span class="label label-primary">{{nomi.year_choice}}</span>
-            <span class="label label-success">{{nomi.dept_choice}}</span>
-            <p><span style="font-weight: bolder"> Expiry Date :  </span>{{nomi.closing_date}}</p>
-            <p>{{nomi.description}}</p>
-            <a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}" class="btn btn-sm read-more-button btn-danger">Read More</a>
-        </div>
+                <div class="panel-body">
+                    <span style="font-weight: bolder">Preference : </span>
+                    <span class="label label-primary">{{nomi.year_choice}}</span>
+                    <span class="label label-success">{{nomi.dept_choice}}</span>
+                    <p><span style="font-weight: bolder"> Expiry Date :  </span>{{nomi.closing_date}}</p>
+                    <p>{{nomi.description}}</p>
+                    <a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}" class="btn btn-sm read-more-button btn-danger">Read More</a>
+                </div>
+            </div>
+
+        {% endfor %}
     </div>
 
-{% endfor %}
 </div>
 {% endblock %}
