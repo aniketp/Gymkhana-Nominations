@@ -134,7 +134,7 @@ def ensure_parent_in_approvals(sender, **kwargs):
 
     if nomi.description:
         if not nomi.brief_desc:
-            nomi.brief_desc=nomi.description[:300]
+            nomi.brief_desc = nomi.description[:50]
             nomi.save()
 
 
