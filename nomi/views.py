@@ -6,11 +6,11 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
-from .forms import NominationForm, PostForm, ConfirmApplication, ClubForm, CommentForm
+from .forms import NominationForm, PostForm, ConfirmApplication, ClubForm, CommentForm, UserId
 from forms.models import Questionnaire
 import json
 from .filters import NominationFilter
-
+from django.core.exceptions import ObjectDoesNotExist
 
 def index(request):
     if request.user.is_authenticated:
@@ -151,7 +151,6 @@ def child_post_view(request, pk, view_pk):
         approval = 0
 
 
-
     access = False
     for pt in post.post_approvals.all():
         if request.user in pt.post_holders.all():
@@ -159,9 +158,28 @@ def child_post_view(request, pk, view_pk):
             break
 
     if access or request.user in post.parent.post_holders.all():
+
+        form = UserId(request.POST or None)
+        info = 0
+        if form.is_valid():
+            try:
+                userp = UserProfile.objects.get(roll_no=form.cleaned_data['user_roll'])
+            except ObjectDoesNotExist:
+                userp = None
+            if userp:
+                post.post_holders.add(userp.user)
+                info = 'successfully added'
+            else:
+                info = "no such user"
+            return render(request, 'child_post1.html', {'post': post, 'view_pk': view_pk, 'ap': approved,
+                                                        'approval': approval, 'power_to_approve': power_to_approve,
+                                                        'nominations': nominations,'form':form,'info':info})
+
+
+
         return render(request, 'child_post1.html', {'post': post, 'view_pk': view_pk, 'ap': approved,
                                                'approval': approval, 'power_to_approve': power_to_approve,
-                                               'nominations': nominations})
+                                               'nominations': nominations,'form':form,'info':info})
     else:
         return render(request,'no_access.html')
 
