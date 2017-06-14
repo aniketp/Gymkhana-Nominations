@@ -1,6 +1,6 @@
 from django import forms
 from .choices import *
-from .models import NominationInstance
+from .models import NominationInstance, Post
 
 class NominationForm(forms.Form):
     title = forms.CharField()
@@ -10,9 +10,10 @@ class NominationForm(forms.Form):
     hall_choice = forms.ChoiceField(choices=HALL_1, label="Hall", initial=0, widget=forms.Select(), required=True)
 
 
-class PostForm(forms.Form):
-    # club_name = forms.CharField()
-    post_title = forms.CharField()
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['post_name','club']
 
 
 class ClubForm(forms.Form):
