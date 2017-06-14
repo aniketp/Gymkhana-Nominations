@@ -318,10 +318,8 @@ def nomi_detail(request,nomi_pk):
             return render(request, 'no_access.html')
 
 
-
-
 @login_required
-def nomi_approval(request,nomi_pk):
+def nomi_approval(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     access = False
     view_post = 0
@@ -339,9 +337,8 @@ def nomi_approval(request,nomi_pk):
         return render(request, 'no_access.html')
 
 
-
 @login_required
-def final_nomi_approval(request,nomi_pk):
+def final_nomi_approval(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     access = False
     view_post = 0
@@ -439,10 +436,11 @@ def nomination_answer(request, pk):
 
     if comment_form.is_valid():
         comment_form.save()
-        return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,'comment_form':comment_form})
+        return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
+                                                            'comment_form': comment_form})
 
-
-    return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application,'nomi_user':applicant,'comment_form':comment_form})
+    return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
+                                                        'comment_form': comment_form})
 
 
 @login_required
@@ -452,7 +450,8 @@ def profile_view(request):
     pending_nomi=NominationInstance.objects.filter(user=request.user).filter(nomination__status='Nomination out')
     try:
         user_profile = UserProfile.objects.get(user__id=pk)
-        return render(request, 'profile1.html', context={'user_profile': user_profile ,'history':history,'pending_nomi':pending_nomi})
+        return render(request, 'profile.html', context={'user_profile': user_profile, 'history': history,
+                                                        'pending_nomi': pending_nomi})
     except ObjectDoesNotExist:
         return HttpResponseRedirect('create')
 
