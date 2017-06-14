@@ -130,3 +130,12 @@ def ensure_parent_in_approvals(sender, **kwargs):
         parent = post.parent
         nomi.nomi_approvals.add(parent)
 
+
+@receiver(post_save,sender=Post)
+def ensure_parent_in_post_approvals(sender, **kwargs):
+    post=kwargs.get('instance')
+    if post:
+        parent=post.parent
+        post.post_approvals.add(parent)
+        
+

@@ -40,6 +40,25 @@
                     <div class="col-lg-5 col-sm-6">
                         <div class="post-holder-list">
                             <h2>List of post holders</h2>
+                            <div class="dropdown show">
+                                <button class="btn btn-secondary btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Add New
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                    <li>
+                                         <form action="" method="post" style="display: inline">
+                                        {% csrf_token %}
+                                            {{form|bootstrap}}
+                                            <input class="btn btn-success btn-block" type="submit" value="submit" />
+                                         </form>
+                                    </li>
+                                    <li>{% if info %}
+                                        <div class="text-center"> <strong>{{info}}</strong></div>
+                                        {% endif %}
+                                    </li>
+                                </ul>
+                            </div>
+
                         </div>
 
                         <div class="scroll-area">

@@ -27,3 +27,7 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = NominationInstance
         fields=['comments']
+
+
+class UserId(forms.Form):
+    user_roll = forms.IntegerField()

@@ -30,12 +30,12 @@
 
     <div class="scroll-container">
         {% for nomi in filter.qs %}
-
-            <div class="panel panel-success ">
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{ nomi.name.upper }}</h3>
-                    <div>{{nomi.opening_date}}</div>
-                </div>
+        
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ nomi.name.upper }}</h3>
+            <div>opened on {{nomi.opening_date}}</div>
+        </div>
 
 
                 <div class="panel-body">
