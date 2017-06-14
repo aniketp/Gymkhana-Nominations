@@ -99,6 +99,7 @@ class NominationInstance(models.Model):
     nomination = models.ForeignKey('Nomination', on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     status = models.CharField(max_length=20, choices=NOMI_STATUS,  null=True, blank=True, default=None)
+    interview_status = models.CharField(max_length=20, choices=INTERVIEW_STATUS,  null=True, blank=True, default='Interview Not Done')
     comments = models.TextField(max_length=10000, null=True, blank=True)
     filled_form = models.OneToOneField('forms.FilledForm', null=True, blank=True)
 

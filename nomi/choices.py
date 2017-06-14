@@ -38,6 +38,11 @@ NOMI_STATUS = (
         ('Rejected', 'Rejected'),
 )
 
+INTERVIEW_STATUS = (
+    ('Interview Not Done','Interview Not Done'),
+    ('Interview Done','Interview Done'),
+)
+
 STATUS = (
         ('Nomination created', 'Nomination created'),
         ('Nomination out', 'Nomination out'),
