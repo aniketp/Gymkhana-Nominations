@@ -463,10 +463,11 @@ def profile_view(request):
     pk = request.user.pk
     history=PostHistory.objects.filter(user=request.user)
     pending_nomi=NominationInstance.objects.filter(user=request.user).filter(nomination__status='Nomination out')
+    interview_nomi=NominationInstance.objects.filter(user=request.user).filter(nomination__status='Interview period')
     try:
         user_profile = UserProfile.objects.get(user__id=pk)
         return render(request, 'profile.html', context={'user_profile': user_profile, 'history': history,
-                                                        'pending_nomi': pending_nomi})
+                                                        'pending_nomi': pending_nomi,'interview_nomi':interview_nomi})
     except ObjectDoesNotExist:
         return HttpResponseRedirect('create')
 
