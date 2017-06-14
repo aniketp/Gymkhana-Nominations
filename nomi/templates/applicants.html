@@ -1,23 +1,25 @@
-{% extends 'base.html' %}
+{% extends 'base2.html' %}
 
-{% block title %} Gymkhana Nomination Portal {% endblock %}
+{% block title %} Applicants {% endblock %}
 
 
-    {% block content  %}
-        <div class="container">
-            {% for nomi in applicants  %}
-                <div class="row box">
-                    <div class="col-md-4 text-center"><h5>{{ nomi.user }}</h5></div>
-                    {% if nomi.status %}
-                        <div class="col-md-8 text-center"><a href="#">{{ nomi.status }}</a></div>
-                    {% endif %}
-                        <div class="col-md-8 text-center"><a href="{% url 'nomi_answer' nomi.pk %}">View Application</a></div>
+{% block content  %}
+<div class="profile-content">
+    
+    <table class="table">
 
-                    <!--    <div class="col-md-3 text-center"><a href="{% url 'accept' nomi.pk %}">Accept</a></div>
-                        <div class="col-md-3 text-center"><a href="{% url 'reject' nomi.pk %}">Reject</a></div>  -->
+        <tbody>
+        {% for nomi in applicants  %}
+        <tr>
+        <th scope="row">{{ nomi.user }}</th>
+        {% if nomi.status %}
+        <td><a href="#">{{ nomi.status }}</a></td>
+        {% endif %}
+        <td><a href="{% url 'nomi_answer' nomi.pk %}">View Application</a></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 
-                </div>
-            {% endfor %}
-        </div>
-
-    {% endblock %}
+{% endblock %}
