@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base2.html' %}
 {% load bootstrap %}
 
 {% block title %} Nomination Form {% endblock %}
@@ -8,14 +8,11 @@
 
 {% block content %}
 
-    <div class="container box">
-        <div class="row">
-            <div class="col-lg-12">
-                <hr>
+    <div class="profile-content">
                 <h2 class="intro-text text-center">
                     <strong>Add a new Nomination</strong>
                 </h2>
-            <hr>
+                <hr>
 
                 <div style="padding: 0 35px;">
                     <form action="" method="post" style="display: inline">
@@ -23,16 +20,11 @@
                         <table>
                             {{form|bootstrap}}
                         </table>
-                        <input class="btn btn-success" type="submit" value="submit and start adding question in form" />
-                    </form>
-
-                    <form action="{% url 'index' %}"  style="display: inline">
-                        <button  class="btn btn-info" type="submit">Continue without creating Nomination</button>
+                        <div class="col-md-6">
+                        <input class="btn btn-success btn-block" type="submit" value="submit and start adding question in form" />
+                        </div>
                     </form>
                 </div>
-            </div>
-        </div>
     </div>
-
 {% endblock content %}
 

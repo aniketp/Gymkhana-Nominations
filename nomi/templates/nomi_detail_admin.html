@@ -36,7 +36,7 @@
                                 {% if sent_to_parent %}
                                 <a class="list-group-item" href="">Approval request sent to parent</a>
                                 {% else%}
-                                <a class="list-group-item" href="{% url 'nomi_approval' nomi_pk=nomi.pk %">send to parent for approval</a>
+                                <a class="list-group-item" href="{% url 'nomi_approval' nomi_pk=nomi.pk %}">send to parent for approval</a>
                                 {% endif %}
                             </div>
                             {% endif %}

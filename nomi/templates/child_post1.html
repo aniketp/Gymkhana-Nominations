@@ -45,8 +45,15 @@
                                     Add New
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                                    <li><a href=" " >fdgh</a></li>
-                                    <li>dvsgvdhf</li>
+                                    <li>
+                                         <form action="" method="post" style="display: inline">
+                                        {% csrf_token %}
+                                            {{form|bootstrap}}
+                                            <input class="btn btn-success btn-block" type="submit" value="submit" />
+                                         </form>
+                                    </li>
+                                    <li>
+                                    </li>
                                 </ul>
                             </div>
 
