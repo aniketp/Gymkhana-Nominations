@@ -1,4 +1,7 @@
 {% extends 'base2.html' %}
+{% load bootstrap %}
+{% load staticfiles %}
+
 
 {% block title %} Applicants {% endblock %}
 
@@ -7,7 +10,6 @@
 <div class="profile-content">
 
     <table class="table">
-
         <tbody>
         {% for nomi in applicants  %}
         <tr>
@@ -20,6 +22,22 @@
         {% endfor %}
         </tbody>
     </table>
+    {% if out %}
+    <div class="dropdown show">
+        <button class="btn btn-secondary btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Start Interview Period
+        </button>
+        <div class="dropdown-menu " role="menu">
+            
+                <form action="" method="post" style="display: inline">
+                    {% csrf_token %}
+                    <p>{{form_confirm|bootstrap}}</p>
+                    <input class="btn btn-success btn-block" type="submit" value="submit" />
+                </form>
+
+        </div>
+    </div>
+    {% endif %}
 </div>
 
 {% endblock %}
