@@ -85,6 +85,8 @@ form view
                     </form>
             </div>
         </div>
+
+    {% if not inst_user %}
     <div class="row">
         <div class="btn btn-sm read-more-button " ><a href="{% url 'accept' nomi.pk %} ">Accept</a></div>
         <div class="btn btn-sm read-more-button "><a href="{% url 'reject' nomi.pk %}">Reject</a></div>
@@ -97,6 +99,7 @@ form view
                         <input type="submit" value="Submit"/>
                     </form>
     </div>
+    {% endif %}
 </div>
 
 {% endblock content %}

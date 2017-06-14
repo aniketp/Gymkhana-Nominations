@@ -123,7 +123,7 @@
                             </div>
                             <div class="panel-body">
                                 <p><span>Status: </span>Interview Period</p>
-                                <a href="#" class="btn btn-warning" style="width: auto">View Your Application</a>
+                                <a href="{% url 'nomi_answer' p_nomi.pk %}" class="btn btn-warning" style="width: auto">View Your Application</a>
                             </div>
                         </div>
                         {% endfor %}
@@ -134,7 +134,7 @@
                             </div>
                             <div class="panel-body">
                                 <p><span>Status: </span>Application submitted</p>
-                                <a href="#" class="btn btn-warning" style="width: auto">View Your Application</a>
+                                <a href="{% url 'nomi_answer' p_nomi.pk %}" class="btn btn-warning" style="width: auto">View Your Application</a>
                             </div>
                         </div>
                         {% endfor %}
