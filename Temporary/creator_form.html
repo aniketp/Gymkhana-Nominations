@@ -118,7 +118,54 @@
         </div>
         <div class="col-lg-8">
             <div class="profile-content">
+                <div class="jumbotron jumbotron-post">
+                    <div class="jumbotron-title">
+                        <h1 style="text-align: center">Questionnaire Name</h1>
+                    </div>
+                    <div class="jumbotron-club">
+                        <h3 style="font-size: 35px; text-align: center">Post Name</h3>
+                    </div>
+                </div>
 
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#edit-questions" data-toggle="tab">Edit Form Questions</a></li>
+                    <li><a href="#preview" data-toggle="tab">Preview Nomination Form</a></li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade active in" id="edit-questions">
+                        <div class="form-group">
+                            <label class="control-label" for="focusedInput">Focused input</label>
+                            <input class="form-control" id="focusedInput" type="text" value="This is focused...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="disabledInput">Disabled input</label>
+                            <input class="form-control" id="disabledInput" type="text" placeholder="Disabled input here..." disabled="">
+                        </div>
+
+                        <div class="form-group has-warning">
+                            <label class="control-label" for="inputWarning">Input warning</label>
+                            <input type="text" class="form-control" id="inputWarning">
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="preview">
+                        <div class="form-group">
+                            <label class="control-label" for="focusedInput">Focused input</label>
+                            <input class="form-control" id="focusedInput" type="text" value="This is focused...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="disabledInput">Disabled input</label>
+                            <input class="form-control" id="disabledInput" type="text" placeholder="Disabled input here..." disabled="">
+                        </div>
+
+                        <div class="form-group has-warning">
+                            <label class="control-label" for="inputWarning">Input warning</label>
+                            <input type="text" class="form-control" id="inputWarning">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
