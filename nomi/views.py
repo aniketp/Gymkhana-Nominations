@@ -14,12 +14,14 @@ from .filters import NominationFilter
 
 def index(request):
     if request.user.is_authenticated:
-        filter = NominationFilter(request.GET, queryset=Nomination.objects.filter(status='Nomination out').order_by('-opening_date'))
+        filters = NominationFilter(request.GET, queryset=Nomination.objects
+                                   .filter(status='Nomination out').order_by('-opening_date'))
         posts = Post.objects.filter(post_holders=request.user)
         username = UserProfile.objects.get(user=request.user)
-        return render(request, 'index1.html', context={'posts': posts, 'username': username,'filter':filter})
+        return render(request, 'index1.html', context={'posts': posts, 'username': username, 'filter': filters})
     else:
         return HttpResponseRedirect(reverse('login'))
+
 
 @login_required
 def club_list(request):
@@ -447,13 +449,6 @@ class UserProfileUpdate(UpdateView):
     model = UserProfile
     fields = '__all__'
     success_url = reverse_lazy('index')
-
-
-@login_required
-def universal_filter(request):
-    filters = UserProfileFilter(request.GET, queryset=UserProfile.objects.all())
-    return render(request, 'filters.html', {'filter': filters})
-
 
 
 # not in use
