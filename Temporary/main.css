@@ -292,3 +292,7 @@ body {
     font-size: medium;
 }
 
+.profile-post-name span {
+    font-weight: bold;
+}
+
