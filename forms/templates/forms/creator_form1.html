@@ -30,8 +30,8 @@ Nomination Form
                                 <h4> Click on a Question to Edit</h4>
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <strong><a href="{% url 'forms:add_ques' pk %}">Add New Question</a></strong>
+                        <div class="col-lg-6 btn btn-danger">
+                            <a href="{% url 'forms:add_ques' pk %}">Add New Question</a></strong>
                         </div>
                         <hr>
 
@@ -39,8 +39,8 @@ Nomination Form
                         <a href="{% url 'forms:ques_update' pk=question.pk qk=pk %}">
                             <div class="panel panel-default">
                                 <div class="panel-body">
-                                    <div class="text-center">
-                                        <h5>{{question.question}}</h5>
+                                    <div>
+                                        <p style="font-size: x-large">{{question.question}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -50,7 +50,7 @@ Nomination Form
 
                     <div class="tab-pane fade" id="preview">
                         <div class="form-group">
-                            <div class="col-lg-6 box" style="margin:25px">
+                            <div class="col-lg-10 box" style="margin:25px">
                                 <form>
 
                                     {% csrf_token %}
