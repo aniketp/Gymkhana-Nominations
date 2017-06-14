@@ -17,6 +17,7 @@
         {% if nomi.status %}
         <td><a href="#">{{ nomi.status }}</a></td>
         {% endif %}
+            <td><a href="#">{{ nomi.interview_status }}</a></td>
         <td><a href="{% url 'nomi_answer' nomi.pk %}">View Application</a></td>
         </tr>
         {% endfor %}
