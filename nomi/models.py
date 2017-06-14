@@ -116,6 +116,7 @@ class UserProfile(models.Model):
     department = models.CharField(max_length=200, choices=DEPT, default=None)
     hall = models.CharField(max_length=10, choices=HALL, default=1)
     room_no = models.CharField(max_length=10, null=True)
+    contact_no = models.IntegerField(null=True,blank=True)
 
     def __str__(self):
         return str(self.name)
