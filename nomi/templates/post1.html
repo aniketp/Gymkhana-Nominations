@@ -35,8 +35,12 @@
                                         <tbody>
                                         {% for ch_post in child_posts %}
                                             <tr>
-                                                <td><a href="{% url 'child_post' pk=ch_post.pk %}">{{ ch_post.post_name }}</a></td>
-                                                <td>{{ch_post.status}}</td>
+                                                <td style="text-align: center">
+                                                    <a href="{% url 'child_post' pk=ch_post.pk %}">
+                                                        {{ ch_post.post_name }}</a>
+                                                </td>
+
+                                                <td style="text-align: center">{{ch_post.status}}</td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
