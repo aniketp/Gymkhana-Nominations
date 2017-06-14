@@ -19,7 +19,20 @@ def index(request):
                                        .filter(status='Nomination out').order_by('-opening_date'))
             posts = Post.objects.filter(post_holders=request.user)
             username = UserProfile.objects.get(user=request.user)
-            return render(request, 'index1.html', context={'posts': posts, 'username': username, 'filter': filters})
+
+            admin_query=Nomination.objects.none()
+
+            for post in posts:
+                query=Nomination.objects.filter(nomi_approvals=post)
+                admin_query=admin_query | query
+
+            admin_filter=NominationFilter(request.GET, queryset=admin_query)
+
+
+
+            return render(request, 'index1.html', context={'posts': posts, 'username': username, 'filter': filters,'admin_filter':admin_filter})
+
+
         except ObjectDoesNotExist:
             profile=UserProfile.objects.create(user=request.user)
             pk=profile.pk
