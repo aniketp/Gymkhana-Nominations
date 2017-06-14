@@ -55,7 +55,7 @@ class PostHistory(models.Model):
 class Nomination(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(max_length=20000, null=True, blank=True)
-    brief_desc = models.TextField(max_length=100, null=True, blank=True)
+    brief_desc = models.TextField(max_length=300, null=True, blank=True)
     nomi_post = models.ForeignKey(Post, null=True)
     nomi_form = models.OneToOneField('forms.Questionnaire', null=True, blank=True)
     status = models.CharField(max_length=50, choices=STATUS, default='Nomination created')
@@ -113,9 +113,9 @@ class UserProfile(models.Model):
     roll_no = models.IntegerField(null=True)
     year = models.CharField(max_length=4, choices=YEAR, default='Y16')
     programme = models.CharField(max_length=7, choices=PROGRAMME, default='B.Tech')
-    department = models.CharField(max_length=200, choices=DEPT, default=None)
+    department = models.CharField(max_length=200, choices=DEPT, default='AE')
     hall = models.CharField(max_length=10, choices=HALL, default=1)
-    room_no = models.CharField(max_length=10, null=True)
+    room_no = models.CharField(max_length=10, null=True,blank=True)
     contact = models.CharField(max_length=10, null=True, blank=True)
 
 
@@ -135,7 +135,7 @@ def ensure_parent_in_approvals(sender, **kwargs):
 
     if nomi.description:
         if not nomi.brief_desc:
-            nomi.brief_desc = nomi.description[:50]
+            nomi.brief_desc = nomi.description[:280]
             nomi.save()
 
 

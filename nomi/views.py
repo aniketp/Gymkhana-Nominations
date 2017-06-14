@@ -5,20 +5,26 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.core.exceptions import ObjectDoesNotExist
 from .forms import NominationForm, PostForm, ConfirmApplication, ClubForm, CommentForm, UserId
 from forms.models import Questionnaire
 import json
 from .filters import NominationFilter
 from django.core.exceptions import ObjectDoesNotExist
 
+
 def index(request):
     if request.user.is_authenticated:
-        filters = NominationFilter(request.GET, queryset=Nomination.objects
-                                   .filter(status='Nomination out').order_by('-opening_date'))
-        posts = Post.objects.filter(post_holders=request.user)
-        username = UserProfile.objects.get(user=request.user)
-        return render(request, 'index1.html', context={'posts': posts, 'username': username, 'filter': filters})
+        try :
+            filters = NominationFilter(request.GET, queryset=Nomination.objects
+                                       .filter(status='Nomination out').order_by('-opening_date'))
+            posts = Post.objects.filter(post_holders=request.user)
+            username = UserProfile.objects.get(user=request.user)
+            return render(request, 'index1.html', context={'posts': posts, 'username': username, 'filter': filters})
+        except ObjectDoesNotExist:
+            profile=UserProfile.objects.create(user=request.user)
+            pk=profile.pk
+            return HttpResponseRedirect(reverse('profile_update',kwargs={'pk': pk} ))
+
     else:
         return HttpResponseRedirect(reverse('login'))
 
