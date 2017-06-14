@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from forms.models import Question
-from .models import Nomination, NominationInstance, UserProfile, Post, Club
+from .models import Nomination, NominationInstance, UserProfile, Post, Club, PostHistory
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
@@ -449,10 +449,10 @@ def nomination_answer(request, pk):
 @login_required
 def profile_view(request):
     pk = request.user.pk
-
+    history=PostHistory.objects.filter(user=request.user)
     try:
         user_profile = UserProfile.objects.get(user__id=pk)
-        return render(request, 'profile1.html', context={'user_profile': user_profile})
+        return render(request, 'profile1.html', context={'user_profile': user_profile ,'history':history})
     except ObjectDoesNotExist:
         return HttpResponseRedirect('create')
 
