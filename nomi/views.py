@@ -126,38 +126,35 @@ def child_club_view(request, pk, view_pk):
 
 
 @login_required
-def child_post_view(request, pk, view_pk):
+def child_post_view(request, pk):
     post = Post.objects.get(pk=pk)
     nominations = Nomination.objects.filter(nomi_post=post)
 
-    if post.status == 'Post created':
-        approved = 1
-    else:
-        approved = 0
-
-    view_pk = view_pk
-    view = Post.objects.get(pk=view_pk)
-
-    if view.perms == 'normal':
-        power_to_approve = 0
-    else:
-        power_to_approve = 1
-
-    view_parent = Post.objects.get(pk=view.parent.pk)
-
-    if view_parent in post.post_approvals.all():
-        approval = 1
-    else:
-        approval = 0
-
-
     access = False
+    view=0
     for pt in post.post_approvals.all():
         if request.user in pt.post_holders.all():
             access=True
+            view=pt
             break
 
     if access or request.user in post.parent.post_holders.all():
+        if post.status == 'Post created':
+            approved = 1
+        else:
+            approved = 0
+
+        if view.perms == 'normal':
+            power_to_approve = 0
+        else:
+            power_to_approve = 1
+
+        view_parent = Post.objects.get(pk=view.parent.pk)
+
+        if view_parent in post.post_approvals.all():
+            approval = 1
+        else:
+            approval = 0
 
         form = UserId(request.POST or None)
         info = 0
@@ -171,13 +168,13 @@ def child_post_view(request, pk, view_pk):
                 info = 'successfully added'
             else:
                 info = "no such user"
-            return render(request, 'child_post1.html', {'post': post, 'view_pk': view_pk, 'ap': approved,
+            return render(request, 'child_post1.html', {'post': post,'ap': approved,
                                                         'approval': approval, 'power_to_approve': power_to_approve,
                                                         'nominations': nominations,'form':form,'info':info})
 
 
 
-        return render(request, 'child_post1.html', {'post': post, 'view_pk': view_pk, 'ap': approved,
+        return render(request, 'child_post1.html', {'post': post,'ap': approved,
                                                'approval': approval, 'power_to_approve': power_to_approve,
                                                'nominations': nominations,'form':form,'info':info})
     else:
