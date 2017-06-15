@@ -308,15 +308,17 @@ def nomi_detail(request,nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     questionnaire = nomi.nomi_form
     form = questionnaire.get_form(request.POST or None)
-    status=[0,0,0,0]
+    status=[0,0,0,0,0]
     if nomi.status == 'Nomination created':
         status[0] = 1
     elif nomi.status == 'Nomination out':
         status[1] = 1
     elif nomi.status == 'Interview period':
         status[2] = 1
-    else:
+    elif nomi.status == 'Result compiled':
         status[3] = 1
+    else:
+        status[4] = 1
 
     access = False
     view_post=0
@@ -424,15 +426,17 @@ def applications(request, pk):
     out=0
     form_confirm = ConfirmApplication(request.POST or None)
     result_confirm = ConfirmApplication(request.GET or None)
-    status=[0,0,0,0]
+    status=[0,0,0,0,0]
     if nomination.status == 'Nomination created':
         status[0]=1
     elif nomination.status == 'Nomination out':
         status[1] = 1
     elif nomination.status == 'Interview period':
         status[2] = 1
-    else :
+    elif nomination.status == 'Result compiled':
         status[3] = 1
+    else :
+        status[4] = 1
 
     if form_confirm.is_valid():
         nomination.status = 'Interview period'
