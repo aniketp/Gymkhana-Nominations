@@ -20,6 +20,7 @@
 
                 </div>
                 <div class="container-fluid child-post-container">
+                {% if not approval %}
                     <div class="col-lg-7 col-sm-6">
                         <h2>Nominations for the post</h2>
                         <div class="row">
@@ -28,6 +29,7 @@
                             </div>
                         </div>
                         <br>
+
 
                         {% for nomination in nominations %}
                             <div class="panel panel-default">
@@ -69,6 +71,7 @@
 
                             </ol>
                         </div>
+                    {% else %}
                         <div>
                          <ul class="list-group">
                          {% if ap %}
@@ -88,6 +91,7 @@
                          </ul>
                         </div>
                     </div>
+                {% endif %}
                 </div>
             </div>
 {% endblock %}
