@@ -6,7 +6,7 @@ from . import views
 urlpatterns = [
     # nominations/
     url(r'^$', views.index, name='index'),
-    url(r'^admin_filter$', views.admin_index, name='admin_filter'),
+    url(r'^admin_portal$', views.admin_portal, name='admin_portal'),
 
     # nominations/clubs
     url(r'^clubs', views.club_list, name='club_list'),

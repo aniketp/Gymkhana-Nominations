@@ -31,7 +31,7 @@ def index(request):
     else:
         return HttpResponseRedirect(reverse('login'))
 
-def admin_index(request):
+def admin_portal(request):
     posts = Post.objects.filter(post_holders=request.user)
     username = UserProfile.objects.get(user=request.user)
 
@@ -45,7 +45,7 @@ def admin_index(request):
 
     filter = NominationFilter(request.GET, queryset=admin_query)
 
-    return render(request, 'admin_filter.html',
+    return render(request, 'admin_portal.html',
                   context={'posts': posts, 'username': username,'filter':filter})
 
 
