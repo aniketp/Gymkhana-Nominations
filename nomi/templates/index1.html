@@ -8,9 +8,6 @@
 
      <ul class="nav nav-tabs">
          <li class="active"><a href="#user" data-toggle="tab" aria-expanded="true">User Portal</a></li>
-         {% if posts %}
-         <li><a href="#admin" data-toggle="tab" aria-expanded="true">Admin Portal</a></li>
-         {% endif %}
      </ul>
     <div id="myTabContent" class="tab-content">
          <div class="tab-pane fade active in profile-nominations" id="user">
@@ -60,56 +57,6 @@
                     {% endfor %}
                 </div>
          </div>
-        {% if posts %}
-        <div class="tab-pane fade profile-nominations" id="admin">
-                        <br>
-                <div class="panel panel-default">
-                  <div class="panel-heading">Filter Nominations</div>
-                  <div class="panel-body">
-                    <form action="" method="get">
-                        <label class="col-lg-1 control-label">Club</label>
-                              <!-- <div class="col-lg-3">
-                                    {{admin_filter.form|bootstrap}}
-                                </div>-->
-                            <div class="col-lg-3">
-                                {{admin_filter.form.club_search__club}}
-                            </div>
-
-                        <label class="col-lg-1 control-label">Batch</label>
-                            <div class="col-lg-3 ">
-                                {{admin_filter.form.year_choice}}
-                            </div>
-
-                        <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
-                    </form>
-                  </div>
-                </div>
-
-
-                <div>
-                    {% for nomi in admin_filter.qs %}
-
-                    <div class="panel panel-success">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">{{ nomi.name.upper }}</h3>
-                            <div>opened on {{nomi.opening_date}}</div>
-                        </div>
-
-
-                        <div class="panel-body">
-                                <span style="font-weight: bolder">Preference : </span>
-                                <span class="label label-primary">{{nomi.year_choice}}</span>
-                                <span class="label label-success">{{nomi.dept_choice}}</span>
-                                <p><span style="font-weight: bolder"> Deadline :  </span>{{nomi.closing_date}}</p>
-                                <p>{{nomi.brief_desc}}</p>
-                                <a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}" class="btn btn-sm read-more-button btn-danger">Read More</a>
-                        </div>
-                    </div>
-
-                    {% endfor %}
-                </div>
-        </div>
-        {% endif %}
     </div>
 </div>
 
