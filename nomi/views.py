@@ -14,7 +14,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 def index(request):
     if request.user.is_authenticated:
-        try :
+        try:
             filters = NominationFilter(request.GET, queryset=Nomination.objects
                                        .filter(status='Nomination out').order_by('-opening_date'))
             posts = Post.objects.filter(post_holders=request.user)
@@ -306,9 +306,9 @@ def nomi_detail(request,nomi_pk):
     else:
         created = 0
 
-    if nomi.status =='Nomination out':
+    if nomi.status == 'Nomination out':
         out=1
-    elif nomi.status =='Interview period' :
+    elif nomi.status == 'Interview period':
         out=1
     else:
         out=0
@@ -437,6 +437,7 @@ def accept_nomination(request, pk):
 
     return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_accept}))
 
+
 @login_required
 def mark_as_interviewed(request, pk):
     application = NominationInstance.objects.get(pk=pk)
@@ -473,9 +474,10 @@ def nomination_answer(request, pk):
     questionnaire = application.nomination.nomi_form
     form = questionnaire.get_form(data)
     comment_form = CommentForm(request.POST or None, instance=application)
-    inst_user=0
-    if application.user==request.user:
-        inst_user=1
+    inst_user = 0
+
+    if application.user == request.user:
+        inst_user = 1
 
     if comment_form.is_valid():
         comment_form.save()
@@ -489,9 +491,10 @@ def nomination_answer(request, pk):
 @login_required
 def profile_view(request):
     pk = request.user.pk
-    history=PostHistory.objects.filter(user=request.user)
-    pending_nomi=NominationInstance.objects.filter(user=request.user).filter(nomination__status='Nomination out')
-    interview_nomi=NominationInstance.objects.filter(user=request.user).filter(nomination__status='Interview period')
+    history = PostHistory.objects.filter(user=request.user)
+    pending_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Nomination out')
+    interview_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Interview period')
+
     try:
         user_profile = UserProfile.objects.get(user__id=pk)
         return render(request, 'profile.html', context={'user_profile': user_profile, 'history': history,

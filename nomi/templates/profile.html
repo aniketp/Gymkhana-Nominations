@@ -76,7 +76,8 @@
                                 <h3 class="panel-title">{{post.club}}</h3>
                             </div>
                             <div class="panel-body">
-                                <p class="profile-post-name"><a href="{% url 'post_view' post.pk %}"><span>Post: </span>{{post.post_name}}</a></p>
+                                <p class="profile-post-name"><a href="{% url 'post_view' post.pk %}">
+                                    <span>Post: </span>{{post.post_name}}</a></p>
 
                                 <div class="row">
                                     <div class="col-lg-6">
@@ -91,6 +92,29 @@
 
                     <div class="tab-pane fade profile-nominations" id="post-history">
                         <br>
+                        {% for post in my_posts %}
+
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{post.club}}</h3>
+                            </div>
+                            <div class="panel-body">
+                                <p class="profile-post-name"><a href="{% url 'post_view' post.pk %}">
+                                    <span>Post: </span>{{post.post_name}}</a></p>
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <p><span>Start:</span> Start-date</p>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <p><span>End: </span> Till-Date</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% endfor %}
+
                         {% for his in history %}
                         {% if his.end %}
                         <div class="panel panel-info">
