@@ -441,15 +441,15 @@ def applications(request, pk):
     if form_confirm.is_valid():
         nomination.status = 'Interview period'
         nomination.save()
-        return render(request, 'applicants.html', context={'applicants': applicants,
+        return render(request, 'applicants.html', context={'nomination':nomination,'applicants': applicants,
                                                                'form_confirm': form_confirm,'result_confirm': result_confirm,'accepted':accepted,'rejected':rejected, 'status':status})
     if result_confirm.is_valid():
         nomination.status = 'Result compiled'
         nomination.save()
-        return render(request, 'applicants.html', context={'applicants': applicants,
+        return render(request, 'applicants.html', context={'nomination':nomination,'applicants': applicants,
                                                                'form_confirm': form_confirm,'result_confirm': result_confirm,'accepted':accepted,'rejected':rejected, 'status':status})
 
-    return render(request, 'applicants.html', context={'applicants': applicants,
+    return render(request, 'applicants.html', context={'nomination':nomination,'applicants': applicants,
                                                        'form_confirm': form_confirm, 'result_confirm': result_confirm,'accepted':accepted,'rejected':rejected,'status':status})
 
 
@@ -481,6 +481,22 @@ def reject_nomination(request, pk):
     application.save()
 
     return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_reject}))
+
+
+@login_required
+def append_user(request, pk):
+    nomi = Nomination.objects.get(pk=pk)
+    nomi.append()
+    return HttpResponseRedirect(reverse('applicants', kwargs={'pk': pk}))
+
+
+@login_required
+def replace_user(request, pk):
+    nomi = Nomination.objects.get(pk=pk)
+    nomi.replace()
+    return HttpResponseRedirect(reverse('applicants', kwargs={'pk': pk}))
+
+
 
 
 @login_required
