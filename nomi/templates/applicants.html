@@ -16,7 +16,7 @@
     {% endif %}
     <!-- ---------------------------------------------------------------------------------------------------------------  -->
     {% if status.1 %}
-    <h3 class="text-center">   Nomination under construction</h3>
+    <h3 class="text-center">{{nomination.name}} </h3>
 
      <ul class="nav nav-tabs">
          <li class="active"><a href="#all" data-toggle="tab" aria-expanded="true">All Applicatons</a></li>
@@ -61,6 +61,7 @@
 
     <!-- -------------------------------------------------------------------------------------------------------------------   -->
     {% if status.2 %}
+    <h3 class="text-center">{{nomination.name}} </h3>
     <h3 class="text-center">This is Interview period</h3>
     <ul class="nav nav-tabs">
          <li class="active"><a href="#all" data-toggle="tab" aria-expanded="true">All Applicatons</a></li>
@@ -146,6 +147,7 @@
     <!--  ----------------------------------------------------------------------------------------------------------------------  -->
 
     {% if status.3%}
+    <h3 class="text-center">{{nomination.name}} </h3>
     <h3 class="text-center">Result has been Compiled</h3>
     <ul class="nav nav-tabs">
          <li class="active"><a  href="#accepted" data-toggle="tab" aria-expanded="true">Accepted</a></li>
@@ -208,6 +210,7 @@
 
     <!-- --------------------------------------------------------------------------------------------------------------    -->
     {% if status.4 %}
+    <h3 class="text-center">{{nomination.name}} </h3>
     <h3 class="text-center">Selected users have been assigned to post.</h3>
 
     {% endif %}
