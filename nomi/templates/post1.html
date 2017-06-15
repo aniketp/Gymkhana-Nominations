@@ -21,8 +21,8 @@
     </div>
      <ul class="nav nav-tabs">
                     <li class="active"><a href="#child-posts" data-toggle="tab" aria-expanded="true">Posts under you</a></li>
-                    <li><a href="#post-history" data-toggle="tab" aria-expanded="true">Posts to be approved</a></li>
-                    <li><a href="#pending" data-toggle="tab" aria-expanded="false">Pending Applications</a></li>
+                    <li><a href="#post-approval" data-toggle="tab" aria-expanded="true">Posts to be approved</a></li>
+                    <li><a href="#nomi-approval" data-toggle="tab" aria-expanded="false">Nominations to be approved</a></li>
                     <li><a href="#declared" data-toggle="tab" aria-expanded="false">Nomination Results</a></li>
                 </ul>
                 <div id="myTabContent" class="tab-content">
@@ -40,7 +40,7 @@
 
                                 <div class="row">
                                     <div class="col-lg-6">
-                                        <p><span>Status : </span> Start-date</p>
+                                        <p><span>Status : </span>{{ch_post.status}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -49,93 +49,99 @@
                         {% endfor %}
                     </div>
 
-                    <div class="tab-pane fade profile-nominations" id="post-history">
+                    <div class="tab-pane fade profile-nominations" id="post-approval">
                         <br>
-                        {% for his in history %}
-                        {% if his.end %}
+                         {% for ch_post in post_approval %}
                         <div class="panel panel-info">
                             <div class="panel-heading">
-                                <h3 class="panel-title">{{his.post.club}}</h3>
+                                <h3 class="panel-title">{{ch_post.club}}</h3>
                             </div>
                             <div class="panel-body">
-                                <p class="profile-post-name"><span>Post: </span>{{his.post.post_name}}</p>
+                                <p class="profile-post-name"><span>Post: </span>{{ch_post.post_name}}</p>
 
                                 <div class="row">
                                     <div class="col-lg-6">
-                                        <p><span>Start: </span>{{his.start}}</p>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <p><span>End: </span>{{his.end}}</p>
+                                        <p><span>parent : </span>{{ch_post.parent}}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        {% endif %}
                         {% endfor %}
                     </div>
-                </div>
+                    <div class="tab-pane fade profile-nominations" id="nomi-approval">
+                        <br>
+                         {% for nomi in nomi_approval %}
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{nomi.nomi_post.club}}</h3>
+                            </div>
+                            <div class="panel-body">
+                                <p class="profile-post-name"><span></span>{{nomi.name}}</p>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                <div class="jumbotron jumbotron-post">
-                    <div class="jumbotron-title">
-                        <h1 style="text-align: center">{{post.post_name}}</h1>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <p><span>parent : </span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
                     </div>
-                    <div class="jumbotron-club">
-                        <h3 style="font-size: 35px; text-align: center">{{ post.club }}</h3>
-                    </div>
+
+
+
+
                 </div>
 
-                <div id="create-post">
-                    <p><a href="{% url 'post_create' post.pk %}">Create a New Post</a></p>
-                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 <div class="container-fluid">
                     <div class="row">
