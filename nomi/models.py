@@ -105,7 +105,6 @@ class NominationInstance(models.Model):
 
 
 class UserProfile(models.Model):
-
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=40, blank=True)
     roll_no = models.IntegerField(null=True)

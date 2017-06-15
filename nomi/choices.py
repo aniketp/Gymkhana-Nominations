@@ -39,8 +39,8 @@ NOMI_STATUS = (
 )
 
 INTERVIEW_STATUS = (
-    ('Interview Not Done','Interview Not Done'),
-    ('Interview Done','Interview Done'),
+    ('Interview Not Done', 'Interview Not Done'),
+    ('Interview Done', 'Interview Done'),
 )
 
 STATUS = (
