@@ -8,22 +8,8 @@
 
 {% block content  %}
 <div class="profile-content">
-
-    <table class="table">
-        <tbody>
-        {% for nomi in applicants  %}
-        <tr>
-        <th scope="row">{{ nomi.user }}</th>
-        {% if nomi.status %}
-        <td><a href="#">{{ nomi.status }}</a></td>
-        {% endif %}
-            <td><a href="#">{{ nomi.interview_status }}</a></td>
-        <td><a href="{% url 'nomi_answer' nomi.pk %}">View Application</a></td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    {% if out %}
+    {{status}}
+    {% if status.1 %}
     <div class="dropdown show">
         <button class="btn btn-secondary btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Start Interview Period
@@ -38,9 +24,44 @@
 
         </div>
     </div>
-    {% else %}
-    <h3 class="text-center">This is Interview period</h3>
     {% endif %}
+
+    {% if status.2 %}
+    <h3 class="text-center">This is Interview period</h3>
+    <button class="btn btn-secondary btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Compile Result
+        </button>
+        <div class="dropdown-menu " role="menu">
+                <form action="" method="post" style="display: inline">
+                    {% csrf_token %}
+                    <p>{{result_confirm|bootstrap}}</p>
+                    <input class="btn btn-success btn-block" type="submit" value="submit" />
+                </form>
+
+        </div>
+    {% endif %}
+     {% if status.3%}
+    <h3 class="text-center">Result Is Compiled/h3>
+
+    {% endif %}
+
+
+
+    <table class="table">
+        <tbody>
+        {% for nomi in applicants  %}
+        <tr>
+        <th scope="row">{{ nomi.user }}</th>
+        {% if nomi.status %}
+        <td><a href="">{{ nomi.status }}</a></td>
+        {% endif %}
+            <td><a href="">{{ nomi.interview_status }}</a></td>
+        <td><a href="{% url 'nomi_answer' nomi.pk %}">View Application</a></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
 </div>
 
 {% endblock %}

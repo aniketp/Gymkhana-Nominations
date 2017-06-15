@@ -47,7 +47,7 @@ STATUS = (
         ('Nomination created', 'Nomination created'),
         ('Nomination out', 'Nomination out'),
         ('Interview period', 'Interview period'),
-        ('Compiled', 'Compiled'),
+        ('Result compiled', 'Result compiled'),
 )
 
 CLUB_STATUS = (
