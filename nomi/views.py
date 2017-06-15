@@ -308,18 +308,15 @@ def nomi_detail(request,nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     questionnaire = nomi.nomi_form
     form = questionnaire.get_form(request.POST or None)
-
+    status=[0,0,0,0]
     if nomi.status == 'Nomination created':
-        created = 1
-    else:
-        created = 0
-
-    if nomi.status == 'Nomination out':
-        out=1
+        status[0] = 1
+    elif nomi.status == 'Nomination out':
+        status[1] = 1
     elif nomi.status == 'Interview period':
-        out=1
+        status[2] = 1
     else:
-        out=0
+        status[3] = 1
 
     access = False
     view_post=0
@@ -339,9 +336,9 @@ def nomi_detail(request,nomi_pk):
         else:
             sent_to_parent=0
 
-        return render(request, 'nomi_detail_admin.html', context={'nomi': nomi, 'form': form, 'created':created,'sent_to_parent':sent_to_parent, 'power_to_send': power_to_send,'out':out})
+        return render(request, 'nomi_detail_admin.html', context={'nomi': nomi, 'form': form, 'sent_to_parent':sent_to_parent, 'power_to_send': power_to_send,'status':status})
     else:
-        if out:
+        if status[1]:
             return render(request, 'nomi_detail_user.html', context={'nomi': nomi,})
         else:
             return render(request, 'no_access.html')
@@ -518,7 +515,7 @@ def profile_view(request):
     history = PostHistory.objects.filter(user=request.user)
     pending_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Nomination out')
     interview_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Interview period')
-    declared_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Compiled')
+    declared_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Result compiled')
 
     try:
         user_profile = UserProfile.objects.get(user__id=pk)
