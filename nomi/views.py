@@ -422,15 +422,17 @@ def nomi_apply(request, pk):
 def applications(request, pk):
     nomination = Nomination.objects.get(pk=pk)
     applicants = NominationInstance.objects.filter(nomination=nomination)
+    accepted=NominationInstance.objects.filter(nomination=nomination).filter(status='Accepted')
+    rejected=NominationInstance.objects.filter(nomination=nomination).filter(status='Rejected')
     out=0
     form_confirm = ConfirmApplication(request.POST or None)
-    result_confirm = ConfirmApplication(request.POST or None)
+    result_confirm = ConfirmApplication(request.GET or None)
     status=[0,0,0,0]
     if nomination.status == 'Nomination created':
         status[0]=1
     elif nomination.status == 'Nomination out':
         status[1] = 1
-    elif nomination.status == 'InterView Period':
+    elif nomination.status == 'Interview period':
         status[2] = 1
     else :
         status[3] = 1
@@ -439,15 +441,15 @@ def applications(request, pk):
         nomination.status = 'Interview period'
         nomination.save()
         return render(request, 'applicants.html', context={'applicants': applicants,
-                                                               'form_confirm': form_confirm,'result_confirm': result_confirm, 'status':status})
+                                                               'form_confirm': form_confirm,'result_confirm': result_confirm,'accepted':accepted,'rejected':rejected, 'status':status})
     if result_confirm.is_valid():
         nomination.status = 'Result compiled'
         nomination.save()
         return render(request, 'applicants.html', context={'applicants': applicants,
-                                                               'form_confirm': form_confirm,'result_confirm': result_confirm, 'status':status})
+                                                               'form_confirm': form_confirm,'result_confirm': result_confirm,'accepted':accepted,'rejected':rejected, 'status':status})
 
     return render(request, 'applicants.html', context={'applicants': applicants,
-                                                       'form_confirm': form_confirm, 'result_confirm': result_confirm,'status':status})
+                                                       'form_confirm': form_confirm, 'result_confirm': result_confirm,'accepted':accepted,'rejected':rejected,'status':status})
 
 
 @login_required

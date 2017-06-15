@@ -8,59 +8,129 @@
 
 {% block content  %}
 <div class="profile-content">
-    {{status}}
-    {% if status.1 %}
-    <div class="dropdown show">
-        <button class="btn btn-secondary btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Start Interview Period
-        </button>
-        <div class="dropdown-menu " role="menu">
-
-                <form action="" method="post" style="display: inline">
-                    {% csrf_token %}
-                    <p>{{form_confirm|bootstrap}}</p>
-                    <input class="btn btn-success btn-block" type="submit" value="submit" />
-                </form>
-
-        </div>
-    </div>
-    {% endif %}
-
     {% if status.2 %}
     <h3 class="text-center">This is Interview period</h3>
-    <button class="btn btn-secondary btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Compile Result
-        </button>
-        <div class="dropdown-menu " role="menu">
-                <form action="" method="post" style="display: inline">
-                    {% csrf_token %}
-                    <p>{{result_confirm|bootstrap}}</p>
-                    <input class="btn btn-success btn-block" type="submit" value="submit" />
-                </form>
+    {% endif %}
+
+    {% if status.3%}
+    <h3 class="text-center">Result has been Compiled</h3>
+    {% endif %}
+
+
+        <ul class="nav nav-tabs">
+            {% if not status.3 %}
+            <li class="active"><a href="#all" data-toggle="tab" aria-expanded="true">All Applicatons</a></li>
+                {% if status.1 %}
+                    <div class="dropdown show">
+                        <button class="btn btn-secondary btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         Start Interview Period
+                        </button>
+                        <div class="dropdown-menu " role="menu">
+
+                         <form action="" method="post" style="display: inline">
+                                {% csrf_token %}
+                                <p>{{form_confirm|bootstrap}}</p>
+                                <input class="btn btn-success btn-block" type="submit" value="submit" />
+                            </form>
+
+                        </div>
+                     </div>
+                {% endif %}
+            {% endif %}
+
+            {% if not status.1 %}
+            <li><a  href="#accepted" data-toggle="tab" aria-expanded="false">Accepted</a></li>
+            <li><a href="#rejected" data-toggle="tab" aria-expanded="false">Rejected</a></li>
+                {% if status.2 %}
+                 <button class="btn btn-secondary btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         Compile Result
+                </button>
+                 <div class="dropdown-menu " role="menu">
+                           <form action="" method="get" style="display: inline">
+                            <p>{{result_confirm|bootstrap}}</p>
+                            <input class="btn btn-success btn-block" type="submit" value="submit" />
+                            </form>
+
+                </div>
+                {% endif %}
+            {% endif %}
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            {% if not status.3 %}
+            <div class="tab-pane fade active in profile-nominations" id="all">
+                <br>
+                {% for nomi in applicants  %}
+                <div class="panel panel-info">
+                    <div class="panel-body">
+                        <p class="profile-post-name"><span>Applicant :</span>{{nomi.user.userprofile.name}}</p>
+
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <p>Result Status : {{ nomi.status }}</p>
+                            </div>
+                            <div class="col-lg-5">
+                                <p>Interview status : {{nomi.interview_status}}</p>
+                            </div>
+                            <div class="col-lg-4">
+                                <p><a href="{% url 'nomi_answer' nomi.pk %}">View Application</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 {% endfor %}
+            </div>
+            {% endif %}
+            {% if not status.1 %}
+            <div class="tab-pane fade active in profile-nominations" id="accepted">
+                <br>
+                {% for nomi in accepted  %}
+                <div class="panel panel-info">
+                    <div class="panel-body">
+                        <p class="profile-post-name"><span>Applicant :</span>{{nomi.user.userprofile.name}}</p>
+
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <p>Result Status : {{ nomi.status }}</p>
+                            </div>
+                            <div class="col-lg-5">
+                                <p>Interview status : {{nomi.interview_status}}</p>
+                            </div>
+                            <div class="col-lg-4">
+                                <p><a href="{% url 'nomi_answer' nomi.pk %}">View Application</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 {% endfor %}
+            </div><div class="tab-pane fade active in profile-nominations" id="rejected">
+                <br>
+                {% for nomi in rejected %}
+                <div class="panel panel-info">
+                    <div class="panel-body">
+                        <p class="profile-post-name"><span>Applicant :</span>{{nomi.user.userprofile.name}}</p>
+
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <p>Result Status : {{ nomi.status }}</p>
+                            </div>
+                            <div class="col-lg-5">
+                                <p>Interview status : {{nomi.interview_status}}</p>
+                            </div>
+                            <div class="col-lg-4">
+                                <p><a href="{% url 'nomi_answer' nomi.pk %}">View Application</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 {% endfor %}
+            </div>
+
+            {% endif %}
+
+
+
 
         </div>
-    {% endif %}
-     {% if status.3%}
-    <h3 class="text-center">Result Is Compiled/h3>
-
-    {% endif %}
-
-
-
-    <table class="table">
-        <tbody>
-        {% for nomi in applicants  %}
-        <tr>
-        <th scope="row">{{ nomi.user }}</th>
-        {% if nomi.status %}
-        <td><a href="">{{ nomi.status }}</a></td>
-        {% endif %}
-            <td><a href="">{{ nomi.interview_status }}</a></td>
-        <td><a href="{% url 'nomi_answer' nomi.pk %}">View Application</a></td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 
 </div>
 
