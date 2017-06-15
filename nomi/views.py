@@ -424,16 +424,30 @@ def applications(request, pk):
     applicants = NominationInstance.objects.filter(nomination=nomination)
     out=0
     form_confirm = ConfirmApplication(request.POST or None)
-    if nomination.status == 'Nomination out':
-        out = 1
-        if form_confirm.is_valid():
-            nomination.status = 'Interview period'
-            nomination.save()
-            return render(request, 'applicants.html', context={'applicants': applicants,
-                                                               'form_confirm': form_confirm, 'out': out})
+    result_confirm = ConfirmApplication(request.POST or None)
+    status=[0,0,0,0]
+    if nomination.status == 'Nomination created':
+        status[0]=1
+    elif nomination.status == 'Nomination out':
+        status[1] = 1
+    elif nomination.status == 'InterView Period':
+        status[2] = 1
+    else :
+        status[3] = 1
+
+    if form_confirm.is_valid():
+        nomination.status = 'Interview period'
+        nomination.save()
+        return render(request, 'applicants.html', context={'applicants': applicants,
+                                                               'form_confirm': form_confirm,'result_confirm': result_confirm, 'status':status})
+    if result_confirm.is_valid():
+        nomination.status = 'Result compiled'
+        nomination.save()
+        return render(request, 'applicants.html', context={'applicants': applicants,
+                                                               'form_confirm': form_confirm,'result_confirm': result_confirm, 'status':status})
 
     return render(request, 'applicants.html', context={'applicants': applicants,
-                                                       'form_confirm': form_confirm, 'out': out})
+                                                       'form_confirm': form_confirm, 'result_confirm': result_confirm,'status':status})
 
 
 @login_required
