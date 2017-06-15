@@ -14,7 +14,7 @@
     {% if status.0 %}
     <h3 class="text-center">   Nomination under construction</h3>
     {% endif %}
-    <-- ---------------------------------------------------------------------------------------------------------------  -->
+    <!-- ---------------------------------------------------------------------------------------------------------------  -->
     {% if status.1 %}
     <h3 class="text-center">   Nomination under construction</h3>
 
@@ -150,6 +150,13 @@
     <ul class="nav nav-tabs">
          <li class="active"><a  href="#accepted" data-toggle="tab" aria-expanded="true">Accepted</a></li>
         <li><a href="#rejected" data-toggle="tab" aria-expanded="false">Rejected</a></li>
+        <button class="btn btn-secondary btn-danger " type="button" id="dropdownMenuButton" >
+            <a>Append to post</a>
+        </button>
+        <button class="btn btn-secondary btn-danger dropdown-toggle" type="button" id="dropdownMenuButton">
+            <a>Clean and Append</a>
+        </button>
+
      </ul>
     <div id="myTabContent" class="tab-content">
 
