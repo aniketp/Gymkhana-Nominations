@@ -69,6 +69,8 @@ class Nomination(models.Model):
 
     def append(self):
         selected = NominationInstance.objects.filter(nomination=self, status='Accepted')
+        self.status='Work done'
+        self.save()
         for each in selected:
             PostHistory.objects.create(post=self.nomi_post, user=each.user)
             self.nomi_post.post_holders.add(each.user)
