@@ -28,9 +28,6 @@ class Post(models.Model):
     status = models.CharField(max_length=50, choices=POST_STATUS, default='Post created')
     perms = models.CharField(max_length=200, choices=POST_PERMS, default='normal')
 
-    class Meta:
-        permissions = (("can approve the post", "can approve the post"),
-                       ("can send nominations to users", "can send nominations to users"))
 
     def __str__(self):
         return self.post_name

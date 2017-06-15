@@ -183,6 +183,7 @@ def child_post_view(request, pk):
                 userp = None
             if userp:
                 post.post_holders.add(userp.user)
+                PostHistory.objects.create(post=post, user=userp.user)
                 info = 'successfully added'
             else:
                 info = "no such user"
@@ -508,7 +509,7 @@ class UserProfileCreate(CreateView):
 
 class UserProfileUpdate(UpdateView):
     model = UserProfile
-    fields = ['name', 'roll_no', 'programme', 'department', 'hall', 'room_no', 'contact']
+    fields = ['name', 'roll_no','year', 'programme', 'department', 'hall', 'room_no', 'contact']
     success_url = reverse_lazy('index')
 
 
