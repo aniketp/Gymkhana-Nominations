@@ -16,21 +16,11 @@ def index(request):
     if request.user.is_authenticated:
         try:
             filters = NominationFilter(request.GET, queryset=Nomination.objects
-                                       .filter(status='Nomination out').order_by('-opening_date'))
+                                       .filter(status='Nomination out').distinct().order_by('-opening_date'))
             posts = Post.objects.filter(post_holders=request.user)
             username = UserProfile.objects.get(user=request.user)
 
-            admin_query=Nomination.objects.none()
-
-            for post in posts:
-                query=Nomination.objects.filter(nomi_approvals=post)
-                admin_query=admin_query | query
-
-            admin_filter=NominationFilter(request.GET, queryset=admin_query)
-
-
-
-            return render(request, 'index1.html', context={'posts': posts, 'username': username, 'filter': filters,'admin_filter':admin_filter})
+            return render(request, 'index1.html', context={'posts': posts, 'username': username, 'filter': filters})
 
 
         except ObjectDoesNotExist:
@@ -40,6 +30,23 @@ def index(request):
 
     else:
         return HttpResponseRedirect(reverse('login'))
+
+def admin_index(request):
+    posts = Post.objects.filter(post_holders=request.user)
+    username = UserProfile.objects.get(user=request.user)
+
+    admin_query = Nomination.objects.none()
+
+    for post in posts:
+        query = Nomination.objects.filter(nomi_approvals=post)
+        admin_query = admin_query | query
+
+    admin_query=admin_query.distinct()
+
+    filter = NominationFilter(request.GET, queryset=admin_query)
+
+    return render(request, 'admin_filter.html',
+                  context={'posts': posts, 'username': username,'filter':filter})
 
 
 @login_required
@@ -189,13 +196,13 @@ def child_post_view(request, pk):
                 info = "no such user"
             return render(request, 'child_post1.html', {'post': post,'ap': approved,
                                                         'approval': approval, 'power_to_approve': power_to_approve,
-                                                        'nominations': nominations,'form':form,'info':info})
+                                                        'nominations': nominations,'form':form,'info':info,'view':view})
 
 
 
         return render(request, 'child_post1.html', {'post': post,'ap': approved,
                                                'approval': approval, 'power_to_approve': power_to_approve,
-                                               'nominations': nominations,'form':form,'info':info})
+                                               'nominations': nominations,'form':form,'info':info,'view':view})
     else:
         return render(request,'no_access.html')
 
@@ -227,7 +234,7 @@ def post_approval(request, view_pk, post_pk):
             break
 
     if access or request.user in post.parent.post_holders.all():
-        return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk, 'view_pk': view_pk}))
+        return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk}))
     else:
         return render(request,'no_access.html')
 
@@ -250,7 +257,7 @@ def final_post_approval(request, view_pk, post_pk):
             break
 
     if access or request.user in post.parent.post_holders.all():
-        return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk, 'view_pk': view_pk}))
+        return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk,}))
     else:
         return render(request, 'no_access.html')
 
