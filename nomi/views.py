@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from forms.models import Question
 from .models import Nomination, NominationInstance, UserProfile, Post, Club, PostHistory
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -22,14 +21,14 @@ def index(request):
 
             return render(request, 'index1.html', context={'posts': posts, 'username': username, 'filter': filters})
 
-
         except ObjectDoesNotExist:
             profile=UserProfile.objects.create(user=request.user)
             pk=profile.pk
-            return HttpResponseRedirect(reverse('profile_update',kwargs={'pk': pk} ))
+            return HttpResponseRedirect(reverse('profile_update', kwargs={'pk': pk}))
 
     else:
         return HttpResponseRedirect(reverse('login'))
+
 
 def admin_portal(request):
     posts = Post.objects.filter(post_holders=request.user)
@@ -41,12 +40,12 @@ def admin_portal(request):
         query = Nomination.objects.filter(nomi_approvals=post)
         admin_query = admin_query | query
 
-    admin_query=admin_query.distinct()
+    admin_query = admin_query.distinct()
 
-    filter = NominationFilter(request.GET, queryset=admin_query)
+    filters = NominationFilter(request.GET, queryset=admin_query)
 
     return render(request, 'admin_portal.html',
-                  context={'posts': posts, 'username': username,'filter':filter})
+                  context={'posts': posts, 'username': username, 'filter': filters})
 
 
 @login_required
@@ -110,17 +109,19 @@ def post_create(request, pk):
     if request.method == 'POST':
         post_form = PostForm(request.POST)
         if post_form.is_valid():
-            post = Post.objects.create(post_name=post_form.cleaned_data['post_name'], club=post_form.cleaned_data['club'], parent=parent)
+            post = Post.objects.create(post_name=post_form.cleaned_data['post_name'],
+                                       club=post_form.cleaned_data['club'], parent=parent)
+
             return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
 
     else:
         club = parent.club
-        post_form = PostForm(initial={'club':club})
+        post_form = PostForm(initial={'club': club})
 
-    if  request.user in parent.post_holders.all():
+    if request.user in parent.post_holders.all():
         return render(request, 'nomi/post_form.html', context={'form': post_form})
     else:
-        return render(request,'no_access.html')
+        return render(request, 'no_access.html')
 
 
 @login_required
@@ -160,7 +161,7 @@ def child_post_view(request, pk):
     for pt in post.post_approvals.all():
         if request.user in pt.post_holders.all():
             view = pt
-            access=True
+            access = True
             break
 
     if access:
@@ -194,18 +195,16 @@ def child_post_view(request, pk):
                 info = 'successfully added'
             else:
                 info = "no such user"
-            return render(request, 'child_post1.html', {'post': post,'ap': approved,
+            return render(request, 'child_post1.html', {'post': post, 'ap': approved,
                                                         'approval': approval, 'power_to_approve': power_to_approve,
-                                                        'nominations': nominations,'form':form,'info':info,'view':view})
+                                                        'nominations': nominations, 'form': form,
+                                                        'info': info, 'view': view})
 
-
-
-        return render(request, 'child_post1.html', {'post': post,'ap': approved,
-                                               'approval': approval, 'power_to_approve': power_to_approve,
-                                               'nominations': nominations,'form':form,'info':info,'view':view})
+        return render(request, 'child_post1.html', {'post': post, 'ap': approved, 'view': view,
+                                                    'approval': approval, 'power_to_approve': power_to_approve,
+                                                    'nominations': nominations, 'form': form, 'info': info })
     else:
-        return render(request,'no_access.html')
-
+        return render(request, 'no_access.html')
 
 
 @login_required
@@ -236,9 +235,7 @@ def post_approval(request, view_pk, post_pk):
     if access or request.user in post.parent.post_holders.all():
         return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk}))
     else:
-        return render(request,'no_access.html')
-
-
+        return render(request, 'no_access.html')
 
 
 @login_required
@@ -257,7 +254,7 @@ def final_post_approval(request, view_pk, post_pk):
             break
 
     if access or request.user in post.parent.post_holders.all():
-        return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk,}))
+        return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk}))
     else:
         return render(request, 'no_access.html')
 
@@ -280,10 +277,6 @@ def nomination_create(request, pk):
                                                    dept_choice=title_form.cleaned_data['dept_choice'],
                                                    )
 
-            # Fix this bit of code
-            # nomination.brief_desc = title_form.cleaned_data['description'][:50]
-            # nomination.save()
-
             pk = questionnaire.pk
             return HttpResponseRedirect(reverse('forms:creator_form', kwargs={'pk': pk}))
 
@@ -304,7 +297,7 @@ class NominationDelete(DeleteView):
     success_url = reverse_lazy('index')
 
 
-def nomi_detail(request,nomi_pk):
+def nomi_detail(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     questionnaire = nomi.nomi_form
     form = questionnaire.get_form(request.POST or None)
@@ -321,27 +314,30 @@ def nomi_detail(request,nomi_pk):
         status[4] = 1
 
     access = False
-    view_post=0
+    view_post = 0
     for apv_post in nomi.nomi_approvals.all():
         if request.user in apv_post.post_holders.all():
             access = True
-            view_post=apv_post
+            view_post = apv_post
             break
 
     if access:
         if view_post.perms == 'normal':
-            power_to_send=0
+            power_to_send = 0
         else:
-            power_to_send=1
+            power_to_send = 1
         if view_post.parent in nomi.nomi_approvals.all():
-            sent_to_parent=1
+            sent_to_parent = 1
         else:
-            sent_to_parent=0
+            sent_to_parent = 0
 
-        return render(request, 'nomi_detail_admin.html', context={'nomi': nomi, 'form': form, 'sent_to_parent':sent_to_parent, 'power_to_send': power_to_send,'status':status})
+        return render(request, 'nomi_detail_admin.html', context={'nomi': nomi, 'form': form,
+                                                                  'sent_to_parent': sent_to_parent,
+                                                                  'power_to_send': power_to_send, 'status': status})
+
     else:
         if status[1]:
-            return render(request, 'nomi_detail_user.html', context={'nomi': nomi,})
+            return render(request, 'nomi_detail_user.html', context={'nomi': nomi})
         else:
             return render(request, 'no_access.html')
 
@@ -421,36 +417,46 @@ def nomi_apply(request, pk):
 def applications(request, pk):
     nomination = Nomination.objects.get(pk=pk)
     applicants = NominationInstance.objects.filter(nomination=nomination)
-    accepted=NominationInstance.objects.filter(nomination=nomination).filter(status='Accepted')
-    rejected=NominationInstance.objects.filter(nomination=nomination).filter(status='Rejected')
+    accepted = NominationInstance.objects.filter(nomination=nomination).filter(status='Accepted')
+    rejected = NominationInstance.objects.filter(nomination=nomination).filter(status='Rejected')
+
     out=0
+
     form_confirm = ConfirmApplication(request.POST or None)
     result_confirm = ConfirmApplication(request.GET or None)
-    status=[0,0,0,0,0]
+
+    status = [0, 0, 0, 0, 0]
+
     if nomination.status == 'Nomination created':
-        status[0]=1
+        status[0] = 1
     elif nomination.status == 'Nomination out':
         status[1] = 1
     elif nomination.status == 'Interview period':
         status[2] = 1
     elif nomination.status == 'Result compiled':
         status[3] = 1
-    else :
+    else:
         status[4] = 1
 
     if form_confirm.is_valid():
         nomination.status = 'Interview period'
         nomination.save()
-        return render(request, 'applicants.html', context={'nomination':nomination,'applicants': applicants,
-                                                               'form_confirm': form_confirm,'result_confirm': result_confirm,'accepted':accepted,'rejected':rejected, 'status':status})
+        return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
+                                                           'form_confirm': form_confirm,
+                                                           'result_confirm': result_confirm, 'accepted': accepted,
+                                                           'rejected': rejected, 'status': status})
+
     if result_confirm.is_valid():
         nomination.status = 'Result compiled'
         nomination.save()
-        return render(request, 'applicants.html', context={'nomination':nomination,'applicants': applicants,
-                                                               'form_confirm': form_confirm,'result_confirm': result_confirm,'accepted':accepted,'rejected':rejected, 'status':status})
+        return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
+                                                           'form_confirm': form_confirm,
+                                                           'result_confirm': result_confirm, 'accepted': accepted,
+                                                           'rejected': rejected, 'status': status})
 
-    return render(request, 'applicants.html', context={'nomination':nomination,'applicants': applicants,
-                                                       'form_confirm': form_confirm, 'result_confirm': result_confirm,'accepted':accepted,'rejected':rejected,'status':status})
+    return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
+                                                       'form_confirm': form_confirm, 'result_confirm': result_confirm,
+                                                       'accepted': accepted, 'rejected': rejected, 'status': status})
 
 
 @login_required
@@ -497,8 +503,6 @@ def replace_user(request, pk):
     return HttpResponseRedirect(reverse('applicants', kwargs={'pk': pk}))
 
 
-
-
 @login_required
 def result(request, pk):
     nomination = Nomination.objects.get(pk=pk)
@@ -523,10 +527,10 @@ def nomination_answer(request, pk):
     if comment_form.is_valid():
         comment_form.save()
         return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
-                                                            'comment_form': comment_form,'inst_user':inst_user})
+                                                            'comment_form': comment_form, 'inst_user': inst_user})
 
     return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
-                                                        'comment_form': comment_form,'inst_user':inst_user})
+                                                        'comment_form': comment_form, 'inst_user': inst_user})
 
 
 @login_required
