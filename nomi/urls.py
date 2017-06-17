@@ -36,8 +36,8 @@ urlpatterns = [
     url(r'^accept/(?P<pk>\d+)/$', views.accept_nomination, name='accept'),
     url(r'^reject/(?P<pk>\d+)/$', views.reject_nomination, name='reject'),
     url(r'^interviewed/(?P<pk>\d+)$', views.mark_as_interviewed, name='interviewed'),
-    url(r'^append/fdybdjhhvjdk5878fkjjgj521/(?P<pk>\d+)$',views.append_user,name='append_user'),
-    url(r'^append/fdybdjhhvjdk5878fkjjgj521/(?P<pk>\d+)$',views.replace_user,name='replace_user'),
+    url(r'^append/fdybdjhhvjdk5878fkjjgj521/(?P<pk>\d+)$',views.append_user, name='append_user'),
+    url(r'^append/fdybdjhhvjdk5878fkjjgj521/(?P<pk>\d+)$',views.replace_user, name='replace_user'),
 
     # nominations/create
     url(r'^create/(?P<pk>\d+)/$', views.nomination_create, name='nomi_create'),
@@ -65,7 +65,6 @@ urlpatterns = [
 
     # nominations/post_approve/2/34
     url(r'^post_approve/(?P<post_pk>\d+)/(?P<view_pk>\d+)/$', views.post_approval, name='post_approval'),
-
 
     # nominations/final_post_approve/2/43
     url(r'^final_post_approve/(?P<post_pk>\d+)/(?P<view_pk>\d+)/$', views.final_post_approval,

@@ -26,9 +26,7 @@ class Post(models.Model):
     post_holders = models.ManyToManyField(User, blank=True)
     post_approvals = models.ManyToManyField('self', related_name='approvals', symmetrical=False, blank=True)
     status = models.CharField(max_length=50, choices=POST_STATUS, default='Post created')
-    status = models.CharField(max_length=50, choices=POST_STATUS, default='Post created')
     perms = models.CharField(max_length=200, choices=POST_PERMS, default='normal')
-
 
     def __str__(self):
         return self.post_name
@@ -56,11 +54,14 @@ class Nomination(models.Model):
     brief_desc = models.TextField(max_length=300, null=True, blank=True)
     nomi_post = models.ForeignKey(Post, null=True)
     nomi_form = models.OneToOneField('forms.Questionnaire', null=True, blank=True)
+
     status = models.CharField(max_length=50, choices=STATUS, default='Nomination created')
     nomi_approvals = models.ManyToManyField(Post, related_name='nomi_approvals', symmetrical=False, blank=True)
     club_search = models.ManyToManyField(Post, related_name='all_clubs', symmetrical=False, blank=True)
+
     opening_date = models.DateField(null=True, blank=True)
     closing_date = models.DateField(null=True, blank=True, editable=True)
+
     year_choice = models.CharField(max_length=100, choices=YEAR_1, null=True)
     hall_choice = models.CharField(max_length=100, choices=HALL_1, null=True)
     dept_choice = models.CharField(max_length=100, choices=DEPT_1, null=True)
@@ -70,7 +71,7 @@ class Nomination(models.Model):
 
     def append(self):
         selected = NominationInstance.objects.filter(nomination=self, status='Accepted')
-        self.status='Work done'
+        self.status = 'Work done'
         self.save()
         for each in selected:
             PostHistory.objects.create(post=self.nomi_post, user=each.user)
@@ -99,7 +100,8 @@ class NominationInstance(models.Model):
     nomination = models.ForeignKey('Nomination', on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     status = models.CharField(max_length=20, choices=NOMI_STATUS,  null=True, blank=True, default=None)
-    interview_status = models.CharField(max_length=20, choices=INTERVIEW_STATUS,  null=True, blank=True, default='Interview Not Done')
+    interview_status = models.CharField(max_length=20, choices=INTERVIEW_STATUS,  null=True, blank=True,
+                                        default='Interview Not Done')
     comments = models.TextField(max_length=10000, null=True, blank=True)
     filled_form = models.OneToOneField('forms.FilledForm', null=True, blank=True)
 

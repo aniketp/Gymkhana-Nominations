@@ -2,6 +2,7 @@ from django import forms
 from .choices import *
 from .models import NominationInstance, Post
 
+
 class NominationForm(forms.Form):
     title = forms.CharField()
     description = forms.CharField(widget=forms.Textarea)
@@ -13,7 +14,7 @@ class NominationForm(forms.Form):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['post_name','club']
+        fields = ['post_name', 'club']
 
 
 class ClubForm(forms.Form):
@@ -27,7 +28,7 @@ class ConfirmApplication(forms.Form):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = NominationInstance
-        fields=['comments']
+        fields = ['comments']
 
 
 class UserId(forms.Form):

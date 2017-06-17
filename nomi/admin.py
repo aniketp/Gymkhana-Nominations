@@ -9,7 +9,7 @@ admin.site.register(UserProfile, UserProfileAdmin)
 
 
 class NominationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'status','opening_date','closing_date')
+    list_display = ('name', 'status', 'opening_date', 'closing_date')
 
 admin.site.register(Nomination, NominationAdmin)
 
@@ -31,6 +31,8 @@ class ClubAdmin(admin.ModelAdmin):
 
 admin.site.register(Club, ClubAdmin)
 
+
 class PostHistoryAdmin(admin.ModelAdmin):
-    list_display = ('post', 'user','start','end')
-admin.site.register(PostHistory,PostHistoryAdmin)
+    list_display = ('post', 'user', 'start', 'end')
+
+admin.site.register(PostHistory, PostHistoryAdmin)
