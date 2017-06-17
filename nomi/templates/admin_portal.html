@@ -52,7 +52,8 @@
                         <span class="label label-success">{{nomi.dept_choice}}</span>
                         <p><span style="font-weight: bolder"> Deadline :  </span>{{nomi.closing_date}}</p>
                         <p>{{nomi.brief_desc}}</p>
-                        <a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}" class="btn btn-sm read-more-button btn-danger">Read More</a>
+                        <a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}"
+                           class="btn btn-sm read-more-button btn-danger">Read More</a>
                     </div>
                 </div>
                     {% endfor %}
