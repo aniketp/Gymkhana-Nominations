@@ -90,18 +90,18 @@ form view
         </form>
     </div>
 
-    {% if nomi.nomination.status == 'Interview period' %}
+    {% if nomi.nomination.status == 'Interview period' or nomi.nomination.status == 'Result compiled' %}
         <div class="row text-center">
             <div class="col-lg-4">
-                <div class="btn btn-info read-more-button " ><a href="{% url 'accept' nomi.pk %} ">Accept</a></div>
+                <a href="{% url 'accept' nomi.pk %} "><div class="btn btn-info read-more-button " >Accept</div></a>
             </div>
 
             <div class="col-lg-4">
-                <div class="btn btn-danger read-more-button "><a href="{% url 'reject' nomi.pk %}">Reject</a></div>
+                <a href="{% url 'reject' nomi.pk %}"><div class="btn btn-danger read-more-button ">Reject</div></a>
             </div>
             <div class="col-lg-4">
-                <div class="btn btn-danger read-more-button ">
-                    <a href="{% url 'interviewed' nomi.pk %}">Interviewed</a></div>
+                <a href="{% url 'interviewed' nomi.pk %}"><div class="btn btn-danger read-more-button ">
+                    Interviewed</div></a>
             </div>
 
         </div>
