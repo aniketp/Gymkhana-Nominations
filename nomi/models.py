@@ -113,7 +113,7 @@ class UserProfile(models.Model):
     programme = models.CharField(max_length=7, choices=PROGRAMME, default='B.Tech')
     department = models.CharField(max_length=200, choices=DEPT, default='AE')
     hall = models.CharField(max_length=10, choices=HALL, default=1)
-    room_no = models.CharField(max_length=10, null=True,blank=True)
+    room_no = models.CharField(max_length=10, null=True, blank=True)
     contact = models.CharField(max_length=10, null=True, blank=True)
 
     def __str__(self):
