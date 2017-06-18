@@ -51,13 +51,6 @@ STATUS = (
         ('Work done','Work done')
 )
 
-CLUB_STATUS = (
-        ('Club created', 'Club created'),
-        ('Club approved', 'Club approved'),
-        ('Club rejected', 'Club rejected'),
-        ('Club on work', 'Club on work'),
-)
-
 POST_STATUS = (
         ('Post created', 'Post created'),
         ('Post approved', 'Post approved'),
@@ -69,12 +62,6 @@ POST_PERMS = (
     ("normal", "normal"),
     ("can approve the post", "can approve the post"),
     ("can approve post and send nominations to users", "can approve post and send nominations to users"),
-)
-
-CLUB_PERMS = (
-    ("normal", "normal"),
-    ("can approve the club", "can approve the club"),
-    ("can approve club and create posts within", "can approve club and create posts within"),
 )
 
 HALL_1 = (

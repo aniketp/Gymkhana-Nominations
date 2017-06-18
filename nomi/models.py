@@ -11,10 +11,6 @@ class Club(models.Model):
     club_parent = models.ForeignKey('self', null=True, blank=True)
     club_members = models.ManyToManyField(User, blank=True)
 
-    status = models.CharField(max_length=50, choices=CLUB_STATUS, default='Club created')
-    club_approvals = models.ManyToManyField('self', related_name='approvals', symmetrical=False, blank=True)
-    perms = models.CharField(max_length=200, choices=CLUB_PERMS, default='normal')
-
     def __str__(self):
         return self.club_name
 
