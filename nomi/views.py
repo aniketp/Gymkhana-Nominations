@@ -513,12 +513,12 @@ def result(request, pk):
 @login_required
 def nomination_answer(request, pk):
     application = NominationInstance.objects.get(pk=pk)
-    form1 = application.filled_form
-    data = json.loads(form1.data)
+    ans_form = application.filled_form
+    data = json.loads(ans_form.data)
     applicant = application.user.userprofile
     questionnaire = application.nomination.nomi_form
     form = questionnaire.get_form(data)
-    comment_form = CommentForm(request.POST or None, instance=application)
+    comment_form = CommentForm(request.POST or None)
     inst_user = 0
 
     if application.user == request.user:
