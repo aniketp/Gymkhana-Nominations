@@ -98,7 +98,6 @@ class NominationInstance(models.Model):
     status = models.CharField(max_length=20, choices=NOMI_STATUS,  null=True, blank=True, default=None)
     interview_status = models.CharField(max_length=20, choices=INTERVIEW_STATUS,  null=True, blank=True,
                                         default='Interview Not Done')
-    comments = models.TextField(max_length=10000, null=True, blank=True)
     filled_form = models.OneToOneField('forms.FilledForm', null=True, blank=True)
 
     def __str__(self):
