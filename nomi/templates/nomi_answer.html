@@ -90,9 +90,13 @@ form view
                         <input type="submit" class="btn btn-warning" value="Add Comment"/>
                     </div>
                 {% endif %}
-
             </form>
-
+            {% for comment in comments %}
+            <div>
+                {{comment.user}} :
+                {{comment.comments}}
+            </div>
+            {% endfor %}
 
         </div>
 
