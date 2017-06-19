@@ -1,6 +1,6 @@
 from django import forms
 from .choices import *
-from .models import NominationInstance, Post
+from .models import NominationInstance, Post, Commment
 
 
 class NominationForm(forms.Form):
@@ -25,10 +25,8 @@ class ConfirmApplication(forms.Form):
     Tick_the_box_for_confirmation = forms.CharField(max_length=100, widget=forms.CheckboxInput())
 
 
-class CommentForm(forms.ModelForm):
-    class Meta:
-        model = NominationInstance
-        fields = ['comments']
+class CommentForm(forms.Form):
+    comment = forms.CharField(widget=forms.Textarea)
 
 
 class UserId(forms.Form):
