@@ -80,7 +80,30 @@ form view
 
     {% if not inst_user %}
 
-        <div style="margin:25px">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#comments" data-toggle="tab" aria-expanded="true">Comments</a></li>
+        <li><a href="#add" data-toggle="tab" aria-expanded="false">Add comment</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade active in profile-nominations" id="comments">
+            <br>
+            {% for comment in comments %}
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{comment.user.userprofile.name}}</h3>
+                </div>
+                <div class="panel-body">
+                    <p class="profile-post-name">{{comment.comments}}</p>
+                    <div class="row">
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="tab-pane fade profile-nominations" id="add">
+            <br>
+            <div style="margin:25px">
             <form  action="" method="post" class="text-center">
                 {% csrf_token %}
                 {{comment_form|bootstrap}}
@@ -91,14 +114,11 @@ form view
                     </div>
                 {% endif %}
             </form>
-            {% for comment in comments %}
-            <div>
-                {{comment.user}} :
-                {{comment.comments}}
             </div>
-            {% endfor %}
-
         </div>
+    </div>
+
+
 
     {% if nomi.nomination.status == 'Interview period' or nomi.nomination.status == 'Result compiled' %}
         <div class="row text-center">
