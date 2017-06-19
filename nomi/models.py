@@ -104,6 +104,10 @@ class NominationInstance(models.Model):
     def __str__(self):
         return str(self.user) + ' ' + str(self.id)
 
+class Commment(models.Model):
+    comments = models.TextField(max_length=10000, null=True, blank=True)
+    nomi_instance=models.ForeignKey(NominationInstance,on_delete = models.CASCADE, null = True)
+    user = models.ForeignKey(User,on_delete = models.SET_NULL, null=True )
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
