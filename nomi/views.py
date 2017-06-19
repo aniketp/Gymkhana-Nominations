@@ -518,19 +518,21 @@ def nomination_answer(request, pk):
     applicant = application.user.userprofile
     questionnaire = application.nomination.nomi_form
     form = questionnaire.get_form(data)
+    comments = Commment.objects.filter(nomi_instance=application)
     comment_form = CommentForm(request.POST or None)
-    inst_user = 0
 
+
+    inst_user = 0
     if application.user == request.user:
         inst_user = 1
 
     if comment_form.is_valid():
         Commment.objects.create(comments = comment_form.cleaned_data['comment'], nomi_instance = application, user = request.user)
         return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
-                                                            'comment_form': comment_form, 'inst_user': inst_user})
+                                                            'comment_form': comment_form, 'inst_user': inst_user, 'comments':comments})
 
     return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
-                                                        'comment_form': comment_form, 'inst_user': inst_user})
+                                                        'comment_form': comment_form, 'inst_user': inst_user, 'comments':comments})
 
 
 @login_required
