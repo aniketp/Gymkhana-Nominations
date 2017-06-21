@@ -48,4 +48,23 @@ The main aim of the project is to develop a portal through which admins can rele
 	\item Created a filter for User Profile so that while releasing a nomination, it is possible to specify the target group (e.g users who are supposed to apply for the post). It remains to combine Forms and Filters for a nomination request.
 \end{enumerate}
 
+\subsection{Week 3}
+\begin{enumerate}
+	\item I created a separate view for all the Clubs, in which it is possible to have a look at the current post holders in all the clubs.
+	Although the clubs don't have the typical heirarchial structure, they are just used to differentiate between the posts at the same level.
+	\item We finally integrated the Filters with Nomination form. Using that, it is possible to specify for whom this nomination is being released. On completion of Backend, we discussed the possiblity of using \textit{Angular 2} as a front end framework, however, due to some compatibility issue of Angular with Dynamic Forms, we had to use Bootstrap for writing frontend.
+	\item Finished off the nomination heirarchy, now all the nominations that are released are first sent to the parent post, then on his approval , the process continues till it reaches the Gen-Sec. On his approval, the nominations are released to the public for applying.
+	Meanwhile, the nomination creator and all the approving authority can view the applicants' answers.
+	\item Created the responsive template for the Index, Profile and the Nomination-Detail view. Replaced the original with the new template. 
+\end{enumerate}
+
+\subsection{Week 4}
+\begin{enumerate}
+	\item Completed the frontend templates, replaced all the previous templates with the new one. Bootstrapped all the forms to make it look attractive. 
+	\item Fixed the error in which the new user was not able to see his index view after logging in. Passed the username before the user logged-in, so as to create a user instance and allowing him to update his profile.
+	\item Added commenting functionality in the nominee's filled form. So during the interview, panel can record comments about the candidate.
+	\item Finished off the main structure of the project, only thing that remains to be done is to enhance the look by altering the font-sizes, background colour etc.
+	\item Started writing an API-refernce of the code for future maintenance. 
+\end{enumerate}
+
 \end{document}
