@@ -123,7 +123,7 @@ form view
 
 
 
-    {% if nomi.nomination.status == 'Interview period' %}
+    {% if nomi.nomination.status == 'Interview period' and nomi.interview_status == 'Interview Done' %}
         <div class="row text-center">
             <div class="col-lg-6">
                 <a href="{% url 'accept' nomi.pk %} "><div class="btn btn-info read-more-button " >Accept</div></a>
@@ -132,7 +132,8 @@ form view
             <div class="col-lg-6">
                 <a href="{% url 'reject' nomi.pk %}"><div class="btn btn-danger read-more-button ">Reject</div></a>
             </div>
-    {% elif nomi.nomination.status == 'Interview period' %}
+
+    {% elif nomi.nomination.status == 'Interview period' and nomi.interview_status == 'Interview Not Done' %}
             <div class="col-lg-4">
                 <a href="{% url 'accept' nomi.pk %} "><div class="btn btn-info read-more-button " >Accept</div></a>
             </div>
