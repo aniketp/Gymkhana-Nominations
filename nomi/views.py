@@ -366,6 +366,7 @@ def applications(request, pk):
     applicants = NominationInstance.objects.filter(nomination=nomination)
     accepted = NominationInstance.objects.filter(nomination=nomination).filter(status='Accepted')
     rejected = NominationInstance.objects.filter(nomination=nomination).filter(status='Rejected')
+    pending = NominationInstance.objects.filter(nomination=nomination).filter(status=None)
 
     out=0
 
@@ -389,7 +390,7 @@ def applications(request, pk):
         nomination.status = 'Interview period'
         nomination.save()
         return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
-                                                           'form_confirm': form_confirm,
+                                                           'form_confirm': form_confirm, 'pending': pending,
                                                            'result_confirm': result_confirm, 'accepted': accepted,
                                                            'rejected': rejected, 'status': status})
 
@@ -397,13 +398,14 @@ def applications(request, pk):
         nomination.status = 'Result compiled'
         nomination.save()
         return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
-                                                           'form_confirm': form_confirm,
+                                                           'form_confirm': form_confirm, 'pending': pending,
                                                            'result_confirm': result_confirm, 'accepted': accepted,
                                                            'rejected': rejected, 'status': status})
 
     return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
                                                        'form_confirm': form_confirm, 'result_confirm': result_confirm,
-                                                       'accepted': accepted, 'rejected': rejected, 'status': status})
+                                                       'accepted': accepted, 'rejected': rejected, 'status': status,
+                                                       'pending': pending})
 
 
 @login_required
