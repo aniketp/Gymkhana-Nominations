@@ -255,7 +255,7 @@ def nomi_detail(request, nomi_pk):
         status[1] = 1
     elif nomi.status == 'Interview period':
         status[2] = 1
-    elif nomi.status == 'Result compiled':
+    elif nomi.status == 'Sent for ratification':
         status[3] = 1
     else:
         status[4] = 1
@@ -390,7 +390,7 @@ def applications(request, pk):
         status[1] = 1
     elif nomination.status == 'Interview period':
         status[2] = 1
-    elif nomination.status == 'Result compiled':
+    elif nomination.status == 'Sent for ratification':
         status[3] = 1
     else:
         status[4] = 1
