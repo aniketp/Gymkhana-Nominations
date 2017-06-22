@@ -378,7 +378,17 @@ def applications(request, pk):
     else:
         permission = False
 
-    out = 0
+    #result approval things
+    result_approval=[0,0,0]
+    if view_post in nomination.result_approvals.all():
+        if view_post.parent in nomination.result_approvals.all():
+            result_approval[1] = 1
+            grand_parent = view_post.parent.parent
+            if not grand_parent in nomination.result_approvals.all():
+                result_approval[2] = 1
+        else:
+            result_approval[0] = 1
+
 
     form_confirm = ConfirmApplication(request.POST or None)
 
