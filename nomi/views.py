@@ -199,7 +199,7 @@ def group_nominations(request,pk):
                 for nomi_pk in groupform.cleaned_data['group']:
                     nomi = Nomination.objects.get(pk = nomi_pk)
                     group.nominations.add(nomi)
-                return render(request, 'no_access.html')
+                return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
     else:
         title_form = GroupNominationForm
         groupform = SelectNomiForm(post)
