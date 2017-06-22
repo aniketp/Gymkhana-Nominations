@@ -85,6 +85,6 @@ urlpatterns = [
 
     # nominations/final_nomi_approve/2/43/21
     url(r'^final_nomi_approve/(?P<nomi_pk>\d+)/$', views.final_nomi_approval, name='final_nomi_approval'),
-    url(r'^group_nomi/(?P<post_pk>\d+)/$', views.group_nominations, name='nomi_group'),
+    url(r'^group_nomi/(?P<pk>\d+)/$', views.group_nominations, name='nomi_group'),
 
 ]

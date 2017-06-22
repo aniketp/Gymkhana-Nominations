@@ -188,10 +188,22 @@ def final_post_approval(request, view_pk, post_pk):
 
 
 @login_required
-def group_nominations(request,post_pk):
-    post = Post.objects.get(pk=post_pk)
+def group_nominations(request,pk):
+    post = Post.objects.get(pk=pk)
     groupform = SelectNomiForm(post)
-    return render(request,'nomi_group.html',{'form':groupform})
+    child_posts = Post.objects.filter(parent=post)
+    child_posts_reverse = child_posts[::-1]
+
+    post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
+    nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
+
+
+    return render(request, 'nomi_group.html', context={'post': post, 'child_posts': child_posts_reverse,
+                                                      'post_approval': post_approvals, 'nomi_approval': nomi_approvals,
+                                                           'form':groupform})
+
+
+
 
 
 @login_required
