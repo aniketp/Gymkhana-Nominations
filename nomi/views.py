@@ -411,6 +411,25 @@ def applications(request, pk):
 
 
 @login_required
+def ratify(request, nomi_pk):
+    nomi = Nomination.objects.get(pk=nomi_pk)
+    access = False
+
+    for apv_post in nomi.nomi_approvals.all():
+        if request.user in apv_post.post_holders.all():
+            access = True
+            break
+    if access:
+        nomi.status = 'Sent for ratification'
+        nomi.save()
+        status = [0, 0, 0, 1]
+
+        return HttpResponseRedirect(reverse('applicants', kwargs={'pk': nomi_pk}))
+    else:
+        return render(request, 'no_access.html')
+
+
+@login_required
 def cancel_result_approval(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     access = False
