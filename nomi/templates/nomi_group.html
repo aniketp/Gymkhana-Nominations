@@ -1,0 +1,29 @@
+{% extends 'base2.html' %}
+{% load bootstrap %}
+
+{% block title %} Group Nomination{% endblock %}
+
+{% load bootstrap %}
+
+
+{% block content %}
+
+    <div class="profile-content">
+                <h2 class="intro-text text-center">
+                    <strong>club nominations</strong>
+                </h2>
+                <hr>
+
+                <div style="padding: 0 35px;">
+                    <form action="" method="post" style="display: inline">
+                        {% csrf_token %}
+                        <table>
+                            {{form|bootstrap}}
+                        </table>
+                        <div class="col-md-6">
+                        <input class="btn btn-success btn-block" type="submit" value="submit" />
+                        </div>
+                    </form>
+                </div>
+    </div>
+{% endblock content %}
