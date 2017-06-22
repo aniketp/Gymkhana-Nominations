@@ -85,7 +85,8 @@
 
                         <div style="padding: 0 35px;">
                             <form action="" method="post" style="display: inline">
-                             {% csrf_token %}
+                                {% csrf_token %}
+                                {% csrf_token %}
                             <table>
                                 {{title_form|bootstrap}}
                                 {{form|bootstrap}}
