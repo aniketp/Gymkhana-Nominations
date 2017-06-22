@@ -381,7 +381,7 @@ def applications(request, pk):
     out = 0
 
     form_confirm = ConfirmApplication(request.POST or None)
-    result_confirm = ConfirmApplication(request.GET or None)
+    parent_approval = ConfirmApplication(request.GET or None)
 
     status = [0, 0, 0, 0, 0]
 
@@ -401,21 +401,59 @@ def applications(request, pk):
         nomination.save()
         return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
                                                            'form_confirm': form_confirm, 'pending': pending,
-                                                           'result_confirm': result_confirm, 'accepted': accepted,
+                                                         'accepted': accepted,
                                                            'rejected': rejected, 'status': status, 'perm': permission})
 
-    if result_confirm.is_valid():
-        nomination.status = 'Result compiled'
+
+    if parent_approval.is_valid():
+        nomination.result_approvals.add()
         nomination.save()
         return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
                                                            'form_confirm': form_confirm, 'pending': pending,
-                                                           'result_confirm': result_confirm, 'accepted': accepted,
-                                                           'rejected': rejected, 'status': status, 'perm': permission})
+                                                           'accepted': accepted, 'rejected': rejected,
+                                                           'status': status})
 
     return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
-                                                       'form_confirm': form_confirm, 'result_confirm': result_confirm,
+                                                       'form_confirm': form_confirm,
                                                        'accepted': accepted, 'rejected': rejected, 'status': status,
                                                        'pending': pending, 'perm': permission})
+
+
+@login_required
+def result_approval(request, nomi_pk):
+    nomi = Nomination.objects.get(pk=nomi_pk)
+    access = False
+    view_post = 0
+    for apv_post in nomi.nomi_approvals.all():
+        if request.user in apv_post.post_holders.all():
+            access = True
+            view_post = apv_post
+            break
+    if access:
+        to_remove = view_post.parent
+        if not to_remove.parent in nomi.result_approvals.all()
+            nomi.result_approvals.remove(to_remove)
+        return HttpResponseRedirect(reverse('applicants', kwargs={'nomi_pk': nomi_pk}))
+    else:
+        return render(request, 'no_access.html')
+
+
+def cancel_result_approval(request, nomi_pk):
+    result_approval(request, nomi_pk):
+    nomi = Nomination.objects.get(pk=nomi_pk)
+    access = False
+    view_post = 0
+    for apv_post in nomi.nomi_approvals.all():
+        if request.user in apv_post.post_holders.all():
+            access = True
+            view_post = apv_post
+            break
+    if access:
+        to_add = view_post.parent
+        nomi.result_approvals.add(to_add)
+        return HttpResponseRedirect(reverse('applicants', kwargs={'nomi_pk': nomi_pk}))
+    else:
+        return render(request, 'no_access.html')
 
 
 @login_required
