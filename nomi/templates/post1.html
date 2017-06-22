@@ -52,6 +52,7 @@
 
                     <div class="tab-pane fade profile-nominations" id="post-approval">
                         <br>
+                        {% block nomi_approval %}
                          {% for ch_post in post_approval %}
                         <div class="panel panel-info">
                             <div class="panel-heading">
@@ -69,6 +70,7 @@
                             </div>
                         </div>
                         {% endfor %}
+                        {%endblock %}
                     </div>
                     <div class="tab-pane fade profile-nominations" id="nomi-approval">
                         <br>
