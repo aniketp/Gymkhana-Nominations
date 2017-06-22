@@ -73,11 +73,26 @@
             <li><a href="#pending" data-toggle="tab" aria-expanded="false">Pending</a></li>
         {% endif %}
 
-        {% if not pending %}
-            <div class="btn btn-secondary btn-danger dropdown-toggle" type="button" style="width: auto"
-                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Send Result list for Approval
-            </div>
+        {% if not pending and not perm %}
+
+            {% if result_approval.0 %}
+                <a href="{% url 'result_approval' nomination.pk %}" class="btn btn-danger" style="width: auto">
+                    Send Result list for Approval
+                </a>
+            {% elif result_approval.2 %}
+                <a href="{% url 'cancel_result_approval' nomination.pk %}" class="btn btn-danger" style="width: auto">
+                    Cancel Approval Request
+                </a>
+            {% elif result_approval.1 %}
+                <div class="btn btn-danger disabled" style="width: auto">
+                    Your Parents have Approved the Results
+                </div>
+            {% endif %}
+
+        {% endif %}
+
+        {% if not pending and perm %}
+            <a href="#" class="btn btn-info">Send for Ratification</a>
         {% endif %}
 
      </ul>
@@ -175,14 +190,14 @@
 
     <!--  -------------------------------------------------------------------------------------------------------  -->
 
-    {% if status.3%}
+    {% if nomination.status == 'Sent for ratification' %}
     <h3 class="text-center">{{nomination.name}} </h3>
     <h3 class="text-center">Result has been Compiled</h3>
     <ul class="nav nav-tabs">
          <li class="active"><a  href="#accepted" data-toggle="tab" aria-expanded="true">Accepted</a></li>
         <li><a href="#rejected" data-toggle="tab" aria-expanded="false">Rejected</a></li>
 
-        {% if perm %}
+        {% if senate_perm %}
             <a class="btn btn-info" href="{% url 'append_user' nomination.pk %}">
                 Append to post
             </a>

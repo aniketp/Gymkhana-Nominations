@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Nomination, NominationInstance, UserProfile, Post, Club, PostHistory ,Commment
+from .models import Nomination, NominationInstance, UserProfile, Post, Club, PostHistory, Commment
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
@@ -22,8 +22,8 @@ def index(request):
             return render(request, 'index1.html', context={'posts': posts, 'username': username, 'filter': filters})
 
         except ObjectDoesNotExist:
-            profile=UserProfile.objects.create(user=request.user)
-            pk=profile.pk
+            profile = UserProfile.objects.create(user=request.user)
+            pk = profile.pk
             return HttpResponseRedirect(reverse('profile_update', kwargs={'pk': pk}))
 
     else:
@@ -48,7 +48,6 @@ def admin_portal(request):
                   context={'posts': posts, 'username': username, 'filter': filters})
 
 
-
 @login_required
 def post_view(request, pk):
     post = Post.objects.get(pk=pk)
@@ -63,8 +62,6 @@ def post_view(request, pk):
                                                       'post_approval': post_approvals, 'nomi_approval': nomi_approvals})
     else:
         return render(request, 'no_access.html')
-
-
 
 
 @login_required
@@ -86,7 +83,6 @@ def post_create(request, pk):
         return render(request, 'nomi/post_form.html', context={'form': post_form})
     else:
         return render(request, 'no_access.html')
-
 
 
 @login_required
@@ -142,8 +138,6 @@ def child_post_view(request, pk):
                                                     'nominations': nominations, 'form': form, 'info': info })
     else:
         return render(request, 'no_access.html')
-
-
 
 
 @login_required
@@ -208,13 +202,9 @@ def group_nominations(request,pk):
     else:
         groupform = SelectNomiForm(post)
 
-
     return render(request, 'nomi_group.html', context={'post': post, 'child_posts': child_posts_reverse,
-                                                      'post_approval': post_approvals, 'nomi_approval': nomi_approvals,
-                                                           'form':groupform})
-
-
-
+                                                       'post_approval': post_approvals, 'nomi_approval': nomi_approvals,
+                                                       'form': groupform})
 
 
 @login_required
@@ -259,7 +249,8 @@ def nomi_detail(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     questionnaire = nomi.nomi_form
     form = questionnaire.get_form(request.POST or None)
-    status=[0,0,0,0,0]
+    status = [0, 0, 0, 0, 0]
+
     if nomi.status == 'Nomination created':
         status[0] = 1
     elif nomi.status == 'Nomination out':
@@ -379,6 +370,7 @@ def applications(request, pk):
     rejected = NominationInstance.objects.filter(nomination=nomination).filter(status='Rejected')
     pending = NominationInstance.objects.filter(nomination=nomination).filter(status=None)
 
+    view_post = None
     for apv_post in nomination.nomi_approvals.all():
         if request.user in apv_post.post_holders.all():
             view_post = apv_post
@@ -386,20 +378,22 @@ def applications(request, pk):
 
     if view_post.perms == 'can approve post and send nominations to users':
         permission = True
-    else:
+        senate_permission = False
+    elif view_post.perms == 'can ratify the post':
+        senate_permission = True
         permission = False
 
-    #result approval things    send,sent,cancel
-    result_approval=[0,0,0]
+    # result approval things    send,sent,cancel
+    results_approval = [0, 0, 0]
+
     if view_post in nomination.result_approvals.all():
         if view_post.parent in nomination.result_approvals.all():
-            result_approval[1] = 1
+            results_approval[1] = 1
             grand_parent = view_post.parent.parent
-            if not grand_parent in nomination.result_approvals.all():
-                result_approval[2] = 1
+            if grand_parent not in nomination.result_approvals.all():
+                results_approval[2] = 1
         else:
-            result_approval[0] = 1
-
+            results_approval[0] = 1
 
     form_confirm = ConfirmApplication(request.POST or None)
 
@@ -421,14 +415,34 @@ def applications(request, pk):
         nomination.save()
         return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
                                                            'form_confirm': form_confirm, 'pending': pending,
-                                                         'accepted': accepted,'result_approval':result_approval,
-                                                           'rejected': rejected, 'status': status, 'perm': permission})
-
+                                                           'accepted': accepted, 'result_approval': results_approval,
+                                                           'rejected': rejected, 'status': status, 'perm': permission,
+                                                           'senate_perm': senate_permission})
 
     return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
-                                                       'form_confirm': form_confirm,'result_approval':result_approval,
+                                                       'form_confirm': form_confirm, 'result_approval': result_approval,
                                                        'accepted': accepted, 'rejected': rejected, 'status': status,
-                                                       'pending': pending, 'perm': permission})
+                                                       'pending': pending, 'perm': permission,
+                                                       'senate_perm': senate_permission})
+
+
+@login_required
+def ratify(request, nomi_pk):
+    nomi = Nomination.objects.get(pk=nomi_pk)
+    access = False
+
+    for apv_post in nomi.nomi_approvals.all():
+        if request.user in apv_post.post_holders.all():
+            access = True
+            break
+    if access:
+        nomi.status = 'Sent for ratification'
+        nomi.save()
+        status = [0, 0, 0, 1]
+
+        return HttpResponseRedirect(reverse('applicants', kwargs={'pk': nomi_pk}))
+    else:
+        return render(request, 'no_access.html')
 
 
 @login_required
@@ -445,7 +459,7 @@ def cancel_result_approval(request, nomi_pk):
         to_remove = view_post.parent
         if not to_remove.parent in nomi.result_approvals.all():
             nomi.result_approvals.remove(to_remove)
-        return HttpResponseRedirect(reverse('applicants', kwargs={'nomi_pk': nomi_pk}))
+        return HttpResponseRedirect(reverse('applicants', kwargs={'pk': nomi_pk}))
     else:
         return render(request, 'no_access.html')
 
@@ -462,7 +476,7 @@ def result_approval(request, nomi_pk):
     if access:
         to_add = view_post.parent
         nomi.result_approvals.add(to_add)
-        return HttpResponseRedirect(reverse('applicants', kwargs={'nomi_pk': nomi_pk}))
+        return HttpResponseRedirect(reverse('applicants', kwargs={'pk': nomi_pk}))
     else:
         return render(request, 'no_access.html')
 
@@ -512,13 +526,6 @@ def replace_user(request, pk):
 
 
 @login_required
-def result(request, pk):
-    nomination = Nomination.objects.get(pk=pk)
-    users = NominationInstance.objects.filter(nomination=nomination).filter(status__exact='Accepted')
-    return render(request, 'result.html', context={'users': users})
-
-
-@login_required
 def nomination_answer(request, pk):
     application = NominationInstance.objects.get(pk=pk)
     ans_form = application.filled_form
@@ -529,18 +536,21 @@ def nomination_answer(request, pk):
     comments = Commment.objects.filter(nomi_instance=application)
     comment_form = CommentForm(request.POST or None)
 
-
     inst_user = 0
     if application.user == request.user:
         inst_user = 1
 
     if comment_form.is_valid():
-        Commment.objects.create(comments = comment_form.cleaned_data['comment'], nomi_instance = application, user = request.user)
+        Commment.objects.create(comments=comment_form.cleaned_data['comment'],
+                                nomi_instance=application, user=request.user)
+
         return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
-                                                            'comment_form': comment_form, 'inst_user': inst_user, 'comments':comments})
+                                                            'comment_form': comment_form, 'inst_user': inst_user,
+                                                            'comments': comments})
 
     return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
-                                                        'comment_form': comment_form, 'inst_user': inst_user, 'comments':comments})
+                                                        'comment_form': comment_form, 'inst_user': inst_user,
+                                                        'comments': comments})
 
 
 @login_required
