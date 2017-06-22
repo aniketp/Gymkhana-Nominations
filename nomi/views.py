@@ -425,6 +425,25 @@ def result_approval(request, nomi_pk):
             view_post = apv_post
             break
     if access:
+        to_remove = view_post.parent
+        if not to_remove.parent in nomi.result_approvals.all()
+            nomi.result_approvals.remove(to_remove)
+        return HttpResponseRedirect(reverse('applicants', kwargs={'nomi_pk': nomi_pk}))
+    else:
+        return render(request, 'no_access.html')
+
+
+def cancel_result_approval(request, nomi_pk):
+    result_approval(request, nomi_pk):
+    nomi = Nomination.objects.get(pk=nomi_pk)
+    access = False
+    view_post = 0
+    for apv_post in nomi.nomi_approvals.all():
+        if request.user in apv_post.post_holders.all():
+            access = True
+            view_post = apv_post
+            break
+    if access:
         to_add = view_post.parent
         nomi.result_approvals.add(to_add)
         return HttpResponseRedirect(reverse('applicants', kwargs={'nomi_pk': nomi_pk}))
