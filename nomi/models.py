@@ -52,7 +52,7 @@ class Nomination(models.Model):
     nomi_form = models.OneToOneField('forms.Questionnaire', null=True, blank=True)
 
     status = models.CharField(max_length=50, choices=STATUS, default='Nomination created')
-    result_approvals=models.ManyToManyField(Post,related_name = 'result_approvals',symmetrical = False,blank = True)
+    result_approvals = models.ManyToManyField(Post, related_name='result_approvals', symmetrical=False, blank=True)
     nomi_approvals = models.ManyToManyField(Post, related_name='nomi_approvals', symmetrical=False, blank=True)
     club_search = models.ManyToManyField(Post, related_name='all_clubs', symmetrical=False, blank=True)
 

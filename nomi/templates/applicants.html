@@ -68,18 +68,15 @@
         <li class="active"><a href="#all" data-toggle="tab" aria-expanded="true">All Applicatons</a></li>
         <li><a  href="#accepted" data-toggle="tab" aria-expanded="false">Accepted</a></li>
         <li><a href="#rejected" data-toggle="tab" aria-expanded="false">Rejected</a></li>
-        <li><a href="#pending" data-toggle="tab" aria-expanded="false">Pending</a></li>
+
+        {% if pending %}
+            <li><a href="#pending" data-toggle="tab" aria-expanded="false">Pending</a></li>
+        {% endif %}
 
         {% if not pending %}
             <div class="btn btn-secondary btn-danger dropdown-toggle" type="button" style="width: auto"
                     id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Send Result list for Approval
-            </div>
-            <div class="dropdown-menu " role="menu">
-                <form action="" method="get" style="display: inline">
-                    <p>{{result_confirm|bootstrap}}</p>
-                    <input class="btn btn-success btn-block" type="submit" value="submit" />
-                </form>
             </div>
         {% endif %}
 
@@ -184,13 +181,14 @@
     <ul class="nav nav-tabs">
          <li class="active"><a  href="#accepted" data-toggle="tab" aria-expanded="true">Accepted</a></li>
         <li><a href="#rejected" data-toggle="tab" aria-expanded="false">Rejected</a></li>
-        <li><a href="#pending" data-toggle="tab" aria-expanded="false">Pending</a></li>
-        <a class="btn btn-info" href="{% url 'append_user' nomination.pk %}">
-            Append to post
-        </a>
-        <a class="btn btn-danger" href="{% url 'replace_user' nomination.pk %}">
-            Clean and Append
-        </a>
+
+
+            <a class="btn btn-info" href="{% url 'append_user' nomination.pk %}">
+                Append to post
+            </a>
+            <a class="btn btn-danger" href="{% url 'replace_user' nomination.pk %}">
+                Clean and Append
+            </a>
 
 
      </ul>
@@ -239,27 +237,6 @@
             {% endfor %}
         </div>
 
-        <div class="tab-pane fade profile-nominations" id="pending">
-                <br>
-            {% for nomi in pending %}
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant :</span>{{nomi.user.userprofile.name}}</p>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <p>Result Status : Pending</p>
-                        </div>
-                        <div class="col-lg-5">
-                            <p>Interview status : {{nomi.interview_status}}</p>
-                        </div>
-                        <div class="col-lg-4">
-                            <p><a href="{% url 'nomi_answer' nomi.pk %}">View Application</a></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
     </div>
     {% endif %}
 

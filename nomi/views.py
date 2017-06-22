@@ -368,7 +368,17 @@ def applications(request, pk):
     rejected = NominationInstance.objects.filter(nomination=nomination).filter(status='Rejected')
     pending = NominationInstance.objects.filter(nomination=nomination).filter(status=None)
 
-    out=0
+    for apv_post in nomination.nomi_approvals.all():
+        if request.user in apv_post.post_holders.all():
+            view_post = apv_post
+            break
+
+    if view_post.perms == 'can approve post and send nominations to users':
+        permission = True
+    else:
+        permission = False
+
+    out = 0
 
     form_confirm = ConfirmApplication(request.POST or None)
     result_confirm = ConfirmApplication(request.GET or None)
@@ -392,7 +402,7 @@ def applications(request, pk):
         return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
                                                            'form_confirm': form_confirm, 'pending': pending,
                                                            'result_confirm': result_confirm, 'accepted': accepted,
-                                                           'rejected': rejected, 'status': status})
+                                                           'rejected': rejected, 'status': status, 'perm': permission})
 
     if result_confirm.is_valid():
         nomination.status = 'Result compiled'
@@ -400,12 +410,12 @@ def applications(request, pk):
         return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
                                                            'form_confirm': form_confirm, 'pending': pending,
                                                            'result_confirm': result_confirm, 'accepted': accepted,
-                                                           'rejected': rejected, 'status': status})
+                                                           'rejected': rejected, 'status': status, 'perm': permission})
 
     return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
                                                        'form_confirm': form_confirm, 'result_confirm': result_confirm,
                                                        'accepted': accepted, 'rejected': rejected, 'status': status,
-                                                       'pending': pending})
+                                                       'pending': pending, 'perm': permission})
 
 
 @login_required

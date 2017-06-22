@@ -47,7 +47,7 @@ STATUS = (
         ('Nomination created', 'Nomination created'),
         ('Nomination out', 'Nomination out'),
         ('Interview period', 'Interview period'),
-        ('Result compiled', 'Result compiled'),
+        ('Sent for ratification', 'Sent for ratification'),
         ('Work done', 'Work done')
 )
 
