@@ -39,3 +39,8 @@ class SelectNomiForm(forms.Form):
             choices=[(o.id, o) for o in Nomination.objects.filter(nomi_approvals=post)],
             widget=forms.CheckboxSelectMultiple
         )
+
+
+
+class GroupNominationForm(forms.Form):
+    title = forms.CharField()
