@@ -381,7 +381,6 @@ def applications(request, pk):
     out = 0
 
     form_confirm = ConfirmApplication(request.POST or None)
-    parent_approval = ConfirmApplication(request.GET or None)
 
     status = [0, 0, 0, 0, 0]
 
@@ -404,14 +403,6 @@ def applications(request, pk):
                                                          'accepted': accepted,
                                                            'rejected': rejected, 'status': status, 'perm': permission})
 
-
-    if parent_approval.is_valid():
-        nomination.result_approvals.add()
-        nomination.save()
-        return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
-                                                           'form_confirm': form_confirm, 'pending': pending,
-                                                           'accepted': accepted, 'rejected': rejected,
-                                                           'status': status})
 
     return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
                                                        'form_confirm': form_confirm,
