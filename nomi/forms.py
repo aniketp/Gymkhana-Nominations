@@ -1,6 +1,6 @@
 from django import forms
 from .choices import *
-from .models import NominationInstance, Post, Commment
+from .models import NominationInstance, Post, Commment, Nomination
 
 
 class NominationForm(forms.Form):
@@ -31,3 +31,11 @@ class CommentForm(forms.Form):
 
 class UserId(forms.Form):
     user_roll = forms.IntegerField()
+
+class SelectNomiForm(forms.Form):
+    def __init__(self, post, *args, **kwargs):
+        super(SelectNomiForm, self).__init__(*args, **kwargs)
+        self.fields['selct to group'] = forms.MultipleChoiceField(
+            choices=[(o.id, o) for o in Nomination.objects.filter(nomi_approvals=post)],
+            widget=forms.CheckboxSelectMultiple
+        )
