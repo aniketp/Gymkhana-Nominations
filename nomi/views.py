@@ -378,7 +378,7 @@ def applications(request, pk):
     else:
         permission = False
 
-    #result approval things
+    #result approval things    send,sent,cancel
     result_approval=[0,0,0]
     if view_post in nomination.result_approvals.all():
         if view_post.parent in nomination.result_approvals.all():
@@ -410,12 +410,12 @@ def applications(request, pk):
         nomination.save()
         return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
                                                            'form_confirm': form_confirm, 'pending': pending,
-                                                         'accepted': accepted,
+                                                         'accepted': accepted,'result_approval':result_approval,
                                                            'rejected': rejected, 'status': status, 'perm': permission})
 
 
     return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
-                                                       'form_confirm': form_confirm,
+                                                       'form_confirm': form_confirm,'result_approval':result_approval,
                                                        'accepted': accepted, 'rejected': rejected, 'status': status,
                                                        'pending': pending, 'perm': permission})
 
