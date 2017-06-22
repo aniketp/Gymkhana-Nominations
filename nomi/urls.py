@@ -92,4 +92,7 @@ urlpatterns = [
     # nominations/cancel_result_approval/2
     url(r'^cancel_result_approval/(?P<nomi_pk>\d+)/$', views.cancel_result_approval, name='cancel_result_approval'),
 
+    # nominations/ratify/2
+    url(r'^ratify/(?P<nomi_pk>\d+)/$', views.ratify, name='ratify'),
+
 ]
