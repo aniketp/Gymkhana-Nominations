@@ -359,14 +359,17 @@ def applications(request, pk):
     rejected = NominationInstance.objects.filter(nomination=nomination).filter(status='Rejected')
     pending = NominationInstance.objects.filter(nomination=nomination).filter(status=None)
 
+    view_post = None
     for apv_post in nomination.nomi_approvals.all():
         if request.user in apv_post.post_holders.all():
             view_post = apv_post
             break
 
-    if view_post.perms == 'can ratify the post':
+    if view_post.perms == 'can approve post and send nominations to users':
         permission = True
-    else:
+        senate_permission = False
+    elif view_post.perms == 'can ratify the post':
+        senate_permission = True
         permission = False
 
     # result approval things    send,sent,cancel
@@ -402,12 +405,14 @@ def applications(request, pk):
         return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
                                                            'form_confirm': form_confirm, 'pending': pending,
                                                            'accepted': accepted, 'result_approval': results_approval,
-                                                           'rejected': rejected, 'status': status, 'perm': permission})
+                                                           'rejected': rejected, 'status': status, 'perm': permission,
+                                                           'senate_perm': senate_permission})
 
     return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
                                                        'form_confirm': form_confirm, 'result_approval': result_approval,
                                                        'accepted': accepted, 'rejected': rejected, 'status': status,
-                                                       'pending': pending, 'perm': permission})
+                                                       'pending': pending, 'perm': permission,
+                                                       'senate_perm': senate_permission})
 
 
 @login_required
