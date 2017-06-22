@@ -422,7 +422,7 @@ def cancel_result_approval(request, nomi_pk):
             break
     if access:
         to_remove = view_post.parent
-        if not to_remove.parent in nomi.result_approvals.all()
+        if not to_remove.parent in nomi.result_approvals.all():
             nomi.result_approvals.remove(to_remove)
         return HttpResponseRedirect(reverse('applicants', kwargs={'nomi_pk': nomi_pk}))
     else:
