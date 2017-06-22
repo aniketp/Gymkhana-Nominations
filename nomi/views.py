@@ -424,7 +424,7 @@ def cancel_result_approval(request, nomi_pk):
         to_remove = view_post.parent
         if not to_remove.parent in nomi.result_approvals.all():
             nomi.result_approvals.remove(to_remove)
-        return HttpResponseRedirect(reverse('applicants', kwargs={'nomi_pk': nomi_pk}))
+        return HttpResponseRedirect(reverse('applicants', kwargs={'pk': nomi_pk}))
     else:
         return render(request, 'no_access.html')
 
@@ -441,7 +441,7 @@ def result_approval(request, nomi_pk):
     if access:
         to_add = view_post.parent
         nomi.result_approvals.add(to_add)
-        return HttpResponseRedirect(reverse('applicants', kwargs={'nomi_pk': nomi_pk}))
+        return HttpResponseRedirect(reverse('applicants', kwargs={'pk': nomi_pk}))
     else:
         return render(request, 'no_access.html')
 

@@ -74,10 +74,16 @@
         {% endif %}
 
         {% if not pending %}
-            <div class="btn btn-secondary btn-danger dropdown-toggle" type="button" style="width: auto"
-                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Send Result list for Approval
-            </div>
+            {% if result_approval.0 %}
+                <a href="{% url 'result_approval' nomination.pk %}" class="btn btn-danger" style="width: auto">
+                    Send Result list for Approval
+                </a>
+            {% elif result_approval.2 %}
+                <a href="{% url 'cancel_result_approval' nomination.pk %}" class="btn btn-danger" style="width: auto">
+                    Cancel Approval Request
+                </a>
+            {% endif %}
+
         {% endif %}
 
      </ul>

@@ -23,9 +23,6 @@ urlpatterns = [
     # nominations/profile/update/2
     url(r'^profile/update/(?P<pk>\d+)/$', views.UserProfileUpdate.as_view(), name='profile_update'),
 
-    # nominations/result/2
-    url(r'^result/(?P<pk>\d+)/$', views.result, name='result'),
-
     # nominations/applicants/2
     url(r'^applicants/(?P<pk>\d+)/$', views.applications, name='applicants'),
 
