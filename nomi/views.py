@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
-from .forms import NominationForm, PostForm, ConfirmApplication, ClubForm, CommentForm, UserId, SelectNomiForm
+from .forms import NominationForm, PostForm, ConfirmApplication, ClubForm, CommentForm, UserId, SelectNomiForm, GroupNominationForm
 from forms.models import Questionnaire
 import json
 from .filters import NominationFilter
@@ -192,18 +192,21 @@ def group_nominations(request,pk):
 
     if request.method == 'POST':
         groupform = SelectNomiForm(post,request.POST)
-        if groupform.is_valid():
-            group = GroupNomination.objects.create(title ='hello bro')
-            for nomi_pk in groupform.cleaned_data['group']:
-                nomi = Nomination.objects.get(pk = nomi_pk)
-                group.nominations.add(nomi)
-            return render(request, 'no_access.html')
+        title_form = GroupNominationForm(request.POST)
+        if title_form.is_valid():
+            if groupform.is_valid():
+                group = GroupNomination.objects.create(title ='hello bro')
+                for nomi_pk in groupform.cleaned_data['group']:
+                    nomi = Nomination.objects.get(pk = nomi_pk)
+                    group.nominations.add(nomi)
+                return render(request, 'no_access.html')
     else:
+        title_form = GroupNominationForm
         groupform = SelectNomiForm(post)
 
     return render(request, 'nomi_group.html', context={'post': post, 'child_posts': child_posts_reverse,
                                                        'post_approval': post_approvals, 'nomi_approval': nomi_approvals,
-                                                       'form': groupform})
+                                                       'form': groupform, 'title_form':title_form})
 
 
 @login_required
