@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Nomination, NominationInstance, UserProfile, Post, Club, PostHistory, Commment
+from .models import Nomination, NominationInstance, UserProfile, Post, Club, PostHistory, Commment, GroupNomination
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
@@ -181,9 +181,6 @@ def final_post_approval(request, view_pk, post_pk):
         return render(request, 'no_access.html')
 
 
-def get_group_form(pk,*args,**kwargs):
-    post = Post.objects.get(pk=pk)
-    return SelectNomiForm(*args, extra=post, **kwargs)
 
 @login_required
 def group_nominations(request,pk):
@@ -196,8 +193,10 @@ def group_nominations(request,pk):
     if request.method == 'POST':
         groupform = SelectNomiForm(post,request.POST)
         if groupform.is_valid():
+            group = GroupNomination.objects.create(title ='hello bro')
             for nomi_pk in groupform.cleaned_data['group']:
-                return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
+                nomi = Nomination.objects.get(pk = nomi_pk)
+                group.nominations.add(nomi)
             return render(request, 'no_access.html')
     else:
         groupform = SelectNomiForm(post)
