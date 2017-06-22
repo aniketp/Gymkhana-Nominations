@@ -1,29 +1,109 @@
-{% extends 'post1.html' %}
+
+{% extends 'base2.html' %}
+
+{% load staticfiles %}
 {% load bootstrap %}
+{% block title %} Gymkhana Nominations {% endblock %}
 
-{% block title %} Group Nomination{% endblock %}
-
-{% load bootstrap %}
+{% block content %}
 
 
-{% block nomi_approval %}
-
-    <div class="profile-content">
-                <h2 class="intro-text text-center">
-                    <strong>club nominations</strong>
-                </h2>
-                <hr>
-
-                <div style="padding: 0 35px;">
-                    <form action="" method="post" style="display: inline">
-                        {% csrf_token %}
-                        <table>
-                            {{form|bootstrap}}
-                        </table>
-                        <div class="col-md-6">
-                        <input class="btn btn-success btn-block" type="submit" value="submit" />
-                        </div>
-                    </form>
-                </div>
+<div class="profile-content">
+    <div class="jumbotron jumbotron-post">
+        <div class="jumbotron-title">
+            <h1 style="text-align: center">{{post.post_name}}</h1>
+        </div>
+        <div class="jumbotron-club">
+            <h3 style="font-size: 35px; text-align: center">{{ post.club }}</h3>
+        </div>
     </div>
+
+    <div id="create-post">
+        <p><a href="{% url 'post_create' post.pk %}">Create a New Post</a></p>
+    </div>
+                <ul class="nav nav-tabs">
+                    <li ><a href="#child-posts" data-toggle="tab" aria-expanded="false">Posts under you</a></li>
+                    <li><a href="#post-approval" data-toggle="tab" aria-expanded="false">Posts to be approved</a></li>
+                    <li class="active"><a href="#nomi-approval" data-toggle="tab" aria-expanded="true">Nominations to be approved</a></li>
+                    <li><a href="#declared" data-toggle="tab" aria-expanded="false">Nomination Results</a></li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+
+                    <div class="tab-pane fade profile-nominations" id="child-posts">
+                        <br>
+                        {% for ch_post in child_posts %}
+
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{ch_post.club}}</h3>
+                            </div>
+                            <div class="panel-body">
+                                <p class="profile-post-name"><a href="{% url 'child_post' pk=ch_post.pk %}">
+                                    <span>Post: </span>{{ch_post.post_name}}</a></p>
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <p><span>Status : </span>{{ch_post.status}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% endfor %}
+                    </div>
+
+                    <div class="tab-pane fade profile-nominations" id="post-approval">
+                        <br>
+
+                         {% for ch_post in post_approval %}
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{ch_post.club}}</h3>
+                            </div>
+                            <div class="panel-body">
+                                <p class="profile-post-name"><a href="{% url 'child_post' pk=ch_post.pk %}">
+                                    <span>Post: </span>{{ch_post.post_name}}</a></p>
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <p><span>parent : </span>{{ch_post.parent}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                    <div class="tab-pane fade active in  profile-nominations" id="nomi-approval">
+                        <br>
+                        <h2 class="intro-text text-center">
+                                <strong>club nominations</strong>
+                         </h2>
+                        <hr>
+
+                        <div style="padding: 0 35px;">
+                            <form action="" method="post" style="display: inline">
+                             {% csrf_token %}
+                            <table>
+                              {{form|bootstrap}}
+                            </table>
+                            <div class="col-md-6">
+                            <input class="btn btn-success btn-block" type="submit" value="submit" />
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade profile-nominations" id="declared">
+                        <br>
+                    </div>
+
+                </div>
+
+
+
+
+</div>
+
+
 {% endblock %}

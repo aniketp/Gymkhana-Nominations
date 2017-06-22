@@ -21,7 +21,7 @@
     </div>
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#child-posts" data-toggle="tab" aria-expanded="true">Posts under you</a></li>
-                    <li><a href="#post-approval" data-toggle="tab" aria-expanded="true">Posts to be approved</a></li>
+                    <li><a href="#post-approval" data-toggle="tab" aria-expanded="false">Posts to be approved</a></li>
                     <li><a href="#nomi-approval" data-toggle="tab" aria-expanded="false">Nominations to be approved</a></li>
                     <li><a href="#declared" data-toggle="tab" aria-expanded="false">Nomination Results</a></li>
                 </ul>
@@ -52,7 +52,7 @@
 
                     <div class="tab-pane fade profile-nominations" id="post-approval">
                         <br>
-                        {% block nomi_approval %}
+
                          {% for ch_post in post_approval %}
                         <div class="panel panel-info">
                             <div class="panel-heading">
@@ -70,7 +70,7 @@
                             </div>
                         </div>
                         {% endfor %}
-                        {%endblock %}
+
                     </div>
                     <div class="tab-pane fade profile-nominations" id="nomi-approval">
                         <br>
