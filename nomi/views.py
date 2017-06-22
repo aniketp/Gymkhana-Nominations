@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
-from .forms import NominationForm, PostForm, ConfirmApplication, ClubForm, CommentForm, UserId
+from .forms import NominationForm, PostForm, ConfirmApplication, ClubForm, CommentForm, UserId, SelectNomiForm
 from forms.models import Questionnaire
 import json
 from .filters import NominationFilter
@@ -48,26 +48,6 @@ def admin_portal(request):
                   context={'posts': posts, 'username': username, 'filter': filters})
 
 
-@login_required
-def club_list(request):
-    admin_club = Club.objects.get(club_name="Admin")
-    clubs = Club.objects.filter(club_parent=admin_club)
-
-    return render(request, 'clubs/council_clubs.html', context={'clubs': clubs})
-
-
-@login_required
-def club_view(request, pk):
-    club = Club.objects.get(pk=pk)
-    child_clubs = Club.objects.filter(club_parent=club)
-    child_clubs_reverse = child_clubs[::-1]
-    posts = Post.objects.filter(post_holders=request.user)
-
-    club_approvals = Club.objects.filter(club_approvals=club).filter(status='Club created')
-
-    return render(request, 'club.html', context={'club': club, 'child_clubs': child_clubs_reverse,
-                                                 'posts': posts, 'club_approval': club_approvals})
-
 
 @login_required
 def post_view(request, pk):
@@ -85,22 +65,6 @@ def post_view(request, pk):
         return render(request, 'no_access.html')
 
 
-@login_required
-def club_create(request, pk):
-    if request.method == 'POST':
-        parent = Club.objects.get(pk=pk)
-        club_form = ClubForm(request.POST)
-
-        if club_form.is_valid():
-            club = Club.objects.create(club_name=club_form.cleaned_data['club_name'], club_parent=parent)
-            club_pk = club.pk
-
-            return HttpResponseRedirect(reverse('index'))
-
-    else:
-        club_form = ClubForm()
-
-    return render(request, 'nomi/club_form.html', context={'form': club_form})
 
 
 @login_required
@@ -123,33 +87,6 @@ def post_create(request, pk):
     else:
         return render(request, 'no_access.html')
 
-
-@login_required
-def child_club_view(request, pk, view_pk):
-    club = Club.objects.get(pk=pk)
-
-    if club.status == 'Club created':
-        approved = 1
-    else:
-        approved = 0
-
-    view_pk = view_pk
-    view = Club.objects.get(pk=view_pk)
-
-    if view.perms == 'normal':
-        power_to_approve = 0
-    else:
-        power_to_approve = 1
-
-    view_parent = Club.objects.get(pk=view.club_parent.pk)
-
-    if view_parent in club.club_approvals.all():
-        approval = 1
-    else:
-        approval = 0
-
-    return render(request, 'child_club.html', {'club': club, 'view_pk': view_pk, 'ap': approved,
-                                               'approval': approval, 'power_to_approve': power_to_approve})
 
 
 @login_required
@@ -207,15 +144,6 @@ def child_post_view(request, pk):
         return render(request, 'no_access.html')
 
 
-@login_required
-def club_approval(request, view_pk, club_pk):
-    club = Club.objects.get(pk=club_pk)
-    viewer = Club.objects.get(pk=view_pk)
-    to_add = viewer.club_parent
-
-    club.club_approvals.add(to_add)
-
-    return HttpResponseRedirect(reverse('child_club', kwargs={'pk': club_pk, 'view_pk': view_pk}))
 
 
 @login_required
@@ -257,6 +185,13 @@ def final_post_approval(request, view_pk, post_pk):
         return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk}))
     else:
         return render(request, 'no_access.html')
+
+
+@login_required
+def group_nominations(request,post_pk):
+    post = Post.objects.get(pk=post_pk)
+    groupform = SelectNomiForm(post)
+    return render(request,'nomi_group.html',{'form':groupform})
 
 
 @login_required
@@ -564,3 +499,79 @@ class UserProfileUpdate(UpdateView):
     success_url = reverse_lazy('index')
 
 
+@login_required
+def club_list(request):
+    admin_club = Club.objects.get(club_name="Admin")
+    clubs = Club.objects.filter(club_parent=admin_club)
+
+    return render(request, 'clubs/council_clubs.html', context={'clubs': clubs})
+
+
+@login_required
+def club_view(request, pk):
+    club = Club.objects.get(pk=pk)
+    child_clubs = Club.objects.filter(club_parent=club)
+    child_clubs_reverse = child_clubs[::-1]
+    posts = Post.objects.filter(post_holders=request.user)
+
+    club_approvals = Club.objects.filter(club_approvals=club).filter(status='Club created')
+
+    return render(request, 'club.html', context={'club': club, 'child_clubs': child_clubs_reverse,
+                                                 'posts': posts, 'club_approval': club_approvals})
+
+
+@login_required
+def club_create(request, pk):
+    if request.method == 'POST':
+        parent = Club.objects.get(pk=pk)
+        club_form = ClubForm(request.POST)
+
+        if club_form.is_valid():
+            club = Club.objects.create(club_name=club_form.cleaned_data['club_name'], club_parent=parent)
+            club_pk = club.pk
+
+            return HttpResponseRedirect(reverse('index'))
+
+    else:
+        club_form = ClubForm()
+
+    return render(request, 'nomi/club_form.html', context={'form': club_form})
+
+@login_required
+def child_club_view(request, pk, view_pk):
+    club = Club.objects.get(pk=pk)
+
+    if club.status == 'Club created':
+        approved = 1
+    else:
+        approved = 0
+
+    view_pk = view_pk
+    view = Club.objects.get(pk=view_pk)
+
+    if view.perms == 'normal':
+        power_to_approve = 0
+    else:
+        power_to_approve = 1
+
+    view_parent = Club.objects.get(pk=view.club_parent.pk)
+
+    if view_parent in club.club_approvals.all():
+        approval = 1
+    else:
+        approval = 0
+
+    return render(request, 'child_club.html', {'club': club, 'view_pk': view_pk, 'ap': approved,
+                                               'approval': approval, 'power_to_approve': power_to_approve})
+
+
+
+@login_required
+def club_approval(request, view_pk, club_pk):
+    club = Club.objects.get(pk=club_pk)
+    viewer = Club.objects.get(pk=view_pk)
+    to_add = viewer.club_parent
+
+    club.club_approvals.add(to_add)
+
+    return HttpResponseRedirect(reverse('child_club', kwargs={'pk': club_pk, 'view_pk': view_pk}))
