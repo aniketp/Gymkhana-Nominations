@@ -368,10 +368,9 @@ def applications(request, pk):
     rejected = NominationInstance.objects.filter(nomination=nomination).filter(status='Rejected')
     pending = NominationInstance.objects.filter(nomination=nomination).filter(status=None)
 
-    out=0
 
     form_confirm = ConfirmApplication(request.POST or None)
-    result_confirm = ConfirmApplication(request.GET or None)
+    parent_approval = ConfirmApplication(request.GET or None)
 
     status = [0, 0, 0, 0, 0]
 
@@ -402,10 +401,35 @@ def applications(request, pk):
                                                            'result_confirm': result_confirm, 'accepted': accepted,
                                                            'rejected': rejected, 'status': status})
 
+    if parent_approval.is_valid():
+        nomination.result_approvals.add()
+        nomination.save()
+        return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
+                                                           'form_confirm': form_confirm, 'pending': pending,
+                                                           'result_confirm': result_confirm, 'accepted': accepted,
+                                                              'rejected': rejected, 'status': status})
     return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
                                                        'form_confirm': form_confirm, 'result_confirm': result_confirm,
-                                                       'accepted': accepted, 'rejected': rejected, 'status': status,
+                                                           'accepted': accepted, 'rejected': rejected, 'status': status,
                                                        'pending': pending})
+
+
+@login_required
+def result_approval(request, nomi_pk):
+    nomi = Nomination.objects.get(pk=nomi_pk)
+    access = False
+    view_post = 0
+    for apv_post in nomi.nomi_approvals.all():
+        if request.user in apv_post.post_holders.all():
+            access = True
+            view_post = apv_post
+            break
+    if access:
+        to_add = view_post.parent
+        nomi.result_approvals.add(to_add)
+        return HttpResponseRedirect(reverse('applicants', kwargs={'nomi_pk': nomi_pk}))
+    else:
+        return render(request, 'no_access.html')
 
 
 @login_required
