@@ -202,7 +202,8 @@ def group_nominations(request,pk):
     if request.method == 'POST':
         groupform = SelectNomiForm(post,request.POST)
         if groupform.is_valid():
-
+            for nomi_pk in groupform.cleaned_data['group']:
+                return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
             return render(request, 'no_access.html')
     else:
         groupform = SelectNomiForm(post)
