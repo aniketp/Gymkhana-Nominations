@@ -35,7 +35,7 @@ class UserId(forms.Form):
 class SelectNomiForm(forms.Form):
     def __init__(self, post, *args, **kwargs):
         super(SelectNomiForm, self).__init__(*args, **kwargs)
-        self.fields['selct to group'] = forms.MultipleChoiceField(
+        self.fields['group'] = forms.MultipleChoiceField(
             choices=[(o.id, o) for o in Nomination.objects.filter(nomi_approvals=post)],
             widget=forms.CheckboxSelectMultiple
         )

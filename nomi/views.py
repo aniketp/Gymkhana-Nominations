@@ -181,15 +181,26 @@ def final_post_approval(request, view_pk, post_pk):
         return render(request, 'no_access.html')
 
 
+def get_group_form(pk,*args,**kwargs):
+    post = Post.objects.get(pk=pk)
+    return SelectNomiForm(*args, extra=post, **kwargs)
+
 @login_required
 def group_nominations(request,pk):
     post = Post.objects.get(pk=pk)
-    groupform = SelectNomiForm(post)
     child_posts = Post.objects.filter(parent=post)
     child_posts_reverse = child_posts[::-1]
-
     post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
     nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
+
+    if request.method == 'POST':
+        groupform = SelectNomiForm(post,request.POST)
+        if groupform.is_valid():
+            for nomi_pk in groupform.cleaned_data['group']:
+                return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
+            return render(request, 'no_access.html')
+    else:
+        groupform = SelectNomiForm(post)
 
     return render(request, 'nomi_group.html', context={'post': post, 'child_posts': child_posts_reverse,
                                                        'post_approval': post_approvals, 'nomi_approval': nomi_approvals,
