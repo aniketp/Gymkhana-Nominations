@@ -73,7 +73,8 @@
             <li><a href="#pending" data-toggle="tab" aria-expanded="false">Pending</a></li>
         {% endif %}
 
-        {% if not pending %}
+        {% if not pending and not perm %}
+
             {% if result_approval.0 %}
                 <a href="{% url 'result_approval' nomination.pk %}" class="btn btn-danger" style="width: auto">
                     Send Result list for Approval
@@ -88,6 +89,10 @@
                 </div>
             {% endif %}
 
+        {% endif %}
+
+        {% if not pending and perm %}
+            <a href="#" class="btn btn-info">Send for Ratification</a>
         {% endif %}
 
      </ul>
