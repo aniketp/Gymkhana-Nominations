@@ -124,6 +124,12 @@ class UserProfile(models.Model):
         return str(self.name)
 
 
+
+class GroupNomination(models.Model):
+    title = models.CharField(max_length=2000,null =True)
+    description = models.CharField(max_length=5000, null = True, blank = True)
+    nominations = models.ManyToManyField(Nomination, symmetrical= False, blank= True)
+
 @receiver(post_save, sender=Nomination)
 def ensure_parent_in_approvals(sender, **kwargs):
     nomi = kwargs.get('instance')
