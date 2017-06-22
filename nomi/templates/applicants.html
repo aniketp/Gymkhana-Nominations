@@ -82,6 +82,10 @@
                 <a href="{% url 'cancel_result_approval' nomination.pk %}" class="btn btn-danger" style="width: auto">
                     Cancel Approval Request
                 </a>
+            {% elif result_approval.1 %}
+                <div class="btn btn-danger disabled" style="width: auto">
+                    Your Parents have Approved the Results
+                </div>
             {% endif %}
 
         {% endif %}
