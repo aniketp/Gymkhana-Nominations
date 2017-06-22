@@ -411,7 +411,7 @@ def applications(request, pk):
 
 
 @login_required
-def result_approval(request, nomi_pk):
+def cancel_result_approval(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     access = False
     view_post = 0
@@ -429,8 +429,7 @@ def result_approval(request, nomi_pk):
         return render(request, 'no_access.html')
 
 
-def cancel_result_approval(request, nomi_pk):
-    result_approval(request, nomi_pk):
+def result_approval(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     access = False
     view_post = 0
