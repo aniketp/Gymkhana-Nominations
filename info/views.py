@@ -4,6 +4,6 @@ from .filters import UserProfileFilter
 
 
 def index(request):
-    user_list = UserProfileFilter(request.GET, queryset=UserProfile.objects.all())
+    user_list = UserProfileFilter(request.GET, queryset=UserProfile.objects.all().order_by('name'))
 
     return render(request, 'index.html', context={'filter': user_list})
