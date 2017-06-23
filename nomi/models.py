@@ -19,7 +19,7 @@ class Club(models.Model):
 class Post(models.Model):
     post_name = models.CharField(max_length=500, null=True)
     club = models.ForeignKey(Club, on_delete=models.CASCADE, null=True, blank=True)
-    tag = models.ManyToManyField(ClubTag, related_name='tag_name', symmetrical=False)
+    tag = models.ManyToManyField(ClubTag, related_name='tagname', symmetrical=False)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     post_holders = models.ManyToManyField(User, blank=True)
     post_approvals = models.ManyToManyField('self', related_name='approvals', symmetrical=False, blank=True)
