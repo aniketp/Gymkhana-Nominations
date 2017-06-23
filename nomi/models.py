@@ -131,6 +131,7 @@ class GroupNomination(models.Model):
     description = models.CharField(max_length=5000, null = True, blank = True)
     nominations = models.ManyToManyField(Nomination, symmetrical= False, blank= True)
     status = models.CharField(max_length= 50,choices= G_STATUS,default= 'created')
+    approvals = models.ManyToManyField(Post, related_name='group_approvals', symmetrical=False, blank=True)
     def __str__(self):
         return str(self.title)
 
