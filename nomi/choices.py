@@ -50,6 +50,10 @@ STATUS = (
         ('Sent for ratification', 'Sent for ratification'),
         ('Work done', 'Work done')
 )
+GROUP_STATUS = (
+        ('normal','normal'),
+        ('grouped','grouped')
+)
 
 POST_STATUS = (
         ('Post created', 'Post created'),
