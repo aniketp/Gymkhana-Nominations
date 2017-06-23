@@ -51,13 +51,13 @@ STATUS = (
         ('Work done', 'Work done')
 )
 GROUP_STATUS = (
-        ('normal','normal'),
-        ('grouped','grouped')
+        ('normal', 'normal'),
+        ('grouped', 'grouped')
 )
 
 G_STATUS = (
-        ('created','created'),
-        ('out','out')
+        ('created', 'created'),
+        ('out', 'out')
 )
 
 POST_STATUS = (

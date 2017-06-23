@@ -455,6 +455,9 @@ def applications(request, pk):
             view_post = apv_post
             break
 
+    permission = None
+    senate_permission = None
+
     if view_post.perms == 'can approve post and send nominations to users':
         permission = True
         senate_permission = False
