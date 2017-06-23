@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django_filters',
     'nomi.apps.NomiConfig',
     'forms.apps.FormsConfig',
+    'info.apps.InfoConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
