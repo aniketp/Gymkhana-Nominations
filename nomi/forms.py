@@ -36,7 +36,7 @@ class SelectNomiForm(forms.Form):
     def __init__(self, post, *args, **kwargs):
         super(SelectNomiForm, self).__init__(*args, **kwargs)
         self.fields['group'] = forms.MultipleChoiceField(
-            choices=[(o.id, o) for o in Nomination.objects.filter(nomi_approvals=post)],
+            choices=[(o.id, o) for o in Nomination.objects.filter(nomi_approvals=post).filter(status = 'Nomination created')],
             widget=forms.CheckboxSelectMultiple
         )
 
