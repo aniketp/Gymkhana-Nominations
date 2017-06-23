@@ -10,9 +10,6 @@ urlpatterns = [
     # nominations/admin_portal
     url(r'^admin_portal$', views.admin_portal, name='admin_portal'),
 
-    # nominations/clubs
-    url(r'^clubs', views.club_list, name='club_list'),
-
     # nominations/apply/2
     url(r'^apply/(?P<pk>\d+)/$', views.nomi_apply, name='nomi_apply'),
 
