@@ -14,8 +14,22 @@
         </div>
         {% if admin %}
         {% if group_nomi.status == 'created' %}
-        <a href="{% url 'add_to_group' pk=admin.pk gr_pk=group_nomi.pk %}" class="btn btn-sm read-more-button btn-info">Add New</a>
-        <a href="" class="btn btn-sm read-more-button btn-danger">Open to User</a>
+        <ul class="nav nav-tabs">
+            <li><a href="{% url 'add_to_group' pk=admin.pk gr_pk=group_nomi.pk %}" class="btn  read-more-button btn-info">Add New</a></li>
+            <li class="dropdown show">
+                 <button class="btn btn-secondary btn-danger dropdown-toggle" type="button"
+                         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Open to Users
+                </button>
+                <div class="dropdown-menu " role="menu">
+                 <form action="" method="post" style="display: inline">
+                     {% csrf_token %}
+                     <p>{{form_confirm|bootstrap}}</p>
+                     <input class="btn btn-success btn-block" type="submit" value="submit" />
+                 </form>
+                </div>
+            </li>
+        </ul>
         {% endif %}
         {% endif %}
 

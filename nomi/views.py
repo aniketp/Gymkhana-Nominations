@@ -338,6 +338,7 @@ def group_nominations(request, pk):
         title_form = GroupNominationForm
         groupform = SelectNomiForm(post)
 
+
     return render(request, 'nomi_group.html', context={'post': post, 'child_posts': child_posts_reverse,
                                                        'post_approval': post_approvals, 'nomi_approval': nomi_approvals,
                                                        'form': groupform, 'title_form': title_form})
@@ -347,16 +348,19 @@ def group_nominations(request, pk):
 
 def group_nomi_detail(request,pk):
     group_nomi = GroupNomination.objects.get(pk = pk)
-    return render(request, 'group_detail.html', {'group_nomi':group_nomi})
-
-def group_nomi_detail(request,pk):
-    group_nomi = GroupNomination.objects.get(pk = pk)
     admin =0
     for post in request.user.posts.all():
         if post in group_nomi.approvals.all():
             admin = post
 
-    return render(request, 'group_detail.html', {'group_nomi':group_nomi , 'admin':admin})
+
+    form_confirm = ConfirmApplication(request.POST or None)
+    if form_confirm.is_valid():
+        group_nomi.status = 'out'
+        group_nomi.save()
+
+
+    return render(request, 'group_detail.html', {'group_nomi':group_nomi , 'admin':admin, 'form_confirm':form_confirm})
 
 def add_to_group(request,pk,gr_pk):
     post = Post.objects.get(pk=pk)
