@@ -88,7 +88,9 @@
                                 {% csrf_token %}
                                 {% csrf_token %}
                             <table>
+                                {% if title_form %}
                                 {{title_form|bootstrap}}
+                                {% endif %}
                                 {{form|bootstrap}}
                             </table>
                             <div class="col-md-6">

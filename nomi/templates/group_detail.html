@@ -12,9 +12,11 @@
             <h1 style="text-align: center">{{group_nomi.title}}</h1>
 
         </div>
+        {% if admin %}
         {% if group_nomi.status == 'created' %}
-        <a href="" class="btn btn-sm read-more-button btn-info">Add New</a>
+        <a href="{% url 'add_to_group' pk=admin.pk gr_pk=group_nomi.pk %}" class="btn btn-sm read-more-button btn-info">Add New</a>
         <a href="" class="btn btn-sm read-more-button btn-danger">Open to User</a>
+        {% endif %}
         {% endif %}
 
     </div>
@@ -33,9 +35,11 @@
                  <p>{{nomi.brief_desc}} ...</p>
                  <a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}"
                     class="btn btn-sm read-more-button btn-info">Read More</a>
+                 {% if admin %}
                  {% if group_nomi.status == 'created' %}
                  <a href="{% url 'remove_from_group' nomi_pk=nomi.pk  gr_pk=group_nomi.pk %}"
                     class="btn btn-sm read-more-button btn-danger">Remove</a>
+                 {% endif %}
                  {% endif %}
              </div>
          </div>
