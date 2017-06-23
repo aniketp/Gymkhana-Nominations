@@ -95,4 +95,7 @@ urlpatterns = [
     # nominations/ratify/2
     url(r'^ratify/(?P<nomi_pk>\d+)/$', views.ratify, name='ratify'),
 
+    # nominations/group_nomi_detail/2
+    url(r'^group_nomi_detail/(?P<pk>\d+)$',views.group_nomi_detail,name='group_nomi_detail'),
+
 ]

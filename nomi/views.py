@@ -344,6 +344,13 @@ def group_nominations(request, pk):
                                                        'form': groupform, 'title_form': title_form})
 
 
+
+
+def group_nomi_detail(request,pk):
+    group_nomi = GroupNomination.objects.get(pk = pk)
+    return render(request, 'group_detail.html', {'group_nomi':group_nomi})
+
+
 @login_required
 def nomi_apply(request, pk):
     nomination = Nomination.objects.get(pk=pk)
