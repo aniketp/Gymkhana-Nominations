@@ -4,6 +4,7 @@ from .choices import *
 from datetime import datetime
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from info.models import ClubTag
 
 
 class Club(models.Model):
@@ -18,9 +19,11 @@ class Club(models.Model):
 class Post(models.Model):
     post_name = models.CharField(max_length=500, null=True)
     club = models.ForeignKey(Club, on_delete=models.CASCADE, null=True, blank=True)
+    tag = models.ManyToManyField(ClubTag, related_name='tagname', symmetrical=False)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     post_holders = models.ManyToManyField(User, related_name='posts', blank=True)
     post_approvals = models.ManyToManyField('self', related_name='approvals', symmetrical=False, blank=True)
+
     status = models.CharField(max_length=50, choices=POST_STATUS, default='Post created')
     perms = models.CharField(max_length=200, choices=POST_PERMS, default='normal')
 
@@ -55,7 +58,7 @@ class Nomination(models.Model):
     result_approvals = models.ManyToManyField(Post, related_name='result_approvals', symmetrical=False, blank=True)
     nomi_approvals = models.ManyToManyField(Post, related_name='nomi_approvals', symmetrical=False, blank=True)
     club_search = models.ManyToManyField(Post, related_name='all_clubs', symmetrical=False, blank=True)
-    group_status = models.CharField(max_length= 50, choices= GROUP_STATUS, default='normal')
+    group_status = models.CharField(max_length=50, choices= GROUP_STATUS, default='normal')
 
     opening_date = models.DateField(null=True, blank=True)
     closing_date = models.DateField(null=True, blank=True, editable=True)
@@ -105,10 +108,12 @@ class NominationInstance(models.Model):
     def __str__(self):
         return str(self.user) + ' ' + str(self.id)
 
+
 class Commment(models.Model):
     comments = models.TextField(max_length=10000, null=True, blank=True)
-    nomi_instance=models.ForeignKey(NominationInstance,on_delete = models.CASCADE, null = True)
-    user = models.ForeignKey(User,on_delete = models.SET_NULL, null=True )
+    nomi_instance = models.ForeignKey(NominationInstance, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True )
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -121,9 +126,11 @@ class UserProfile(models.Model):
     room_no = models.CharField(max_length=10, null=True, blank=True)
     contact = models.CharField(max_length=10, null=True, blank=True)
 
+    post = models.ManyToManyField(Post, related_name='user_post', symmetrical=False)
+    club = models.ManyToManyField(ClubTag, related_name='club_tags', symmetrical=False)
+
     def __str__(self):
         return str(self.name)
-
 
 
 class GroupNomination(models.Model):
@@ -135,6 +142,7 @@ class GroupNomination(models.Model):
 
     def __str__(self):
         return str(self.title)
+
 
 @receiver(post_save, sender=Nomination)
 def ensure_parent_in_approvals(sender, **kwargs):

@@ -6,12 +6,14 @@ from . import views
 urlpatterns = [
     # nominations/
     url(r'^$', views.index, name='index'),
+
+    # nominations/admin_portal
     url(r'^admin_portal$', views.admin_portal, name='admin_portal'),
 
     # nominations/clubs
     url(r'^clubs', views.club_list, name='club_list'),
 
-    # nominations/2
+    # nominations/apply/2
     url(r'^apply/(?P<pk>\d+)/$', views.nomi_apply, name='nomi_apply'),
 
     # nominations/profile/

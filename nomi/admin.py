@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Nomination, NominationInstance, UserProfile, Post, Club,PostHistory, GroupNomination
+from .models import *
 
 
 class UserProfileAdmin(admin.ModelAdmin):
