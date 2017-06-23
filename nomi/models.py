@@ -4,6 +4,7 @@ from .choices import *
 from datetime import datetime
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from info.models import ClubTag
 
 
 class Club(models.Model):
@@ -18,9 +19,11 @@ class Club(models.Model):
 class Post(models.Model):
     post_name = models.CharField(max_length=500, null=True)
     club = models.ForeignKey(Club, on_delete=models.CASCADE, null=True, blank=True)
+    tag = models.ManyToManyField(ClubTag, related_name='tag_name', symmetrical=False)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     post_holders = models.ManyToManyField(User, blank=True)
     post_approvals = models.ManyToManyField('self', related_name='approvals', symmetrical=False, blank=True)
+
     status = models.CharField(max_length=50, choices=POST_STATUS, default='Post created')
     perms = models.CharField(max_length=200, choices=POST_PERMS, default='normal')
 
