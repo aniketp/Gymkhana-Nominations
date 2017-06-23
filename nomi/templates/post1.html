@@ -83,9 +83,8 @@
                                 <h3 class="panel-title">Group of nominations</h3>
                             </div>
                             <div class="panel-body">
-                                <p class="profile-post-name"><a href="">
+                                <p class="profile-post-name"><a href="{% url 'group_nomi_detail' group.pk %}">
                                     <span></span>{{group.title}}</a></p>
-
                             </div>
                         </div>
                         {% endfor %}
