@@ -58,7 +58,7 @@ class Nomination(models.Model):
     result_approvals = models.ManyToManyField(Post, related_name='result_approvals', symmetrical=False, blank=True)
     nomi_approvals = models.ManyToManyField(Post, related_name='nomi_approvals', symmetrical=False, blank=True)
     club_search = models.ManyToManyField(Post, related_name='all_clubs', symmetrical=False, blank=True)
-    group_status = models.CharField(max_length= 50, choices= GROUP_STATUS, default='normal')
+    group_status = models.CharField(max_length=50, choices= GROUP_STATUS, default='normal')
 
     opening_date = models.DateField(null=True, blank=True)
     closing_date = models.DateField(null=True, blank=True, editable=True)
