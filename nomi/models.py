@@ -108,10 +108,12 @@ class NominationInstance(models.Model):
     def __str__(self):
         return str(self.user) + ' ' + str(self.id)
 
+
 class Commment(models.Model):
     comments = models.TextField(max_length=10000, null=True, blank=True)
     nomi_instance=models.ForeignKey(NominationInstance,on_delete = models.CASCADE, null = True)
     user = models.ForeignKey(User,on_delete = models.SET_NULL, null=True )
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -128,15 +130,16 @@ class UserProfile(models.Model):
         return str(self.name)
 
 
-
 class GroupNomination(models.Model):
     title = models.CharField(max_length=2000,null =True)
     description = models.CharField(max_length=5000, null = True, blank = True)
     nominations = models.ManyToManyField(Nomination, symmetrical= False, blank= True)
     status = models.CharField(max_length= 50,choices= G_STATUS,default= 'created')
     approvals = models.ManyToManyField(Post, related_name='group_approvals', symmetrical=False, blank=True)
+
     def __str__(self):
         return str(self.title)
+
 
 @receiver(post_save, sender=Nomination)
 def ensure_parent_in_approvals(sender, **kwargs):
