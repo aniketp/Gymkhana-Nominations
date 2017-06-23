@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
-from .forms import NominationForm, PostForm, ConfirmApplication, ClubForm, CommentForm, UserId, SelectNomiForm, GroupNominationForm
+from .forms import *
 from forms.models import Questionnaire
 import json
 from .filters import NominationFilter
@@ -20,7 +20,8 @@ def index(request):
             username = UserProfile.objects.get(user=request.user)
             grouped_nomi = GroupNomination.objects.filter(status = 'out')
 
-            return render(request, 'index1.html', context={'posts': posts, 'username': username, 'filter': filters, 'grouped_nomi':grouped_nomi})
+            return render(request, 'index1.html', context={'posts': posts, 'username': username, 'filter': filters,
+                                                           'grouped_nomi': grouped_nomi})
 
         except ObjectDoesNotExist:
             profile = UserProfile.objects.create(user=request.user)
@@ -182,7 +183,6 @@ def final_post_approval(request, view_pk, post_pk):
         return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk}))
     else:
         return render(request, 'no_access.html')
-
 
 
 @login_required
