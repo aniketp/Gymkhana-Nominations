@@ -1,8 +1,12 @@
 {% extends 'base2.html' %}
 
 {% block content %}
+    <br>
+    <br>
+    <br>
     <form action="" method="get">
-        {{ filter.form.as_p }}
+        {{ filter.form.club }}
+        {{ filter.form.post }}
         <input type="submit" />
     </form>
     {% for obj in filter.qs %}
