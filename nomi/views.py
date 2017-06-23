@@ -14,7 +14,7 @@ from django.core.exceptions import ObjectDoesNotExist
 def index(request):
     if request.user.is_authenticated:
         try:
-            filters = NominationFilter(request.GET, queryset=Nomination.objects.filter(group_status = 'normal')
+            filters = NominationFilter(request.GET, queryset=Nomination.objects.filter(group_status='normal')
                                        .filter(status='Nomination out').distinct().order_by('-opening_date'))
             posts = Post.objects.filter(post_holders=request.user)
             username = UserProfile.objects.get(user=request.user)

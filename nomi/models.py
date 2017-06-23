@@ -111,8 +111,8 @@ class NominationInstance(models.Model):
 
 class Commment(models.Model):
     comments = models.TextField(max_length=10000, null=True, blank=True)
-    nomi_instance=models.ForeignKey(NominationInstance,on_delete = models.CASCADE, null = True)
-    user = models.ForeignKey(User,on_delete = models.SET_NULL, null=True )
+    nomi_instance = models.ForeignKey(NominationInstance, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True )
 
 
 class UserProfile(models.Model):
@@ -125,6 +125,9 @@ class UserProfile(models.Model):
     hall = models.CharField(max_length=10, choices=HALL, default=1)
     room_no = models.CharField(max_length=10, null=True, blank=True)
     contact = models.CharField(max_length=10, null=True, blank=True)
+
+    post = models.ManyToManyField(Post, related_name='user_post', symmetrical=False)
+    club = models.ManyToManyField(ClubTag, related_name='club_tags', symmetrical=False)
 
     def __str__(self):
         return str(self.name)
