@@ -56,10 +56,12 @@ def post_view(request, pk):
 
     post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
     nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
+    group_nomi_approvals = GroupNomination.objects.filter(status = 'created').filter(approvals = post)
 
     if request.user in post.post_holders.all():
         return render(request, 'post1.html', context={'post': post, 'child_posts': child_posts_reverse,
-                                                      'post_approval': post_approvals, 'nomi_approval': nomi_approvals})
+                                                      'post_approval': post_approvals,
+                                                      'nomi_approval': nomi_approvals, 'group_nomi_approvals':group_nomi_approvals})
     else:
         return render(request, 'no_access.html')
 
