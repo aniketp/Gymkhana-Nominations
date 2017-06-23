@@ -37,6 +37,24 @@
                   </div>
                 </div>
 
+                <div>
+                    {% for group in grouped_nomi %}
+
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{{ group.title.upper }}</h3>
+                        <div>Group of nominations</div>
+                    </div>
+
+
+                    <div class="panel-body">
+                        <p>.......................................................................</p>
+                        <a href="{% url 'group_nomi_detail' pk=group.pk %}"
+                           class="btn btn-sm read-more-button btn-danger">See Detail</a>
+                    </div>
+                </div>
+                    {% endfor %}
+                </div>
 
                 <div>
                     {% for nomi in filter.qs %}
@@ -44,7 +62,7 @@
                 <div class="panel panel-success">
                     <div class="panel-heading">
                         <h3 class="panel-title">{{ nomi.name.upper }}</h3>
-                        <div>opened on {{nomi.opening_date}}</div>
+                        <div>Opened on {{nomi.opening_date}}</div>
                     </div>
 
 

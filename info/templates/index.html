@@ -1,11 +1,48 @@
 {% extends 'base2.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
 
 {% block content %}
-    <form action="" method="get">
-        {{ filter.form.as_p }}
-        <input type="submit" />
-    </form>
-    {% for obj in filter.qs %}
-        {{ obj.name }} <br>
-    {% endfor %}
+  <div class="profile-content ">
+
+    <div id="myTabContent" class="tab-content">
+         <div class="tab-pane fade active in profile-nominations" id="user">
+                <br>
+                <div class="panel panel-default">
+                  <div class="panel-heading">Student Search</div>
+                  <div class="panel-body">
+                    <form action="" method="get">
+                        <label class="col-lg-1 control-label">Club</label>
+                              <!-- <div class="col-lg-3">
+                                    {{filter.form|bootstrap}}
+                                </div>-->
+                            <div class="col-lg-3">
+                                {{filter.form.club}}
+                            </div>
+
+                        <label class="col-lg-1 control-label">Post</label>
+                            <div class="col-lg-3 ">
+                                {{filter.form.post}}
+                            </div>
+
+                        <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
+                    </form>
+                  </div>
+                </div>
+
+
+                <div>
+                    {% for nomi in filter.qs %}
+
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{{ nomi.name.upper }}</h3>
+                    </div>
+                </div>
+                    {% endfor %}
+                </div>
+         </div>
+    </div>
+</div>
+
 {% endblock %}

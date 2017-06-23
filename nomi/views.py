@@ -18,8 +18,9 @@ def index(request):
                                        .filter(status='Nomination out').distinct().order_by('-opening_date'))
             posts = Post.objects.filter(post_holders=request.user)
             username = UserProfile.objects.get(user=request.user)
+            grouped_nomi = GroupNomination.objects.filter(status = 'out')
 
-            return render(request, 'index1.html', context={'posts': posts, 'username': username, 'filter': filters})
+            return render(request, 'index1.html', context={'posts': posts, 'username': username, 'filter': filters, 'grouped_nomi':grouped_nomi})
 
         except ObjectDoesNotExist:
             profile = UserProfile.objects.create(user=request.user)
