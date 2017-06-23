@@ -326,6 +326,7 @@ def group_nominations(request, pk):
                     nomi = Nomination.objects.get(pk=nomi_pk)
                     group.nominations.add(nomi)
                     nomi.group_status = 'grouped'
+                    nomi.approvals.add(post)
                     nomi.save()
                     nomi.open_to_users()
                 return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
