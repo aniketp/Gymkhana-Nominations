@@ -296,6 +296,10 @@ body {
     font-size: medium;
 }
 
+.profile-pic-search {
+    border-radius: 30%;
+}
+
 
 @media screen and (max-width: 600px) {
   #profile {
@@ -307,3 +311,4 @@ body {
     display: none;
   }
 }
+

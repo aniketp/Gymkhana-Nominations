@@ -34,9 +34,15 @@
                 <div>
                     {% for nomi in filter.qs %}
 
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">{{ nomi.name.upper }}</h3>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="container-fluid">
+                            <div class="col-lg-4">
+                                <img src="{% static 'nomi/img/logo.jpg' %}" alt="Pic here"
+                                     width="100px" height="100px" style="border-radius: 10%">
+                            </div>
+
+                        </div>
                     </div>
                 </div>
                     {% endfor %}

@@ -174,3 +174,7 @@ h1{
 	font-size: 0.9em;
 }
 }
+
+.profile-pic-search {
+    border-radius: 30px;
+}
