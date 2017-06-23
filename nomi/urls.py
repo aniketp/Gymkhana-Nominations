@@ -35,8 +35,8 @@ urlpatterns = [
     url(r'^accept/(?P<pk>\d+)/$', views.accept_nomination, name='accept'),
     url(r'^reject/(?P<pk>\d+)/$', views.reject_nomination, name='reject'),
     url(r'^interviewed/(?P<pk>\d+)$', views.mark_as_interviewed, name='interviewed'),
-    url(r'^append/fdybdjhhvjdk5878fkjjgj521/(?P<pk>\d+)$',views.append_user, name='append_user'),
-    url(r'^append/fdybdjhhvjdk5878fkjjgj521/(?P<pk>\d+)$',views.replace_user, name='replace_user'),
+    url(r'^append/fdybdjhhvjdk5878fkjjgj521/(?P<pk>\d+)$', views.append_user, name='append_user'),
+    url(r'^append/fdybdjhhvjdk5878fkjjgj521/(?P<pk>\d+)$', views.replace_user, name='replace_user'),
 
     # nominations/create
     url(r'^create/(?P<pk>\d+)/$', views.nomination_create, name='nomi_create'),
@@ -53,15 +53,6 @@ urlpatterns = [
     # nominations/createpost/2
     url(r'^createpost/(?P<pk>\d+)/$', views.post_create, name='post_create'),
 
-    # nominations/club/2
-    url(r'^club/(?P<pk>\d+)/$', views.club_view, name='club_view'),
-
-    # nominations/createclub/2
-    url(r'^createclub/(?P<pk>\d+)/$', views.club_create, name='club_create'),
-
-    # nominations/club_approve/2/34
-    url(r'^club_approve/(?P<club_pk>\d+)/(?P<view_pk>\d+)/$', views.club_approval, name='club_approval'),
-
     # nominations/post_approve/2/34
     url(r'^post_approve/(?P<post_pk>\d+)/(?P<view_pk>\d+)/$', views.post_approval, name='post_approval'),
 
@@ -72,9 +63,6 @@ urlpatterns = [
 
     # nominations/child_post/2/8
     url(r'^child_post/(?P<pk>\d+)/$', views.child_post_view, name='child_post'),
-
-    # nominations/child_post/2/8
-    url(r'^child_club/(?P<pk>\d+)/(?P<view_pk>\d+)/$', views.child_club_view, name='child_club'),
 
     # nominations/nomi_detail/2/34/6
     url(r'^nomi_detail/(?P<nomi_pk>\d+)/$', views.nomi_detail, name='nomi_detail'),
@@ -98,9 +86,9 @@ urlpatterns = [
     url(r'^ratify/(?P<nomi_pk>\d+)/$', views.ratify, name='ratify'),
 
     # nominations/group_nomi_detail/2
-    url(r'^group_nomi_detail/(?P<pk>\d+)/$',views.group_nomi_detail,name='group_nomi_detail'),
+    url(r'^group_nomi_detail/(?P<pk>\d+)/$', views.group_nomi_detail, name='group_nomi_detail'),
 
-    url(r'^add_to_group/(?P<pk>\d+)/(?P<gr_pk>\d+)/$',views.add_to_group,name='add_to_group'),
+    url(r'^add_to_group/(?P<pk>\d+)/(?P<gr_pk>\d+)/$', views.add_to_group, name='add_to_group'),
 
     url(r'^remove_from_group/(?P<nomi_pk>\d+)/(?P<gr_pk>\d+)/$', views.remove_from_group, name='remove_from_group'),
 
