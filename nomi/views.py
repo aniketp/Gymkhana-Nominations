@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from .models import Nomination, NominationInstance, UserProfile, Post, Club, PostHistory, Commment, GroupNomination
+from .models import *
+from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
-from .forms import *
 from forms.models import Questionnaire
 import json
 from .filters import NominationFilter
