@@ -35,6 +35,8 @@ urlpatterns = [
     url(r'^accept/(?P<pk>\d+)/$', views.accept_nomination, name='accept'),
     url(r'^reject/(?P<pk>\d+)/$', views.reject_nomination, name='reject'),
     url(r'^interviewed/(?P<pk>\d+)$', views.mark_as_interviewed, name='interviewed'),
+
+    # nominations/append/2 (redirect)
     url(r'^append/fdybdjhhvjdk5878fkjjgj521/(?P<pk>\d+)$', views.append_user, name='append_user'),
     url(r'^append/fdybdjhhvjdk5878fkjjgj521/(?P<pk>\d+)$', views.replace_user, name='replace_user'),
 
