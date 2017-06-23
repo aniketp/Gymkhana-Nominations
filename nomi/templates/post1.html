@@ -75,11 +75,12 @@
                     <div class="tab-pane fade profile-nominations" id="nomi-approval">
                         <br>
                         <div class="btn btn-secondary btn-info "><a href="{% url 'group_nomi' post.pk %}"> Group Nominations</a></div>
-
-                        {% for group in group_nomi_approval %}
+                        <br>
+                        <br>
+                        {% for group in group_nomi_approvals %}
                         <div class="panel panel-info">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Bunch</h3>
+                                <h3 class="panel-title">Group of nominations</h3>
                             </div>
                             <div class="panel-body">
                                 <p class="profile-post-name"><a href="">

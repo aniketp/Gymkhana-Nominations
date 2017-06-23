@@ -298,7 +298,7 @@ def final_nomi_approval(request, nomi_pk):
             view_post = apv_post
             break
     if access:
-        to_add = view_post
+        to_add = view_post.parent
         nomi.nomi_approvals.add(to_add)
         nomi.club_search.add(to_add)
         nomi.open_to_users()
@@ -321,12 +321,15 @@ def group_nominations(request, pk):
         if title_form.is_valid():
             if groupform.is_valid():
                 group = GroupNomination.objects.create(title=title_form.cleaned_data['title'])
+                group.approvals.add(post)
                 for nomi_pk in groupform.cleaned_data['group']:
                     # things to be performed on nomination
                     nomi = Nomination.objects.get(pk=nomi_pk)
                     group.nominations.add(nomi)
                     nomi.group_status = 'grouped'
-                    nomi.approvals.add(post)
+                    to_add = post.parent
+                    nomi.nomi_approvals.add(to_add)
+                    nomi.club_search.add(to_add)
                     nomi.save()
                     nomi.open_to_users()
                 return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
