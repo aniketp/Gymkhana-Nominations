@@ -349,6 +349,14 @@ def group_nomi_detail(request,pk):
     group_nomi = GroupNomination.objects.get(pk = pk)
     return render(request, 'group_detail.html', {'group_nomi':group_nomi})
 
+def group_nomi_detail(request,pk):
+    group_nomi = GroupNomination.objects.get(pk = pk)
+
+
+
+
+    return render(request, 'group_detail.html', {'group_nomi':group_nomi})
+
 def remove_from_group(request,nomi_pk,gr_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     group = GroupNomination.objects.get(pk= gr_pk)
@@ -359,6 +367,8 @@ def remove_from_group(request,nomi_pk,gr_pk):
     nomi.save()
 
     return HttpResponseRedirect(reverse('group_nomi_detail', kwargs={'pk': gr_pk}))
+
+
 
 @login_required
 def nomi_apply(request, pk):

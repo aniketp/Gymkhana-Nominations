@@ -19,7 +19,7 @@ class Post(models.Model):
     post_name = models.CharField(max_length=500, null=True)
     club = models.ForeignKey(Club, on_delete=models.CASCADE, null=True, blank=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
-    post_holders = models.ManyToManyField(User, blank=True)
+    post_holders = models.ManyToManyField(User, related_name='posts', blank=True)
     post_approvals = models.ManyToManyField('self', related_name='approvals', symmetrical=False, blank=True)
     status = models.CharField(max_length=50, choices=POST_STATUS, default='Post created')
     perms = models.CharField(max_length=200, choices=POST_PERMS, default='normal')
@@ -132,6 +132,8 @@ class GroupNomination(models.Model):
     nominations = models.ManyToManyField(Nomination, symmetrical= False, blank= True)
     status = models.CharField(max_length= 50,choices= G_STATUS,default= 'created')
     approvals = models.ManyToManyField(Post, related_name='group_approvals', symmetrical=False, blank=True)
+    creator = models.ForeignKey(Post, on_delete = models.SET_NULL,null = True,blank = True)
+
     def __str__(self):
         return str(self.title)
 
