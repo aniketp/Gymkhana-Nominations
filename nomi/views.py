@@ -320,10 +320,11 @@ def group_nominations(request, pk):
             if groupform.is_valid():
                 group = GroupNomination.objects.create(title=title_form.cleaned_data['title'])
                 for nomi_pk in groupform.cleaned_data['group']:
-                    # things to performed on nomination
+                    # things to be performed on nomination
                     nomi = Nomination.objects.get(pk=nomi_pk)
                     group.nominations.add(nomi)
                     nomi.group_status = 'grouped'
+                    nomi.save()
                     nomi.open_to_users()
                 return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
 

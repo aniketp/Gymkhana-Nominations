@@ -55,6 +55,11 @@ GROUP_STATUS = (
         ('grouped','grouped')
 )
 
+G_STATUS = (
+        ('created','created'),
+        ('out','out')
+)
+
 POST_STATUS = (
         ('Post created', 'Post created'),
         ('Post approved', 'Post approved'),
