@@ -98,6 +98,8 @@ urlpatterns = [
     # nominations/group_nomi_detail/2
     url(r'^group_nomi_detail/(?P<pk>\d+)/$',views.group_nomi_detail,name='group_nomi_detail'),
 
+    url(r'^add_to_group/(?P<pk>\d+)/(?P<gr_pk>\d+)/$',views.add_to_group,name='add_to_group'),
+
     url(r'^remove_from_group/(?P<nomi_pk>\d+)/(?P<gr_pk>\d+)/$', views.remove_from_group, name='remove_from_group'),
 
 ]

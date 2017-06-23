@@ -351,11 +351,45 @@ def group_nomi_detail(request,pk):
 
 def group_nomi_detail(request,pk):
     group_nomi = GroupNomination.objects.get(pk = pk)
+    admin =0
+    for post in request.user.posts.all():
+        if post in group_nomi.approvals.all():
+            admin = post
+
+    return render(request, 'group_detail.html', {'group_nomi':group_nomi , 'admin':admin})
+
+def add_to_group(request,pk,gr_pk):
+    post = Post.objects.get(pk=pk)
+    child_posts = Post.objects.filter(parent=post)
+    child_posts_reverse = child_posts[::-1]
+    post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
+    nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
+
+    if request.method == 'POST':
+        groupform = SelectNomiForm(post, request.POST)
+        if groupform.is_valid():
+            group = GroupNomination.objects.get(pk=gr_pk)
+
+            for nomi_pk in groupform.cleaned_data['group']:
+                # things to be performed on nomination
+                nomi = Nomination.objects.get(pk=nomi_pk)
+                group.nominations.add(nomi)
+                nomi.group_status = 'grouped'
+                to_add = post.parent
+                nomi.nomi_approvals.add(to_add)
+                nomi.save()
+                nomi.open_to_users()
+            return HttpResponseRedirect(reverse('group_nomi_detail', kwargs={'pk': gr_pk}))
 
 
+    else:
+        title_form = None
+        groupform = SelectNomiForm(post)
 
+    return render(request, 'nomi_group.html', context={'post': post, 'child_posts': child_posts_reverse,
+                                                       'post_approval': post_approvals, 'nomi_approval': nomi_approvals,
+                                                       'form': groupform, 'title_form': title_form})
 
-    return render(request, 'group_detail.html', {'group_nomi':group_nomi})
 
 def remove_from_group(request,nomi_pk,gr_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
