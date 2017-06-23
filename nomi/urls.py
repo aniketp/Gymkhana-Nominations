@@ -96,6 +96,8 @@ urlpatterns = [
     url(r'^ratify/(?P<nomi_pk>\d+)/$', views.ratify, name='ratify'),
 
     # nominations/group_nomi_detail/2
-    url(r'^group_nomi_detail/(?P<pk>\d+)$',views.group_nomi_detail,name='group_nomi_detail'),
+    url(r'^group_nomi_detail/(?P<pk>\d+)/$',views.group_nomi_detail,name='group_nomi_detail'),
+
+    url(r'^remove_from_group/(?P<nomi_pk>\d+)/(?P<gr_pk>\d+)/$', views.remove_from_group, name='remove_from_group'),
 
 ]

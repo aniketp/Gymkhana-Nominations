@@ -329,7 +329,6 @@ def group_nominations(request, pk):
                     nomi.group_status = 'grouped'
                     to_add = post.parent
                     nomi.nomi_approvals.add(to_add)
-                    nomi.club_search.add(to_add)
                     nomi.save()
                     nomi.open_to_users()
                 return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
@@ -350,6 +349,16 @@ def group_nomi_detail(request,pk):
     group_nomi = GroupNomination.objects.get(pk = pk)
     return render(request, 'group_detail.html', {'group_nomi':group_nomi})
 
+def remove_from_group(request,nomi_pk,gr_pk):
+    nomi = Nomination.objects.get(pk=nomi_pk)
+    group = GroupNomination.objects.get(pk= gr_pk)
+    group.nominations.remove(nomi)
+
+    nomi.group_status = 'normal'
+    nomi.status = 'Nomination created'
+    nomi.save()
+
+    return HttpResponseRedirect(reverse('group_nomi_detail', kwargs={'pk': gr_pk}))
 
 @login_required
 def nomi_apply(request, pk):

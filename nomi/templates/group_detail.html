@@ -34,7 +34,7 @@
                  <a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}"
                     class="btn btn-sm read-more-button btn-info">Read More</a>
                  {% if group_nomi.status == 'created' %}
-                 <a href=""
+                 <a href="{% url 'remove_from_group' nomi_pk=nomi.pk  gr_pk=group_nomi.pk %}"
                     class="btn btn-sm read-more-button btn-danger">Remove</a>
                  {% endif %}
              </div>
@@ -42,5 +42,4 @@
          {% endfor %}
      </div>
 </div>
-
 {% endblock %}
