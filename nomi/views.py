@@ -77,16 +77,18 @@ def post_view(request, pk):
 def post_create(request, pk):
     parent = Post.objects.get(pk=pk)
     if request.method == 'POST':
-        post_form = PostForm(request.POST)
+        post_form = PostForm(parent,request.POST)
         if post_form.is_valid():
+            club_id = post_form.cleaned_data['club']
+            club = Club.objects.get(pk=club_id)
             post = Post.objects.create(post_name=post_form.cleaned_data['post_name'],
-                                       club=post_form.cleaned_data['club'], parent=parent)
+                                       club=club, parent=parent)
 
             return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
 
     else:
         club = parent.club
-        post_form = PostForm(initial={'club': club})
+        post_form = PostForm(parent)
 
     if request.user in parent.post_holders.all():
         return render(request, 'nomi/post_form.html', context={'form': post_form})
