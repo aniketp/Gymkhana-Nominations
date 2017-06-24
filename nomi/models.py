@@ -10,7 +10,6 @@ from info.models import ClubTag
 class Club(models.Model):
     club_name = models.CharField(max_length=100, null=True)
     club_parent = models.ForeignKey('self', null=True, blank=True)
-    club_members = models.ManyToManyField(User, blank=True)
 
     def __str__(self):
         return self.club_name
@@ -19,13 +18,15 @@ class Club(models.Model):
 class Post(models.Model):
     post_name = models.CharField(max_length=500, null=True)
     club = models.ForeignKey(Club, on_delete=models.CASCADE, null=True, blank=True)
-    tag = models.ManyToManyField(ClubTag, related_name='tagname', symmetrical=False)
+    tag = models.ManyToManyField(Club, related_name='club_posts', symmetrical=False,blank=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     post_holders = models.ManyToManyField(User, related_name='posts', blank=True)
     post_approvals = models.ManyToManyField('self', related_name='approvals', symmetrical=False, blank=True)
 
     status = models.CharField(max_length=50, choices=POST_STATUS, default='Post created')
     perms = models.CharField(max_length=200, choices=POST_PERMS, default='normal')
+    tag_perms = models.CharField(max_length=20, choices=TAG_PERMS, default='normal')
+
 
     def __str__(self):
         return self.post_name
