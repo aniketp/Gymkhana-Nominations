@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from nomi.models import UserProfile
+from nomi.models import Post
+from info.filters import PostFilter
 
 
 def index(request):
-    user_list = UserProfileFilter(request.GET, queryset=UserProfile.objects.all().order_by('name'))
+    user_list = PostFilter(request.GET, queryset=Post.objects.all().order_by('post_holders'))
 
     return render(request, 'index.html', context={'filter': user_list})

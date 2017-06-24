@@ -28,7 +28,6 @@ class Post(models.Model):
     perms = models.CharField(max_length=200, choices=POST_PERMS, default='normal')
     tag_perms = models.CharField(max_length=20, choices=TAG_PERMS, default='normal')
 
-
     def __str__(self):
         return self.post_name
 
