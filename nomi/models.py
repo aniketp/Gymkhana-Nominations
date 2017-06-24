@@ -116,8 +116,13 @@ class Commment(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
 
+def user_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return os.path.join('pics', str(instance.id), filename)
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user_img = models.ImageField(upload_to=user_directory_path, null=True, blank=True)
     name = models.CharField(max_length=40, blank=True)
     roll_no = models.IntegerField(null=True)
     year = models.CharField(max_length=4, choices=YEAR, default='Y16')
@@ -132,6 +137,12 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+    def image_url(self):
+        if self.user_img and hasattr(self.user_img, 'url'):
+            return self.user_img.url
+        else:
+            return '/static/nomi/img/logo.gif'
 
 
 class GroupNomination(models.Model):
