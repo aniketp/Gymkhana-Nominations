@@ -48,6 +48,7 @@ class PostHistory(models.Model):
     end = models.DateField(null=True, blank=True, editable=True)
 
 
+
 class Nomination(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(max_length=20000, null=True, blank=True)
@@ -98,6 +99,22 @@ class Nomination(models.Model):
         return self.status
 
 
+
+
+class GroupNomination(models.Model):
+    name = models.CharField(max_length=2000, null=True)
+    description = models.CharField(max_length=5000, null=True, blank=True)
+    nominations = models.ManyToManyField(Nomination, symmetrical=False, blank=True)
+    status = models.CharField(max_length=50, choices=G_STATUS, default='created')
+    opening_date = models.DateField(null=True, blank=True)
+    approvals = models.ManyToManyField(Post, related_name='group_approvals', symmetrical=False, blank=True)
+    club_search = models.ManyToManyField(Post, related_name='groups', symmetrical=False, blank=True)
+
+    def __str__(self):
+        return str(self.name)
+
+
+
 class NominationInstance(models.Model):
     nomination = models.ForeignKey('Nomination', on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
@@ -143,15 +160,6 @@ class UserProfile(models.Model):
             return '/static/nomi/img/logo.gif'
 
 
-class GroupNomination(models.Model):
-    title = models.CharField(max_length=2000, null=True)
-    description = models.CharField(max_length=5000, null=True, blank=True)
-    nominations = models.ManyToManyField(Nomination, symmetrical=False, blank=True)
-    status = models.CharField(max_length=50, choices=G_STATUS, default='created')
-    approvals = models.ManyToManyField(Post, related_name='group_approvals', symmetrical=False, blank=True)
-
-    def __str__(self):
-        return str(self.title)
 
 
 @receiver(post_save, sender=Nomination)
