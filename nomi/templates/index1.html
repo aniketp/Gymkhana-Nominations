@@ -1,6 +1,7 @@
 {% extends 'base2.html' %}
 {% load staticfiles %}
 {% load bootstrap %}
+{% load temp_tags %}
 
 {% block content %}
 <div class="profile-content ">
@@ -15,51 +16,11 @@
     <div id="myTabContent" class="tab-content">
          <div class="tab-pane fade active in profile-nominations" id="user">
                 <br>
-                <div class="panel panel-default">
-                  <div class="panel-heading">Filter Nominations</div>
-                  <div class="panel-body">
-                    <form action="" method="get">
-                        <label class="col-lg-1 control-label">Club</label>
-                              <!-- <div class="col-lg-3">
-                                    {{filter.form|bootstrap}}
-                                </div>-->
-                            <div class="col-lg-3">
-                                {{filter.form.club_search__club}}
-                            </div>
-
-                        <label class="col-lg-1 control-label">Batch</label>
-                            <div class="col-lg-3 ">
-                                {{filter.form.year_choice}}
-                            </div>
-
-                        <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
-                    </form>
-                  </div>
-                </div>
-
                 <div>
-                    {% for group in grouped_nomi %}
+                    {% for nomi in result_query %}
+                    {% if nomi|to_class_name == 'Nomination' %}
 
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">{{ group.title.upper }}</h3>
-                        <div>Group of nominations</div>
-                    </div>
-
-
-                    <div class="panel-body">
-                        <p>.......................................................................</p>
-                        <a href="{% url 'group_nomi_detail' pk=group.pk %}"
-                           class="btn btn-sm read-more-button btn-danger">See Dgit etail</a>
-                    </div>
-                </div>
-                    {% endfor %}
-                </div>
-
-                <div>
-                    {% for nomi in filter.qs %}
-
-                <div class="panel panel-success">
+                    <div class="panel panel-success">
                     <div class="panel-heading">
                         <h3 class="panel-title">{{ nomi.name.upper }}</h3>
                         <div>Opened on {{nomi.opening_date}}</div>
@@ -75,7 +36,27 @@
                         <a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}"
                            class="btn btn-sm read-more-button btn-danger">Read More</a>
                     </div>
-                </div>
+                    </div>
+                    {% else %}
+                    <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{{ nomi.name.upper }}</h3>
+                        <div>Group of Nomination</div>
+                    </div>
+
+
+                    <div class="panel-body">
+                        <span style="font-weight: bolder">Preference : </span>
+                        <span class="label label-primary">{{nomi.year_choice}}</span>
+                        <span class="label label-success">{{nomi.dept_choice}}</span>
+                        <p><span style="font-weight: bolder"> Deadline :  </span>{{nomi.closing_date}}</p>
+                        <p>....................................................</p>
+                        <a href="{% url 'group_nomi_detail' pk=nomi.pk %}"
+                           class="btn btn-sm read-more-button btn-success">See Detail</a>
+                    </div>
+                    </div>
+
+                    {% endif %}
                     {% endfor %}
                 </div>
          </div>
