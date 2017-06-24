@@ -1,16 +1,18 @@
-from django.shortcuts import render
-from .models import *
-from .forms import *
-from django.contrib.auth.decorators import login_required
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse, reverse_lazy
-from forms.models import Questionnaire
 import json
-from .filters import NominationFilter
-from django.core.exceptions import ObjectDoesNotExist
 from itertools import chain
 from operator import attrgetter
+
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
+from forms.models import Questionnaire
+from .filters import NominationFilter
+from .forms import *
+from .models import *
 
 
 def index(request):
