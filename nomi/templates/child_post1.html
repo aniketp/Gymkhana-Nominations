@@ -17,7 +17,34 @@
                         </div>
                     </div>
                     <br>
-
+                    {% if view.tag_perms == 'Can create' %}
+                    <div class="dropdown show">
+                        <button class="btn btn-secondary btn-danger dropdown-toggle" type="button"
+                         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Create a new Tag
+                        </button>
+                        <div class="dropdown-menu " role="menu">
+                        <form action="" method="post" style="display: inline">
+                            {% csrf_token %}
+                            <p>{{tag_form|bootstrap}}</p>
+                            <input class="btn btn-success btn-block" type="submit" value="submit" />
+                        </form>
+                        </div>
+                    </div>
+                    <div class="dropdown show">
+                        <button class="btn btn-secondary btn-danger dropdown-toggle" type="button"
+                         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Give tag permission
+                        </button>
+                        <div class="dropdown-menu " role="menu">
+                        <form action="" method="post" style="display: inline">
+                            {% csrf_token %}
+                            <p>{{confirm_form|bootstrap}}</p>
+                            <input class="btn btn-success btn-block" type="submit" value="submit" />
+                        </form>
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
                 <div class="container-fluid child-post-container">
                 {% if not ap %}
