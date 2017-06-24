@@ -9,19 +9,22 @@ from forms.models import Questionnaire
 import json
 from .filters import NominationFilter
 from django.core.exceptions import ObjectDoesNotExist
-
+from itertools import chain
+from operator import attrgetter
 
 def index(request):
     if request.user.is_authenticated:
         try:
-            filters = NominationFilter(request.GET, queryset=Nomination.objects.filter(group_status='normal')
-                                       .filter(status='Nomination out').distinct().order_by('-opening_date'))
+
             posts = Post.objects.filter(post_holders=request.user)
             username = UserProfile.objects.get(user=request.user)
             grouped_nomi = GroupNomination.objects.filter(status = 'out')
+            nomi = Nomination.objects.filter(group_status='normal').filter(status='Nomination out')
 
-            return render(request, 'index1.html', context={'posts': posts, 'username': username, 'filter': filters,
-                                                           'grouped_nomi': grouped_nomi})
+            result_query = sorted(chain(nomi, grouped_nomi), key=attrgetter('opening_date'),reverse=True)
+
+
+            return render(request, 'index1.html', context={'posts': posts, 'username': username, 'result_query': result_query})
 
         except ObjectDoesNotExist:
             profile = UserProfile.objects.create(user=request.user)
@@ -339,7 +342,7 @@ def group_nominations(request, pk):
         title_form = GroupNominationForm(request.POST)
         if title_form.is_valid():
             if groupform.is_valid():
-                group = GroupNomination.objects.create(title=title_form.cleaned_data['title'])
+                group = GroupNomination.objects.create(name=title_form.cleaned_data['title'])
                 group.approvals.add(post)
                 for nomi_pk in groupform.cleaned_data['group']:
                     # things to be performed on nomination
