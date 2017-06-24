@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from nomi.models import UserProfile
-from .filters import UserProfileFilter
 
 
 def index(request):

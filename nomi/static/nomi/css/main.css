@@ -297,7 +297,8 @@ body {
 }
 
 .profile-pic-search {
-    border-radius: 30%;
+    border-radius: 10%;
+    border: 2px solid black;
 }
 
 

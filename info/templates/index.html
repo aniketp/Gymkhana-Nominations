@@ -32,18 +32,18 @@
 
 
                 <div>
-                    {% for nomi in filter.qs %}
+                    {% for student in filter.qs %}
 
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="container-fluid">
                             <div class="col-lg-2">
-                                <img src="{% static 'nomi/img/logo.jpg' %}" alt="Pic here"
-                                     width="100px" height="100px" style="border-radius: 10%">
+                                <img style="border-radius: 10%" src="{% static 'nomi/img/logo.jpg' %}" alt="Pic here"
+                                     width="100px" height="100px">
                             </div>
 
                             <div class="col-lg-10">
-                                Name: {{ nomi.name }}
+                                <span style="font-weight: bold;">Name: </span>{{ student.name }}
                             </div>
                         </div>
                     </div>

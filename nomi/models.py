@@ -112,7 +112,7 @@ class NominationInstance(models.Model):
 
 
 class Commment(models.Model):
-    comments = models.TextField(max_length=10000, null=True, blank=True)
+    comments = models.TextField(max_length=1000, null=True, blank=True)
     nomi_instance = models.ForeignKey(NominationInstance, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
@@ -120,6 +120,7 @@ class Commment(models.Model):
 def user_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
     return 'user_{0}/{1}'.format(instance.user.id, filename)
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -132,9 +133,6 @@ class UserProfile(models.Model):
     hall = models.CharField(max_length=10, choices=HALL, default=1)
     room_no = models.CharField(max_length=10, null=True, blank=True)
     contact = models.CharField(max_length=10, null=True, blank=True)
-
-    post = models.ManyToManyField(Post, related_name='user_post', symmetrical=False, blank=True)
-    club = models.ManyToManyField(ClubTag, related_name='club_tags', symmetrical=False, blank=True)
 
     def __str__(self):
         return str(self.name)
