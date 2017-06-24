@@ -1,6 +1,8 @@
 {% extends 'base2.html' %}
 
 {% load staticfiles %}
+
+{% load bootstrap %}
 {% block title %} Gymkhana Nominations {% endblock %}
 
 {% block content %}
@@ -17,7 +19,24 @@
     </div>
 
     <div id="create-post">
-        <p><a href="{% url 'post_create' post.pk %}">Create a New Post</a></p>
+        <p>
+            <a  class="btn btn-success" href="{% url 'post_create' post.pk %}">Create a New Post</a>
+            {% if post.tag_perms == 'Can create' %}
+            <div class="dropdown show">
+             <button class="btn btn-secondary btn-danger dropdown-toggle" type="button"
+                     id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                 Create a new Tag
+             </button>
+             <div class="dropdown-menu " role="menu">
+                 <form action="" method="post" style="display: inline">
+                     {% csrf_token %}
+                     <p>{{tag_form|bootstrap}}</p>
+                     <input class="btn btn-success btn-block" type="submit" value="submit" />
+                 </form>
+             </div>
+            </div>
+            {% endif %}
+        </p>
     </div>
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#child-posts" data-toggle="tab" aria-expanded="true">Posts under you</a></li>
