@@ -5,7 +5,7 @@ from datetime import datetime
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from info.models import ClubTag
-import os
+
 import django.utils.timezone as time
 
 
@@ -47,7 +47,6 @@ class PostHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     start = models.DateField(auto_now_add=True)
     end = models.DateField(null=True, blank=True, editable=True)
-
 
 
 class Nomination(models.Model):
@@ -100,8 +99,6 @@ class Nomination(models.Model):
         return self.status
 
 
-
-
 class GroupNomination(models.Model):
     name = models.CharField(max_length=2000, null=True)
     description = models.CharField(max_length=5000, null=True, blank=True)
@@ -113,7 +110,6 @@ class GroupNomination(models.Model):
 
     def __str__(self):
         return str(self.name)
-
 
 
 class NominationInstance(models.Model):
@@ -159,8 +155,6 @@ class UserProfile(models.Model):
             return self.user_img.url
         else:
             return '/static/nomi/img/logo.gif'
-
-
 
 
 @receiver(post_save, sender=Nomination)
