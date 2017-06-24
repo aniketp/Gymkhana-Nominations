@@ -5,6 +5,7 @@ from datetime import datetime
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from info.models import ClubTag
+import os
 
 
 class Club(models.Model):
@@ -118,7 +119,7 @@ class Commment(models.Model):
 
 def user_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return os.path.join('pics', str(instance.id), filename)
+    return 'user_{0}/{1}'.format(instance.user.id, filename)
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

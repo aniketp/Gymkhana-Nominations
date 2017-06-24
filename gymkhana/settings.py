@@ -137,8 +137,6 @@ ROOT_URLCONF = 'gymkhana.urls'
 
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/nominations'
-
-EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
 m_path=os.path.abspath(os.path.dirname(__file__))
 MEDIA_ROOT =os.path.join(m_path,'media')
 
