@@ -1,6 +1,6 @@
 from django import forms
 from .choices import *
-from .models import NominationInstance, Post, Commment, Nomination, Club
+from .models import *
 
 
 class NominationForm(forms.Form):
@@ -26,8 +26,6 @@ class PostForm(forms.Form):
                 widget=forms.Select)
 
 
-
-
 class ClubForm(forms.Form):
     club_name = forms.CharField()
 
@@ -43,14 +41,14 @@ class CommentForm(forms.Form):
 class UserId(forms.Form):
     user_roll = forms.IntegerField()
 
+
 class SelectNomiForm(forms.Form):
     def __init__(self, post, *args, **kwargs):
         super(SelectNomiForm, self).__init__(*args, **kwargs)
         self.fields['group'] = forms.MultipleChoiceField(
-            choices=[(o.id, o) for o in Nomination.objects.filter(nomi_approvals=post).filter(status = 'Nomination created')],
+            choices=[(o.id, o) for o in Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')],
             widget=forms.CheckboxSelectMultiple
         )
-
 
 
 class GroupNominationForm(forms.Form):
