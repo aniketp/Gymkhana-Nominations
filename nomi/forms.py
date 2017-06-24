@@ -1,6 +1,6 @@
 from django import forms
 from .choices import *
-from .models import NominationInstance, Post, Commment, Nomination
+from .models import NominationInstance, Post, Commment, Nomination, Club
 
 
 class NominationForm(forms.Form):
@@ -11,10 +11,21 @@ class NominationForm(forms.Form):
     hall_choice = forms.ChoiceField(choices=HALL_1, label="Hall", initial=0, widget=forms.Select(), required=True)
 
 
-class PostForm(forms.ModelForm):
-    class Meta:
-        model = Post
-        fields = ['post_name', 'club']
+class PostForm(forms.Form):
+    def __init__(self, parent, *args, **kwargs):
+        super(PostForm, self).__init__(*args, **kwargs)
+        self.fields['post_name'] = forms.CharField()
+        if parent.club.club_set.all():
+            self.fields['club'] = forms.ChoiceField(
+                choices=[(o.id, o) for o in Club.objects.filter(club_parent=parent.club)],
+                widget=forms.Select
+         )
+        else:
+            self.fields['club'] = forms.ChoiceField(
+                choices=[(parent.club.id, parent.club)],
+                widget=forms.Select)
+
+
 
 
 class ClubForm(forms.Form):
