@@ -169,6 +169,7 @@ def post_approval(request, view_pk, post_pk):
     to_add = viewer.parent
 
     post.post_approvals.add(to_add)
+    post.club_search.add(to_add)
 
     access = False
     for apv_post in post.post_approvals.all():

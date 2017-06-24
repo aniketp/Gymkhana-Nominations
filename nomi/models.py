@@ -23,7 +23,7 @@ class Post(models.Model):
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     post_holders = models.ManyToManyField(User, related_name='posts', blank=True)
     post_approvals = models.ManyToManyField('self', related_name='approvals', symmetrical=False, blank=True)
-
+    club_search = models.ManyToManyField('self', related_name='post_club', symmetrical=False, blank=True)
     status = models.CharField(max_length=50, choices=POST_STATUS, default='Post created')
     perms = models.CharField(max_length=200, choices=POST_PERMS, default='normal')
     tag_perms = models.CharField(max_length=20, choices=TAG_PERMS, default='normal')
@@ -177,5 +177,6 @@ def ensure_parent_in_post_approvals(sender, **kwargs):
     if post:
         parent = post.parent
         post.post_approvals.add(parent)
+        post.club_search.add(post)
         
 

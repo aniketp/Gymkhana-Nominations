@@ -17,7 +17,7 @@
                                     {{filter.form|bootstrap}}
                                 </div>-->
                             <div class="col-lg-3">
-                                {{filter.form.club}}
+                                {{filter.form.club_search__club}}
                             </div>
 
                         <label class="col-lg-1 control-label">Post</label>
@@ -32,8 +32,8 @@
 
 
                 <div>
-                    {% for student in filter.qs %}
-
+                    {% for post in filter.qs %}
+                        {% for students in post.post_holders.all %}
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="container-fluid">
@@ -43,11 +43,12 @@
                             </div>
 
                             <div class="col-lg-10">
-                                <span style="font-weight: bold;">Name: </span>{{ student.post_name }}
+                                <span style="font-weight: bold;">Name: </span>{{ students.userprofile.name }}
                             </div>
                         </div>
                     </div>
                 </div>
+                            {% endfor %}
                     {% endfor %}
                 </div>
          </div>
