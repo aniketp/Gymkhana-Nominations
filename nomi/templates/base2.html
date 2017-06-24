@@ -46,7 +46,9 @@
                     <ul class="dropdown-menu" role="menu">
 
                             {% for post in my_posts %}
-                                <li><a href="{% url 'post_view' post.pk %}" >{{post.post_name}}</a></li>
+                                {% if not post.perms == 'can ratify the post' %}
+                                    <li><a href="{% url 'post_view' post.pk %}" >{{post.post_name}}</a></li>
+                                {% endif %}
                             {% endfor %}
 
                     </ul>
