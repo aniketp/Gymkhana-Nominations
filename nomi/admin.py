@@ -27,7 +27,7 @@ admin.site.register(Post, PostAdmin)
 
 
 class ClubAdmin(admin.ModelAdmin):
-    list_display = ('club_name', 'club_parent')
+    list_display = ('pk','club_name', 'club_parent')
 
 admin.site.register(Club, ClubAdmin)
 

@@ -12,19 +12,20 @@ from django.core.exceptions import ObjectDoesNotExist
 from itertools import chain
 from operator import attrgetter
 
+
 def index(request):
     if request.user.is_authenticated:
         try:
 
             posts = Post.objects.filter(post_holders=request.user)
             username = UserProfile.objects.get(user=request.user)
-            grouped_nomi = GroupNomination.objects.filter(status = 'out')
+            grouped_nomi = GroupNomination.objects.filter(status='out')
             nomi = Nomination.objects.filter(group_status='normal').filter(status='Nomination out')
 
-            result_query = sorted(chain(nomi, grouped_nomi), key=attrgetter('opening_date'),reverse=True)
+            result_query = sorted(chain(nomi, grouped_nomi), key=attrgetter('opening_date'), reverse=True)
 
-
-            return render(request, 'index1.html', context={'posts': posts, 'username': username, 'result_query': result_query})
+            return render(request, 'index1.html', context={'posts': posts, 'username': username,
+                                                           'result_query': result_query})
 
         except ObjectDoesNotExist:
             profile = UserProfile.objects.create(user=request.user)
@@ -41,7 +42,6 @@ def admin_portal(request):
 
     admin_query = Nomination.objects.none()
 
-
     for post in posts:
         query = Nomination.objects.filter(nomi_approvals=post)
         admin_query = admin_query | query
@@ -50,8 +50,7 @@ def admin_portal(request):
 
     filters = NominationFilter(request.GET, queryset=admin_query)
 
-    return render(request, 'admin_portal.html',
-                  context={'posts': posts, 'username': username, 'filter': filters})
+    return render(request, 'admin_portal.html', context={'posts': posts, 'username': username, 'filter': filters})
 
 
 @login_required
@@ -62,16 +61,17 @@ def post_view(request, pk):
 
     post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
     nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
-    group_nomi_approvals = GroupNomination.objects.filter(status = 'created').filter(approvals = post)
+    group_nomi_approvals = GroupNomination.objects.filter(status='created').filter(approvals=post)
 
-    tag_form = ClubForm(request.POST or None )
+    tag_form = ClubForm(request.POST or None)
     if tag_form.is_valid():
-        Club.objects.create(club_name = tag_form.cleaned_data['club_name'],club_parent=post.club)
+        Club.objects.create(club_name=tag_form.cleaned_data['club_name'], club_parent=post.club)
 
     if request.user in post.post_holders.all():
         return render(request, 'post1.html', context={'post': post, 'child_posts': child_posts_reverse,
-                                                      'post_approval': post_approvals,'tag_form':tag_form,
-                                                      'nomi_approval': nomi_approvals, 'group_nomi_approvals':group_nomi_approvals})
+                                                      'post_approval': post_approvals, 'tag_form': tag_form,
+                                                      'nomi_approval': nomi_approvals,
+                                                      'group_nomi_approvals': group_nomi_approvals})
     else:
         return render(request, 'no_access.html')
 
@@ -80,7 +80,7 @@ def post_view(request, pk):
 def post_create(request, pk):
     parent = Post.objects.get(pk=pk)
     if request.method == 'POST':
-        post_form = PostForm(parent,request.POST)
+        post_form = PostForm(parent, request.POST)
         if post_form.is_valid():
             club_id = post_form.cleaned_data['club']
             club = Club.objects.get(pk=club_id)

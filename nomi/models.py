@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from info.models import ClubTag
 import os
+import django.utils.timezone as time
 
 
 class Club(models.Model):
@@ -106,7 +107,7 @@ class GroupNomination(models.Model):
     description = models.CharField(max_length=5000, null=True, blank=True)
     nominations = models.ManyToManyField(Nomination, symmetrical=False, blank=True)
     status = models.CharField(max_length=50, choices=G_STATUS, default='created')
-    opening_date = models.DateField(null=True, blank=True)
+    opening_date = models.DateField(null=True, blank=True, default=time.now())
     approvals = models.ManyToManyField(Post, related_name='group_approvals', symmetrical=False, blank=True)
     club_search = models.ManyToManyField(Post, related_name='groups', symmetrical=False, blank=True)
 
