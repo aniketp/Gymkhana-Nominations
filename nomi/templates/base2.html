@@ -54,6 +54,9 @@
                 {% endif %}
                 {% endblock %}
                 <li><a href="{% url 'info:info' %}" id="navbar-links">Student Search</a></li>
+            {% if senate %}
+                <li><a href="{% url 'info:info' %}" id="navbar-links">Senate</a></li>
+            {% endif %}
 
             </ul>
             <ul class="nav navbar-nav navbar-right">
