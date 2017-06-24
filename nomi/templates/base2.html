@@ -70,8 +70,8 @@
             {% block profile %}
             <div id="profile" class="profile-sidebar" style="position:fixed">
                 <!-- SIDEBAR USERPIC -->
-                <div class="profile-userpic">
-                    <img src="{% static 'nomi/img/logo.gif' %}" class="img-responsive" alt="">
+                <div class="">
+                    <img src="{{ my_profile.image_url }}" class="img-responsive" alt="">
                 </div>
                 <!-- END SIDEBAR USERPIC -->
                 <!-- SIDEBAR USER TITLE -->
