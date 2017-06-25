@@ -63,6 +63,7 @@ def senate_view(request):
     else:
         return render(request, 'no_access.html')
 
+
 @login_required
 def admin_portal(request):
     posts = Post.objects.filter(post_holders=request.user)
@@ -729,13 +730,13 @@ def profile_view(request):
 
 class UserProfileCreate(CreateView):
     model = UserProfile
-    fields = ['name', 'roll_no', 'year', 'programme', 'department','user_img', 'hall', 'room_no', 'contact']
+    fields = ['name', 'roll_no', 'year', 'programme', 'department', 'user_img', 'hall', 'room_no', 'contact']
     success_url = reverse_lazy('index')
 
 
 class UserProfileUpdate(UpdateView):
     model = UserProfile
-    fields = ['name','roll_no', 'year', 'programme', 'department','user_img', 'hall', 'room_no', 'contact']
+    fields = ['name', 'roll_no', 'year', 'programme', 'department', 'user_img', 'hall', 'room_no', 'contact']
     success_url = reverse_lazy('index')
 
 
