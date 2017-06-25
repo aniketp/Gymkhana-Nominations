@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from nomi.models import Post,Club
-from info.filters import PostFilter
 from info.forms import ClubForm,PostForm
 
 
