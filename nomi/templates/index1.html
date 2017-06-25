@@ -16,6 +16,18 @@
     <div id="myTabContent" class="tab-content">
          <div class="tab-pane fade active in profile-nominations" id="user">
                 <br>
+                <div class="panel panel-default">
+                  <div class="panel-heading">Filter Nominations</div>
+                  <div class="panel-body">
+                    <form action="" method="post">
+                            {% csrf_token %}
+
+                           {{club_filter|bootstrap}}
+
+                        <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
+                    </form>
+                  </div>
+                </div>
                 <div>
                     {% for nomi in result_query %}
                     {% if nomi|to_class_name == 'Nomination' %}
