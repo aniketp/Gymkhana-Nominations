@@ -52,8 +52,8 @@
 {% block content %}
     <div class="profile-content">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#current-posts" data-toggle="tab" aria-expanded="true">Your Current Posts</a></li>
-                    <li><a href="#post-history" data-toggle="tab" aria-expanded="true">Your Post History</a></li>
+                    <li class="active"><a href="#current-posts" data-toggle="tab" aria-expanded="true">{{ student.name }}'s Posts</a></li>
+                    <li><a href="#post-history" data-toggle="tab" aria-expanded="true">Post History</a></li>
                 </ul>
                 <div id="myTabContent" class="tab-content">
 
@@ -66,8 +66,8 @@
                                 <h3 class="panel-title">{{post.club}}</h3>
                             </div>
                             <div class="panel-body">
-                                <p class="profile-post-name"><a href="{% url 'post_view' post.pk %}">
-                                    <span>Post: </span>{{post.post_name}}</a></p>
+                                <p class="profile-post-name">
+                                    <span>Post: </span>{{post.post_name}}</p>
 
                                 <div class="row">
                                 </div>
@@ -79,6 +79,7 @@
 
                     <div class="tab-pane fade profile-nominations" id="post-history">
                         <br>
+
                         {% for his in history %}
                         <div class="panel panel-info">
                             <div class="panel-heading">
