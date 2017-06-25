@@ -92,9 +92,12 @@
         {% endif %}
 
         {% if not pending and perm %}
-            <a href="{% url 'ratify' nomination.pk %}" class="btn btn-info">Send for Ratification</a>
+            {% if nomination.status == 'Interview period' %}
+                <a href="{% url 'ratify' nomination.pk %}" class="btn btn-info">Send for Ratification</a>
+            {% elif nomination.status == 'Sent for ratification' %}
+                <a href="{% url 'cancel_ratify' nomination.pk %}" class="btn btn-danger">Cancel Ratification Request</a>
+            {% endif %}
         {% endif %}
-
      </ul>
     <div id="myTabContent" class="tab-content">
         <div class="tab-pane fade active in profile-nominations" id="all">
@@ -201,6 +204,14 @@
     <ul class="nav nav-tabs">
          <li class="active"><a  href="#accepted" data-toggle="tab" aria-expanded="true">Accepted</a></li>
         <li><a href="#rejected" data-toggle="tab" aria-expanded="false">Rejected</a></li>
+        {% if not pending and perm %}
+            {% if nomination.status == 'Interview period' %}
+                <a href="{% url 'ratify' nomination.pk %}" class="btn btn-info">Send for Ratification</a>
+            {% elif nomination.status == 'Sent for ratification' %}
+                <a href="{% url 'cancel_ratify' nomination.pk %}" class="btn btn-danger"
+                   style="width: auto">Cancel Ratification Request</a>
+            {% endif %}
+        {% endif %}
 
         {% if senate_perm %}
             <a class="btn btn-info" href="{% url 'append_user' nomination.pk %}">
