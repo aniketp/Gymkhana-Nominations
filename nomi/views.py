@@ -10,7 +10,6 @@ from django.shortcuts import render
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from forms.models import Questionnaire
-from .filters import NominationFilter
 from .forms import *
 from .models import *
 
@@ -77,9 +76,16 @@ def admin_portal(request):
 
     admin_query = admin_query.distinct()
 
-    filters = NominationFilter(request.GET, queryset=admin_query)
+    club_filter = ClubFilter(request.POST or None)
+    if club_filter.is_valid():
+        club = Club.objects.get(pk=club_filter.cleaned_data['club'])
+        admin_query = admin_query.filter(tags= club)
+        return render(request, 'admin_portal.html', context={'posts': posts, 'username': username,
+                                                             'admin_query':admin_query,'club_filter':club_filter})
 
-    return render(request, 'admin_portal.html', context={'posts': posts, 'username': username, 'filter': filters})
+
+    return render(request, 'admin_portal.html', context={'posts': posts, 'username': username,
+                                                         'admin_query':admin_query,'club_filter':club_filter})
 
 
 @login_required

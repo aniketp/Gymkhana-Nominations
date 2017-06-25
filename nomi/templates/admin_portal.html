@@ -16,19 +16,10 @@
                 <div class="panel panel-default">
                   <div class="panel-heading">Filter Nominations</div>
                   <div class="panel-body">
-                    <form action="" method="get">
-                        <label class="col-lg-1 control-label">Club</label>
-                              <!-- <div class="col-lg-3">
-                                    {{filter.form|bootstrap}}
-                                </div>-->
-                            <div class="col-lg-3">
-                                {{filter.form.club_search__club}}
-                            </div>
+                    <form action="" method="post">
+                            {% csrf_token %}
 
-                        <label class="col-lg-1 control-label">Batch</label>
-                            <div class="col-lg-3 ">
-                                {{filter.form.year_choice}}
-                            </div>
+                           {{club_filter|bootstrap}}
 
                         <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
                     </form>
@@ -37,7 +28,7 @@
 
 
                 <div>
-                    {% for nomi in filter.qs %}
+                    {% for nomi in admin_query %}
 
                 <div class="panel panel-success">
                     <div class="panel-heading">
