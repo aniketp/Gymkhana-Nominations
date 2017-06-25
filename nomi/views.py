@@ -733,8 +733,11 @@ def profile_view(request):
 
 def public_profile(request, pk):
     student = UserProfile.objects.get(pk=pk)
+    student_user = student.user
+    history = PostHistory.objects.filter(user=student_user)
+    my_posts = Post.objects.filter(post_holders=student_user)
 
-    return render(request, 'public_profile.html', context={'student': student})
+    return render(request, 'public_profile.html', context={'student': student, 'history': history, 'my_posts': my_posts})
 
 
 class UserProfileCreate(CreateView):
