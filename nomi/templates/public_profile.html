@@ -1,0 +1,167 @@
+{% extends 'base2.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
+
+{% block profile %}
+    <div class="profile-sidebar">
+
+        <div class="profile-userpic">
+            <img src="{{ my_profile.image_url }}" class="img-responsive" alt="">
+        </div>
+
+        <div class="profile-usertitle">
+            <div class="profile-usertitle-name">
+                {{my_profile.name}}
+            </div>
+
+            <div class="profile-usertitle-job">
+                {{my_profile.programme}} <br> {{my_profile.department}}
+            </div>
+        </div>
+
+        <div class="profile-usermenu">
+            <table class="table table-striped table-hover ">
+                <tbody>
+                <tr>
+                    <td id="topic">Batch</td>
+                    <td>{{my_profile.year}} </td>
+                </tr>
+                <tr>
+                    <td id="topic">Roll No.</td>
+                    <td>{{my_profile.roll_no}} </td>
+                </tr>
+                <tr>
+                    <td id="topic">Address</td>
+                    <td>{{my_profile.room_no}} , Hall-{{my_profile.hall}}</td>
+                </tr>
+                <tr>
+                    <td id="topic">Contact No.</td>
+                    <td>{{ my_profile.contact }}</td>
+                </tr>
+                <tr>
+                    <td id="topic">Email ID</td>
+                    <td>{{my_profile.user}}@iitk.ac.in</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <div class="row box text-center">
+                <form action="{% url 'profile_update' user_profile.pk %}" method="get" style="display: inline">
+                    {% csrf_token %}
+                    <button class="btn btn-success" type="submit">Edit Your Profile</button>
+                </form>
+            </div>
+        </div>
+                <!-- END MENU -->
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="profile-content">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#current-posts" data-toggle="tab" aria-expanded="true">Your Current Posts</a></li>
+                    <li><a href="#post-history" data-toggle="tab" aria-expanded="true">Your Post History</a></li>
+                    <li><a href="#pending" data-toggle="tab" aria-expanded="false">Pending Applications</a></li>
+                    <li><a href="#declared" data-toggle="tab" aria-expanded="false">Nomination Results</a></li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+
+                    <div class="tab-pane fade active in profile-nominations" id="current-posts">
+                        <br>
+                        {% for post in my_posts %}
+
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{post.club}}</h3>
+                            </div>
+                            <div class="panel-body">
+                                <p class="profile-post-name"><a href="{% url 'post_view' post.pk %}">
+                                    <span>Post: </span>{{post.post_name}}</a></p>
+
+                                <div class="row">
+                                </div>
+                            </div>
+                        </div>
+
+                        {% endfor %}
+                    </div>
+
+                    <div class="tab-pane fade profile-nominations" id="post-history">
+                        <br>
+                        {% for his in history %}
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{his.post.club}}</h3>
+                            </div>
+                            <div class="panel-body">
+                                <p class="profile-post-name"><span>Post: </span>{{his.post.post_name}}</p>
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <p><span>Start: </span>{{his.start}}</p>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <p><span>End: </span>
+                                            {% if his.end %}
+                                                {{his.end}}
+                                            {% else %}
+                                                currently holdind the post
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="tab-pane fade profile-nominations" id="pending">
+                        <br>
+                        {% for p_nomi in interview_nomi %}
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{p_nomi.nomination.name}}</h3>
+                            </div>
+                            <div class="panel-body">
+                                <p><span>Status: </span>Interview Period</p>
+                                <a href="{% url 'nomi_answer' p_nomi.pk %}" class="btn btn-warning" style="width: auto">
+                                    View Your Application</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% for p_nomi in pending_nomi %}
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{p_nomi.nomination.name}}</h3>
+                            </div>
+                            <div class="panel-body">
+                                <p><span>Status: </span>Application submitted</p>
+                                <a href="{% url 'nomi_answer' p_nomi.pk %}" class="btn btn-warning"
+                                   style="width: auto">View Your Application</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+
+                    </div>
+
+                    <div class="tab-pane fade profile-nominations" id="declared">
+                        <br>
+
+                        {% for nomi in declared_nomi %}
+                        <div class="panel panel-warning">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{ nomi.nomination.name }}</h3>
+                            </div>
+                            <div class="panel-body">
+                                <p><span>Status:</span>{{nomi.status}}</p>
+                                <a href="#" class="btn btn-danger">View Results</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+    </div>
+{% endblock %}
