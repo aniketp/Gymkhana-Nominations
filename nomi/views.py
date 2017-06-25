@@ -174,7 +174,7 @@ def child_post_view(request, pk):
 
         view_parent = Post.objects.get(pk=view.parent.pk)
 
-        if view_parent in post.post_approvals.all():  
+        if view_parent in post.post_approvals.all():
             approval = 1
         else:
             approval = 0
