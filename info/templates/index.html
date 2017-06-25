@@ -5,26 +5,45 @@
 {% block content %}
   <div class="profile-content ">
 
-    <div id="myTabContent" class="tab-content">
-         <div class="tab-pane fade active in profile-nominations" id="user">
+      <div id="myTabContent" class="tab-content">
+           <div class="tab-pane fade active in profile-nominations" id="user">
                 <br>
                 <div class="panel panel-default">
-                  <div class="panel-heading">Student Search</div>
-                  <div class="panel-body">
-                    <form action="" method="post">
-                            {% csrf_token %}
+                    <div class="panel-heading">Student Search</div>
+                    <div class="panel-body">
+                        {% if not post_form %}
+                            <form action="" method="post">
+                                <div class="col-lg-12">
+                                    {% csrf_token %}
+                                    {{club_form|bootstrap}}
+                                </div>
 
-                           {{club_form|bootstrap}}
-                        {% if post_form %}
-                         {% csrf_token %}
-                        {{post_form|bootstrap}}
+                                <div class="col-lg-12 text-center">
+                                    <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
+                                </div>
+
+                            </form>
+                        {% else %}
+                            <form action="" method="post">
+                                <div class="row-fluid">
+                                    <div class="col-lg-6">
+                                        {% csrf_token %}
+                                        {{club_form|bootstrap}}
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        {% csrf_token %}
+                                        {{post_form|bootstrap}}
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="col-lg-12 text-center">
+                                    <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
+                                </div>
+                                </div>
+                            </form>
                         {% endif %}
-
-
-
-                        <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
-                    </form>
-                  </div>
+                    </div>
                 </div>
 
 
