@@ -126,49 +126,44 @@
         </div>
         <div class="col-lg-9 col-md-9">
             {% block content %}
-  <div class="profile-content ">
-
-      <div id="myTabContent" class="tab-content">
-           <div class="tab-pane fade active in profile-nominations" id="user">
-                <br>
-                <div class="panel panel-default">
-                    <div class="panel-heading">Student Search</div>
-                    <div class="panel-body">
-                        {% if not post_form %}
-                            <form action="" method="post">
-                                <div class="col-lg-12">
-                                    {% csrf_token %}
-                                    {{club_form|bootstrap}}
-                                </div>
-
-                                <div class="col-lg-12 text-center">
-                                    <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
-                                </div>
-
-                            </form>
-                        {% else %}
-                            <form action="" method="post">
-                                <div class="row-fluid">
-                                    <div class="col-lg-6">
+                <div class="profile-content ">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Student Search</div>
+                        <div class="panel-body">
+                            {% if not post_form %}
+                                <form action="" method="post">
+                                    <div class="col-lg-12">
                                         {% csrf_token %}
                                         {{club_form|bootstrap}}
                                     </div>
 
-                                    <div class="col-lg-6">
-                                        {% csrf_token %}
-                                        {{post_form|bootstrap}}
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
                                     <div class="col-lg-12 text-center">
-                                    <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
-                                </div>
-                                </div>
-                            </form>
-                        {% endif %}
-                    </div>
-                </div>
+                                        <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
+                                    </div>
 
+                                </form>
+                            {% else %}
+                                <form action="" method="post">
+                                    <div class="row-fluid">
+                                        <div class="col-lg-6">
+                                            {% csrf_token %}
+                                            {{club_form|bootstrap}}
+                                        </div>
+
+                                        <div class="col-lg-6">
+                                            {% csrf_token %}
+                                            {{post_form|bootstrap}}
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="col-lg-12 text-center">
+                                            <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
+                                        </div>
+                                    </div>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
 
                 <div class="container-fluid">
                     {% for post in query_posts %}
@@ -200,8 +195,7 @@
 
 {% endblock %}
         </div>
-    </div>
-</div>
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
