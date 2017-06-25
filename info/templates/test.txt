@@ -1,0 +1,21 @@
+<div>
+                    {% for post in query_posts %}
+                        {% for students in post.post_holders.all %}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="container-fluid">
+                            <div class="col-lg-2">
+                                <img style="border-radius: 10%" src="{{ students.userprofile.image_url }}" alt="Pic here"
+                                     width="100px" height="100px">
+                            </div>
+
+                            <div class="col-lg-10">
+                                <span style="font-weight: bold;">Name: </span>{{ students.userprofile.name }} <br>
+                                <span style="font-weight: bold;">Post: </span>{{ post }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                            {% endfor %}
+                    {% endfor %}
+                </div>
