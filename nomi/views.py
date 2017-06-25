@@ -79,13 +79,12 @@ def admin_portal(request):
     club_filter = ClubFilter(request.POST or None)
     if club_filter.is_valid():
         club = Club.objects.get(pk=club_filter.cleaned_data['club'])
-        admin_query = admin_query.filter(tags= club)
+        admin_query = admin_query.filter(tags=club)
         return render(request, 'admin_portal.html', context={'posts': posts, 'username': username,
-                                                             'admin_query':admin_query,'club_filter':club_filter})
-
+                                                             'admin_query': admin_query, 'club_filter': club_filter})
 
     return render(request, 'admin_portal.html', context={'posts': posts, 'username': username,
-                                                         'admin_query':admin_query,'club_filter':club_filter})
+                                                         'admin_query': admin_query, 'club_filter': club_filter})
 
 
 @login_required
@@ -730,6 +729,12 @@ def profile_view(request):
                                                         'interview_nomi': interview_nomi})
     except ObjectDoesNotExist:
         return HttpResponseRedirect('create')
+
+
+def public_profile(request, pk):
+    student = UserProfile.objects.get(pk=pk)
+
+    return render(request, 'public_profile.html', context={'student': student})
 
 
 class UserProfileCreate(CreateView):
