@@ -146,7 +146,14 @@ form view
                 <a href="{% url 'interviewed' nomi.pk %}"><div class="btn btn-danger read-more-button ">
                     Interviewed</div></a>
             </div>
+    {% elif senate_perm %}
+            <div class="col-lg-6 text-center">
+                <a href="{% url 'accept' nomi.pk %} "><div class="btn btn-info read-more-button " >Accept</div></a>
+            </div>
 
+            <div class="col-lg-6 text-center">
+                <a href="{% url 'reject' nomi.pk %}"><div class="btn btn-danger read-more-button ">Reject</div></a>
+            </div>
         </div>
     {% endif %}
     {% endif %}

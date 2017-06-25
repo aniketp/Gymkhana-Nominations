@@ -643,6 +643,14 @@ def nomination_answer(request, pk):
     comments = Commment.objects.filter(nomi_instance=application)
     comment_form = CommentForm(request.POST or None)
 
+    all_posts = Post.objects.filter(post_holders=request.user)
+
+    senate_perm = False
+    for post in all_posts:
+        if post.perms == 'can ratify the post':
+            senate_perm = True
+            break
+
     inst_user = False
     if application.user == request.user:
         inst_user = True
@@ -653,11 +661,11 @@ def nomination_answer(request, pk):
 
         return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
                                                             'comment_form': comment_form, 'inst_user': inst_user,
-                                                            'comments': comments})
+                                                            'comments': comments, 'senate_perm': senate_perm})
 
     return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
                                                         'comment_form': comment_form, 'inst_user': inst_user,
-                                                        'comments': comments})
+                                                        'comments': comments, 'senate_perm': senate_perm})
 
 
 @login_required
