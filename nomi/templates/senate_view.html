@@ -1,0 +1,16 @@
+{% extends 'base2.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
+
+{% block content %}
+    {% for nomi in nomi %}
+        <div class="panel panel-danger">
+          <div class="panel-heading">
+            <h3 class="panel-title">{{ nomi.name }}</h3>
+          </div>
+          <div class="panel-body">
+            Panel content
+          </div>
+        </div>
+    {% endfor %}
+{% endblock %}
