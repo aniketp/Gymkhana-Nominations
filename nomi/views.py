@@ -643,9 +643,9 @@ def nomination_answer(request, pk):
     comments = Commment.objects.filter(nomi_instance=application)
     comment_form = CommentForm(request.POST or None)
 
-    inst_user = 0
+    inst_user = False
     if application.user == request.user:
-        inst_user = 1
+        inst_user = True
 
     if comment_form.is_valid():
         Commment.objects.create(comments=comment_form.cleaned_data['comment'],
