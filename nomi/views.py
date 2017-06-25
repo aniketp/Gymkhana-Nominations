@@ -545,9 +545,9 @@ def ratify(request, nomi_pk):
     if access:
         nomi.status = 'Sent for ratification'
         nomi.save()
-        status = [0, 0, 0, 1]
 
         return HttpResponseRedirect(reverse('applicants', kwargs={'pk': nomi_pk}))
+
     else:
         return render(request, 'no_access.html')
 
@@ -555,10 +555,20 @@ def ratify(request, nomi_pk):
 @login_required
 def cancel_ratify(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
-    nomi.status = 'Interview period'
-    nomi.save()
+    access = False
 
-    return HttpResponseRedirect(reverse('applicants', kwargs={'pk': nomi_pk}))
+    for apv_post in nomi.nomi_approvals.all():
+        if request.user in apv_post.post_holders.all():
+            access = True
+            break
+    if access:
+        nomi.status = 'Interview period'
+        nomi.save()
+
+        return HttpResponseRedirect(reverse('applicants', kwargs={'pk': nomi_pk}))
+
+    else:
+        return render(request, 'no_access.html')
 
 
 @login_required
