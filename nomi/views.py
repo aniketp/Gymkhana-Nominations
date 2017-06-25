@@ -218,6 +218,24 @@ def post_approval(request, view_pk, post_pk):
     else:
         return render(request, 'no_access.html')
 
+@login_required
+def post_reject(request, view_pk, post_pk):
+    post = Post.objects.get(pk=post_pk)
+    viewer = Post.objects.get(pk=view_pk)
+    to_add = viewer
+    post.post_approvals.remove(to_add)
+
+    access = False
+    for apv_post in post.post_approvals.all():
+        if request.user in apv_post.post_holders.all():
+            access = True
+            break
+
+    if access:
+        return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view_pk}))
+    else:
+        return render(request, 'no_access.html')
+
 
 @login_required
 def final_post_approval(request, view_pk, post_pk):
@@ -340,6 +358,25 @@ def nomi_approval(request, nomi_pk):
         nomi.nomi_approvals.add(to_add)
         nomi.tags.add(to_add.club)
         return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
+    else:
+        return render(request, 'no_access.html')
+
+
+@login_required
+def nomi_reject(request, nomi_pk):
+    nomi = Nomination.objects.get(pk=nomi_pk)
+    access = False
+    view_post = 0
+    for apv_post in nomi.nomi_approvals.all():
+        if request.user in apv_post.post_holders.all():
+            access = True
+            view_post = apv_post
+            break
+    if access:
+        to_remove = view_post
+        nomi.nomi_approvals.add(to_remove)
+        nomi.tags.remove(to_remove.club)
+        return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view_post.pk}))
     else:
         return render(request, 'no_access.html')
 
