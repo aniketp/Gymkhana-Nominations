@@ -376,7 +376,8 @@ def group_nominations(request, pk):
         title_form = GroupNominationForm(request.POST)
         if title_form.is_valid():
             if groupform.is_valid():
-                group = GroupNomination.objects.create(name=title_form.cleaned_data['title'])
+                group = GroupNomination.objects.create(name=title_form.cleaned_data['title'],
+                                                       description=title_form.cleaned_data['description'])
                 group.approvals.add(post)
                 for nomi_pk in groupform.cleaned_data['group']:
                     # things to be performed on nomination
