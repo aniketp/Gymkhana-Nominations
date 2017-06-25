@@ -171,7 +171,7 @@
                             <div class="row-fluid">
                                 <div class="col-lg-6">
                                     {% if students.userprofile %}
-                                        <a href="{% url 'public_profile' students.userprofile.pk %}"><div class="panel panel-default">
+                                        <a style="color: black;" href="{% url 'public_profile' students.userprofile.pk %}"><div class="panel panel-default">
                                             <div class="panel-body">
                                                 <div class="col-lg-3">
                                                     <img style="border-radius: 10%" src="{{ students.userprofile.image_url }}" alt="Pic here"
@@ -186,7 +186,7 @@
                                             </div>
                                         </div></a>
                                     {% else %}
-                                        <div class="panel panel-default">
+                                        <div style="color: black" class="panel panel-default">
                                             <div class="panel-body">
                                                 <div class="col-lg-3">
                                                     <img style="border-radius: 10%" src="{{ students.userprofile.image_url }}" alt="Pic here"
