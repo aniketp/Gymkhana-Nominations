@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from nomi.models import Post,Club
-from info.forms import ClubForm,PostForm
+from nomi.models import Post, Club
+from info.forms import ClubForm, PostForm
 
 
 def index(request):

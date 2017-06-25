@@ -170,20 +170,37 @@
                         {% for students in post.post_holders.all %}
                             <div class="row-fluid">
                                 <div class="col-lg-6">
-                                    <div class="panel panel-default">
-                                        <div class="panel-body">
-                                            <div class="col-lg-3">
-                                                <img style="border-radius: 10%" src="{{ students.userprofile.image_url }}" alt="Pic here"
-                                                width="100%" height="100%">
-                                            </div>
+                                    {% if students.userprofile %}
+                                        <a href="{% url 'public_profile' students.userprofile.pk %}"><div class="panel panel-default">
+                                            <div class="panel-body">
+                                                <div class="col-lg-3">
+                                                    <img style="border-radius: 10%" src="{{ students.userprofile.image_url }}" alt="Pic here"
+                                                    width="100%" height="100%">
+                                                </div>
 
-                                            <div class="col-lg-9">
-                                                <p><span style="font-weight: bold;">Name: </span>{{ students.userprofile.name }}</p>
-                                                <p><span style="font-weight: bold;">Post: </span>{{ post }}</p>
-                                                <p><span style="font-weight: bold;">Club: </span>{{ post.club }}</p>
+                                                <div class="col-lg-9">
+                                                    <p><span style="font-weight: bold;">Name: </span>{{ students.userprofile.name }}</p>
+                                                    <p><span style="font-weight: bold;">Post: </span>{{ post }}</p>
+                                                    <p><span style="font-weight: bold;">Club: </span>{{ post.club }}</p>
+                                                </div>
+                                            </div>
+                                        </div></a>
+                                    {% else %}
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+                                                <div class="col-lg-3">
+                                                    <img style="border-radius: 10%" src="{{ students.userprofile.image_url }}" alt="Pic here"
+                                                    width="100%" height="100%">
+                                                </div>
+
+                                                <div class="col-lg-9">
+                                                    <p><span style="font-weight: bold;">Name: </span>{{ students.userprofile.name }}</p>
+                                                    <p><span style="font-weight: bold;">Post: </span>{{ post }}</p>
+                                                    <p><span style="font-weight: bold;">Club: </span>{{ post.club }}</p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         {% endfor %}
