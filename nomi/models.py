@@ -56,7 +56,6 @@ class Nomination(models.Model):
     status = models.CharField(max_length=50, choices=STATUS, default='Nomination created')
     result_approvals = models.ManyToManyField(Post, related_name='result_approvals', symmetrical=False, blank=True)
     nomi_approvals = models.ManyToManyField(Post, related_name='nomi_approvals', symmetrical=False, blank=True)
-    club_search = models.ManyToManyField(Post, related_name='all_clubs', symmetrical=False, blank=True)
     group_status = models.CharField(max_length=50, choices= GROUP_STATUS, default='normal')
     tags = models.ManyToManyField(Club, related_name='club_nomi', symmetrical=False, blank=True)
 
@@ -162,8 +161,6 @@ def ensure_parent_in_approvals(sender, **kwargs):
     if post:
         parent = post.parent
         nomi.nomi_approvals.add(parent)
-        nomi.club_search.add(post)
-        nomi.club_search.add(parent)
         nomi.result_approvals.add(post)
         nomi.tags.add(post.club)
         nomi.tags.add(parent.club)

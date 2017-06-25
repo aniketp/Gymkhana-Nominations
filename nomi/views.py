@@ -338,7 +338,6 @@ def nomi_approval(request, nomi_pk):
     if access:
         to_add = view_post.parent
         nomi.nomi_approvals.add(to_add)
-        nomi.club_search.add(to_add)
         nomi.tags.add(to_add.club)
         return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
     else:
@@ -358,7 +357,6 @@ def final_nomi_approval(request, nomi_pk):
     if access:
         to_add = view_post.parent
         nomi.nomi_approvals.add(to_add)
-        nomi.club_search.add(to_add)
         nomi.tags.add(to_add.club)
         nomi.open_to_users()
         return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
