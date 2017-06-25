@@ -180,9 +180,8 @@ def post_approval(request, view_pk, post_pk):
     post = Post.objects.get(pk=post_pk)
     viewer = Post.objects.get(pk=view_pk)
     to_add = viewer.parent
-
     post.post_approvals.add(to_add)
-    post.club_search.add(to_add)
+    post.tags.add(to_add.club)
 
     access = False
     for apv_post in post.post_approvals.all():
@@ -200,8 +199,9 @@ def post_approval(request, view_pk, post_pk):
 def final_post_approval(request, view_pk, post_pk):
     post = Post.objects.get(pk=post_pk)
     viewer = Post.objects.get(pk=view_pk)
-    to_add = viewer
+    to_add = viewer.parent
     post.post_approvals.add(to_add)
+    post.tags.add(to_add.club)
     post.status = 'Post approved'
     post.save()
 
