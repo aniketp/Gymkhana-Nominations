@@ -8,14 +8,13 @@ def index(request):
 
     if request.method == 'POST':
         club_form = ClubForm(request.POST)
-        post_form = PostForm(club,request.POST)
-
+        post_form = PostForm(club, request.POST)
 
         if club_form.is_valid():
-            club = Club.objects.get(pk = club_form.cleaned_data['club'])
+            club = Club.objects.get(pk=club_form.cleaned_data['club'])
 
             if post_form.is_valid():
-                post = Post.objects.filter(pk=post_form.cleaned_data['post'],tag = club)
+                post = Post.objects.filter(pk=post_form.cleaned_data['post'], tags=club)
                 query_posts = post
                 post_form = PostForm(club)
                 return render(request, 'index.html',
