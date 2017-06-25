@@ -39,21 +39,31 @@
                 <li><a href="{% url 'index' %}" id="brand">Gymkhana Nominations</a></li>
                 <li><a href="{% url 'profile' %}" id="navbar-links">Profile</a></li>
                 {% block posts%}
-                {% if my_posts %}
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" id="navbar-links" data-toggle="dropdown" role="button"
-                       aria-expanded="false">My Posts <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
+                    {% if my_posts %}
+                        {% if senate and length == 1 %}
+                        {% else %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" id="navbar-links" data-toggle="dropdown" role="button"
+                               aria-expanded="false">My Posts <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
 
-                            {% for post in my_posts %}
-                                <li><a href="{% url 'post_view' post.pk %}" >{{post.post_name}}</a></li>
-                            {% endfor %}
+                                    {% for post in my_posts %}
+                                        {% if not post.perms == 'can ratify the post' %}
+                                            <li><a href="{% url 'post_view' post.pk %}" >{{post.post_name}}</a></li>
+                                        {% endif %}
+                                    {% endfor %}
 
-                    </ul>
-                </li>
-                {% endif %}
+                            </ul>
+                        </li>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if senate %}
+                        <li><a href="{% url 'senate_view' %}" id="navbar-links">Senate</a></li>
+                    {% endif %}
                 {% endblock %}
                 <li><a href="{% url 'info:info' %}" id="navbar-links">Student Search</a></li>
+
 
             </ul>
             <ul class="nav navbar-nav navbar-right">

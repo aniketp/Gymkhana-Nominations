@@ -179,7 +179,9 @@ def ensure_parent_in_post_approvals(sender, **kwargs):
     post = kwargs.get('instance')
     if post:
         parent = post.parent
-        post.post_approvals.add(parent)
+        if parent:
+            post.post_approvals.add(parent)
+
         post.club_search.add(post)
         
 

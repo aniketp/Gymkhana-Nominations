@@ -1,16 +1,18 @@
-from django.shortcuts import render
-from .models import *
-from .forms import *
-from django.contrib.auth.decorators import login_required
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse, reverse_lazy
-from forms.models import Questionnaire
 import json
-from .filters import NominationFilter
-from django.core.exceptions import ObjectDoesNotExist
 from itertools import chain
 from operator import attrgetter
+
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
+from forms.models import Questionnaire
+from .filters import NominationFilter
+from .forms import *
+from .models import *
 
 
 def index(request):
@@ -36,6 +38,14 @@ def index(request):
         return HttpResponseRedirect(reverse('login'))
 
 
+@login_required
+def senate_view(request):
+    nomi_ratify = Nomination.objects.filter(status='Sent for ratification')
+
+    return render(request, 'senate_view.html', context={'nomi': nomi_ratify})
+
+
+@login_required
 def admin_portal(request):
     posts = Post.objects.filter(post_holders=request.user)
     username = UserProfile.objects.get(user=request.user)
@@ -633,9 +643,17 @@ def nomination_answer(request, pk):
     comments = Commment.objects.filter(nomi_instance=application)
     comment_form = CommentForm(request.POST or None)
 
-    inst_user = 0
+    all_posts = Post.objects.filter(post_holders=request.user)
+
+    senate_perm = False
+    for post in all_posts:
+        if post.perms == 'can ratify the post':
+            senate_perm = True
+            break
+
+    inst_user = False
     if application.user == request.user:
-        inst_user = 1
+        inst_user = True
 
     if comment_form.is_valid():
         Commment.objects.create(comments=comment_form.cleaned_data['comment'],
@@ -643,11 +661,11 @@ def nomination_answer(request, pk):
 
         return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
                                                             'comment_form': comment_form, 'inst_user': inst_user,
-                                                            'comments': comments})
+                                                            'comments': comments, 'senate_perm': senate_perm})
 
     return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
                                                         'comment_form': comment_form, 'inst_user': inst_user,
-                                                        'comments': comments})
+                                                        'comments': comments, 'senate_perm': senate_perm})
 
 
 @login_required
