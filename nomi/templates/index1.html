@@ -51,19 +51,22 @@
                     </div>
                     </div>
                     {% else %}
-                    <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">{{ nomi.name.upper }}</h3>
-                        <div>Group of Nominations</div>
-                    </div>
+                        {% if nomi|group_status %}
+
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                            <h3 class="panel-title">{{ nomi.name.upper }}</h3>
+                            <div>Group of Nominations</div>
+                        </div>
 
 
-                    <div class="panel-body">
-                        <p>{{nomi.description}}</p>
-                        <a href="{% url 'group_nomi_detail' pk=nomi.pk %}"
-                           class="btn btn-sm read-more-button btn-info">See Detail</a>
-                    </div>
-                    </div>
+                        <div class="panel-body">
+                            <p>{{nomi.description}}</p>
+                            <a href="{% url 'group_nomi_detail' pk=nomi.pk %}"
+                            class="btn btn-sm read-more-button btn-info">See Detail</a>
+                        </div>
+                        </div>
+                        {% endif %}
 
                     {% endif %}
                     {% endfor %}
