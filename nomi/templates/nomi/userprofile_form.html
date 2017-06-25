@@ -11,7 +11,7 @@
         <hr>
         <div class="scroll-userform">
             <div style="padding: 0 40px; margin-bottom: 2px;">
-                <form action="" method="post">
+                <form action="" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
 
                         {{ form|bootstrap }}

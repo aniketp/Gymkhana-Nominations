@@ -154,7 +154,7 @@ class UserProfile(models.Model):
         if self.user_img and hasattr(self.user_img, 'url'):
             return self.user_img.url
         else:
-            return '/static/nomi/img/logo.gif'
+            return '/static/nomi/img/banner.png'
 
 
 @receiver(post_save, sender=Nomination)

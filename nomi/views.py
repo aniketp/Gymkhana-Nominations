@@ -669,13 +669,13 @@ def profile_view(request):
 
 class UserProfileCreate(CreateView):
     model = UserProfile
-    fields = ['name', 'roll_no', 'year', 'programme', 'department', 'hall', 'room_no', 'contact']
+    fields = ['name', 'roll_no', 'year', 'programme', 'department','user_img', 'hall', 'room_no', 'contact']
     success_url = reverse_lazy('index')
 
 
 class UserProfileUpdate(UpdateView):
     model = UserProfile
-    fields = ['name', 'roll_no', 'year', 'programme', 'department', 'hall', 'room_no', 'contact']
+    fields = ['name','roll_no', 'year', 'programme', 'department','user_img', 'hall', 'room_no', 'contact']
     success_url = reverse_lazy('index')
 
 
