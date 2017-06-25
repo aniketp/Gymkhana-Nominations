@@ -22,19 +22,19 @@ def index(request):
             username = UserProfile.objects.get(user=request.user)
             club_filter = ClubFilter(request.POST or None)
             if club_filter.is_valid():
-                club = Club.objects.get(pk = club_filter.cleaned_data['club'])
-                grouped_nomi =  club.club_group.all().filter(status = 'out')
+                club = Club.objects.get(pk=club_filter.cleaned_data['club'])
+                grouped_nomi = club.club_group.all().filter(status='out')
                 nomi = club.club_nomi.all().filter(group_status='normal').filter(status='Nomination out')
                 result_query = sorted(chain(nomi, grouped_nomi), key=attrgetter('opening_date'), reverse=True)
                 return render(request, 'index1.html', context={'posts': posts, 'username': username,
-                                                               'result_query': result_query,'club_filter':club_filter})
+                                                               'result_query': result_query, 'club_filter': club_filter})
 
             grouped_nomi = GroupNomination.objects.filter(status='out')
             nomi = Nomination.objects.filter(group_status='normal').filter(status='Nomination out')
             result_query = sorted(chain(nomi, grouped_nomi), key=attrgetter('opening_date'), reverse=True)
 
             return render(request, 'index1.html', context={'posts': posts, 'username': username,
-                                                           'result_query': result_query,'club_filter':club_filter})
+                                                           'result_query': result_query, 'club_filter': club_filter})
 
         except ObjectDoesNotExist:
             profile = UserProfile.objects.create(user=request.user)
@@ -74,7 +74,7 @@ def admin_portal(request):
         query = Nomination.objects.filter(nomi_approvals=post)
         admin_query = admin_query | query
 
-    admin_query = admin_query.distinct()
+    admin_query = admin_query.distinct().exclude(status='Work done')
 
     club_filter = ClubFilter(request.POST or None)
     if club_filter.is_valid():
