@@ -58,6 +58,7 @@ class Nomination(models.Model):
     nomi_approvals = models.ManyToManyField(Post, related_name='nomi_approvals', symmetrical=False, blank=True)
     club_search = models.ManyToManyField(Post, related_name='all_clubs', symmetrical=False, blank=True)
     group_status = models.CharField(max_length=50, choices= GROUP_STATUS, default='normal')
+    tags = models.ManyToManyField(Club, related_name='club_nomi', symmetrical=False, blank=True)
 
     opening_date = models.DateField(null=True, blank=True)
     closing_date = models.DateField(null=True, blank=True, editable=True)
@@ -103,7 +104,7 @@ class GroupNomination(models.Model):
     status = models.CharField(max_length=50, choices=G_STATUS, default='created')
     opening_date = models.DateField(null=True, blank=True, default=timezone.now)
     approvals = models.ManyToManyField(Post, related_name='group_approvals', symmetrical=False, blank=True)
-    club_search = models.ManyToManyField(Post, related_name='groups', symmetrical=False, blank=True)
+    tags = models.ManyToManyField(Club, related_name='club_group', symmetrical=False, blank=True)
 
     def __str__(self):
         return str(self.name)
