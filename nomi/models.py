@@ -178,6 +178,7 @@ def ensure_parent_in_post_approvals(sender, **kwargs):
         parent = post.parent
         if parent:
             post.post_approvals.add(parent)
+            post.tags.add(parent.club)
 
         if post.club:
             post.tags.add(post.club)
