@@ -40,7 +40,7 @@ def index(request):
 
 @login_required
 def senate_view(request):
-    nomi_ratify = Nomination.objects.filter(status='Sent for ratification')
+    nomi_ratify = Nomination.objects.filter(status='Sent for ratification')   # Need to add no_access
 
     return render(request, 'senate_view.html', context={'nomi': nomi_ratify})
 
@@ -550,6 +550,15 @@ def ratify(request, nomi_pk):
         return HttpResponseRedirect(reverse('applicants', kwargs={'pk': nomi_pk}))
     else:
         return render(request, 'no_access.html')
+
+
+@login_required
+def cancel_ratify(request, nomi_pk):
+    nomi = Nomination.objects.get(pk=nomi_pk)
+    nomi.status = 'Interview period'
+    nomi.save()
+
+    return HttpResponseRedirect(reverse('applicants', kwargs={'pk': nomi_pk}))
 
 
 @login_required
