@@ -53,3 +53,6 @@ class SelectNomiForm(forms.Form):
 
 class GroupNominationForm(forms.Form):
     title = forms.CharField()
+
+class ClubFilter(forms.Form):
+    club = forms.ChoiceField( choices=[('','------------')] + [(o.id, o) for o in Club.objects.all()],  widget=forms.Select )
