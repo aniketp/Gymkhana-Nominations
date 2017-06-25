@@ -5,6 +5,7 @@ from info.forms import ClubForm,PostForm
 
 def index(request):
     club = None
+    query_posts = None
 
     if request.method == 'POST':
         club_form = ClubForm(request.POST)
@@ -24,14 +25,13 @@ def index(request):
             post_form = PostForm(club)
             query_posts = club.club_posts.all()
             return render(request, 'index.html',
-                          context={'club_form': club_form,'post_form':post_form ,
+                          context={'club_form': club_form, 'post_form': post_form,
                                    'query_posts': query_posts})
-
 
     else:
         club_form = ClubForm
         post_form = None
         query_posts = Post.objects.all()
 
-    return render(request, 'index.html', context={'club_form':club_form,'post_form':post_form,
-                                                  'query_posts':query_posts})
+    return render(request, 'index.html', context={'club_form': club_form, 'post_form':post_form,
+                                                  'query_posts': query_posts})
