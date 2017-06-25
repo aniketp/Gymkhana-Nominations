@@ -1,54 +1,65 @@
 {% extends 'base2.html' %}
 {% load staticfiles %}
 {% load bootstrap %}
+
 {% block title %}Child_post{% endblock %}
+
 {% block content %}
-            <div class="profile-content">
-                <div class="container-fluid child-post-container">
-                    <div class="row box">
-                        <div>
-                            <h1>{{post.post_name}}</h1>
-                        </div>
-                        <div class="col-lg-6 col-sm-6">
-                            <h3>{{post.status}}</h3>
-                        </div>
-                        <div class="col-lg-6 col-sm-6">
-                            <h3> {{post.club.club_name}}</h3>
-                        </div>
-                    </div>
-                    <br>
-                    {% if view.tag_perms == 'Can create' %}
-                    <div class="dropdown show">
-                        <button class="btn btn-secondary btn-danger dropdown-toggle" type="button"
-                         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Create a new Tag
-                        </button>
-                        <div class="dropdown-menu " role="menu">
-                        <form action="" method="post" style="display: inline">
-                            {% csrf_token %}
-                            <p>{{tag_form|bootstrap}}</p>
-                            <input class="btn btn-success btn-block" type="submit" value="submit" />
-                        </form>
-                        </div>
-                    </div>
-                    <div class="dropdown show">
-                        <button class="btn btn-secondary btn-danger dropdown-toggle" type="button"
-                         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Give tag permission
-                        </button>
-                        <div class="dropdown-menu " role="menu">
-                        <form action="" method="post" style="display: inline">
-                            {% csrf_token %}
-                            <p>{{confirm_form|bootstrap}}</p>
-                            <input class="btn btn-success btn-block" type="submit" value="submit" />
-                        </form>
-                        </div>
-                    </div>
-                    {% endif %}
+    <div class="profile-content">
+        <div class="container-fluid child-post-container">
+            <div class="row box">
+                <div>
+                    <h2>Secretary, Programming Club</h2>
                 </div>
-                <div class="container-fluid child-post-container">
+
+                <div class="col-lg-12 col-sm-12">
+                    <h3> {{post.club.club_name}}</h3>
+                </div>
+            </div>
+            <br>
+        </div>
+
+        {% if view.tag_perms == 'Can create' %}
+            <div class="container-fluid">
+                <div class="col-lg-6 text-center">
+                    <div class="dropdown show">
+                        <button class="btn btn-secondary btn-primary dropdown-toggle" type="button"
+                             id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Create a new Tag
+                        </button>
+                        <div class="dropdown-menu " role="menu">
+                            <form action="" method="post" style="display: inline">
+                                {% csrf_token %}
+                                <p>{{tag_form|bootstrap}}</p>
+
+                                <input class="btn btn-success btn-block" type="submit" value="submit" />
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <div class="dropdown show">
+                        <button class="btn btn-secondary btn-warning dropdown-toggle" type="button"
+                             id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Give tag permission
+                        </button>
+                        <div class="dropdown-menu " role="menu">
+                            <form action="" method="post" style="display: inline">
+                                {% csrf_token %}
+                                <p>{{confirm_form|bootstrap}}</p>
+                                <input class="btn btn-success btn-block" type="submit" value="submit" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+
+            <div class="container-fluid">
                 {% if not ap %}
-                    <div class="col-lg-7 col-sm-6">
+                    <div class="col-lg-6 col-sm-6 nomination-list">
                         <h2>Nominations for the post</h2>
                         <div class="row">
                             <div class="col-lg-12 text-center">
@@ -66,27 +77,10 @@
                             </div>
                         {% endfor %}
                     </div>
-                    <div class="col-lg-5 col-sm-6">
+                    <div class="col-lg-1 col-sm-1"></div>
+                    <div class="col-lg-5 col-sm-6 nomination-list">
                         <div class="post-holder-list">
                             <h2>List of post holders</h2>
-                            <div class="dropdown show">
-                                <button class="btn btn-secondary btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Add New
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                                    <li>
-                                         <form action="" method="post" style="display: inline">
-                                        {% csrf_token %}
-                                            {{form|bootstrap}}
-                                            <input class="btn btn-success btn-block" type="submit" value="submit" />
-                                         </form>
-                                    </li>
-                                    <li>{% if info %}
-                                        <div class="text-center"> <strong>{{info}}</strong></div>
-                                        {% endif %}
-                                    </li>
-                                </ul>
-                            </div>
 
                         </div>
 
