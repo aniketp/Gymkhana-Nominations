@@ -40,10 +40,20 @@ def index(request):
 
 @login_required
 def senate_view(request):
-    nomi_ratify = Nomination.objects.filter(status='Sent for ratification')   # Need to add no_access
+    nomi_ratify = Nomination.objects.filter(status='Sent for ratification')
+    all_posts = Post.objects.filter(post_holders=request.user)
+    access = False
 
-    return render(request, 'senate_view.html', context={'nomi': nomi_ratify})
+    for post in all_posts:
+        if post.perms == 'can ratify the post':
+            access = True
+            break
 
+    if access:
+        return render(request, 'senate_view.html', context={'nomi': nomi_ratify})
+
+    else:
+        return render(request, 'no_access.html')
 
 @login_required
 def admin_portal(request):
@@ -129,7 +139,6 @@ def child_post_view(request, pk):
     if confirm_form.is_valid():
         post.tag_perms = 'Can create'
         post.save()
-
 
     if access:
         if post.status == 'Post created':
