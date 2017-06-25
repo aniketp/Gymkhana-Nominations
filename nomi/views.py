@@ -96,6 +96,7 @@ def post_view(request, pk):
     post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
     nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
     group_nomi_approvals = GroupNomination.objects.filter(status='created').filter(approvals=post)
+    result_approvals = Nomination.objects.filter(result_approvals = post).exclude(status='work_done').exclude(status='Nomination_created')
 
     tag_form = ClubForm(request.POST or None)
     if tag_form.is_valid():
@@ -105,7 +106,7 @@ def post_view(request, pk):
         return render(request, 'post1.html', context={'post': post, 'child_posts': child_posts_reverse,
                                                       'post_approval': post_approvals, 'tag_form': tag_form,
                                                       'nomi_approval': nomi_approvals,
-                                                      'group_nomi_approvals': group_nomi_approvals})
+                                                      'group_nomi_approvals': group_nomi_approvals,'result_approvals':result_approvals})
     else:
         return render(request, 'no_access.html')
 
@@ -154,6 +155,12 @@ def child_post_view(request, pk):
         post.tag_perms = 'Can create'
         post.save()
 
+    remove_form = ConfirmApplication(request.POST or None)
+    if remove_form.is_valid():
+        post.tag_perms = 'normal'
+        post.save()
+
+
     if access:
         if post.status == 'Post created':
             approved = 1
@@ -167,7 +174,7 @@ def child_post_view(request, pk):
 
         view_parent = Post.objects.get(pk=view.parent.pk)
 
-        if view_parent in post.post_approvals.all():
+        if view_parent in post.post_approvals.all():  
             approval = 1
         else:
             approval = 0
@@ -188,12 +195,14 @@ def child_post_view(request, pk):
             return render(request, 'child_post1.html', {'post': post, 'ap': approved,
                                                         'approval': approval, 'power_to_approve': power_to_approve,
                                                         'nominations': nominations, 'form': form,'info': info,
-                                                        'view': view,'tag_form':tag_form,'confirm_form':confirm_form})
+                                                        'view': view,'tag_form':tag_form,
+                                                        'confirm_form':confirm_form,'remove_form':remove_form})
 
         return render(request, 'child_post1.html', {'post': post, 'ap': approved, 'view': view,
                                                     'approval': approval, 'power_to_approve': power_to_approve,
                                                     'nominations': nominations, 'form': form, 'info': info,
-                                                    'tag_form':tag_form,'confirm_form':confirm_form })
+                                                    'tag_form':tag_form,'confirm_form':confirm_form ,
+                                                    'remove_form':remove_form})
     else:
         return render(request, 'no_access.html')
 

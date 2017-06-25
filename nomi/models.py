@@ -161,7 +161,7 @@ def ensure_parent_in_approvals(sender, **kwargs):
     if post:
         parent = post.parent
         nomi.nomi_approvals.add(parent)
-        nomi.result_approvals.add(post)
+        nomi.result_approvals.add(parent)
         nomi.tags.add(post.club)
         nomi.tags.add(parent.club)
 
