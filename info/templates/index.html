@@ -11,19 +11,16 @@
                 <div class="panel panel-default">
                   <div class="panel-heading">Student Search</div>
                   <div class="panel-body">
-                    <form action="" method="get">
-                        <label class="col-lg-1 control-label">Club</label>
-                              <!-- <div class="col-lg-3">
-                                    {{filter.form|bootstrap}}
-                                </div>-->
-                            <div class="col-lg-3">
-                                {{filter.form.club_search__club}}
-                            </div>
+                    <form action="" method="post">
+                            {% csrf_token %}
 
-                        <label class="col-lg-1 control-label">Post</label>
-                            <div class="col-lg-3 ">
-                                {{filter.form.post_name}}
-                            </div>
+                           {{club_form|bootstrap}}
+                        {% if post_form %}
+                         {% csrf_token %}
+                        {{post_form|bootstrap}}
+                        {% endif %}
+
+
 
                         <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
                     </form>
@@ -32,7 +29,7 @@
 
 
                 <div>
-                    {% for post in filter.qs %}
+                    {% for post in query_posts %}
                         {% for students in post.post_holders.all %}
                 <div class="panel panel-default">
                     <div class="panel-body">
