@@ -1,71 +1,209 @@
-{% extends 'base2.html' %}
+<!DOCTYPE html>
+<html lang="en">
 {% load staticfiles %}
 {% load bootstrap %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-zF4BRsG/fLiTGfR9QL82DrilZxrwgY/+du4p/c7J72zZj+FLYq4zY00RylP9ZjiT" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'nomi/css/main.css' %}" type="text/css">
 
-{% block content %}
-  <div class="profile-content ">
+    <title>{% block title %} Gymkhana Nominations {% endblock %}</title>
+</head>
+<body>
 
-      <div id="myTabContent" class="tab-content">
-           <div class="tab-pane fade active in profile-nominations" id="user">
-                <br>
-                <div class="panel panel-default">
-                    <div class="panel-heading">Student Search</div>
-                    <div class="panel-body">
-                        {% if not post_form %}
-                            <form action="" method="post">
-                                <div class="col-lg-12">
-                                    {% csrf_token %}
-                                    {{club_form|bootstrap}}
-                                </div>
+{% block navigation %}
+<nav class="navbar navbar-default" id="navbar">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="#">
+                <div>
+                    <img src="{% static 'nomi/img/gym.jpg' %}" width="50" height="50">
+                </div>
+            </a>
+        </div>
 
-                                <div class="col-lg-12 text-center">
-                                    <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
-                                </div>
-
-                            </form>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="{% url 'index' %}" id="brand">Gymkhana Nominations</a></li>
+                <li><a href="{% url 'profile' %}" id="navbar-links">Profile</a></li>
+                {% block posts%}
+                    {% if my_posts %}
+                        {% if senate and length == 1 %}
                         {% else %}
-                            <form action="" method="post">
-                                <div class="row-fluid">
-                                    <div class="col-lg-6">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" id="navbar-links" data-toggle="dropdown" role="button"
+                               aria-expanded="false">My Posts <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+
+                                    {% for post in my_posts %}
+                                        {% if not post.perms == 'can ratify the post' %}
+                                            <li><a href="{% url 'post_view' post.pk %}" >{{post.post_name}}</a></li>
+                                        {% endif %}
+                                    {% endfor %}
+
+                            </ul>
+                        </li>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if senate %}
+                        <li><a href="{% url 'senate_view' %}" id="navbar-links">Senate</a></li>
+                    {% endif %}
+                {% endblock %}
+                <li><a href="{% url 'info:info' %}" id="navbar-links">Student Search</a></li>
+
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li id="navbar-links"><a href="{% url 'logout' %}?next={% url 'login' %}">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+<div class="container-fluid">
+    <div  class="row profile">
+        <div class="col-lg-3 col-md-3">
+            {% block profile %}
+            <div id="profile" class="profile-sidebar" style="position:fixed">
+                <!-- SIDEBAR USERPIC -->
+                <div class="profile-userpic">
+                    <img src="{{ my_profile.image_url }}" class="img-responsive" alt="">
+                </div>
+                <!-- END SIDEBAR USERPIC -->
+                <!-- SIDEBAR USER TITLE -->
+                <div class="profile-usertitle">
+                    <div class="profile-usertitle-name">
+                        {{my_profile.name}}
+                    </div>
+                    <div class="profile-usertitle-job">
+                        {{my_profile.programme}} <br> {{my_profile.department}}
+                    </div>
+                </div>
+                <div class="profile-usermenu">
+                    <table class="table table-striped table-hover ">
+
+                        <tbody>
+                        <tr>
+                            <td id="topic">Batch</td>
+                            <td>{{my_profile.year}} </td>
+                        </tr>
+                        <tr>
+                            <td id="topic">Roll No.</td>
+                            <td>{{my_profile.roll_no}} </td>
+                        </tr>
+                        <tr>
+                            <td id="topic">Address</td>
+                            <td>{{my_profile.room_no}} , Hall-{{my_profile.hall}}</td>
+                        </tr>
+                        <tr>
+                            <td id="topic">Contact No.</td>
+                            <td>{{ my_profile.contact }}</td>
+                        </tr>
+                        <tr>
+                            <td id="topic">Email ID</td>
+                            <td>{{my_profile.user}}@iitk.ac.in</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END MENU -->
+            </div>
+            {% endblock %}
+        </div>
+        <div class="col-lg-9 col-md-9">
+            {% block content %}
+                <div class="profile-content ">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Student Search</div>
+                        <div class="panel-body">
+                            {% if not post_form %}
+                                <form action="" method="post">
+                                    <div class="col-lg-12">
                                         {% csrf_token %}
                                         {{club_form|bootstrap}}
                                     </div>
 
-                                    <div class="col-lg-6">
-                                        {% csrf_token %}
-                                        {{post_form|bootstrap}}
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
                                     <div class="col-lg-12 text-center">
-                                    <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
-                                </div>
-                                </div>
-                            </form>
-                        {% endif %}
-                    </div>
-                </div>
+                                        <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
+                                    </div>
 
+                                </form>
+                            {% else %}
+                                <form action="" method="post">
+                                    <div class="row-fluid">
+                                        <div class="col-lg-6">
+                                            {% csrf_token %}
+                                            {{club_form|bootstrap}}
+                                        </div>
 
-                <div>
-                    {% for post in query_posts %}
-                        {% for students in post.post_holders.all %}
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="container-fluid">
-                            <div class="col-lg-2">
-                                <img style="border-radius: 10%" src="{{ students.userprofile.image_url }}" alt="Pic here"
-                                     width="100px" height="100px">
-                            </div>
-
-                            <div class="col-lg-10">
-                                <span style="font-weight: bold;">Name: </span>{{ students.userprofile.name }} <br>
-                                <span style="font-weight: bold;">Post: </span>{{ post }}
-                            </div>
+                                        <div class="col-lg-6">
+                                            {% csrf_token %}
+                                            {{post_form|bootstrap}}
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="col-lg-12 text-center">
+                                            <input type="submit" value="Submit" class="btn btn-success nomi-filter" />
+                                        </div>
+                                    </div>
+                                </form>
+                            {% endif %}
                         </div>
                     </div>
-                </div>
-                            {% endfor %}
+
+                <div class="container-fluid">
+                    {% for post in query_posts %}
+                        {% for students in post.post_holders.all %}
+                            <div class="row-fluid">
+                                <div class="col-lg-6">
+                                    {% if students.userprofile %}
+                                        <a style="color: black;" href="{% url 'public_profile' students.userprofile.pk %}"><div class="panel panel-default">
+                                            <div class="panel-body">
+                                                <div class="col-lg-3">
+                                                    <img style="border-radius: 10%" src="{{ students.userprofile.image_url }}" alt="Pic here"
+                                                    width="100%" height="100%">
+                                                </div>
+
+                                                <div class="col-lg-9">
+                                                    <p><span style="font-weight: bold;">Name: </span>{{ students.userprofile.name }}</p>
+                                                    <p><span style="font-weight: bold;">Post: </span>{{ post }}</p>
+                                                    <p><span style="font-weight: bold;">Club: </span>{{ post.club }}</p>
+                                                </div>
+                                            </div>
+                                        </div></a>
+                                    {% else %}
+                                        <div style="color: black" class="panel panel-default">
+                                            <div class="panel-body">
+                                                <div class="col-lg-3">
+                                                    <img style="border-radius: 10%" src="{{ students.userprofile.image_url }}" alt="Pic here"
+                                                    width="100%" height="100%">
+                                                </div>
+
+                                                <div class="col-lg-9">
+                                                    <p><span style="font-weight: bold;">Name: </span>{{ students.userprofile.name }}</p>
+                                                    <p><span style="font-weight: bold;">Post: </span>{{ post }}</p>
+                                                    <p><span style="font-weight: bold;">Club: </span>{{ post.club }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
                     {% endfor %}
                 </div>
          </div>
@@ -73,3 +211,12 @@
 </div>
 
 {% endblock %}
+        </div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+</body>
+</html>

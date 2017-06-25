@@ -1,0 +1,111 @@
+{% extends 'base2.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
+
+{% block profile %}
+    <div class="profile-sidebar">
+
+        <div class="profile-userpic">
+            <img src="{{ student.image_url }}" class="img-responsive" alt="">
+        </div>
+
+        <div class="profile-usertitle">
+            <div class="profile-usertitle-name">
+                {{student.name}}
+            </div>
+
+            <div class="profile-usertitle-job">
+                {{student.programme}} <br> {{student.department}}
+            </div>
+        </div>
+
+        <div class="profile-usermenu">
+            <table class="table table-striped table-hover ">
+                <tbody>
+                <tr>
+                    <td id="topic">Batch</td>
+                    <td>{{student.year}} </td>
+                </tr>
+                <tr>
+                    <td id="topic">Roll No.</td>
+                    <td>{{student.roll_no}} </td>
+                </tr>
+                <tr>
+                    <td id="topic">Address</td>
+                    <td>{{student.room_no}} , Hall-{{student.hall}}</td>
+                </tr>
+                <tr>
+                    <td id="topic">Contact No.</td>
+                    <td>{{ student.contact }}</td>
+                </tr>
+                <tr>
+                    <td id="topic">Email ID</td>
+                    <td>{{student.user}}@iitk.ac.in</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+                <!-- END MENU -->
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="profile-content">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#current-posts" data-toggle="tab" aria-expanded="true">{{ student.name }}'s Posts</a></li>
+                    <li><a href="#post-history" data-toggle="tab" aria-expanded="true">Post History</a></li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+
+                    <div class="tab-pane fade active in profile-nominations" id="current-posts">
+                        <br>
+                        {% for post in my_posts %}
+
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{post.club}}</h3>
+                            </div>
+                            <div class="panel-body">
+                                <p class="profile-post-name">
+                                    <span>Post: </span>{{post.post_name}}</p>
+
+                                <div class="row">
+                                </div>
+                            </div>
+                        </div>
+
+                        {% endfor %}
+                    </div>
+
+                    <div class="tab-pane fade profile-nominations" id="post-history">
+                        <br>
+
+                        {% for his in history %}
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{his.post.club}}</h3>
+                            </div>
+                            <div class="panel-body">
+                                <p class="profile-post-name"><span>Post: </span>{{his.post.post_name}}</p>
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <p><span>Start: </span>{{his.start}}</p>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <p><span>End: </span>
+                                            {% if his.end %}
+                                                {{his.end}}
+                                            {% else %}
+                                                Currently holdind the post
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+    </div>
+{% endblock %}

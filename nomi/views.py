@@ -22,19 +22,19 @@ def index(request):
             username = UserProfile.objects.get(user=request.user)
             club_filter = ClubFilter(request.POST or None)
             if club_filter.is_valid():
-                club = Club.objects.get(pk = club_filter.cleaned_data['club'])
-                grouped_nomi =  club.club_group.all().filter(status = 'out')
+                club = Club.objects.get(pk=club_filter.cleaned_data['club'])
+                grouped_nomi = club.club_group.all().filter(status='out')
                 nomi = club.club_nomi.all().filter(group_status='normal').filter(status='Nomination out')
                 result_query = sorted(chain(nomi, grouped_nomi), key=attrgetter('opening_date'), reverse=True)
                 return render(request, 'index1.html', context={'posts': posts, 'username': username,
-                                                               'result_query': result_query,'club_filter':club_filter})
+                                                               'result_query': result_query, 'club_filter': club_filter})
 
             grouped_nomi = GroupNomination.objects.filter(status='out')
             nomi = Nomination.objects.filter(group_status='normal').filter(status='Nomination out')
             result_query = sorted(chain(nomi, grouped_nomi), key=attrgetter('opening_date'), reverse=True)
 
             return render(request, 'index1.html', context={'posts': posts, 'username': username,
-                                                           'result_query': result_query,'club_filter':club_filter})
+                                                           'result_query': result_query, 'club_filter': club_filter})
 
         except ObjectDoesNotExist:
             profile = UserProfile.objects.create(user=request.user)
@@ -74,18 +74,17 @@ def admin_portal(request):
         query = Nomination.objects.filter(nomi_approvals=post)
         admin_query = admin_query | query
 
-    admin_query = admin_query.distinct()
+    admin_query = admin_query.distinct().exclude(status='Work done')
 
     club_filter = ClubFilter(request.POST or None)
     if club_filter.is_valid():
         club = Club.objects.get(pk=club_filter.cleaned_data['club'])
-        admin_query = admin_query.filter(tags= club)
+        admin_query = admin_query.filter(tags=club)
         return render(request, 'admin_portal.html', context={'posts': posts, 'username': username,
-                                                             'admin_query':admin_query,'club_filter':club_filter})
-
+                                                             'admin_query': admin_query, 'club_filter': club_filter})
 
     return render(request, 'admin_portal.html', context={'posts': posts, 'username': username,
-                                                         'admin_query':admin_query,'club_filter':club_filter})
+                                                         'admin_query': admin_query, 'club_filter': club_filter})
 
 
 @login_required
@@ -414,7 +413,8 @@ def group_nominations(request, pk):
         title_form = GroupNominationForm(request.POST)
         if title_form.is_valid():
             if groupform.is_valid():
-                group = GroupNomination.objects.create(name=title_form.cleaned_data['title'])
+                group = GroupNomination.objects.create(name=title_form.cleaned_data['title'],
+                                                       description=title_form.cleaned_data['description'])
                 group.approvals.add(post)
                 for nomi_pk in groupform.cleaned_data['group']:
                     # things to be performed on nomination
@@ -767,6 +767,16 @@ def profile_view(request):
                                                         'interview_nomi': interview_nomi})
     except ObjectDoesNotExist:
         return HttpResponseRedirect('create')
+
+
+def public_profile(request, pk):
+    student = UserProfile.objects.get(pk=pk)
+    student_user = student.user
+    history = PostHistory.objects.filter(user=student_user)
+    my_posts = Post.objects.filter(post_holders=student_user)
+
+    return render(request, 'public_profile.html', context={'student': student, 'history': history,
+                                                           'my_posts': my_posts})
 
 
 class UserProfileCreate(CreateView):

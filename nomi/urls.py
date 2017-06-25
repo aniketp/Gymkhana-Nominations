@@ -19,6 +19,9 @@ urlpatterns = [
     # nominations/profile/
     url(r'^profile/$', views.profile_view, name='profile'),
 
+    # nominations/public_profile/2
+    url(r'^public_profile/(?P<pk>\d+)/$', views.public_profile, name='public_profile'),
+
     # nominations/profile/create
     url(r'profile/create/$', views.UserProfileCreate.as_view(), name='profile_create'),
 
