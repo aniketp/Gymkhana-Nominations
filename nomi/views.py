@@ -40,7 +40,7 @@ def index(request):
 
 @login_required
 def senate_view(request):
-    nomi_ratify = Nomination.objects.filter(STATUS='Sent for ratification')
+    nomi_ratify = Nomination.objects.filter(status='Sent for ratification')
 
     return render(request, 'senate_view.html', context={'nomi': nomi_ratify})
 

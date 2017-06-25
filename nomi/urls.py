@@ -7,6 +7,9 @@ urlpatterns = [
     # nominations/
     url(r'^$', views.index, name='index'),
 
+    # nominations/senate
+    url(r'^senate/$', views.senate_view, name='senate_view'),
+
     # nominations/admin_portal
     url(r'^admin_portal$', views.admin_portal, name='admin_portal'),
 
