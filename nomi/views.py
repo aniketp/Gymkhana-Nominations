@@ -38,6 +38,14 @@ def index(request):
         return HttpResponseRedirect(reverse('login'))
 
 
+@login_required
+def senate_view(request):
+    nomi = Nomination.objects.filter(STATUS='Sent for ratification')
+
+    return render(request, 'senate_view.html', context={'nomi': nomi})
+
+
+@login_required
 def admin_portal(request):
     posts = Post.objects.filter(post_holders=request.user)
     username = UserProfile.objects.get(user=request.user)

@@ -18,5 +18,6 @@ def context(request):
 
         except ObjectDoesNotExist:
             return {'my_posts': 0, 'my_profile': 0}
+
     else:
         return {'my_posts': 0, 'my_profile': 0}
