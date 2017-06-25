@@ -332,6 +332,7 @@ def nomi_approval(request, nomi_pk):
         to_add = view_post.parent
         nomi.nomi_approvals.add(to_add)
         nomi.club_search.add(to_add)
+        nomi.tags.add(to_add.club)
         return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
     else:
         return render(request, 'no_access.html')
@@ -351,6 +352,7 @@ def final_nomi_approval(request, nomi_pk):
         to_add = view_post.parent
         nomi.nomi_approvals.add(to_add)
         nomi.club_search.add(to_add)
+        nomi.tags.add(to_add.club)
         nomi.open_to_users()
         return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
     else:
@@ -376,6 +378,8 @@ def group_nominations(request, pk):
                     # things to be performed on nomination
                     nomi = Nomination.objects.get(pk=nomi_pk)
                     group.nominations.add(nomi)
+                    for tag in nomi.tags.all():
+                        group.tags.add(tag)
                     nomi.group_status = 'grouped'
                     to_add = post.parent
                     nomi.nomi_approvals.add(to_add)
@@ -423,6 +427,8 @@ def add_to_group(request,pk,gr_pk):
                 # things to be performed on nomination
                 nomi = Nomination.objects.get(pk=nomi_pk)
                 group.nominations.add(nomi)
+                for tag in nomi.tags.all():
+                    group.tags.add(tag)
                 nomi.group_status = 'grouped'
                 to_add = post.parent
                 nomi.nomi_approvals.add(to_add)
