@@ -549,10 +549,14 @@ def applications(request, pk):
     pending = NominationInstance.objects.filter(nomination=nomination).filter(status=None)
 
     view_post = None
+    access = False
     for apv_post in nomination.nomi_approvals.all():
         if request.user in apv_post.post_holders.all():
             view_post = apv_post
+            access = True
             break
+    if not access:
+        return render(request, 'no_access.html')
 
     permission = None
     senate_permission = None
