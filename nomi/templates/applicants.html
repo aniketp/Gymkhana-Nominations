@@ -19,17 +19,8 @@
         <div class="well well-sm" style="padding-bottom: 20px">
             <h2 class="text-center" style="color: #343e2e;">{{nomination.name}} </h2>
         </div>
-        <hr>
-        <div class="row">
-            <div class="col-lg-6 text-center">
-                <h4><span style=" font-size: 20px;color: #1b3013">Post:</span> {{ nomination.nomi_post }}</h4>
-            </div>
-            <div class="col-lg-6 text-center">
-                <h4><span style=" font-size: 20px;color: #1b3013">Club:</span> {{ nomination.nomi_post.club }}</h4>
-            </div>
-        </div>
-        <hr>
-        <div class="well text-center">
+
+        <div class="text-center">
             <div class="dropdown show">
              <button class="btn btn-secondary btn-danger dropdown-toggle" style="width: auto" type="button"
                      id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -44,6 +35,17 @@
              </div>
          </div>
         </div>
+        <hr>
+        <div class="row">
+            <div class="col-lg-6 text-center">
+                <h4><span style=" font-size: 20px;color: #1b3013">Post:</span> {{ nomination.nomi_post }}</h4>
+            </div>
+            <div class="col-lg-6 text-center">
+                <h4><span style=" font-size: 20px;color: #1b3013">Club:</span> {{ nomination.nomi_post.club }}</h4>
+            </div>
+        </div>
+        <hr>
+
 
      <ul class="nav nav-tabs">
          <li class="active"><a href="#all" data-toggle="tab" aria-expanded="true">All Applications</a></li>
@@ -83,6 +85,9 @@
         {% if pending %}
             <h3 class="text-center">Interview Period</h3>
         {% endif %}
+        {% if perm %}
+            <h3 class="text-center">Result Compiled</h3>
+        {% endif %}
         </div>
 
 
@@ -90,11 +95,11 @@
         {% if not pending and not perm %}
         <div class="well well-sm">
             {% if result_approval.0 %}
-                <a href="{% url 'result_approval' nomination.pk %}" class="btn btn-danger btn-lg" style="width: auto">
+                <a href="{% url 'result_approval' nomination.pk %}" class="btn btn-danger" style="width: auto">
                     Send Result list for Approval
                 </a>
             {% elif result_approval.2 %}
-                <a href="{% url 'cancel_result_approval' nomination.pk %}" class="btn btn-danger btn-lg" style="width: auto">
+                <a href="{% url 'cancel_result_approval' nomination.pk %}" class="btn btn-danger" style="width: auto">
                     Cancel Approval Request
                 </a>
             {% elif result_approval.1 %}
@@ -108,10 +113,10 @@
         {% if not pending and perm and result_approval.0 %}
             <div class="text-center">
                 {% if nomination.status == 'Interview period' %}
-                    <a href="{% url 'ratify' nomination.pk %}" class="btn btn-info btn-lg"
+                    <a href="{% url 'ratify' nomination.pk %}" class="btn btn-info "
                        style="width: auto">Send for Ratification</a>
                 {% elif nomination.status == 'Sent for ratification' %}
-                    <a href="{% url 'cancel_ratify' nomination.pk %}" class="btn btn-danger btn-lg"
+                    <a href="{% url 'cancel_ratify' nomination.pk %}" class="btn btn-danger"
                        style="width: auto">Cancel Ratification Request</a>
                 {% endif %}
             </div>
@@ -235,36 +240,82 @@
     <!--  -------------------------------------------------------------------------------------------------------  -->
 
     {% if nomination.status == 'Sent for ratification' %}
-    <h3 class="text-center"><a href="{% url 'nomi_detail' nomination.pk %}">{{nomination.name}} </a></h3>
+        <div class="well well-sm" style="padding-bottom: 20px">
+            <h2 class="text-center" style="color: #343e2e;">{{nomination.name}} </h2>
 
-        {% if senate_perm %}
-            <h3 class="text-center">Result list to be Ratified</h3>
-        {% else %}
-            <h3 class="text-center">Result list sent for Ratification</h3>
-        {% endif %}
+            {% if senate_perm %}
+                <h3 class="text-center">Result list to be Ratified</h3>
+            {% else %}
+                <h3 class="text-center">Result list sent for Ratification</h3>
+            {% endif %}
+
+        </div>
+
+        <div>
+            {% if not pending and perm %}
+                {% if nomination.status == 'Interview period' %}
+                    <div class="text-center">
+                        <a href="{% url 'ratify' nomination.pk %}" class="btn btn-info">Send for Ratification</a>
+                    </div>
+
+                {% elif nomination.status == 'Sent for ratification' %}
+                    <div class="text-center">
+                        <a href="{% url 'cancel_ratify' nomination.pk %}" class="btn btn-danger"
+                   style="width: auto">Cancel Ratification Request</a>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            {% if senate_perm %}
+                <div class="col-lg-6 text-center">
+                    <a class="btn btn-info" href="{% url 'append_user' nomination.pk %}">Append to post</a>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <a class="btn btn-danger" href="{% url 'replace_user' nomination.pk %}">Clean and Append</a>
+                </div>
+            {% endif %}
+        </div>
+
+        <hr>
+        <div class="row">
+            <div class="col-lg-6 text-center">
+                <h4><span style=" font-size: 20px;color: #1b3013">Post:</span> {{ nomination.nomi_post }}</h4>
+            </div>
+            <div class="col-lg-6 text-center">
+                <h4><span style=" font-size: 20px;color: #1b3013">Club:</span> {{ nomination.nomi_post.club }}</h4>
+            </div>
+        </div>
+        <hr>
+
     <ul class="nav nav-tabs">
+         <li class="active"><a  href="#all" data-toggle="tab" aria-expanded="true">All Applicants</a></li>
          <li class="active"><a  href="#accepted" data-toggle="tab" aria-expanded="true">Accepted</a></li>
         <li><a href="#rejected" data-toggle="tab" aria-expanded="false">Rejected</a></li>
-        {% if not pending and perm %}
-            {% if nomination.status == 'Interview period' %}
-                <a href="{% url 'ratify' nomination.pk %}" class="btn btn-info">Send for Ratification</a>
-            {% elif nomination.status == 'Sent for ratification' %}
-                <a href="{% url 'cancel_ratify' nomination.pk %}" class="btn btn-danger"
-                   style="width: auto">Cancel Ratification Request</a>
-            {% endif %}
-        {% endif %}
 
-        {% if senate_perm %}
-            <a class="btn btn-info" href="{% url 'append_user' nomination.pk %}">
-                Append to post
-            </a>
-            <a class="btn btn-danger" href="{% url 'replace_user' nomination.pk %}">
-                Clean and Append
-            </a>
-        {% endif %}
 
      </ul>
     <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade active in profile-nominations" id="all">
+            <br>
+            {% for nomi in applicants  %}
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    <p class="profile-post-name"><span>Applicant :</span>{{nomi.user.userprofile.name}}</p>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <p>Result Status : {{ nomi.status }}</p>
+                        </div>
+                        <div class="col-lg-5">
+                            <p>Interview status : {{nomi.interview_status}}</p>
+                        </div>
+                        <div class="col-lg-4">
+                            <p><a href="{% url 'nomi_answer' nomi.pk %}">View Application</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
 
         <div class="tab-pane fade active in profile-nominations" id="accepted">
                 <br>
@@ -314,8 +365,10 @@
 
     <!-- -----------------------------------------------------------------------------------------------------    -->
     {% if status.4 %}
-    <h3 class="text-center">{{nomination.name}} </h3>
-    <h3 class="text-center">Selected users have been assigned to post.</h3>
+        <div class="well well-sm" style="padding-bottom: 20px">
+            <h2 class="text-center" style="color: #343e2e;">{{nomination.name}} </h2>
+        </div>
+    <h3 class="text-center">Selected users have been assigned the Post.</h3>
 
     {% endif %}
 
