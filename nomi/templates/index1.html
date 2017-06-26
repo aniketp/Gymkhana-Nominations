@@ -7,43 +7,37 @@
 <div class="profile-content ">
 
 
-     <ul class="nav nav-tabs">
+     <ul class="nav nav-tabs btn-group btn-group-justified">
          <li class="active"><a href="#user" data-toggle="tab" aria-expanded="true">User Portal</a></li>
          {% if posts %}
           <li><a href="{% url 'admin_portal' %}" aria-expanded="false">Admin Portal</a></li>
          {% endif %}
+        <li><a href="#filter" data-toggle="tab" aria-expanded="true">Filter Nominations</a></li>
      </ul>
     <div id="myTabContent" class="tab-content">
          <div class="tab-pane fade active in profile-nominations" id="user">
                 <br>
-                <div class="panel panel-default">
-                  <div class="panel-heading">Filter Nominations</div>
-                  <div class="panel-body">
-                    <form action="" method="post">
-                            {% csrf_token %}
 
-                           {{club_filter|bootstrap}}
-
-                        <input type="submit" value="Submit" class="button-facebook btn" />
-                    </form>
-                  </div>
-                </div>
                 <div>
+
+                <div>
+                    <h1 style="text-align: center">RELEASED NOMINATIONS</h1>
+                    <hr>
+                </div>
                     {% for nomi in result_query %}
                     {% if nomi|to_class_name == 'Nomination' %}
 
                     <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">{{ nomi.name.upper }}</h3>
-                        <div>Opened on {{nomi.opening_date}}</div>
+                    <div class="panel-heading" style="background-color: #eb5562">
+                        <h3 class="panel-title" style="font-weight: bolder; font-size: 20px">{{ nomi.name.upper }}</h3>
+                        <span style="font-weight: bolder">Preference : </span>
+                        <span class="label label-primary">{{nomi.year_choice}}</span>
+                        <span class="label label-success">{{nomi.dept_choice}}</span>
                     </div>
 
 
                     <div class="panel-body">
-
-                        <span style="font-weight: bolder">Preference : </span>
-                        <span class="label label-primary">{{nomi.year_choice}}</span>
-                        <span class="label label-success">{{nomi.dept_choice}}</span>
+                        <div><span style="font-weight: bold">Release Date: </span> {{nomi.opening_date}}</div>
                         <p><span style="font-weight: bolder"> Deadline :  </span>{{nomi.closing_date}}</p>
                         <p>{{nomi.brief_desc}} ...</p>
                         <a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}"
@@ -51,12 +45,14 @@
                     </div>
                     </div>
                     {% else %}
+
+
                         {% if nomi|group_status %}
 
                         <div class="panel panel-success">
-                            <div class="panel-heading">
-                            <h3 class="panel-title">{{ nomi.name.upper }}</h3>
-                            <div>Group of Nominations</div>
+                            <div class="panel-heading" style="background-color: #164552">
+                            <h3 class="panel-title" style="font-weight: bolder; font-size: 20px">{{ nomi.name.upper }}</h3>
+                            <span>Group of Nominations</span>
                         </div>
 
 
@@ -71,6 +67,24 @@
                     {% endif %}
                     {% endfor %}
                 </div>
+         </div>
+
+        <div class="tab-pane fade profile-nominations" id="filter">
+                <br>
+                <div class="panel panel-default">
+                  <div class="panel-heading">Filter Nominations</div>
+                  <div class="panel-body">
+                    <form action="" method="post">
+                            {% csrf_token %}
+
+                           {{club_filter|bootstrap}}
+                    <div class="col-lg-11 text-center">
+                        <input type="submit" value="Submit" class="btn-success btn nomi-filter" />
+                    </div>
+                    </form>
+                  </div>
+                </div>
+
          </div>
     </div>
 </div>
