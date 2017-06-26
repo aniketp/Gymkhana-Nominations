@@ -9,7 +9,7 @@
         <div class="container-fluid child-post-container">
             <div class="row box">
                 <div>
-                    <h2>Secretary, Programming Club</h2>
+                    <h2>{{ post.post_name }}</h2>
                 </div>
 
                 <div class="col-lg-12 col-sm-12">
@@ -39,19 +39,23 @@
                     </div>
                 </div>
                 <div class="col-lg-6 text-center">
-                    <div class="dropdown show">
-                        <button class="btn btn-secondary btn-warning dropdown-toggle" type="button"
-                             id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Give tag permission
-                        </button>
-                        <div class="dropdown-menu " role="menu">
-                            <form action="" method="post" style="display: inline">
-                                {% csrf_token %}
-                                <p>{{confirm_form|bootstrap}}</p>
-                                <input class="btn btn-success btn-block" type="submit" value="submit" />
-                            </form>
+                    {% if post.tag_perms == 'normal' %}
+                        <div class="dropdown show">
+                            <button class="btn btn-secondary btn-warning dropdown-toggle" type="button"
+                                 id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Give tag permission
+                            </button>
+                            <div class="dropdown-menu " role="menu">
+                                <form action="" method="post" style="display: inline">
+                                    {% csrf_token %}
+                                    <p>{{confirm_form|bootstrap}}</p>
+                                    <input class="btn btn-success btn-block" type="submit" value="submit" />
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                    {% else %}
+                       <p>Tag permission given</p>
+                    {% endif %}
                 </div>
             </div>
         {% endif %}

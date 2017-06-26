@@ -155,10 +155,7 @@ def child_post_view(request, pk):
         post.tag_perms = 'Can create'
         post.save()
 
-    remove_form = ConfirmApplication(request.POST or None)
-    if remove_form.is_valid():
-        post.tag_perms = 'normal'
-        post.save()
+
 
 
     if access:
@@ -196,13 +193,12 @@ def child_post_view(request, pk):
                                                         'approval': approval, 'power_to_approve': power_to_approve,
                                                         'nominations': nominations, 'form': form,'info': info,
                                                         'view': view,'tag_form':tag_form,
-                                                        'confirm_form':confirm_form,'remove_form':remove_form})
+                                                        'confirm_form':confirm_form})
 
         return render(request, 'child_post1.html', {'post': post, 'ap': approved, 'view': view,
                                                     'approval': approval, 'power_to_approve': power_to_approve,
                                                     'nominations': nominations, 'form': form, 'info': info,
-                                                    'tag_form':tag_form,'confirm_form':confirm_form ,
-                                                    'remove_form':remove_form})
+                                                    'tag_form':tag_form,'confirm_form':confirm_form })
     else:
         return render(request, 'no_access.html')
 
