@@ -91,7 +91,7 @@
 
         {% endif %}
 
-        {% if not pending and perm %}
+        {% if not pending and perm and result_approval.0 %}
             {% if nomination.status == 'Interview period' %}
                 <a href="{% url 'ratify' nomination.pk %}" class="btn btn-info">Send for Ratification</a>
             {% elif nomination.status == 'Sent for ratification' %}

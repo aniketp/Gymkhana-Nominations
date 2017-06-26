@@ -399,7 +399,6 @@ def final_nomi_approval(request, nomi_pk):
             break
     if access:
         to_add = view_post.parent
-        nomi.nomi_approvals.add(to_add)
         nomi.tags.add(to_add.club)
         nomi.open_to_users()
         return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
@@ -603,7 +602,7 @@ def applications(request, pk):
                                                            'senate_perm': senate_permission})
 
     return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
-                                                       'form_confirm': form_confirm, 'result_approval': result_approval,
+                                                       'form_confirm': form_confirm, 'result_approval': results_approval,
                                                        'accepted': accepted, 'rejected': rejected, 'status': status,
                                                        'pending': pending, 'perm': permission,
                                                        'senate_perm': senate_permission})
@@ -613,12 +612,17 @@ def applications(request, pk):
 def ratify(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     access = False
+    view_post = None
 
     for apv_post in nomi.nomi_approvals.all():
         if request.user in apv_post.post_holders.all():
             access = True
+            view_post = apv_post
             break
     if access:
+        to_add = view_post.parent
+        nomi.result_approvals.add(to_add)
+        nomi.nomi_approvals.add(to_add)
         nomi.status = 'Sent for ratification'
         nomi.save()
 
@@ -632,12 +636,17 @@ def ratify(request, nomi_pk):
 def cancel_ratify(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     access = False
+    view_post = None
 
     for apv_post in nomi.nomi_approvals.all():
         if request.user in apv_post.post_holders.all():
             access = True
+            view_post = apv_post
             break
     if access:
+        to_remove = view_post.parent
+        nomi.result_approvals.remove(to_remove)
+        nomi.nomi_approvals.remove(to_remove)
         nomi.status = 'Interview period'
         nomi.save()
 
