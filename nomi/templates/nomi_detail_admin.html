@@ -48,7 +48,7 @@
                             </div>
 
                             <div class="col-lg-4 text-center">
-                                <a href="{% url 'index' %}" class="btn btn-info">Go Back</a>
+                                <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
                             </div>
 
                             {% else %}
@@ -59,7 +59,7 @@
                                     </div>
 
                                     <div class="col-lg-6 text-center">
-                                        <a href="{% url 'index' %}" class="btn btn-info">Go Back</a>
+                                        <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
                                     </div>
                                 {% else%}
                                     <div>
@@ -73,7 +73,7 @@
                                     </div>
 
                                     <div class="col-lg-4 text-center">
-                                        <a href="{% url 'index' %}" class="btn btn-info">Go Back</a>
+                                        <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
                                     </div>
 
                                 {% endif %}
@@ -90,7 +90,7 @@
                                 <a href="{% url 'applicants' nomi.pk %}" class="btn btn-success">View Applicants</a>
                             </div>
                             <div class="col-lg-6 text-center">
-                                <a href="{% url 'child_post' pk=nomi.nomi_post.pk %}" class="btn btn-info">Go Back</a>
+                                <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
                             </div>
                         </div>
                          {% endif %}
@@ -100,7 +100,7 @@
                                 <a href="{% url 'applicants' nomi.pk %}" class="btn btn-success">View Applicants</a>
                             </div>
                             <div class="col-lg-6 text-center">
-                                <a href="{% url 'child_post' pk=nomi.nomi_post.pk %}" class="btn btn-info">Go Back</a>
+                                <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
                             </div>
                         </div>
                          {% endif %}
@@ -110,7 +110,7 @@
                                 <a href="{% url 'applicants' nomi.pk %}" class="btn btn-success">View Results</a>
                             </div>
                             <div class="col-lg-6 text-center">
-                                <a href="{% url 'child_post' pk=nomi.nomi_post.pk %}" class="btn btn-info">Go Back</a>
+                                <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
                             </div>
                         </div>
                          {% endif %}

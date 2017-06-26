@@ -16,12 +16,22 @@
     {% endif %}
     <!-- --------------------------------------------------------------------------------------------------------  -->
     {% if status.1 %}
-    <h3 class="text-center">{{nomination.name}} </h3>
-
-     <ul class="nav nav-tabs">
-         <li class="active"><a href="#all" data-toggle="tab" aria-expanded="true">All Applicatons</a></li>
-         <div class="dropdown show">
-             <button class="btn btn-secondary btn-danger dropdown-toggle" type="button"
+        <div class="well well-sm" style="padding-bottom: 20px">
+            <h2 class="text-center" style="color: #343e2e;">{{nomination.name}} </h2>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-lg-6 text-center">
+                <h4><span style=" font-size: 20px;color: #1b3013">For the Post:</span> {{ nomination.nomi_post }}</h4>
+            </div>
+            <div class="col-lg-6 text-center">
+                <h4><span style=" font-size: 20px;color: #1b3013">Club:</span> {{ nomination.nomi_post.club }}</h4>
+            </div>
+        </div>
+        <hr>
+        <div class="well text-center">
+            <div class="dropdown show">
+             <button class="btn btn-secondary btn-danger dropdown-toggle" style="width: auto" type="button"
                      id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                  Start Interview Period
              </button>
@@ -33,6 +43,11 @@
                  </form>
              </div>
          </div>
+        </div>
+
+     <ul class="nav nav-tabs">
+         <li class="active"><a href="#all" data-toggle="tab" aria-expanded="true">All Applications</a></li>
+
      </ul>
     <div id="myTabContent" class="tab-content">
         <div class="tab-pane fade active in profile-nominations" id="all">
