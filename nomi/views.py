@@ -96,6 +96,7 @@ def post_view(request, pk):
     post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
     nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
     group_nomi_approvals = GroupNomination.objects.filter(status='created').filter(approvals=post)
+    result_approvals = Nomination.objects.filter(result_approvals = post).exclude(status='work_done').exclude(status='Nomination_created')
 
     tag_form = ClubForm(request.POST or None)
     if tag_form.is_valid():
@@ -105,7 +106,7 @@ def post_view(request, pk):
         return render(request, 'post1.html', context={'post': post, 'child_posts': child_posts_reverse,
                                                       'post_approval': post_approvals, 'tag_form': tag_form,
                                                       'nomi_approval': nomi_approvals,
-                                                      'group_nomi_approvals': group_nomi_approvals})
+                                                      'group_nomi_approvals': group_nomi_approvals,'result_approvals':result_approvals})
     else:
         return render(request, 'no_access.html')
 
@@ -154,6 +155,12 @@ def child_post_view(request, pk):
         post.tag_perms = 'Can create'
         post.save()
 
+    remove_form = ConfirmApplication(request.POST or None)
+    if remove_form.is_valid():
+        post.tag_perms = 'normal'
+        post.save()
+
+
     if access:
         if post.status == 'Post created':
             approved = 1
@@ -188,12 +195,14 @@ def child_post_view(request, pk):
             return render(request, 'child_post1.html', {'post': post, 'ap': approved,
                                                         'approval': approval, 'power_to_approve': power_to_approve,
                                                         'nominations': nominations, 'form': form,'info': info,
-                                                        'view': view,'tag_form':tag_form,'confirm_form':confirm_form})
+                                                        'view': view,'tag_form':tag_form,
+                                                        'confirm_form':confirm_form,'remove_form':remove_form})
 
         return render(request, 'child_post1.html', {'post': post, 'ap': approved, 'view': view,
                                                     'approval': approval, 'power_to_approve': power_to_approve,
                                                     'nominations': nominations, 'form': form, 'info': info,
-                                                    'tag_form':tag_form,'confirm_form':confirm_form })
+                                                    'tag_form':tag_form,'confirm_form':confirm_form ,
+                                                    'remove_form':remove_form})
     else:
         return render(request, 'no_access.html')
 
@@ -213,9 +222,29 @@ def post_approval(request, view_pk, post_pk):
             break
 
     if access or request.user in post.parent.post_holders.all():
-        return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk}))
+        return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view_pk}))
     else:
         return render(request, 'no_access.html')
+
+@login_required
+def post_reject(request, view_pk, post_pk):
+    post = Post.objects.get(pk=post_pk)
+    viewer = Post.objects.get(pk=view_pk)
+    to_add = viewer
+    post.post_approvals.remove(to_add)
+
+    access = False
+    for apv_post in post.post_approvals.all():
+        if request.user in apv_post.post_holders.all():
+            access = True
+            break
+
+    if access:
+        post.post_approvals.remove(to_add)
+
+
+    return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view_pk}))
+
 
 
 @login_required
@@ -235,7 +264,7 @@ def final_post_approval(request, view_pk, post_pk):
             break
 
     if access or request.user in post.parent.post_holders.all():
-        return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk}))
+        return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view_pk}))
     else:
         return render(request, 'no_access.html')
 
@@ -339,6 +368,25 @@ def nomi_approval(request, nomi_pk):
         nomi.nomi_approvals.add(to_add)
         nomi.tags.add(to_add.club)
         return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
+    else:
+        return render(request, 'no_access.html')
+
+
+@login_required
+def nomi_reject(request, nomi_pk):
+    nomi = Nomination.objects.get(pk=nomi_pk)
+    access = False
+    view_post = 0
+    for apv_post in nomi.nomi_approvals.all():
+        if request.user in apv_post.post_holders.all():
+            access = True
+            view_post = apv_post
+            break
+    if access:
+        to_remove = view_post
+        nomi.nomi_approvals.add(to_remove)
+        nomi.tags.remove(to_remove.club)
+        return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view_post.pk}))
     else:
         return render(request, 'no_access.html')
 
@@ -503,10 +551,14 @@ def applications(request, pk):
     pending = NominationInstance.objects.filter(nomination=nomination).filter(status=None)
 
     view_post = None
+    access = False
     for apv_post in nomination.nomi_approvals.all():
         if request.user in apv_post.post_holders.all():
             view_post = apv_post
+            access = True
             break
+    if not access:
+        return render(request, 'no_access.html')
 
     permission = None
     senate_permission = None
