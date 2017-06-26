@@ -222,7 +222,7 @@ def post_approval(request, view_pk, post_pk):
             break
 
     if access or request.user in post.parent.post_holders.all():
-        return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk}))
+        return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view_pk}))
     else:
         return render(request, 'no_access.html')
 
@@ -240,9 +240,11 @@ def post_reject(request, view_pk, post_pk):
             break
 
     if access:
-        return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view_pk}))
-    else:
-        return render(request, 'no_access.html')
+        post.post_approvals.remove(to_add)
+
+
+    return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view_pk}))
+
 
 
 @login_required
@@ -262,7 +264,7 @@ def final_post_approval(request, view_pk, post_pk):
             break
 
     if access or request.user in post.parent.post_holders.all():
-        return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk}))
+        return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view_pk}))
     else:
         return render(request, 'no_access.html')
 
