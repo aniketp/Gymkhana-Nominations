@@ -12,7 +12,7 @@
 
     <!--  -------------------------------------------------------------------------------------------------   -->
     {% if status.0 %}
-    <h3 class="text-center">   Nomination under construction</h3>
+    <h3 class="text-center">Nomination under construction</h3>
     {% endif %}
     <!-- --------------------------------------------------------------------------------------------------------  -->
     {% if status.1 %}
@@ -22,7 +22,7 @@
         <hr>
         <div class="row">
             <div class="col-lg-6 text-center">
-                <h4><span style=" font-size: 20px;color: #1b3013">For the Post:</span> {{ nomination.nomi_post }}</h4>
+                <h4><span style=" font-size: 20px;color: #1b3013">Post:</span> {{ nomination.nomi_post }}</h4>
             </div>
             <div class="col-lg-6 text-center">
                 <h4><span style=" font-size: 20px;color: #1b3013">Club:</span> {{ nomination.nomi_post.club }}</h4>
@@ -77,8 +77,59 @@
 
     <!-- --------------------------------------------------------------------------------------------------------   -->
     {% if status.2 %}
-    <h3 class="text-center">{{nomination.name}} </h3>
-    <h3 class="text-center">This is Interview period</h3>
+
+        <div class="well well-sm" style="padding-bottom: 20px">
+            <h2 class="text-center" style="color: #343e2e;">{{nomination.name}} </h2>
+        {% if pending %}
+            <h3 class="text-center">Interview Period</h3>
+        {% endif %}
+        </div>
+
+
+
+        {% if not pending and not perm %}
+        <div class="well well-sm">
+            {% if result_approval.0 %}
+                <a href="{% url 'result_approval' nomination.pk %}" class="btn btn-danger btn-lg" style="width: auto">
+                    Send Result list for Approval
+                </a>
+            {% elif result_approval.2 %}
+                <a href="{% url 'cancel_result_approval' nomination.pk %}" class="btn btn-danger btn-lg" style="width: auto">
+                    Cancel Approval Request
+                </a>
+            {% elif result_approval.1 %}
+                <div class="btn btn-danger disabled" style="width: auto">
+                    Your Parents have Approved the Results
+                </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if not pending and perm and result_approval.0 %}
+            <div class="text-center">
+                {% if nomination.status == 'Interview period' %}
+                    <a href="{% url 'ratify' nomination.pk %}" class="btn btn-info btn-lg"
+                       style="width: auto">Send for Ratification</a>
+                {% elif nomination.status == 'Sent for ratification' %}
+                    <a href="{% url 'cancel_ratify' nomination.pk %}" class="btn btn-danger btn-lg"
+                       style="width: auto">Cancel Ratification Request</a>
+                {% endif %}
+            </div>
+        {% endif %}
+
+
+        <hr>
+        <div class="row">
+            <div class="col-lg-6 text-center">
+                <h4><span style=" font-size: 20px;color: #1b3013">Post:</span> {{ nomination.nomi_post }}</h4>
+            </div>
+            <div class="col-lg-6 text-center">
+                <h4><span style=" font-size: 20px;color: #1b3013">Club:</span> {{ nomination.nomi_post.club }}</h4>
+            </div>
+        </div>
+        <hr>
+
+
     <ul class="nav nav-tabs">
         <li class="active"><a href="#all" data-toggle="tab" aria-expanded="true">All Applicatons</a></li>
         <li><a  href="#accepted" data-toggle="tab" aria-expanded="false">Accepted</a></li>
@@ -88,31 +139,6 @@
             <li><a href="#pending" data-toggle="tab" aria-expanded="false">Pending</a></li>
         {% endif %}
 
-        {% if not pending and not perm %}
-
-            {% if result_approval.0 %}
-                <a href="{% url 'result_approval' nomination.pk %}" class="btn btn-danger" style="width: auto">
-                    Send Result list for Approval
-                </a>
-            {% elif result_approval.2 %}
-                <a href="{% url 'cancel_result_approval' nomination.pk %}" class="btn btn-danger" style="width: auto">
-                    Cancel Approval Request
-                </a>
-            {% elif result_approval.1 %}
-                <div class="btn btn-danger disabled" style="width: auto">
-                    Your Parents have Approved the Results
-                </div>
-            {% endif %}
-
-        {% endif %}
-
-        {% if not pending and perm and result_approval.0 %}
-            {% if nomination.status == 'Interview period' %}
-                <a href="{% url 'ratify' nomination.pk %}" class="btn btn-info">Send for Ratification</a>
-            {% elif nomination.status == 'Sent for ratification' %}
-                <a href="{% url 'cancel_ratify' nomination.pk %}" class="btn btn-danger">Cancel Ratification Request</a>
-            {% endif %}
-        {% endif %}
      </ul>
     <div id="myTabContent" class="tab-content">
         <div class="tab-pane fade active in profile-nominations" id="all">
