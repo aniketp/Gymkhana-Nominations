@@ -340,7 +340,7 @@ body {
 /**
  * Shadow
  */
-a.button::before {
+.button::before {
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     -webkit-box-shadow: #959595 0 2px 5px;
@@ -356,12 +356,12 @@ a.button::before {
     top: 0;
     width: 100%; }
 
-a.button:active::before { padding: 1px 0 0; }
+.button:active::before { padding: 1px 0 0; }
 
 /**
  * Grey
  */
-a.button {
+.button {
     -moz-box-shadow: inset 0 0 0 1px #63ad0d;
     -webkit-box-shadow: inset 0 0 0 1px #63ad0d;
     -moz-border-radius: 3px;
@@ -384,7 +384,7 @@ a.button {
     text-decoration: none;
     text-shadow: 0 1px 0 #fafafa; }
 
-a.button:hover {
+.button:hover {
     background: #e4e4e4;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#e4e4e4), to(#ededed));
     background: -moz-linear-gradient(#e4e4e4, #ededed);
@@ -393,7 +393,7 @@ a.button:hover {
     border-bottom: solid 3px #b2b1b1;
     box-shadow: inset 0 0 0 1px #efefef; }
 
-a.button:active {
+.button:active {
     background: #dfdfdf;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#dfdfdf), to(#e3e3e3));
     background: -moz-linear-gradient(#dfdfdf, #e3e3e3);
@@ -405,7 +405,7 @@ a.button:active {
 /**
  * Pink
  */
-a.button.pink {
+.button-pink {
     background: #f997b0;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#f997b0), to(#f56778));
     background: -moz-linear-gradient(#f997b0, #f56778);
@@ -416,7 +416,7 @@ a.button.pink {
     color: #913944;
     text-shadow: 0 1px 0 #f9a0ad; }
 
-a.button.pink:hover {
+.button-pink:hover {
     background: #f57184;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#f57184), to(#f78297));
     background: -moz-linear-gradient(#f57184, #f78297);
@@ -425,7 +425,7 @@ a.button.pink:hover {
     border-bottom: solid 3px #cb5462;
     box-shadow: inset 0 0 0 1px #f9aab5; }
 
-a.button.pink:active {
+.button-pink:active {
     background: #f06a7c;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#f06a7c), to(#f56c7e));
     background: -moz-linear-gradient(#f06a7c, #f56c7e);
@@ -436,7 +436,7 @@ a.button.pink:active {
 /**
  * Blue
  */
-a.button.blue {
+.button-blue {
     background: #abe4f8;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#abe4f8), to(#74d0f4));
     background: -moz-linear-gradient(#abe4f8, #74d0f4);
@@ -447,7 +447,7 @@ a.button.blue {
     color: #42788e;
     text-shadow: 0 1px 0 #b6e6f9; }
 
-a.button.blue:hover {
+.button-blue:hover {
     background: #80d4f5;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#80d4f5), to(#92dbf6));
     background: -moz-linear-gradient(#80d4f5, #92dbf6);
@@ -456,7 +456,7 @@ a.button.blue:hover {
     border-bottom: solid 3px #589cb6;
     box-shadow: inset 0 0 0 1px #b2e6f8; }
 
-a.button.blue:active {
+.button-blue:active {
     background: #89d2ee;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#89d2ee), to(#84cae6));
     background: -moz-linear-gradient(#89d2ee, #84cae6);
@@ -467,7 +467,7 @@ a.button.blue:active {
 /**
  * Green
  */
-a.button.green {
+.button-green {
     background: #cae285;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#cae285), to(#a3cd5a));
     background: -moz-linear-gradient(#cae285, #a3cd5a);
@@ -478,7 +478,7 @@ a.button.green {
     color: #5d7731;
     text-shadow: 0 1px 0 #d0e5a4; }
 
-a.button.green:hover {
+.button-green:hover {
     background: #abd164;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#abd164), to(#b9d972));
     background: -moz-linear-gradient(#abd164, #b9d972);
@@ -487,7 +487,7 @@ a.button.green:hover {
     border-bottom: solid 3px #799545;
     box-shadow: inset 0 0 0 1px #cce3a1; }
 
-a.button.green:active {
+.button-green:active {
     background: #a4cb5d;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#a4cb5d), to(#9ec45a));
     background: -moz-linear-gradient(#a4cb5d, #9ec45a);
@@ -498,7 +498,7 @@ a.button.green:active {
 /**
  * Teal
  */
-a.button.teal {
+.button-teal {
     background: #b7f2f4;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#b7f2f4), to(#81e8eb));
     background: -moz-linear-gradient(#b7f2f4, #81e8eb);
@@ -509,7 +509,7 @@ a.button.teal {
     color: #437b7d;
     text-shadow: 0 1px 0 #bef3f5; }
 
-a.button.teal:hover {
+.button-teal:hover {
     background: #8deaed;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#8deaed), to(#9fedf0));
     background: -moz-linear-gradient(#8deaed, #9fedf0);
@@ -518,7 +518,7 @@ a.button.teal:hover {
     border-bottom: solid 3px #4fa7aa;
     box-shadow: inset 0 0 0 1px #b9f2f5; }
 
-a.button.teal:active {
+.button-teal:active {
     background: #84e4e7;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#84e4e7), to(#80dcdf));
     background: -moz-linear-gradient(#84e4e7, #80dcdf);
@@ -529,7 +529,7 @@ a.button.teal:active {
 /**
  * Black
  */
-a.button.black {
+.button-black {
     background: #656565;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#656565), to(#444));
     background: -moz-linear-gradient(#656565, #444);
@@ -540,7 +540,7 @@ a.button.black {
     color: #fff;
     text-shadow: 0 1px 0 #2f2f2f; }
 
-a.button.black:hover {
+.button-black:hover {
     background: #4c4c4c;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#4c4c4c), to(#565656));
     background: -moz-linear-gradient(#4c4c4c, #565656);
@@ -549,7 +549,7 @@ a.button.black:hover {
     border-bottom: solid 3px #414141;
     box-shadow: inset 0 0 0 1px #818181; }
 
-a.button.black:active {
+.button-black:active {
     background: #474747;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#474747), to(#444));
     background: -moz-linear-gradient(#474747, #444);
@@ -560,7 +560,7 @@ a.button.black:active {
 /**
  * Dark Grey
  */
-a.button.dark_grey {
+.button-dark_grey {
     background: #d1d1d1;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#d1d1d1), to(#afafaf));
     background: -moz-linear-gradient(#d1d1d1, #afafaf);
@@ -571,7 +571,7 @@ a.button.dark_grey {
     color: #555;
     text-shadow: 0 1px 0 #d6d6d6; }
 
-a.button.dark_grey:hover {
+.button-dark_grey:hover {
     background: #b7b7b7;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#b7b7b7), to(#c2c2c2));
     background: -moz-linear-gradient(#b7b7b7, #c2c2c2);
@@ -580,7 +580,7 @@ a.button.dark_grey:hover {
     border-bottom: solid 3px #878787;
     box-shadow: inset 0 0 0 1px #d4d4d4; }
 
-a.button.dark_grey:active {
+.button-dark_grey:active {
     background: #afafaf;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#afafaf), to(#a9a9a9));
     background: -moz-linear-gradient(#afafaf, #a9a9a9);
@@ -591,7 +591,7 @@ a.button.dark_grey:active {
 /**
  * Orange
  */
-a.button.orange {
+.button-orange {
     background: #feda71;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#feda71), to(#febe4d));
     background: -moz-linear-gradient(#feda71, #febe4d);
@@ -602,7 +602,7 @@ a.button.orange {
     color: #996633;
     text-shadow: 0 1px 0 #fedd9b; }
 
-a.button.orange:hover {
+.button-orange:hover {
     background: #fec455;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#fec455), to(#fecd61));
     background: -moz-linear-gradient(#fec455, #fecd61);
@@ -611,7 +611,7 @@ a.button.orange:hover {
     border-bottom: solid 3px #b98a37;
     box-shadow: inset 0 0 0 1px #fedb98; }
 
-a.button.orange:active {
+.button-orange:active {
     background: #f9bd4f;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#f9bd4f), to(#f0b64d));
     background: -moz-linear-gradient(#f9bd4f, #f0b64d);
@@ -622,7 +622,7 @@ a.button.orange:active {
 /**
  * Purple
  */
-a.button.purple {
+.button-purple {
     background: #e8c4e4;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#e8c4e4), to(#d698d0));
     background: -moz-linear-gradient(#e8c4e4, #d698d0);
@@ -633,7 +633,7 @@ a.button.purple {
     color: #7b5777;
     text-shadow: 0 1px 0 #eacae6; }
 
-a.button.purple:hover {
+.button-purple:hover {
     background: #daa2d4;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#daa2d4), to(#e0b1db));
     background: -moz-linear-gradient(#daa2d4, #e0b1db);
@@ -642,7 +642,7 @@ a.button.purple:hover {
     border-bottom: solid 3px #946890;
     box-shadow: inset 0 0 0 1px #e9c7e6; }
 
-a.button.purple:active {
+.button-purple:active {
     background: #d49ace;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#d49ace), to(#cc94c6));
     background: -moz-linear-gradient(#d49ace, #cc94c6);
@@ -653,7 +653,7 @@ a.button.purple:active {
 /**
  * Blue Alt
  */
-a.button.blue_alt {
+.button-blue_alt {
     background: #becbd6;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#becbd6), to(#8da5b7));
     background: -moz-linear-gradient(#becbd6, #8da5b7);
@@ -664,7 +664,7 @@ a.button.blue_alt {
     color: #515f6a;
     text-shadow: 0 1px 0 #c4d0da; }
 
-a.button.blue_alt:hover {
+.button-blue_alt:hover {
     background: #97adbd;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#97adbd), to(#a8bac8));
     background: -moz-linear-gradient(#97adbd, #a8bac8);
@@ -673,7 +673,7 @@ a.button.blue_alt:hover {
     border-bottom: solid 3px #62727e;
     box-shadow: inset 0 0 0 1px #c0ced7; }
 
-a.button.blue_alt:active {
+.button-blue_alt:active {
     background: #8fa6b6;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#8fa6b6), to(#8aa0b0));
     background: -moz-linear-gradient(#8fa6b6, #8aa0b0);
@@ -684,7 +684,7 @@ a.button.blue_alt:active {
 /**
  * Crisp
  */
-a.button.crisp {
+.button-crisp {
     background: #c38b66;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#c38b66), to(#9d6741));
     background: -moz-linear-gradient(#c38b66, #9d6741);
@@ -695,7 +695,7 @@ a.button.crisp {
     color: #fff;
     text-shadow: 0 1px 0 #7b502e; }
 
-a.button.crisp:hover {
+.button-crisp:hover {
     background: #9d6741;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#9d6741), to(#c38b66));
     background: -moz-linear-gradient(#9d6741, #c38b66);
@@ -704,7 +704,7 @@ a.button.crisp:hover {
     border-bottom: solid 3px #33180d;
     box-shadow: inset 0 0 0 1px #b98c62; }
 
-a.button.crisp:active {
+.button-crisp:active {
     background: #9d6741;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#9d6741), to(#c38b66));
     background: -moz-linear-gradient(#9d6741, #c38b66);
@@ -715,7 +715,7 @@ a.button.crisp:active {
 /**
  * Forrst - Special Edition
  */
-a.button.forrst {
+.button-forrst {
     background: #4a7746;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#4a7746), to(#335d30));
     background: -moz-linear-gradient(#4a7746, #335d30);
@@ -726,7 +726,7 @@ a.button.forrst {
     color: #142413;
     text-shadow: 0 1px 0 #4b7b47; }
 
-a.button.forrst:hover {
+.button-forrst:hover {
     background: #335d30;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#335d30), to(#4a7746));
     background: -moz-linear-gradient(#335d30, #4a7746);
@@ -735,7 +735,7 @@ a.button.forrst:hover {
     border-bottom: solid 3px #0a1608;
     box-shadow: inset 0 0 0 1px #53864f; }
 
-a.button.forrst:active {
+.button-forrst:active {
     background: #335d30;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#335d30), to(#4a7746));
     background: -moz-linear-gradient(#335d30, #4a7746);
@@ -746,7 +746,7 @@ a.button.forrst:active {
 /**
  * Dribbble - Special Edition
  */
-a.button.dribbble {
+.button-dribbble {
     background: #f1a4c1;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#f1a4c1), to(#e675a0));
     background: -moz-linear-gradient(#f1a4c1, #e675a0);
@@ -757,7 +757,7 @@ a.button.dribbble {
     color: #fff;
     text-shadow: 0 1px 0 #d64570; }
 
-a.button.dribbble:hover {
+.button-dribbble:hover {
     background: #e675a0;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#e675a0), to(#f1a4c1));
     background: -moz-linear-gradient(#e675a0, #f1a4c1);
@@ -766,7 +766,7 @@ a.button.dribbble:hover {
     border-bottom: solid 3px #cc4a79;
     box-shadow: inset 0 0 0 1px #f6c2d7; }
 
-a.button.dribbble:active {
+.button-dribbble:active {
     background: #e675a0;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#e675a0), to(#f1a4c1));
     background: -moz-linear-gradient(#e675a0, #f1a4c1);
@@ -777,7 +777,7 @@ a.button.dribbble:active {
 /**
  * Twitter - Special Edition
  */
-a.button.twitter {
+.button-twitter {
     background: #9fd6fa;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#9fd6fa), to(#6bb9f7));
     background: -moz-linear-gradient(#9fd6fa, #6bb9f7);
@@ -788,7 +788,7 @@ a.button.twitter {
     color: #fff;
     text-shadow: 0 1px 0 #4598f3; }
 
-a.button.twitter:hover {
+.button-twitter:hover {
     background: #6bb9f7;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#6bb9f7), to(#9fd6fa));
     background: -moz-linear-gradient(#6bb9f7, #9fd6fa);
@@ -797,7 +797,7 @@ a.button.twitter:hover {
     border-bottom: solid 3px #4a9de1;
     box-shadow: inset 0 0 0 1px #bfe4fc; }
 
-a.button.twitter:active {
+.button-twitter:active {
     background: #6bb9f7;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#6bb9f7), to(#9fd6fa));
     background: -moz-linear-gradient(#6bb9f7, #9fd6fa);
@@ -808,7 +808,7 @@ a.button.twitter:active {
 /**
  * Facebook - Special Edition
  */
-a.button.facebook {
+.button-facebook {
     background: #99b6df;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#99b6df), to(#638ec8));
     background: -moz-linear-gradient(#99b6df, #638ec8);
@@ -819,7 +819,8 @@ a.button.facebook {
     color: #fff;
     text-shadow: 0 1px 0 #3c61ab; }
 
-a.button.facebook:hover {
+.button-facebook:hover {
+    color: #fff;
     background: #638ec8;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#638ec8), to(#99b6df));
     background: -moz-linear-gradient(#638ec8, #99b6df);
@@ -828,7 +829,7 @@ a.button.facebook:hover {
     border-bottom: solid 3px #3867ac;
     box-shadow: inset 0 0 0 1px #bbcfeb; }
 
-a.button.facebook:active {
+.button-facebook:active {
     background: #638ec8;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#638ec8), to(#99b6df));
     background: -moz-linear-gradient(#638ec8, #99b6df);
@@ -839,7 +840,7 @@ a.button.facebook:active {
 /**
  * LoveDSGN - Special Edition
  */
-a.button.lovedsgn {
+.button-lovedsgn {
     background: #f3c1e6;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#f3c1e6), to(#de66c0));
     background: -moz-linear-gradient(#f3c1e6, #de66c0);
@@ -850,7 +851,7 @@ a.button.lovedsgn {
     color: #fff;
     text-shadow: 0 1px 0 #ce5eb0; }
 
-a.button.lovedsgn:hover {
+.button-lovedsgn:hover {
     background: #de66c0;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#de66c0), to(#f3c1e6));
     background: -moz-linear-gradient(#de66c0, #f3c1e6);
@@ -859,7 +860,7 @@ a.button.lovedsgn:hover {
     border-bottom: solid 3px #ce5eb0;
     box-shadow: inset 0 0 0 1px #e998d3; }
 
-a.button.lovedsgn:active {
+.button-lovedsgn:active {
     background: #de66c0;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#de66c0), to(#f3c1e6));
     background: -moz-linear-gradient(#de66c0, #f3c1e6);
@@ -870,7 +871,7 @@ a.button.lovedsgn:active {
 /**
  * XBOX - Special Edition
  */
-a.button.xbox {
+.button-xbox {
     background: #c4e125;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#c4e125), to(#88a819));
     background: -moz-linear-gradient(#c4e125, #88a819);
@@ -881,7 +882,7 @@ a.button.xbox {
     color: #fff;
     text-shadow: 0 1px 0 #819d15; }
 
-a.button.xbox:hover {
+.button-xbox:hover {
     background: #88a819;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#88a819), to(#c4e125));
     background: -moz-linear-gradient(#88a819, #c4e125);
@@ -890,7 +891,7 @@ a.button.xbox:hover {
     border-bottom: solid 3px #819d15;
     box-shadow: inset 0 0 0 1px #c6da7b; }
 
-a.button.xbox:active {
+.button-xbox:active {
     background: #88a819;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#88a819), to(#c4e125));
     background: -moz-linear-gradient(#88a819, #c4e125);
@@ -901,7 +902,7 @@ a.button.xbox:active {
 /**
  * devART - Special Edition
  */
-a.button.devart {
+.button-devart {
     background: #729e85;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#729e85), to(#486d5c));
     background: -moz-linear-gradient(#729e85, #486d5c);
@@ -912,7 +913,7 @@ a.button.devart {
     color: #fff;
     text-shadow: 0 1px 0 #225f33; }
 
-a.button.devart:hover {
+.button-devart:hover {
     background: #486d5c;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#486d5c), to(#729e85));
     background: -moz-linear-gradient(#486d5c, #729e85);
@@ -921,7 +922,7 @@ a.button.devart:hover {
     border-bottom: solid 3px #225f33;
     box-shadow: inset 0 0 0 1px #90a59c; }
 
-a.button.devart:active {
+.button-devart:active {
     background: #486d5c;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#486d5c), to(#729e85));
     background: -moz-linear-gradient(#486d5c, #729e85);
@@ -932,7 +933,7 @@ a.button.devart:active {
 /**
  * Designmoo - Special Edition
  */
-a.button.dsgnmoo {
+.button-dsgnmoo {
     background: #f97779;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#f97779), to(#ce2424));
     background: -moz-linear-gradient(#f97779, #ce2424);
@@ -943,7 +944,7 @@ a.button.dsgnmoo {
     color: #fff;
     text-shadow: 0 1px 0 #bd2524; }
 
-a.button.dsgnmoo:hover {
+.button-dsgnmoo:hover {
     background: #ce2424;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#ce2424), to(#f97779));
     background: -moz-linear-gradient(#ce2424, #f97779);
@@ -952,7 +953,7 @@ a.button.dsgnmoo:hover {
     border-bottom: solid 3px #bd2524;
     box-shadow: inset 0 0 0 1px #e67e7b; }
 
-a.button.dsgnmoo:active {
+.button-dsgnmoo:active {
     background: #ce2424;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#ce2424), to(#f97779));
     background: -moz-linear-gradient(#ce2424, #f97779);
@@ -963,7 +964,7 @@ a.button.dsgnmoo:active {
 /**
  * RSS Feed - Special Edition
  */
-a.button.rss {
+.button-rss {
     background: #f6c696;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#f6c696), to(#e9893d));
     background: -moz-linear-gradient(#f6c696, #e9893d);
@@ -974,7 +975,7 @@ a.button.rss {
     color: #fff;
     text-shadow: 0 1px 0 #a1671d; }
 
-a.button.rss:hover {
+.button-rss:hover {
     background: #e9893d;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#e9893d), to(#f6c696));
     background: -moz-linear-gradient(#e9893d, #f6c696);
@@ -983,7 +984,7 @@ a.button.rss:hover {
     border-bottom: solid 3px #a1671d;
     box-shadow: inset 0 0 0 1px #f1bb8f; }
 
-a.button.rss:active {
+.button-rss:active {
     background: #e9893d;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#e9893d), to(#f6c696));
     background: -moz-linear-gradient(#e9893d, #f6c696);
@@ -994,7 +995,7 @@ a.button.rss:active {
 /**
  * Yahoo - Special Edition
  */
-a.button.yahoo {
+.button-yahoo {
     background: #be95b7;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#be95b7), to(#5f396a));
     background: -moz-linear-gradient(#be95b7, #5f396a);
@@ -1005,7 +1006,7 @@ a.button.yahoo {
     color: #fff;
     text-shadow: 0 1px 0 #4d2955; }
 
-a.button.yahoo:hover {
+.button-yahoo:hover {
     background: #5f396a;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#5f396a), to(#be95b7));
     background: -moz-linear-gradient(#5f396a, #be95b7);
@@ -1014,7 +1015,7 @@ a.button.yahoo:hover {
     border-bottom: solid 3px #4d2955;
     box-shadow: inset 0 0 0 1px #9c83a1; }
 
-a.button.yahoo:active {
+.button-yahoo:active {
     background: #5f396a;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#5f396a), to(#be95b7));
     background: -moz-linear-gradient(#5f396a, #be95b7);
