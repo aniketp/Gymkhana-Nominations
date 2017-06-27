@@ -301,6 +301,7 @@ class NominationDelete(DeleteView):
     success_url = reverse_lazy('index')
 
 
+@login_required
 def nomi_detail(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     questionnaire = nomi.nomi_form
@@ -442,7 +443,8 @@ def group_nominations(request, pk):
                                                        'form': groupform, 'title_form': title_form})
 
 
-def group_nomi_detail(request,pk):
+@login_required
+def group_nomi_detail(request, pk):
     group_nomi = GroupNomination.objects.get(pk = pk)
     admin =0
     for post in request.user.posts.all():
@@ -457,7 +459,8 @@ def group_nomi_detail(request,pk):
     return render(request, 'group_detail.html', {'group_nomi':group_nomi , 'admin':admin, 'form_confirm':form_confirm})
 
 
-def add_to_group(request,pk,gr_pk):
+@login_required
+def add_to_group(request, pk, gr_pk):
     post = Post.objects.get(pk=pk)
     child_posts = Post.objects.filter(parent=post)
     child_posts_reverse = child_posts[::-1]
@@ -491,7 +494,8 @@ def add_to_group(request,pk,gr_pk):
                                                        'form': groupform, 'title_form': title_form})
 
 
-def remove_from_group(request,nomi_pk,gr_pk):
+@login_required
+def remove_from_group(request, nomi_pk, gr_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     group = GroupNomination.objects.get(pk= gr_pk)
     group.nominations.remove(nomi)
@@ -673,6 +677,7 @@ def cancel_result_approval(request, nomi_pk):
         return render(request, 'no_access.html')
 
 
+@login_required
 def result_approval(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     access = False
@@ -787,6 +792,7 @@ def profile_view(request):
         return HttpResponseRedirect('create')
 
 
+@login_required
 def public_profile(request, pk):
     student = UserProfile.objects.get(pk=pk)
     student_user = student.user
