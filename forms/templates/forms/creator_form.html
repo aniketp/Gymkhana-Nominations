@@ -17,6 +17,8 @@ Nomination Form
                     </div>
                 </div>
 
+
+
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#edit-questions" data-toggle="tab">Edit Form Questions</a></li>
                     <li><a href="#preview" data-toggle="tab">Preview Nomination Form</a></li>
@@ -27,16 +29,18 @@ Nomination Form
 
                         <div class="col-lg-6">
                             <div>
-                                <h4> Click on a Question to Edit</h4>
+                                <h4 style="color: #1b3013;"> Click on a Question to Edit</h4>
                             </div>
                         </div>
 
+                         <div class="col-lg-6 text-right">
                             <a href="{% url 'forms:add_ques' pk %}">
                                 <div class="col-lg-6 btn btn-danger">Add New Question</div>
                             </a>
-                    <hr>
+                         </div>
 
-
+                        <hr>
+                    <br>
                         {% for question in questions %}
                         <a href="{% url 'forms:ques_update' pk=question.pk qk=pk %}">
                             <div class="panel panel-default">
@@ -51,17 +55,18 @@ Nomination Form
                     </div>
 
                     <div class="tab-pane fade" id="preview">
+
                         <div class="form-group">
                             <div class="col-lg-10 box" style="margin:25px">
                                 <form>
-
                                     {% csrf_token %}
                                     <p>{{form|bootstrap}}</p>
-
                                 </form>
                             </div>
                         </div>
                     </div>
+
+
                 </div>
             </div>
 {% endblock %}

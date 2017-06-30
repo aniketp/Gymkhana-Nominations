@@ -80,18 +80,7 @@ form view
 
     {% if not inst_user %}
 
-            <br>
-            {% for comment in comments %}
-            <div class="well well-sm" style="padding-bottom: 0">
-                <div>
-                    <p><span style="font-weight: bold">{{comment.user.userprofile.name}}: </span> {{comment.comments}}</p>
-                    <div class="row">
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-
-    {% if not nomi.nomination.status == 'Sent for ratification' %}
+        {% if not nomi.nomination.status == 'Sent for ratification' %}
             <br>
             <div style="margin:25px">
                 <form  action="" method="post" class="text-center">
@@ -109,6 +98,19 @@ form view
             </div>
 
     {% endif %}
+
+            <br>
+            {% for comment in comments %}
+            <div class="well well-sm" style="padding-bottom: 0">
+                <div>
+                    <p><span style="font-weight: bold">{{comment.user.userprofile.name}}: </span> {{comment.comments}}</p>
+                    <div class="row">
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+
 
 
 

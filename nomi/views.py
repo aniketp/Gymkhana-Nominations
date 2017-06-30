@@ -752,6 +752,7 @@ def nomination_answer(request, pk):
     questionnaire = application.nomination.nomi_form
     form = questionnaire.get_form(data)
     comments = Commment.objects.filter(nomi_instance=application)
+    comments_reverse = comments[::-1]
     comment_form = CommentForm(request.POST or None)
 
     all_posts = Post.objects.filter(post_holders=request.user)
@@ -773,12 +774,12 @@ def nomination_answer(request, pk):
 
         return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
                                                             'comment_form': comment_form, 'inst_user': inst_user,
-                                                            'comments': comments, 'senate_perm': senate_perm,
+                                                            'comments': comments_reverse, 'senate_perm': senate_perm,
                                                             'nomi_pk': nomination_id})
 
     return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
                                                         'comment_form': comment_form, 'inst_user': inst_user,
-                                                        'comments': comments, 'senate_perm': senate_perm,
+                                                        'comments': comments_reverse, 'senate_perm': senate_perm,
                                                         'nomi_pk': nomination_id})
 
 
