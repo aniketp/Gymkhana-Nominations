@@ -755,6 +755,7 @@ def nomination_answer(request, pk):
     comment_form = CommentForm(request.POST or None)
 
     all_posts = Post.objects.filter(post_holders=request.user)
+    nomination_id = application.nomination.pk
 
     senate_perm = False
     for post in all_posts:
@@ -772,11 +773,13 @@ def nomination_answer(request, pk):
 
         return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
                                                             'comment_form': comment_form, 'inst_user': inst_user,
-                                                            'comments': comments, 'senate_perm': senate_perm})
+                                                            'comments': comments, 'senate_perm': senate_perm,
+                                                            'nomi_pk': nomination_id})
 
     return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
                                                         'comment_form': comment_form, 'inst_user': inst_user,
-                                                        'comments': comments, 'senate_perm': senate_perm})
+                                                        'comments': comments, 'senate_perm': senate_perm,
+                                                        'nomi_pk': nomination_id})
 
 
 @login_required
