@@ -90,12 +90,9 @@ form view
         <div class="tab-pane fade active in profile-nominations" id="comments">
             <br>
             {% for comment in comments %}
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{comment.user.userprofile.name}}</h3>
-                </div>
-                <div class="panel-body">
-                    <p class="profile-post-name">{{comment.comments}}</p>
+            <div class="well well-sm" style="padding-bottom: 0">
+                <div>
+                    <p><span style="font-weight: bold">{{comment.user.userprofile.name}}: </span> {{comment.comments}}</p>
                     <div class="row">
                     </div>
                 </div>
