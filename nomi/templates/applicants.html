@@ -54,16 +54,16 @@
     <div id="myTabContent" class="tab-content">
         <div class="tab-pane fade active in profile-nominations" id="all">
             <br>
-            {% for nomi in applicants %}
+            {% for nomi in applicants  %}
             <div class="panel panel-info">
                 <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant :</span>{{nomi.user.userprofile.name}}</p>
+                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
                     <div class="row">
                         <div class="col-lg-3">
-                            <p>Result Status : {{ nomi.status }}</p>
+                            <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
                         </div>
                         <div class="col-lg-5">
-                            <p>Interview status : {{nomi.interview_status}}</p>
+                            <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
                         </div>
                         <div class="col-lg-4">
                             <a href="{% url 'nomi_answer' nomi.pk %}">
@@ -145,7 +145,7 @@
 
 
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#all" data-toggle="tab" aria-expanded="true">All Applicatons</a></li>
+        <li class="active"><a href="#all" data-toggle="tab" aria-expanded="true">All Applicants</a></li>
         <li><a  href="#accepted" data-toggle="tab" aria-expanded="false">Accepted</a></li>
         <li><a href="#rejected" data-toggle="tab" aria-expanded="false">Rejected</a></li>
 
@@ -160,13 +160,13 @@
             {% for nomi in applicants  %}
             <div class="panel panel-info">
                 <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant :</span>{{nomi.user.userprofile.name}}</p>
+                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
                     <div class="row">
                         <div class="col-lg-3">
-                            <p>Result Status : {{ nomi.status }}</p>
+                            <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
                         </div>
                         <div class="col-lg-5">
-                            <p>Interview status : {{nomi.interview_status}}</p>
+                            <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
                         </div>
                         <div class="col-lg-4">
                             <a href="{% url 'nomi_answer' nomi.pk %}">
@@ -183,13 +183,13 @@
             {% for nomi in accepted  %}
             <div class="panel panel-info">
                 <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant :</span>{{nomi.user.userprofile.name}}</p>
+                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
                     <div class="row">
                         <div class="col-lg-3">
-                            <p>Result Status : {{ nomi.status }}</p>
+                            <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
                         </div>
                         <div class="col-lg-5">
-                            <p>Interview status : {{nomi.interview_status}}</p>
+                            <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
                         </div>
                         <div class="col-lg-4">
                             <a href="{% url 'nomi_answer' nomi.pk %}">
@@ -203,18 +203,18 @@
         </div>
         <div class="tab-pane fade profile-nominations" id="rejected">
                 <br>
-            {% for nomi in rejected %}
+            {% for nomi in rejected  %}
             <div class="panel panel-info">
                 <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant :</span>{{nomi.user.userprofile.name}}</p>
+                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
                     <div class="row">
                         <div class="col-lg-3">
-                            <p>Result Status : {{ nomi.status }}</p>
+                            <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
                         </div>
                         <div class="col-lg-5">
-                            <p>Interview status : {{nomi.interview_status}}</p>
+                            <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-4"">
                             <a href="{% url 'nomi_answer' nomi.pk %}">
                                 <div class="btn btn-info">View Application</div>
                             </a>
@@ -228,26 +228,26 @@
         {% if pending %}
             <div class="tab-pane fade profile-nominations" id="pending">
                     <br>
-                {% for nomi in pending %}
-                <div class="panel panel-info">
-                    <div class="panel-body">
-                        <p class="profile-post-name"><span>Applicant :</span>{{nomi.user.userprofile.name}}</p>
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <p>Result Status : Pending</p>
-                            </div>
-                            <div class="col-lg-5">
-                                <p>Interview status : {{nomi.interview_status}}</p>
-                            </div>
-                            <div class="col-lg-4">
-                                <a href="{% url 'nomi_answer' nomi.pk %}">
-                                    <div class="btn btn-info">View Application</div>
-                                </a>
-                            </div>
+                {% for nomi in pending  %}
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <p><span style="font-weight: bold">Result Status :</span> Pending</p>
+                        </div>
+                        <div class="col-lg-5">
+                            <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
+                        </div>
+                        <div class="col-lg-4">
+                            <a href="{% url 'nomi_answer' nomi.pk %}">
+                                <div class="btn btn-info">View Application</div>
+                            </a>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
+            </div>
+            {% endfor %}
             </div>
         {% endif %}
 
@@ -318,7 +318,7 @@
             {% for nomi in applicants  %}
             <div class="panel panel-info">
                 <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837" ;">{{nomi.user.userprofile.name}}</span></span></p>
+                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
                     <div class="row">
                         <div class="col-lg-3">
                             <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
@@ -326,7 +326,7 @@
                         <div class="col-lg-5">
                             <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
                         </div>
-                        <div class="col-lg-4"">
+                        <div class="col-lg-4">
                             <a href="{% url 'nomi_answer' nomi.pk %}">
                                 <div class="btn btn-info">View Application</div>
                             </a>
@@ -341,13 +341,13 @@
             {% for nomi in accepted  %}
             <div class="panel panel-info">
                 <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant :</span>{{nomi.user.userprofile.name}}</p>
+                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
                     <div class="row">
                         <div class="col-lg-3">
-                            <p>Result Status : {{ nomi.status }}</p>
+                            <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
                         </div>
                         <div class="col-lg-5">
-                            <p>Interview status : {{nomi.interview_status}}</p>
+                            <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
                         </div>
                         <div class="col-lg-4">
                             <a href="{% url 'nomi_answer' nomi.pk %}">
@@ -364,13 +364,13 @@
             {% for nomi in rejected %}
             <div class="panel panel-info">
                 <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant :</span>{{nomi.user.userprofile.name}}</p>
+                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
                     <div class="row">
                         <div class="col-lg-3">
-                            <p>Result Status : {{ nomi.status }}</p>
+                            <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
                         </div>
                         <div class="col-lg-5">
-                            <p>Interview status : {{nomi.interview_status}}</p>
+                            <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
                         </div>
                         <div class="col-lg-4">
                             <a href="{% url 'nomi_answer' nomi.pk %}">
