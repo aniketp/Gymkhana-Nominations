@@ -14,6 +14,7 @@ from .forms import *
 from .models import *
 
 
+@login_required
 def index(request):
     if request.user.is_authenticated:
         try:
@@ -75,16 +76,19 @@ def admin_portal(request):
         admin_query = admin_query | query
 
     admin_query = admin_query.distinct().exclude(status='Work done')
+    admin_query_reverse = admin_query[::-1]
 
     club_filter = ClubFilter(request.POST or None)
     if club_filter.is_valid():
         club = Club.objects.get(pk=club_filter.cleaned_data['club'])
         admin_query = admin_query.filter(tags=club)
+        admin_query_reverse = admin_query[::-1]
+
         return render(request, 'admin_portal.html', context={'posts': posts, 'username': username,
-                                                             'admin_query': admin_query, 'club_filter': club_filter})
+                                                             'admin_query': admin_query_reverse, 'club_filter': club_filter})
 
     return render(request, 'admin_portal.html', context={'posts': posts, 'username': username,
-                                                         'admin_query': admin_query, 'club_filter': club_filter})
+                                                         'admin_query': admin_query_reverse, 'club_filter': club_filter})
 
 
 @login_required

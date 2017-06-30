@@ -6,14 +6,16 @@
 {% block content %}
 <div class="profile-content ">
 
+    <div>
+         <ul class="nav nav-tabs">
+             <li class="active"><a href="#user" data-toggle="tab" aria-expanded="true">User Portal</a></li>
+             {% if posts %}
+              <li><a href="{% url 'admin_portal' %}" aria-expanded="false">Admin Portal</a></li>
+             {% endif %}
+            <li><a href="#filter" data-toggle="tab" aria-expanded="true">Filter Nominations</a></li>
+         </ul>
+    </div>
 
-     <ul class="nav nav-pills">
-         <li class="active"><a href="#user" data-toggle="tab" aria-expanded="true">User Portal</a></li>
-         {% if posts %}
-          <li><a href="{% url 'admin_portal' %}" aria-expanded="false">Admin Portal</a></li>
-         {% endif %}
-        <li><a href="#filter" data-toggle="tab" aria-expanded="true">Filter Nominations</a></li>
-     </ul>
     <div id="myTabContent" class="tab-content">
          <div class="tab-pane fade active in profile-nominations" id="user">
                 <br>

@@ -85,9 +85,10 @@
         {% if pending %}
             <h3 class="text-center">Interview Period</h3>
         {% endif %}
-        {% if perm %}
+        {% if perm and not pending %}
             <h3 class="text-center">Result Compiled</h3>
         {% endif %}
+
         </div>
 
 
@@ -287,7 +288,7 @@
         </div>
         <hr>
 
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-pills">
          <li class="active"><a  href="#all" data-toggle="tab" aria-expanded="true">All Applicants</a></li>
          <li class="active"><a  href="#accepted" data-toggle="tab" aria-expanded="true">Accepted</a></li>
         <li><a href="#rejected" data-toggle="tab" aria-expanded="false">Rejected</a></li>
@@ -295,27 +296,6 @@
 
      </ul>
     <div id="myTabContent" class="tab-content">
-        <div class="tab-pane fade active in profile-nominations" id="all">
-            <br>
-            {% for nomi in applicants  %}
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant :</span>{{nomi.user.userprofile.name}}</p>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <p>Result Status : {{ nomi.status }}</p>
-                        </div>
-                        <div class="col-lg-5">
-                            <p>Interview status : {{nomi.interview_status}}</p>
-                        </div>
-                        <div class="col-lg-4">
-                            <p><a href="{% url 'nomi_answer' nomi.pk %}">View Application</a></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
 
         <div class="tab-pane fade active in profile-nominations" id="accepted">
                 <br>

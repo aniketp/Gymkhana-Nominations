@@ -30,17 +30,19 @@ Nomination Form
                                 <h4> Click on a Question to Edit</h4>
                             </div>
                         </div>
-                        <div class="col-lg-6 btn btn-danger">
-                            <a href="{% url 'forms:add_ques' pk %}">Add New Question</a></strong>
-                        </div>
-                        <hr>
+
+                            <a href="{% url 'forms:add_ques' pk %}">
+                                <div class="col-lg-6 btn btn-danger">Add New Question</div>
+                            </a>
+                    <hr>
+
 
                         {% for question in questions %}
                         <a href="{% url 'forms:ques_update' pk=question.pk qk=pk %}">
                             <div class="panel panel-default">
                                 <div class="panel-body">
                                     <div>
-                                        <p style="font-size: x-large">{{question.question}}</p>
+                                        <p style="font-size: large">{{question.question}}</p>
                                     </div>
                                 </div>
                             </div>
