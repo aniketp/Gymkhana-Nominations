@@ -85,7 +85,7 @@
         {% if pending %}
             <h3 class="text-center">Interview Period</h3>
         {% endif %}
-        {% if perm and not pending %}
+        {% if  not pending %}
             <h3 class="text-center">Result Compiled</h3>
         {% endif %}
 
@@ -96,16 +96,22 @@
         {% if not pending and not perm %}
         <div class="well well-sm">
             {% if result_approval.0 %}
-                <a href="{% url 'result_approval' nomination.pk %}" class="btn btn-danger" style="width: auto">
-                    Send Result list for Approval
-                </a>
+                <div class="text-center">
+                    <a href="{% url 'result_approval' nomination.pk %}" class="btn btn-info" style="width: auto">
+                        Send Result list for Approval
+                    </a>
+                </div>
             {% elif result_approval.2 %}
-                <a href="{% url 'cancel_result_approval' nomination.pk %}" class="btn btn-danger" style="width: auto">
-                    Cancel Approval Request
-                </a>
+                <div class="text-center">
+                    <a href="{% url 'cancel_result_approval' nomination.pk %}" class="btn btn-danger" style="width: auto">
+                        Cancel Approval Request
+                    </a>
+                </div>
             {% elif result_approval.1 %}
-                <div class="btn btn-danger disabled" style="width: auto">
-                    Your Parents have Approved the Results
+                <div class="text-center">
+                    <div class="btn btn-warning disabled" style="width: auto">
+                        Your Parents have Approved the Results
+                    </div>
                 </div>
             {% endif %}
         </div>
@@ -288,7 +294,7 @@
         </div>
         <hr>
 
-    <ul class="nav nav-pills">
+    <ul class="nav nav-tabs">
          <li class="active"><a  href="#all" data-toggle="tab" aria-expanded="true">All Applicants</a></li>
          <li class="active"><a  href="#accepted" data-toggle="tab" aria-expanded="true">Accepted</a></li>
         <li><a href="#rejected" data-toggle="tab" aria-expanded="false">Rejected</a></li>
