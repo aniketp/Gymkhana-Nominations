@@ -44,10 +44,9 @@
                            class="btn btn-sm read-more-button btn-danger">Read More</a>
                     </div>
                     </div>
-                    {% else %}
 
 
-                        {% if nomi|group_status %}
+                        {% elif nomi|group_status %}
 
                         <div class="panel panel-success">
                             <div class="panel-heading" style="background-color: #164552">
@@ -64,7 +63,7 @@
                         </div>
                         {% endif %}
 
-                    {% endif %}
+
                     {% endfor %}
                 </div>
          </div>
