@@ -99,7 +99,7 @@
                         {% for his in history %}
                         <div class="panel panel-info">
                             <div class="panel-heading">
-                                <h3 class="panel-title">{{his.post.club}}</h3>
+                                <h3 class="panel-title" style="font-weight: bold">{{his.post.club.club_name.upper}}</h3>
                             </div>
                             <div class="panel-body">
                                 <p class="profile-post-name"><span>Post: </span>{{his.post.post_name}}</p>
@@ -128,7 +128,7 @@
                         {% for p_nomi in interview_nomi %}
                         <div class="panel panel-success">
                             <div class="panel-heading">
-                                <h3 class="panel-title">{{p_nomi.nomination.name}}</h3>
+                                <h3 class="panel-title">{{p_nomi.nomination.name.upper}}</h3>
                             </div>
                             <div class="panel-body">
                                 <p><span>Status: </span>Interview Period</p>
@@ -140,11 +140,11 @@
                         {% for p_nomi in pending_nomi %}
                         <div class="panel panel-success">
                             <div class="panel-heading">
-                                <h3 class="panel-title">{{p_nomi.nomination.name}}</h3>
+                                <h3 class="panel-title">{{p_nomi.nomination.name.upper}}</h3>
                             </div>
                             <div class="panel-body">
-                                <p><span>Status: </span>Application submitted</p>
-                                <a href="{% url 'nomi_answer' p_nomi.pk %}" class="btn btn-warning"
+                                <p class="col-lg-6"><span>Status: </span>Application Submitted</p>
+                                <a href="{% url 'nomi_answer' p_nomi.pk %}" class="btn btn-warning col-lg-6"
                                    style="width: auto">View Your Application</a>
                             </div>
                         </div>
