@@ -82,7 +82,7 @@ body {
 }
 
 .profile-userbuttons .btn:last-child {
-    margin-right: 0px;
+    margin-right: 0;
 }
 
 .profile-usermenu {
@@ -288,7 +288,7 @@ body {
 }
 
 .scroll-area {
-    height: 300px;
+    height: 180px;
     overflow-y: scroll;
 }
 

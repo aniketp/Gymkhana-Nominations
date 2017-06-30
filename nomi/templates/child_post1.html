@@ -63,7 +63,7 @@
 
             <div class="container-fluid">
                 {% if not ap %}
-                    <div class="col-lg-6 col-sm-6 nomination-list">
+                    <div class="col-lg-6 col-sm-6 nomination-list" style="min-height: 280px;">
                         <h2>Nominations for the post</h2>
                         <div class="row">
                             <div class="col-lg-12 text-center">
@@ -74,11 +74,13 @@
 
 
                         {% for nomination in nominations %}
-                            <div class="panel panel-default">
-                            <div class="panel-body">
-                                <a  href="{% url 'nomi_detail' nomi_pk=nomination.pk %}">{{nomination.name}}</a>
-                            </div>
-                            </div>
+                            {% if not nomination.status == 'Work done' %}
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <a  href="{% url 'nomi_detail' nomi_pk=nomination.pk %}">{{nomination.name}}</a>
+                                    </div>
+                                </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
                     <div class="col-lg-1 col-sm-1"></div>
@@ -88,7 +90,7 @@
 
                         </div>
 
-                        <div class="scroll-area">
+                        <div style="height: 215px; overflow-y: scroll">
                             <ol>
                                 {% for post_holder in post.post_holders.all %}
                                 <li>{{post_holder.userprofile.name}}</li>
