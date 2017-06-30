@@ -58,12 +58,19 @@ form view
 <div class="profile-content">
 
     {% if not inst_user %}
-            <div class=" text-right">
-                <a href="{% url 'applicants' nomi_pk %}">
-                    <div style="width: inherit" class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-arrow-left"></span> Go Back</div>
-                </a>
-            </div>
-        {% endif %}
+        <div class=" text-right">
+            <a href="{% url 'applicants' nomi_pk %}">
+                <div style="width: inherit" class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-arrow-left"></span> Go Back</div>
+            </a>
+        </div>
+    {% elif inst_user %}
+        <div class=" text-right">
+            <a href="{% url 'profile' %}">
+                <div style="width: inherit" class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-arrow-left"></span> Go Back</div>
+            </a>
+        </div>
+    {% endif %}
+
     <div class="row">
         <h1 style="color: #5c4a6c;" class="intro-text text-center">
             <strong>{{ nomi_user.name }}'s Answer</strong>
