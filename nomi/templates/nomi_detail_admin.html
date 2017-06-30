@@ -54,17 +54,17 @@
                             {% else %}
                                 {% if sent_to_parent %}
                                     <div class="col-lg-6 text-center">
-                                        <a class="list-group-item btn btn-success" style="width: auto"
-                                           href="">Approval request sent to parent</a>
+                                        <div class=" btn btn-success disabled" style="width: auto">
+                                            Approval request sent to parent</div>
                                     </div>
 
                                     <div class="col-lg-6 text-center">
                                         <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
                                     </div>
                                 {% else%}
-                                    <div>
+                                    <div class="col-lg-4 text-center">
                                         <a class="list-group-item btn btn-success" style="width: auto"
-                                       href="{% url 'nomi_approval' nomi_pk=nomi.pk %}">send to parent for approval</a>
+                                       href="{% url 'nomi_approval' nomi_pk=nomi.pk %}">Send to parent for approval</a>
                                     </div>
 
                                     <div class="col-lg-4 text-center">
