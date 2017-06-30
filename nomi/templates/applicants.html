@@ -303,6 +303,27 @@
      </ul>
     <div id="myTabContent" class="tab-content">
 
+        <div class="tab-pane fade active in profile-nominations" id="all">
+                <br>
+            {% for nomi in applicants  %}
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    <p class="profile-post-name"><span>Applicant :</span>{{nomi.user.userprofile.name}}</p>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <p>Result Status : {{ nomi.status }}</p>
+                        </div>
+                        <div class="col-lg-5">
+                            <p>Interview status : {{nomi.interview_status}}</p>
+                        </div>
+                        <div class="col-lg-4">
+                            <p><a href="{% url 'nomi_answer' nomi.pk %}">View Application</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
         <div class="tab-pane fade active in profile-nominations" id="accepted">
                 <br>
             {% for nomi in accepted  %}
