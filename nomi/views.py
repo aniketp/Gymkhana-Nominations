@@ -615,6 +615,66 @@ def applications(request, pk):
 
 
 @login_required
+def nomination_answer(request, pk):
+    application = NominationInstance.objects.get(pk=pk)
+    ans_form = application.filled_form
+    data = json.loads(ans_form.data)
+    applicant = application.user.userprofile
+    questionnaire = application.nomination.nomi_form
+    form = questionnaire.get_form(data)
+    comments = Commment.objects.filter(nomi_instance=application)
+    comments_reverse = comments[::-1]
+    comment_form = CommentForm(request.POST or None)
+
+    all_posts = Post.objects.filter(post_holders=request.user)
+    nomination_id = application.nomination.pk
+    nomination = application.nomination
+
+    senate_perm = False
+    for post in all_posts:
+        if post.perms == 'can ratify the post':
+            senate_perm = True
+            break
+
+    inst_user = False
+    if application.user == request.user:
+        inst_user = True
+
+    view_post = None
+    for apv_post in nomination.nomi_approvals.all():
+        if request.user in apv_post.post_holders.all():
+            view_post = apv_post
+            break
+
+    # result approval things    send,sent,cancel
+    results_approval = [0, 0, 0]
+
+    if view_post in nomination.result_approvals.all():
+        if view_post.parent in nomination.result_approvals.all():
+            results_approval[1] = 1
+            grand_parent = view_post.parent.parent
+            if grand_parent not in nomination.result_approvals.all():
+                results_approval[2] = 1
+        else:
+            results_approval[0] = 1
+
+    if comment_form.is_valid():
+        Commment.objects.create(comments=comment_form.cleaned_data['comment'],
+                                nomi_instance=application, user=request.user)
+
+        return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
+                                                            'comment_form': comment_form, 'inst_user': inst_user,
+                                                            'comments': comments_reverse, 'senate_perm': senate_perm,
+                                                            'nomi_pk': nomination_id, 'result_approval': results_approval})
+
+    return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
+                                                        'comment_form': comment_form, 'inst_user': inst_user,
+                                                        'comments': comments_reverse, 'senate_perm': senate_perm,
+                                                        'nomi_pk': nomination_id, 'result_approval': results_approval})
+
+
+
+@login_required
 def ratify(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     access = False
@@ -742,45 +802,6 @@ def replace_user(request, pk):
     nomi.replace()
     return HttpResponseRedirect(reverse('applicants', kwargs={'pk': pk}))
 
-
-@login_required
-def nomination_answer(request, pk):
-    application = NominationInstance.objects.get(pk=pk)
-    ans_form = application.filled_form
-    data = json.loads(ans_form.data)
-    applicant = application.user.userprofile
-    questionnaire = application.nomination.nomi_form
-    form = questionnaire.get_form(data)
-    comments = Commment.objects.filter(nomi_instance=application)
-    comments_reverse = comments[::-1]
-    comment_form = CommentForm(request.POST or None)
-
-    all_posts = Post.objects.filter(post_holders=request.user)
-    nomination_id = application.nomination.pk
-
-    senate_perm = False
-    for post in all_posts:
-        if post.perms == 'can ratify the post':
-            senate_perm = True
-            break
-
-    inst_user = False
-    if application.user == request.user:
-        inst_user = True
-
-    if comment_form.is_valid():
-        Commment.objects.create(comments=comment_form.cleaned_data['comment'],
-                                nomi_instance=application, user=request.user)
-
-        return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
-                                                            'comment_form': comment_form, 'inst_user': inst_user,
-                                                            'comments': comments_reverse, 'senate_perm': senate_perm,
-                                                            'nomi_pk': nomination_id})
-
-    return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
-                                                        'comment_form': comment_form, 'inst_user': inst_user,
-                                                        'comments': comments_reverse, 'senate_perm': senate_perm,
-                                                        'nomi_pk': nomination_id})
 
 
 @login_required

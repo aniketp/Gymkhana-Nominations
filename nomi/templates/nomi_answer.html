@@ -98,6 +98,7 @@ form view
         </div>
         {% if not inst_user %}
                 <div>
+                {% if result_approval.0 %}
                     {% if nomi.nomination.status == 'Interview period' and nomi.interview_status == 'Interview Done' %}
 
                     <div class="row text-center">
@@ -132,6 +133,7 @@ form view
                         </div>
                     </div>
                     {% endif %}
+                {% endif %}
                 </div>
             {% endif %}
     </div>
@@ -139,7 +141,7 @@ form view
     {% if not inst_user %}
 
         <div>
-            {% if not nomi.nomination.status == 'Sent for ratification' %}
+            {% if not nomi.nomination.status == 'Sent for ratification' and result_approval.0 %}
                 <hr>
                 <br>
 
