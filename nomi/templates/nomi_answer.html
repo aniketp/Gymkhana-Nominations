@@ -57,17 +57,19 @@ form view
 {% block content %}
 <div class="profile-content">
     <div class="row">
-            <h2 class="intro-text text-center">
-                <strong>Answer Form</strong>
-            </h2>
+            <h1 style="color: #5c4a6c;" class="intro-text text-center">
+                <strong>{{ nomi_user.name }}'s Answer</strong>
+            </h1>
             <hr>
-            <hr>
+
              <h2 class="intro-text text-center">
                 <strong>{{nomi.nomination.name}}</strong>
             </h2>
             <hr>
-
-            <div style="margin:25px">
+            <div>
+               <h4>Response</h4>
+            </div>
+            <div>
                 <form  action="" method="post">
                             {% csrf_token %}
                         <p>
@@ -80,36 +82,45 @@ form view
 
     {% if not inst_user %}
 
-        {% if not nomi.nomination.status == 'Sent for ratification' %}
-            <br>
-            <div style="margin:25px">
-                <form  action="" method="post" class="text-center">
-                    {% csrf_token %}
-                    {{comment_form|bootstrap}}
-
-                        <div class="col-lg-6 text-center">
-                            <input type="submit" class="btn btn-warning" value="Add Comment"/>
-                        </div>
-                        <div class="col-lg-6 text-center">
-                            <a href="{% url 'applicants' nomi_pk %}"><div class="btn btn-danger">Go Back</div></a>
-                        </div>
-
-                </form>
+        <div class="row">
+            <div>
+               <h4>Add Comment</h4>
             </div>
 
-    {% endif %}
-
-            <br>
-            {% for comment in comments %}
-            <div class="well well-sm" style="padding-bottom: 0">
+            {% if not nomi.nomination.status == 'Sent for ratification' %}
+                <br>
                 <div>
-                    <p><span style="font-weight: bold">{{comment.user.userprofile.name}}: </span> {{comment.comments}}</p>
-                    <div class="row">
+                    <form  action="" method="post" class="text-center">
+                        {% csrf_token %}
+                        {{comment_form|bootstrap}}
+
+                            <div class="col-lg-6 text-center">
+                                <input type="submit" class="btn btn-warning" value="Add Comment"/>
+                            </div>
+                            <div class="col-lg-6 text-center">
+                                <a href="{% url 'applicants' nomi_pk %}"><div class="btn btn-danger">Go Back</div></a>
+                            </div>
+
+                    </form>
+                </div>
+
+            {% endif %}
+
+                <br>
+                <br>
+                <div>
+                    <h4>Comments</h4>
+                </div>
+                {% for comment in comments %}
+                <div class="well well-sm" style="padding-bottom: 0">
+                    <div>
+                        <p><span style="font-weight: bold">{{comment.user.userprofile.name}}: </span> {{comment.comments}}</p>
+                        <div class="row">
+                        </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-
 
 
 
