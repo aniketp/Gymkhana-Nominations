@@ -73,14 +73,21 @@
 
                         <div class="panel panel-info">
                             <div class="panel-heading">
-                                <h3 class="panel-title">{{post.club}}</h3>
+                                <h3 class="panel-title" style="font-weight: bold">{{post.club.club_name.upper}}</h3>
                             </div>
-                            <div class="panel-body">
-                                <p class="profile-post-name"><a href="{% url 'post_view' post.pk %}">
-                                    <span>Post: </span>{{post.post_name}}</a></p>
-
-                                <div class="row">
+                            <div class="panel-body" style="padding-bottom: 0">
+                                <div class="col-lg-6">
+                                    <p class="profile-post-name">
+                                        <span>Post: </span>{{post.post_name}}</p>
+                                    <p class="profile-post-name">
+                                        <span>Parent Club: </span>{{post.club.club_parent.club_name}}</p>
                                 </div>
+
+                                <a href="{% url 'post_view' post.pk %}">
+                                    <div class="btn btn-primary col-lg-6">
+                                        View Details
+                                    </div>
+                                </a>
                             </div>
                         </div>
 
