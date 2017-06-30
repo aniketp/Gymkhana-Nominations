@@ -135,10 +135,15 @@ form view
             {% if not nomi.nomination.status == 'Sent for ratification' %}
                 <hr>
                 <br>
+
+                <div>
+                    <h1 style="text-align: center">Interview Panel</h1>
+                    <h3 style="text-align: center; color: #1b3013">Comments Section</h3>
+                </div>
                 <div>
                     <form  action="" method="post" class="text-center">
                         {% csrf_token %}
-                        {{comment_form|bootstrap}}
+                        {{comment_form|bootstrap_inline}}
 
                             <div class="col-lg-12 text-center">
                                 <input type="submit" class="btn btn-warning" value="Add Comment"/>
