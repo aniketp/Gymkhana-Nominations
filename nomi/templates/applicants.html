@@ -296,7 +296,7 @@
 
     <ul class="nav nav-tabs">
          <li class="active"><a  href="#all" data-toggle="tab" aria-expanded="true">All Applicants</a></li>
-         <li class="active"><a  href="#accepted" data-toggle="tab" aria-expanded="true">Accepted</a></li>
+         <li><a href="#accepted" data-toggle="tab" aria-expanded="true">Accepted</a></li>
         <li><a href="#rejected" data-toggle="tab" aria-expanded="false">Rejected</a></li>
 
 
@@ -308,23 +308,25 @@
             {% for nomi in applicants  %}
             <div class="panel panel-info">
                 <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant :</span>{{nomi.user.userprofile.name}}</p>
+                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837" ;">{{nomi.user.userprofile.name}}</span></span></p>
                     <div class="row">
                         <div class="col-lg-3">
-                            <p>Result Status : {{ nomi.status }}</p>
+                            <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
                         </div>
                         <div class="col-lg-5">
-                            <p>Interview status : {{nomi.interview_status}}</p>
+                            <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
                         </div>
-                        <div class="col-lg-4">
-                            <p><a href="{% url 'nomi_answer' nomi.pk %}">View Application</a></p>
+                        <div class="col-lg-4"">
+                            <a href="{% url 'nomi_answer' nomi.pk %}">
+                                <div class="btn btn-info">View Application</div>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
-        <div class="tab-pane fade active in profile-nominations" id="accepted">
+        <div class="tab-pane fade profile-nominations" id="accepted">
                 <br>
             {% for nomi in accepted  %}
             <div class="panel panel-info">
