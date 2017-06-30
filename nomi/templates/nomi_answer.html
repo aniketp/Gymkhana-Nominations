@@ -60,13 +60,13 @@ form view
     {% if not inst_user %}
         <div class=" text-right">
             <a href="{% url 'applicants' nomi_pk %}">
-                <div style="width: inherit" class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-arrow-left"></span> Go Back</div>
+                <div style="width: inherit" class="btn btn-warning"><span class="glyphicon glyphicon-arrow-left"></span> Go Back</div>
             </a>
         </div>
     {% elif inst_user %}
         <div class=" text-right">
             <a href="{% url 'profile' %}">
-                <div style="width: inherit" class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-arrow-left"></span> Go Back</div>
+                <div style="width: inherit" class="btn btn-warning"><span class="glyphicon glyphicon-arrow-left"></span> Go Back</div>
             </a>
         </div>
     {% endif %}
