@@ -72,7 +72,7 @@
                              {% if parent.perms == 'can approve post and send nominations to users' %}
                              <a class="list-group-item" href="{% url 'final_post_approval' post_pk=post.pk view_pk=parent.pk %}">Approve the post</a>
                              {% else %}
-                                {% if parent.parent in post.post_approvals %}
+                                {% if parent.parent in post.post_approvals.all %}
                                          <a class="list-group-item">Approval request sent to parent</a>
                                 {% else%}
                                         <a class="list-group-item" href="{% url 'post_approval' post_pk=post.pk view_pk=parent.pk %}">send to parent for approval</a>
