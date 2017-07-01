@@ -6,6 +6,7 @@
 
 {% block content %}
     <div class="profile-content">
+        <!-- heading ---------------------------------------------------------   --->
         <div class="container-fluid child-post-container">
             <div class="row box">
                 <div>
@@ -19,7 +20,9 @@
             <br>
         </div>
 
-        {% if view.tag_perms == 'Can create' %}
+         <!--  tag features---------------------------------------------------------   --->
+
+        {% if parent.tag_perms == 'Can create' %}
             <div class="container-fluid">
                 <div class="col-lg-6 text-center">
                     <div class="dropdown show">
@@ -62,63 +65,58 @@
 
 
             <div class="container-fluid">
-                {% if not ap %}
-                    <div class="col-lg-6 col-sm-6 nomination-list" style="min-height: 280px;">
-                        <h2>Nominations for the post</h2>
-                        <div class="row">
-                            <div class="col-lg-12 text-center">
-                                <a href="{% url 'nomi_create' post.pk %}" class="btn btn-primary nomi-button">Create a New Nomination</a>
-                            </div>
-                        </div>
-                        <br>
-
-
-                        {% for nomination in nominations %}
-                            {% if not nomination.status == 'Work done' %}
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
-                                        <a  href="{% url 'nomi_detail' nomi_pk=nomination.pk %}">{{nomination.name}}</a>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                    <div class="col-lg-1 col-sm-1"></div>
-                    <div class="col-lg-5 col-sm-6 nomination-list">
-                        <div class="post-holder-list">
-                            <h2>List of post holders</h2>
-
-                        </div>
-
-                        <div style="height: 215px; overflow-y: scroll">
-                            <ol>
-                                {% for post_holder in post.post_holders.all %}
-                                <li>{{post_holder.userprofile.name}}</li>
-                                {% endfor %}
-
-                            </ol>
-                        </div>
-                    {% else %}
-                        <div>
-                         <ul class="list-group">
-                         {% if ap %}
+                {% if post.status == 'Post created' %}
+                 <div>
+                     <ul class="list-group">
                          <li class="list-group-item">
-                             {% if power_to_approve %}
-
-                                        <a class="list-group-item" href="{% url 'final_post_approval' post_pk=post.pk view_pk=view.pk %}">Approve the post</a>
+                             {% if parent.perms == 'can approve post and send nominations to users' %}
+                             <a class="list-group-item" href="{% url 'final_post_approval' post_pk=post.pk view_pk=parent.pk %}">Approve the post</a>
                              {% else %}
-                                    {% if approval %}
+                                {% if parent.parent in post.post_approvals %}
                                          <a class="list-group-item">Approval request sent to parent</a>
-                                    {% else%}
-                                        <a class="list-group-item" href="{% url 'post_approval' post_pk=post.pk view_pk=view.pk %}">send to parent for approval</a>
-                                    {% endif %}
+                                {% else%}
+                                        <a class="list-group-item" href="{% url 'post_approval' post_pk=post.pk view_pk=parent.pk %}">send to parent for approval</a>
+                                {% endif %}
                              {% endif %}
                          </li>
-                          {% endif %}
-                         </ul>
+                     </ul>
+                 </div>
+
+                {% else %}
+                <div class="col-lg-6 col-sm-6 nomination-list" style="min-height: 280px;">
+                    <h2>Nominations for the post</h2>
+                    <div class="row">
+                        <div class="col-lg-12 text-center">
+                            <a href="{% url 'nomi_create' post.pk %}" class="btn btn-primary nomi-button">Create a New Nomination</a>
                         </div>
+                    </div>
+                    <br>
+
+
+                    {% for nomination in nominations %}
+                    {% if not nomination.status == 'Work done' %}
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <a  href="{% url 'nomi_detail' nomi_pk=nomination.pk %}">{{nomination.name}}</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="col-lg-1 col-sm-1"></div>
+                <div class="col-lg-5 col-sm-6 nomination-list">
+                    <div class="post-holder-list">
+                        <h2>List of post holders</h2>
+                    </div>
+                    <div style="height: 215px; overflow-y: scroll">
+                        <ol>
+                            {% for post_holder in post.post_holders.all %}
+                            <li>{{post_holder.userprofile.name}}</li>
+                            {% endfor %}
+                        </ol>
                     </div>
                 {% endif %}
                 </div>
             </div>
+    </div>
 {% endblock %}

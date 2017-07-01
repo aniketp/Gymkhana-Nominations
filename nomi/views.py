@@ -100,15 +100,14 @@ def post_view(request, pk):
     post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
     nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
     group_nomi_approvals = GroupNomination.objects.filter(status='created').filter(approvals=post)
-    result_approvals = Nomination.objects.filter(result_approvals=post).exclude(status='work_done').\
-        exclude(status='Nomination_created')
+    result_approvals = Nomination.objects.filter(result_approvals=post).exclude(status='work_done').exclude(status='Nomination_created')
 
     if request.method == 'POST':
         tag_form = ClubForm(request.POST)
         if tag_form.is_valid():
             Club.objects.create(club_name=tag_form.cleaned_data['club_name'], club_parent=post.club)
             return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
-        
+
     else:
         tag_form = ClubForm
 
@@ -149,64 +148,28 @@ def post_create(request, pk):
 @login_required
 def child_post_view(request, pk):
     post = Post.objects.get(pk=pk)
+    parent = post.parent
     nominations = Nomination.objects.filter(nomi_post=post)
 
-    access = False
-    for pt in post.post_approvals.all():
-        if request.user in pt.post_holders.all():
-            view = pt
-            access = True
-            break
 
+    ## tag features
     tag_form = ClubForm(request.POST or None)
     if tag_form.is_valid():
         Club.objects.create(club_name=tag_form.cleaned_data['club_name'], club_parent=post.club)
+        return HttpResponseRedirect(reverse('child_post', kwargs={'pk': pk}))
+
+
 
     confirm_form = ConfirmApplication(request.POST or None)
     if confirm_form.is_valid():
         post.tag_perms = 'Can create'
         post.save()
+        return HttpResponseRedirect(reverse('child_post', kwargs={'pk': pk}))
 
-    if access:
-        if post.status == 'Post created':
-            approved = 1
-        else:
-            approved = 0
 
-        if view.perms == 'normal':
-            power_to_approve = 0
-        else:
-            power_to_approve = 1
 
-        view_parent = Post.objects.get(pk=view.parent.pk)
-
-        if view_parent in post.post_approvals.all():
-            approval = 1
-        else:
-            approval = 0
-
-        form = UserId(request.POST or None)
-        info = 0
-        if form.is_valid():
-            try:
-                userp = UserProfile.objects.get(roll_no=form.cleaned_data['user_roll'])
-            except ObjectDoesNotExist:
-                userp = None
-            if userp:
-                post.post_holders.add(userp.user)
-                PostHistory.objects.create(post=post, user=userp.user)
-                info = 'successfully added'
-            else:
-                info = "no such user"
-            return render(request, 'child_post1.html', {'post': post, 'ap': approved,
-                                                        'approval': approval, 'power_to_approve': power_to_approve,
-                                                        'nominations': nominations, 'form': form, 'info': info,
-                                                        'view': view, 'tag_form': tag_form,
-                                                        'confirm_form': confirm_form})
-
-        return render(request, 'child_post1.html', {'post': post, 'ap': approved, 'view': view,
-                                                    'approval': approval, 'power_to_approve': power_to_approve,
-                                                    'nominations': nominations, 'form': form, 'info': info,
+    if request.user in parent.post_holders.all():
+        return render(request, 'child_post1.html', {'post': post,'nominations': nominations,'parent':parent,
                                                     'tag_form': tag_form, 'confirm_form': confirm_form})
     else:
         return render(request, 'no_access.html')
@@ -216,9 +179,7 @@ def child_post_view(request, pk):
 def post_approval(request, view_pk, post_pk):
     post = Post.objects.get(pk=post_pk)
     viewer = Post.objects.get(pk=view_pk)
-    to_add = viewer.parent
-    post.post_approvals.add(to_add)
-    post.tags.add(to_add.club)
+
 
     access = False
     for apv_post in post.post_approvals.all():
@@ -227,6 +188,9 @@ def post_approval(request, view_pk, post_pk):
             break
 
     if access or request.user in post.parent.post_holders.all():
+        to_add = viewer.parent
+        post.post_approvals.add(to_add)
+        post.tags.add(to_add.club)
         return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view_pk}))
     else:
         return render(request, 'no_access.html')
@@ -237,7 +201,6 @@ def post_reject(request, view_pk, post_pk):
     post = Post.objects.get(pk=post_pk)
     viewer = Post.objects.get(pk=view_pk)
     to_add = viewer
-    post.post_approvals.remove(to_add)
 
     access = False
     for apv_post in post.post_approvals.all():
