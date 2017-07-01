@@ -103,12 +103,18 @@ def post_view(request, pk):
     result_approvals = Nomination.objects.filter(result_approvals=post).exclude(status='work_done').\
         exclude(status='Nomination_created')
 
-    tag_form = ClubForm(request.POST or None)
-    if tag_form.is_valid():
-        Club.objects.create(club_name=tag_form.cleaned_data['club_name'], club_parent=post.club)
+    if request.method == 'POST':
+        tag_form = ClubForm(request.POST)
+        if tag_form.is_valid():
+            Club.objects.create(club_name=tag_form.cleaned_data['club_name'], club_parent=post.club)
+            return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
+        
+    else:
+        tag_form = ClubForm
+
 
     if request.user in post.post_holders.all():
-        return render(request, 'post1.html', context={'post': post, 'child_posts': child_posts_reverse,
+         return render(request, 'post1.html', context={'post': post, 'child_posts': child_posts_reverse,
                                                       'post_approval': post_approvals, 'tag_form': tag_form,
                                                       'nomi_approval': nomi_approvals,
                                                       'group_nomi_approvals': group_nomi_approvals,
