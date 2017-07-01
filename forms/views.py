@@ -3,24 +3,25 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 from .models import Questionnaire, Question, FilledForm
-from .forms import BuildForm, BuildQuestion
+from .forms import BuildForm, BuildQuestion,DesForm
 from django.views.generic.edit import UpdateView
 import json
 
 
-# not in use
-def index(request):
-    forms = Questionnaire.objects.all()
-    return render(request, 'forms/index.html', context={'forms': forms})
 
 
 def creator_form(request, pk):
     questionnaire = get_object_or_404(Questionnaire, id=pk)
+    nomi = questionnaire.nomination
     form = questionnaire.get_form(request.POST or None)
     pk = questionnaire.pk
     questions = Question.objects.filter(questionnaire=questionnaire)
+    d_form = DesForm(request.POST or None, instance = nomi)
+    if d_form.is_valid():
+        d_form.save()
+        return HttpResponseRedirect(reverse('forms:creator_form', kwargs={'pk': pk}))
 
-    return render(request, 'forms/creator_form.html', context={'form': form, 'questions': questions,
+    return render(request, 'forms/creator_form.html', context={'form': form, 'questions': questions,'d_form':d_form,
                                                                'questionnaire': questionnaire, 'pk': pk})
 
 
@@ -51,7 +52,7 @@ class QuestionUpdate(UpdateView):
         qk = self.kwargs['qk']
         return reverse('forms:creator_form', kwargs={'pk': qk})
 
-
+## not in use
 def show_form(request, pk):
     questionnaire = get_object_or_404(Questionnaire, id=pk)
     form = questionnaire.get_form(request.POST or None)
@@ -73,19 +74,5 @@ def show_answer_form(request, pk):
     form = questionnaire.get_form(data)
     return render(request, 'forms/ans_form.html', context={'form': form})
 
-
-def build_form(request):
-    if request.method == 'POST':
-        form = BuildForm(request.POST)
-        if form.is_valid():
-            ques = Questionnaire.objects.create(name=form.cleaned_data['title'],
-                                                description=form.cleaned_data['description'])
-            pk = ques.id
-            return HttpResponseRedirect(reverse('forms:creator_form', kwargs={'pk': pk}))
-    else:
-        form = BuildForm()
-
-    return render(request, 'forms/build_form.html', context={'form': form})
-
-
+## -----------------------------------------------
 

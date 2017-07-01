@@ -1,5 +1,6 @@
 from django import forms
 from .models import QUES_TYPES
+from nomi.models import Nomination
 
 
 # in use
@@ -15,3 +16,9 @@ class BuildForm(forms.Form):
     title = forms.CharField()
     description = forms.CharField()
 
+
+
+class DesForm(forms.ModelForm):
+    class Meta:
+        model = Nomination
+        fields = ('description',)
