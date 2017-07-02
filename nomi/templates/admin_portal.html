@@ -37,6 +37,8 @@
                                     <p>{{nomi.brief_desc}}</p>
                                     <a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}"
                                        class="btn btn-sm read-more-button btn-danger">Read More</a>
+                                    <a href="{% url 'copy_nomi_link' pk=nomi.pk %}"
+                                       class="btn btn-sm read-more-button btn-danger">Copy Link</a>
                                 </div>
                             </div>
 

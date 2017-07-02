@@ -1,6 +1,7 @@
 import json
 from itertools import chain
 from operator import attrgetter
+import pyperclip
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
@@ -10,6 +11,7 @@ from django.shortcuts import render
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from forms.models import Questionnaire
+from gymkhana.settings import DOMAIN_NAME
 from .forms import *
 from .models import *
 
@@ -510,6 +512,16 @@ def nomi_apply(request, pk):
     else:
         info = "You have applied for it already."
         return render(request, 'nomi_done.html', context={'info': info})
+
+
+
+@login_required
+def copy_nomi_link(request, pk):
+    url = 'https://' + DOMAIN_NAME + '/nominations/nomi_detail/' + str(pk) + '/'
+    pyperclip.copy(url)
+
+    return HttpResponseRedirect(reverse('admin_portal'))
+
 
 
 @login_required

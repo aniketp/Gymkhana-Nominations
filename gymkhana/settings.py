@@ -130,6 +130,8 @@ USE_TZ = True
 
 ROOT_URLCONF = 'gymkhana.urls'
 
+DOMAIN_NAME = 'gymkhana.pythonanywhere.com'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
