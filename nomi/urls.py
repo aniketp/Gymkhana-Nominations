@@ -16,9 +16,10 @@ urlpatterns = [
     # nominations/apply/2
     url(r'^apply/(?P<pk>\d+)/$', views.nomi_apply, name='nomi_apply'),
 
+    # nominations/copy_nomi_link/2
     url(r'^copy_nomi_link/(?P<pk>\d+)/$', views.copy_nomi_link, name='copy_nomi_link'),
 
-    # nominations/profile/
+    # nominations/profile
     url(r'^profile/$', views.profile_view, name='profile'),
 
     # nominations/public_profile/2
@@ -63,8 +64,8 @@ urlpatterns = [
     # nominations/post_approve/2/34
     url(r'^post_approve/(?P<post_pk>\d+)/(?P<view_pk>\d+)/$', views.post_approval, name='post_approval'),
 
+    # nominations/post_reject/2/43
     url(r'^post_reject/(?P<post_pk>\d+)/(?P<view_pk>\d+)/$', views.post_reject, name='post_reject'),
-
 
     # nominations/final_post_approve/2/43
     url(r'^final_post_approve/(?P<post_pk>\d+)/(?P<view_pk>\d+)/$', views.final_post_approval,
@@ -79,7 +80,9 @@ urlpatterns = [
     # nominations/post_approve/2/34
     url(r'^nomi_approve/(?P<nomi_pk>\d+)/$', views.nomi_approval, name='nomi_approval'),
 
+    # nominations/nomi_reject/2
     url(r'^nomi_reject/(?P<nomi_pk>\d+)/$', views.nomi_reject, name='nomi_reject'),
+
     # nominations/final_nomi_approve/2/43/21
     url(r'^final_nomi_approve/(?P<nomi_pk>\d+)/$', views.final_nomi_approval, name='final_nomi_approval'),
 

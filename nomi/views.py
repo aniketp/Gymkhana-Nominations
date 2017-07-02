@@ -421,7 +421,7 @@ def group_nominations(request, pk):
 @login_required
 def group_nomi_detail(request, pk):
     group_nomi = GroupNomination.objects.get(pk = pk)
-    admin =0
+    admin = 0
     for post in request.user.posts.all():
         if post in group_nomi.approvals.all():
             admin = post
@@ -431,7 +431,7 @@ def group_nomi_detail(request, pk):
         group_nomi.status = 'out'
         group_nomi.save()
 
-    return render(request, 'group_detail.html', {'group_nomi':group_nomi , 'admin':admin, 'form_confirm':form_confirm})
+    return render(request, 'group_detail.html', {'group_nomi': group_nomi, 'admin': admin, 'form_confirm': form_confirm})
 
 
 @login_required
