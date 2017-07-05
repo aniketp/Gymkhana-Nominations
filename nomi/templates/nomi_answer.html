@@ -173,9 +173,12 @@ form view
                 <div class="well well-sm" style="padding-bottom: 0">
                     <div>
                         <p><span style="font-weight: bold">{{comment.user.userprofile.name}}: </span> {{comment.comments}}</p>
-                        <div >
-                            <span class="glyphicon glyphicon-trash"></span>
-                        </div>
+                        <form action="{% url 'comment_delete' comment.pk %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                        </form>
                     </div>
                 </div>
                 {% endfor %}

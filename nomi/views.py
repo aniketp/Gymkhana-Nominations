@@ -834,7 +834,6 @@ class UserProfileUpdate(UpdateView):
 class CommentUpdate(UpdateView):
     model = Commment
     fields = ['comments']
-    success_url = reverse_lazy('index')
 
 
 class CommentDelete(DeleteView):
