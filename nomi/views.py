@@ -29,14 +29,18 @@ def index(request):
                 grouped_nomi = club.club_group.all().filter(status='out')
                 nomi = club.club_nomi.all().filter(group_status='normal').filter(status='Nomination out')
                 result_query = sorted(chain(nomi, grouped_nomi), key=attrgetter('opening_date'), reverse=True)
+                current_time = datetime.now()
+
                 return render(request, 'index1.html', context={'posts': posts, 'username': username,
-                                                               'result_query': result_query, 'club_filter': club_filter})
+                                                               'result_query': result_query, 'club_filter': club_filter,
+                                                               'current_time': current_time})
 
             grouped_nomi = GroupNomination.objects.filter(status='out')
             nomi = Nomination.objects.filter(group_status='normal').filter(status='Nomination out')
             result_query = sorted(chain(nomi, grouped_nomi), key=attrgetter('opening_date'), reverse=True)
+            current_time = datetime.now()
 
-            return render(request, 'index1.html', context={'posts': posts, 'username': username,
+            return render(request, 'index1.html', context={'posts': posts, 'username': username, 'current_time': current_time,
                                                            'result_query': result_query, 'club_filter': club_filter})
 
         except ObjectDoesNotExist:
