@@ -250,6 +250,7 @@ def nomination_create(request, pk):
 
             nomination = Nomination.objects.create(name=title_form.cleaned_data['title'],
                                                    description=title_form.cleaned_data['description'],
+                                                   deadline=title_form.cleaned_data['deadline'],
                                                    nomi_form=questionnaire, nomi_post=post,
                                                    year_choice=title_form.cleaned_data['year_choice'],
                                                    hall_choice=title_form.cleaned_data['hall_choice'],
