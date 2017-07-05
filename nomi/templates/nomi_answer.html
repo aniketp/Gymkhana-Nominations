@@ -170,15 +170,28 @@ form view
                     <h4>Comments</h4>
                 </div>
                 {% for comment in comments %}
-                <div class="well well-sm" style="padding-bottom: 0">
-                    <div>
-                        <p><span style="font-weight: bold">{{comment.user.userprofile.name}}: </span> {{comment.comments}}</p>
-                        <form action="{% url 'comment_delete' comment.pk %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit">
-                                <span class="glyphicon glyphicon-trash"></span>
-                            </button>
-                        </form>
+                <div class="well well-sm" style="padding-bottom: 10px">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <p><span style="font-weight: bold">{{comment.user.userprofile.name}}: </span> {{comment.comments}}</p>
+                        </div>
+                        <div class="col-lg-6 text-right">
+
+                            <form action="{% url 'comment_update' comment.pk %}" method="get" style="display: inline-block">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success btn-sm"  style="width: inherit">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </button>
+                            </form>
+
+                            <form action="{% url 'comment_delete' comment.pk %}" method="post" style="display: inline-block">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm" style="width: inherit">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                            </form>
+
+                        </div>
                     </div>
                 </div>
                 {% endfor %}

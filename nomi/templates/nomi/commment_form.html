@@ -1,0 +1,27 @@
+{% extends 'base2.html' %}
+{% load staticfiles %}
+{% load bootstrap %}
+
+{% block content %}
+    <div class="profile-content">
+
+        <div>
+            <h2 style="text-align: center">Edit Your Comment</h2>
+        </div>
+        <hr>
+        <div class="scroll-userform">
+            <div style="padding: 0 40px; margin-bottom: 2px;">
+                <form action="" method="post">
+                    {% csrf_token %}
+
+                        {{ form|bootstrap }}
+
+                    <div class="text-center">
+                        <input type="submit" class="btn btn-success" value="submit" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
