@@ -285,10 +285,12 @@
 
             {% if senate_perm %}
                 <div class="col-lg-6 text-center">
-                    <a class="btn btn-info" href="{% url 'append_user' nomination.pk %}">Append to post</a>
+                    <a class="btn btn-info"
+                       style="width: auto" href="{% url 'append_user' nomination.pk %}">Add to Existing Members</a>
                 </div>
                 <div class="col-lg-6 text-center">
-                    <a class="btn btn-danger" href="{% url 'replace_user' nomination.pk %}">Clean and Append</a>
+                    <a class="btn btn-danger"
+                       style="width: auto" href="{% url 'replace_user' nomination.pk %}">Remove Previous Members</a>
                 </div>
             {% endif %}
         </div>

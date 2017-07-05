@@ -6,21 +6,26 @@
     <br>
     <br>
     <br>
+    <div>
+        <h1 style="text-align: center">NOMINATION RESULTS TO BE RATIFIED</h1>
+        <hr>
+        <br>
+    </div>
+
     {% for nomi in nomi %}
 
         <div class="panel panel-success">
-            <div class="panel-heading">
-                <h3 class="panel-title">{{ nomi.name.upper }}</h3>
-            </div>
-
-            <div class="panel-body">
-
+            <div class="panel-heading" style="background-color: #385e63">
+                <h3 class="panel-title" style="font-weight: bolder; font-size: 20px">{{ nomi.name.upper }}</h3>
                 <span style="font-weight: bolder">Preference : </span>
                 <span class="label label-primary">{{nomi.year_choice}}</span>
                 <span class="label label-success">{{nomi.dept_choice}}</span>
+            </div>
+
+            <div class="panel-body">
                 <p>{{nomi.brief_desc}} ...</p>
                 <a href="{% url 'applicants' pk=nomi.pk %}"
-                       class="btn btn-sm read-more-button btn-danger">Read More</a>
+                       class="btn btn-sm read-more-button btn-primary">See Result List</a>
             </div>
         </div>
     {% endfor %}
