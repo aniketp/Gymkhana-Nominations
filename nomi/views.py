@@ -615,6 +615,7 @@ def nomination_answer(request, pk):
     all_posts = Post.objects.filter(post_holders=request.user)
     nomination_id = application.nomination.pk
     nomination = application.nomination
+    auth_user = UserProfile.objects.get(user=request.user)
 
     senate_perm = False
     for post in all_posts:
@@ -651,12 +652,14 @@ def nomination_answer(request, pk):
         return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
                                                             'comment_form': comment_form, 'inst_user': inst_user,
                                                             'comments': comments_reverse, 'senate_perm': senate_perm,
-                                                            'nomi_pk': nomination_id, 'result_approval': results_approval})
+                                                            'nomi_pk': nomination_id, 'result_approval': results_approval,
+                                                            'auth_user': auth_user})
 
     return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
                                                         'comment_form': comment_form, 'inst_user': inst_user,
                                                         'comments': comments_reverse, 'senate_perm': senate_perm,
-                                                        'nomi_pk': nomination_id, 'result_approval': results_approval})
+                                                        'nomi_pk': nomination_id, 'result_approval': results_approval,
+                                                        'auth_user': auth_user})
 
 
 
