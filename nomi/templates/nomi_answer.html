@@ -178,7 +178,7 @@ form view
                         <div class="col-lg-6">
                             <p><span style="font-weight: bold">{{comment.user.userprofile.name}}: </span> {{comment.comments}}</p>
                         </div>
-                        {% if comment.user.userprofile.user == request.user %}
+                        {% if comment.user.userprofile.user == request.user and result_approval.0 %}
                             <div class="col-lg-6 text-right">
 
                                 <form action="{% url 'comment_update' comment.pk %}" method="get" style="display: inline-block">
@@ -194,7 +194,6 @@ form view
                                         <span class="glyphicon glyphicon-trash"></span>
                                     </button>
                                 </form>
-
                             </div>
                         {% endif %}
                     </div>
