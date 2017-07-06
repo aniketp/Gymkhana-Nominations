@@ -286,6 +286,11 @@ def nomi_detail(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     questionnaire = nomi.nomi_form
     form = questionnaire.get_form(request.POST or None)
+
+    panelform = UserId(request.POST or None)
+
+
+
     status = [0, 0, 0, 0, 0]
 
     if nomi.status == 'Nomination created':
@@ -317,9 +322,20 @@ def nomi_detail(request, nomi_pk):
         else:
             sent_to_parent = 0
 
+        if panelform.is_valid():
+            profile = UserProfile.objects.get(roll_no = panelform.cleaned_data["user_roll"])
+            user = profile.user
+            nomi.interview_panel.add(user)
+            return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
+
         return render(request, 'nomi_detail_admin.html', context={'nomi': nomi, 'form': form,
                                                                   'sent_to_parent': sent_to_parent,
-                                                                  'power_to_send': power_to_send, 'status': status})
+                                                                  'power_to_send': power_to_send, 'status': status,'panelform':panelform})
+
+
+    elif request.user in nomi.interview_panel.all():
+        return render(request, 'nomi_detail_user.html', context={'nomi': nomi})
+
 
     else:
         if status[1]:
@@ -537,40 +553,6 @@ def applications(request, pk):
     rejected = NominationInstance.objects.filter(nomination=nomination).filter(status='Rejected')
     pending = NominationInstance.objects.filter(nomination=nomination).filter(status=None)
 
-    view_post = None
-    access = False
-    for apv_post in nomination.nomi_approvals.all():
-        if request.user in apv_post.post_holders.all():
-            view_post = apv_post
-            access = True
-            break
-    if not access:
-        return render(request, 'no_access.html')
-
-    permission = None
-    senate_permission = None
-
-    if view_post.perms == 'can approve post and send nominations to users':
-        permission = True
-        senate_permission = False
-    elif view_post.perms == 'can ratify the post':
-        senate_permission = True
-        permission = False
-
-    # result approval things    send,sent,cancel
-    results_approval = [0, 0, 0]
-
-    if view_post in nomination.result_approvals.all():
-        if view_post.parent in nomination.result_approvals.all():
-            results_approval[1] = 1
-            grand_parent = view_post.parent.parent
-            if grand_parent not in nomination.result_approvals.all():
-                results_approval[2] = 1
-        else:
-            results_approval[0] = 1
-
-    form_confirm = ConfirmApplication(request.POST or None)
-
     status = [0, 0, 0, 0, 0]
 
     if nomination.status == 'Nomination created':
@@ -584,20 +566,71 @@ def applications(request, pk):
     else:
         status[4] = 1
 
-    if form_confirm.is_valid():
-        nomination.status = 'Interview period'
-        nomination.save()
+    view_post = None
+    access = False
+    for apv_post in nomination.nomi_approvals.all():
+        if request.user in apv_post.post_holders.all():
+            view_post = apv_post
+            access = True
+            break
+
+
+     ## if   user post in parent tree
+    if access:
+        permission = None
+        senate_permission = None
+
+        if view_post.perms == 'can approve post and send nominations to users':
+            permission = True
+            senate_permission = False
+        elif view_post.perms == 'can ratify the post':
+            senate_permission = True
+            permission = False
+
+        # result approval things    send,sent,cancel
+        results_approval = [0, 0, 0]
+
+        if view_post in nomination.result_approvals.all():
+            if view_post.parent in nomination.result_approvals.all():
+                results_approval[1] = 1
+                grand_parent = view_post.parent.parent
+                if grand_parent not in nomination.result_approvals.all():
+                    results_approval[2] = 1
+            else:
+                results_approval[0] = 1
+
+        form_confirm = ConfirmApplication(request.POST or None)
+
+        if form_confirm.is_valid():
+            nomination.status = 'Interview period'
+            nomination.save()
+            return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
+                                                               'form_confirm': form_confirm, 'pending': pending,
+                                                               'accepted': accepted,
+                                                               'result_approval': results_approval,
+                                                               'rejected': rejected, 'status': status,
+                                                               'perm': permission,
+                                                               'senate_perm': senate_permission})
+
         return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
-                                                           'form_confirm': form_confirm, 'pending': pending,
-                                                           'accepted': accepted, 'result_approval': results_approval,
-                                                           'rejected': rejected, 'status': status, 'perm': permission,
+                                                           'form_confirm': form_confirm,
+                                                           'result_approval': results_approval,
+                                                           'accepted': accepted, 'rejected': rejected, 'status': status,
+                                                           'pending': pending, 'perm': permission,
                                                            'senate_perm': senate_permission})
 
-    return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
-                                                       'form_confirm': form_confirm, 'result_approval': results_approval,
-                                                       'accepted': accepted, 'rejected': rejected, 'status': status,
-                                                       'pending': pending, 'perm': permission,
-                                                       'senate_perm': senate_permission})
+
+
+    ## if user in panel...
+    if request.user in nomination.interview_panel.all():
+        return render(request, 'applicant_panel.html', context={'nomination': nomination, 'applicants': applicants,
+                                                           'accepted': accepted, 'rejected': rejected, 'status': status,
+                                                           'pending': pending})
+
+    if not access:
+        return render(request, 'no_access.html')
+
+
 
 
 @login_required
@@ -608,12 +641,13 @@ def nomination_answer(request, pk):
     applicant = application.user.userprofile
     questionnaire = application.nomination.nomi_form
     form = questionnaire.get_form(data)
+
+
     comments = Commment.objects.filter(nomi_instance=application)
     comments_reverse = comments[::-1]
     comment_form = CommentForm(request.POST or None)
 
     all_posts = Post.objects.filter(post_holders=request.user)
-    nomination_id = application.nomination.pk
     nomination = application.nomination
     auth_user = UserProfile.objects.get(user=request.user)
 
@@ -627,10 +661,12 @@ def nomination_answer(request, pk):
     if application.user == request.user:
         inst_user = True
 
+
+
     view_post = None
-    for apv_post in nomination.nomi_approvals.all():
-        if request.user in apv_post.post_holders.all():
-            view_post = apv_post
+    for post in nomination.nomi_approvals.all():
+        if post in all_posts:
+            view_post = post
             break
 
     # result approval things    send,sent,cancel
@@ -645,20 +681,26 @@ def nomination_answer(request, pk):
         else:
             results_approval[0] = 1
 
+    if request.user in nomination.interview_panel.all():
+        view_post = nomination.nomi_post.parent
+        if view_post.parent in nomination.result_approvals.all():
+            results_approval[1] = 1
+            grand_parent = view_post.parent.parent
+            if grand_parent not in nomination.result_approvals.all():
+                results_approval[2] = 1
+        else:
+            results_approval[0] = 1
+
+
     if comment_form.is_valid():
         Commment.objects.create(comments=comment_form.cleaned_data['comment'],
                                 nomi_instance=application, user=request.user)
-
-        return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
-                                                            'comment_form': comment_form, 'inst_user': inst_user,
-                                                            'comments': comments_reverse, 'senate_perm': senate_perm,
-                                                            'nomi_pk': nomination_id, 'result_approval': results_approval,
-                                                            'auth_user': auth_user})
+        return HttpResponseRedirect(reverse('nomi_answer', kwargs={'pk': pk}))
 
     return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
                                                         'comment_form': comment_form, 'inst_user': inst_user,
                                                         'comments': comments_reverse, 'senate_perm': senate_perm,
-                                                        'nomi_pk': nomination_id, 'result_approval': results_approval,
+                                                        'nomi_pk': nomination.pk, 'result_approval': results_approval,
                                                         'auth_user': auth_user})
 
 
