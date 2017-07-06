@@ -517,7 +517,7 @@ def nomi_apply(request, pk):
 
 @login_required
 def copy_nomi_link(request, pk):
-    url = 'https://' + DOMAIN_NAME + '/nominations/nomi_detail/' + str(pk) + '/'
+    url = DOMAIN_NAME + '/nominations/nomi_detail/' + str(pk) + '/'
     pyperclip.copy(url)
 
     return HttpResponseRedirect(reverse('admin_portal'))

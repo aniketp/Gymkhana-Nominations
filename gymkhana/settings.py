@@ -130,7 +130,7 @@ USE_TZ = True
 
 ROOT_URLCONF = 'gymkhana.urls'
 
-DOMAIN_NAME = 'gymkhana.pythonanywhere.com'
+DOMAIN_NAME = '127.0.0.1:8000'
 
 
 # Static files (CSS, JavaScript, Images)
