@@ -328,10 +328,13 @@ def nomi_detail(request, nomi_pk):
             sent_to_parent = 0
 
         if panelform.is_valid():
-            profile = UserProfile.objects.get(roll_no=panelform.cleaned_data["user_roll"])
-            user = profile.user
-            nomi.interview_panel.add(user)
-            return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
+            try:
+                profile = UserProfile.objects.get(roll_no=panelform.cleaned_data["user_roll"])
+                user = profile.user
+                nomi.interview_panel.add(user)
+                return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
+            except ObjectDoesNotExist:
+                return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
 
         panelists = nomi.interview_panel.all().distinct()
         panelists_exclude_parent = []
