@@ -118,6 +118,16 @@
                             </div>
                         </div>
                          {% endif %}
+                         <div>
+                              <form action="" method="post">
+                        {% csrf_token %}
+                            {{panelform|bootstrap}}
+                        <br>
+                            <div class="text-center">
+                                <input class="btn btn-warning" type="submit" value="Add to panel" />
+                            </div>
+                    </form>
+                         </div>
 
                      </div>
             </div>
