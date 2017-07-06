@@ -7,7 +7,7 @@
 
 <div class="profile-content">
     <div class="jumbotron">
-          <span class="label label-success">Group Nomination</span>
+          <p style="font-weight: bold; color: #19294b">Group of Nominations</p>
         <div class="jumbotron-title">
             <h1 style="text-align: center">{{group_nomi.name}}</h1>
 
@@ -37,26 +37,31 @@
 
      <div>
          {% for nomi in group_nomi.nominations.all %}
-         <div class="panel panel-success">
-             <div class="panel-heading">
-                 <h3 class="panel-title">{{ nomi.name.upper }}</h3>
-             </div>
-             <div class="panel-body">
-                 <span style="font-weight: bolder">Preference : </span>
-                 <span class="label label-primary">{{nomi.year_choice}}</span>
-                 <span class="label label-success">{{nomi.dept_choice}}</span>
-                 <p><span style="font-weight: bolder"> Deadline :  </span>{{nomi.closing_date}}</p>
-                 <p>{{nomi.brief_desc}} ...</p>
-                 <a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}"
-                    class="btn btn-sm read-more-button btn-info">Read More</a>
-                 {% if admin %}
-                 {% if group_nomi.status == 'created' %}
-                 <a href="{% url 'remove_from_group' nomi_pk=nomi.pk  gr_pk=group_nomi.pk %}"
-                    class="btn btn-sm read-more-button btn-danger">Remove</a>
-                 {% endif %}
-                 {% endif %}
-             </div>
-         </div>
+
+             <div class="panel panel-success">
+                <div class="panel-heading" style="background-color: #1e1d46">
+                    <h3 class="panel-title" style="font-weight: bolder; font-size: 20px">{{ nomi.name.upper }}</h3>
+                    <span style="font-weight: bolder">Preference : </span>
+                    <span class="label label-primary">{{nomi.year_choice}}</span>
+                    <span class="label label-success">{{nomi.dept_choice}}</span>
+                </div>
+
+
+                <div class="panel-body">
+                    <div><span style="font-weight: bold">Release Date: </span> {{nomi.opening_date}}</div>
+                    <p><span style="font-weight: bolder"> Deadline :  </span>{{nomi.deadline}}</p>
+                    <p>{{nomi.brief_desc}} ...</p>
+                    <a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}"
+                       class="btn btn-sm read-more-button btn-danger">Read More</a>
+                    {% if admin %}
+                        {% if group_nomi.status == 'created' %}
+                             <a href="{% url 'remove_from_group' nomi_pk=nomi.pk  gr_pk=group_nomi.pk %}"
+                                class="btn btn-sm read-more-button btn-danger">Remove</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+
          {% endfor %}
      </div>
 </div>

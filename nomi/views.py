@@ -29,14 +29,18 @@ def index(request):
                 grouped_nomi = club.club_group.all().filter(status='out')
                 nomi = club.club_nomi.all().filter(group_status='normal').filter(status='Nomination out')
                 result_query = sorted(chain(nomi, grouped_nomi), key=attrgetter('opening_date'), reverse=True)
+                current_time = datetime.now()
+
                 return render(request, 'index1.html', context={'posts': posts, 'username': username,
-                                                               'result_query': result_query, 'club_filter': club_filter})
+                                                               'result_query': result_query, 'club_filter': club_filter,
+                                                               'current_time': current_time})
 
             grouped_nomi = GroupNomination.objects.filter(status='out')
             nomi = Nomination.objects.filter(group_status='normal').filter(status='Nomination out')
             result_query = sorted(chain(nomi, grouped_nomi), key=attrgetter('opening_date'), reverse=True)
+            current_time = datetime.now()
 
-            return render(request, 'index1.html', context={'posts': posts, 'username': username,
+            return render(request, 'index1.html', context={'posts': posts, 'username': username, 'current_time': current_time,
                                                            'result_query': result_query, 'club_filter': club_filter})
 
         except ObjectDoesNotExist:
@@ -250,6 +254,7 @@ def nomination_create(request, pk):
 
             nomination = Nomination.objects.create(name=title_form.cleaned_data['title'],
                                                    description=title_form.cleaned_data['description'],
+                                                   deadline=title_form.cleaned_data['deadline'],
                                                    nomi_form=questionnaire, nomi_post=post,
                                                    year_choice=title_form.cleaned_data['year_choice'],
                                                    hall_choice=title_form.cleaned_data['hall_choice'],
@@ -421,7 +426,7 @@ def group_nominations(request, pk):
 @login_required
 def group_nomi_detail(request, pk):
     group_nomi = GroupNomination.objects.get(pk = pk)
-    admin =0
+    admin = 0
     for post in request.user.posts.all():
         if post in group_nomi.approvals.all():
             admin = post
@@ -431,7 +436,7 @@ def group_nomi_detail(request, pk):
         group_nomi.status = 'out'
         group_nomi.save()
 
-    return render(request, 'group_detail.html', {'group_nomi':group_nomi , 'admin':admin, 'form_confirm':form_confirm})
+    return render(request, 'group_detail.html', {'group_nomi': group_nomi, 'admin': admin, 'form_confirm': form_confirm})
 
 
 @login_required
@@ -610,6 +615,7 @@ def nomination_answer(request, pk):
     all_posts = Post.objects.filter(post_holders=request.user)
     nomination_id = application.nomination.pk
     nomination = application.nomination
+    auth_user = UserProfile.objects.get(user=request.user)
 
     senate_perm = False
     for post in all_posts:
@@ -646,12 +652,14 @@ def nomination_answer(request, pk):
         return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
                                                             'comment_form': comment_form, 'inst_user': inst_user,
                                                             'comments': comments_reverse, 'senate_perm': senate_perm,
-                                                            'nomi_pk': nomination_id, 'result_approval': results_approval})
+                                                            'nomi_pk': nomination_id, 'result_approval': results_approval,
+                                                            'auth_user': auth_user})
 
     return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
                                                         'comment_form': comment_form, 'inst_user': inst_user,
                                                         'comments': comments_reverse, 'senate_perm': senate_perm,
-                                                        'nomi_pk': nomination_id, 'result_approval': results_approval})
+                                                        'nomi_pk': nomination_id, 'result_approval': results_approval,
+                                                        'auth_user': auth_user})
 
 
 
@@ -823,6 +831,17 @@ class UserProfileCreate(CreateView):
 class UserProfileUpdate(UpdateView):
     model = UserProfile
     fields = ['name', 'roll_no', 'year', 'programme', 'department', 'user_img', 'hall', 'room_no', 'contact']
+    success_url = reverse_lazy('index')
+
+
+class CommentUpdate(UpdateView):
+    model = Commment
+    fields = ['comments']
+    success_url = reverse_lazy('index')
+
+
+class CommentDelete(DeleteView):
+    model = Commment
     success_url = reverse_lazy('index')
 
 

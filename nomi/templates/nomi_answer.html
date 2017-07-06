@@ -84,7 +84,7 @@ form view
 
     </div>
 
-    <div>
+    <div class="well">
 
         <div>
            <h4>Response</h4>
@@ -109,8 +109,9 @@ form view
                         <div class="col-lg-6">
                             <a href="{% url 'reject' nomi.pk %}"><div class="btn btn-danger read-more-button ">Reject</div></a>
                         </div>
-
+                    </div>
                     {% elif nomi.nomination.status == 'Interview period' and nomi.interview_status == 'Interview Not Done' %}
+                    <div class="row text-center">
                         <div class="col-lg-4">
                             <a href="{% url 'accept' nomi.pk %} "><div class="btn btn-info read-more-button " >Accept</div></a>
                         </div>
@@ -123,7 +124,9 @@ form view
                             <a href="{% url 'interviewed' nomi.pk %}"><div class="btn btn-danger read-more-button ">
                                 Interviewed</div></a>
                         </div>
+                    </div>
                     {% elif senate_perm %}
+                    <div class="row text-center">
                         <div class="col-lg-6 text-center">
                             <a href="{% url 'accept' nomi.pk %} "><div class="btn btn-info read-more-button " >Accept</div></a>
                         </div>
@@ -170,11 +173,29 @@ form view
                     <h4>Comments</h4>
                 </div>
                 {% for comment in comments %}
-                <div class="well well-sm" style="padding-bottom: 0">
-                    <div>
-                        <p><span style="font-weight: bold">{{comment.user.userprofile.name}}: </span> {{comment.comments}}</p>
-                        <div class="row">
+                <div class="well well-sm" style="padding-bottom: 10px">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <p><span style="font-weight: bold">{{comment.user.userprofile.name}}: </span> {{comment.comments}}</p>
                         </div>
+                        {% if comment.user.userprofile.user == request.user and result_approval.0 %}
+                            <div class="col-lg-6 text-right">
+
+                                <form action="{% url 'comment_update' comment.pk %}" method="get" style="display: inline-block">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success btn-sm"  style="width: inherit">
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                    </button>
+                                </form>
+
+                                <form action="{% url 'comment_delete' comment.pk %}" method="post" style="display: inline-block">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm" style="width: inherit">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </button>
+                                </form>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
                 {% endfor %}
