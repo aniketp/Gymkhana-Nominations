@@ -149,6 +149,12 @@
                                                 <br>
                                                 <div class="jumbotron" style="background-color: inherit">
                                                     <ul>
+                                                        {% for parent in parents %}
+                                                            <div class="col-lg-10">
+                                                                <li style="font-weight: bold">
+                                                                    {{ parent.userprofile.name }}</li>
+                                                            </div>
+                                                        {% endfor %}
                                                         {% for panelist in panelists %}
                                                             <div class="col-lg-10">
                                                                 <li style="font-weight: bold">

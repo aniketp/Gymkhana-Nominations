@@ -16,12 +16,12 @@ def creator_form(request, pk):
     form = questionnaire.get_form(request.POST or None)
     pk = questionnaire.pk
     questions = Question.objects.filter(questionnaire=questionnaire)
-    d_form = DesForm(request.POST or None, instance = nomi)
+    d_form = DesForm(request.POST or None, instance=nomi)
     if d_form.is_valid():
         d_form.save()
         return HttpResponseRedirect(reverse('forms:creator_form', kwargs={'pk': pk}))
 
-    return render(request, 'forms/creator_form.html', context={'form': form, 'questions': questions,'d_form':d_form,
+    return render(request, 'forms/creator_form.html', context={'form': form, 'questions': questions, 'd_form': d_form,
                                                                'questionnaire': questionnaire, 'pk': pk})
 
 

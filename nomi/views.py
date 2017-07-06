@@ -288,6 +288,7 @@ class NominationDelete(DeleteView):
 @login_required
 def nomi_detail(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
+    parents = nomi.nomi_post.parent.post_holders.all()
     questionnaire = nomi.nomi_form
     form = questionnaire.get_form(request.POST or None)
 
@@ -333,11 +334,17 @@ def nomi_detail(request, nomi_pk):
             return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
 
         panelists = nomi.interview_panel.all().distinct()
+        panelists_exclude_parent = []
 
-        return render(request, 'nomi_detail_admin.html', context={'nomi': nomi, 'form': form,
+        for panelist in panelists:
+            if panelist not in parents:
+                panelists_exclude_parent.append(panelist)
+
+        return render(request, 'nomi_detail_admin.html', context={'nomi': nomi, 'form': form, 'parents': parents,
                                                                   'sent_to_parent': sent_to_parent,
                                                                   'power_to_send': power_to_send, 'status': status,
-                                                                  'panelform': panelform, 'panelists': panelists})
+                                                                  'panelform': panelform,
+                                                                  'panelists': panelists_exclude_parent})
 
 
     elif request.user in nomi.interview_panel.all():
