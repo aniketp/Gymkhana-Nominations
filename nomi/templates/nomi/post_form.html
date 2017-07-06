@@ -7,11 +7,16 @@
 
 
 {% block content %}
+    <br><br>
+    <div class=" text-right">
+            <a href="{% url 'post_view' parent.pk %}">
+                <div style="width: inherit" class="btn btn-info"><span class="glyphicon glyphicon-arrow-left"></span> Go Back</div>
+            </a>
+        </div>
 
     <div class="container box">
         <div class="row">
             <div class="col-lg-8">
-                <hr>
                 <h2 class="intro-text text-center">
                     <strong>Add a new Post</strong>
                 </h2>
