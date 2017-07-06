@@ -150,7 +150,7 @@ def post_create(request, pk):
         post_form = PostForm(parent)
 
     if request.user in parent.post_holders.all():
-        return render(request, 'nomi/post_form.html', context={'form': post_form, 'parent': parent})
+        return render(request, 'nomi/post_form.html', context={'form': post_form, 'parent': parentr})
     else:
         return render(request, 'no_access.html')
 
@@ -332,10 +332,12 @@ def nomi_detail(request, nomi_pk):
             nomi.interview_panel.add(user)
             return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
 
+        panelists = nomi.interview_panel.all().distinct()
+
         return render(request, 'nomi_detail_admin.html', context={'nomi': nomi, 'form': form,
                                                                   'sent_to_parent': sent_to_parent,
                                                                   'power_to_send': power_to_send, 'status': status,
-                                                                  'panelform': panelform})
+                                                                  'panelform': panelform, 'panelists': panelists})
 
 
     elif request.user in nomi.interview_panel.all():

@@ -48,7 +48,7 @@
 
                             <div class="col-lg-4 text-center">
                                 <a href="{% url 'forms:creator_form' nomi.nomi_form.pk %}"
-                                   class="btn btn-warning">Edit Nomination</a>
+                                   class="btn btn-primary">Edit Nomination</a>
                             </div>
 
                             <div class="col-lg-4 text-center">
@@ -73,7 +73,7 @@
 
                                     <div class="col-lg-4 text-center">
                                         <a href="{% url 'forms:creator_form' nomi.nomi_form.pk %}"
-                                           class="btn btn-warning">Edit Nomination</a>
+                                           class="btn btn-primary">Edit Nomination</a>
                                     </div>
 
                                     <div class="col-lg-4 text-center">
@@ -118,15 +118,54 @@
                             </div>
                         </div>
                          {% endif %}
-                         <div>
-                              <form action="" method="post">
-                        {% csrf_token %}
-                            {{panelform|bootstrap}}
-                        <br>
-                            <div class="text-center">
-                                <input class="btn btn-warning" type="submit" value="Add to panel" />
-                            </div>
-                    </form>
+                         <br>
+                         <hr>
+
+                         <div class="well">
+                             <form action="" method="post">
+                                {% csrf_token %}
+
+                                <div class="container-fluid">
+
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div>
+                                                <h3 style="text-align: center">Add Interview Panel Members</h3>
+                                                <br>
+                                                <p style="font-weight: bold">Roll No.</p>
+                                            </div>
+
+                                            {{panelform|bootstrap_inline}}
+
+                                            <br><br>
+
+                                            <div class="text-center">
+                                                <input class="btn btn-warning" type="submit" value="Add to panel" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div>
+                                                <h3 style="text-align: center">List of Panel Members</h3>
+                                                <br>
+                                                <div class="jumbotron" style="background-color: inherit">
+                                                    <ul>
+                                                        {% for panelist in panelists %}
+                                                            <div class="col-lg-10">
+                                                                <li style="font-weight: bold">
+                                                                    {{ panelist.userprofile.name }}</li>
+                                                            </div>
+                                                            <div class="col-lg-2">
+                                                                <span class="glypicon glypicon-trash"></span>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                              </form>
                          </div>
 
                      </div>

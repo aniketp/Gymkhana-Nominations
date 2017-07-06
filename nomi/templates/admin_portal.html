@@ -34,7 +34,9 @@
                                 <div class="panel-body">
                                     <div><span style="font-weight: bold">Release Date: </span> {{nomi.opening_date}}</div>
                                     <p><span style="font-weight: bolder"> Deadline :  </span>{{nomi.closing_date}}</p>
-                                    <p>{{nomi.brief_desc}}</p>
+                                    {% autoescape off %}
+                                        <p>{{nomi.brief_desc}} ...</p>
+                                    {% endautoescape %}
                                     <div class="col-lg-2">
                                         <a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}"
                                            class="btn btn-sm read-more-button btn-danger">Read More</a>

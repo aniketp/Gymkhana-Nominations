@@ -62,7 +62,7 @@ class Nomination(models.Model):
     opening_date = models.DateField(null=True, blank=True)
     deadline = models.DateField(null=True, blank=True, editable=True)
 
-    interview_panel = models.ManyToManyField(User,related_name='panel', symmetrical=False,blank = True)
+    interview_panel = models.ManyToManyField(User, related_name='panel', symmetrical=False, blank=True)
 
     year_choice = models.CharField(max_length=100, choices=YEAR_1, null=True)
     hall_choice = models.CharField(max_length=100, choices=HALL_1, null=True)
