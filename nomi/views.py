@@ -343,10 +343,9 @@ def nomi_detail(request, nomi_pk):
             if panelist not in parents:
                 panelists_exclude_parent.append(panelist)
 
-        return render(request, 'nomi_detail_admin.html', context={'nomi': nomi, 'form': form, 'parents': parents,
-                                                                  'sent_to_parent': sent_to_parent,
-                                                                  'power_to_send': power_to_send, 'status': status,
-                                                                  'panelform': panelform,
+        return render(request, 'nomi_detail_admin.html', context={'nomi': nomi, 'form': form, 'panelform': panelform,
+                                                                  'sent_to_parent': sent_to_parent, 'status': status,
+                                                                  'power_to_send': power_to_send, 'parents': parents,
                                                                   'panelists': panelists_exclude_parent})
 
 
@@ -623,10 +622,9 @@ def applications(request, pk):
             nomination.save()
             return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
                                                                'form_confirm': form_confirm, 'pending': pending,
-                                                               'accepted': accepted,
+                                                               'accepted': accepted, 'perm': permission,
                                                                'result_approval': results_approval,
                                                                'rejected': rejected, 'status': status,
-                                                               'perm': permission,
                                                                'senate_perm': senate_permission})
 
         return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,

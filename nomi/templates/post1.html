@@ -58,7 +58,7 @@
     <ul class="nav nav-tabs">
         <li class="active"><a href="#child-posts" data-toggle="tab" aria-expanded="true">Posts under you</a></li>
         <li><a href="#post-approval" data-toggle="tab" aria-expanded="false">Posts to be approved ({{post_approval.count}})</a></li>
-        <li><a href="#nomi-approval" data-toggle="tab" aria-expanded="false">Nominations to be approved</a></li>
+        <li><a href="#nomi-approval" data-toggle="tab" aria-expanded="false">Nominations to be approved ({{ nomi_approval.count }})</a></li>
         <li><a href="#declared" data-toggle="tab" aria-expanded="false">Nomination Results</a></li>
     </ul>
 
@@ -98,28 +98,37 @@
                         <span>Post: </span>{{ch_post.post_name}}</a></p>
                     <div class="row">
                         <div class="col-lg-4">
-                            <p><span>parent : </span>{{ch_post.parent}}</p>
+                            <p><span>Parent : </span>{{ch_post.parent}}</p>
                         </div>
                         {% if post.parent in ch_post.post_approvals.all %}
                         <div class="col-lg-4 text-center">
                             Status : Sent to parent
                         </div>
                         {% else %}
-                        {% if post.perms == 'can approve post and send nominations to users' %}
-                        <div class="col-lg-4 text-center">
-                            <a  class="btn btn-success" href="{% url 'final_post_approval' post_pk=ch_post.pk view_pk=post.pk %}">Approve</a>
-                        </div>
-                        {% else %}
-                        <div class="col-lg-4 text-center">
-                            <a  class="btn btn-success" href="{% url 'post_approval' post_pk=ch_post.pk view_pk=post.pk %}">Approve</a>
-                        </div>
-                        {% endif %}
+                            {% if post.perms == 'can approve post and send nominations to users' %}
 
-                        {% if not post == ch_post.parent %}
-                        <div class="col-lg-4 text-center">
-                            <a  class="btn btn-success" href="{% url 'post_reject' post_pk=ch_post.pk view_pk=post.pk %}">Reject</a>
-                        </div>
-                        {% endif %}
+                                <div class="col-lg-4 text-center">
+                                    <a  class="btn btn-success" href="{% url 'final_post_approval'
+                                            post_pk=ch_post.pk view_pk=post.pk %}">Approve</a>
+                                </div>
+
+                            {% else %}
+
+                                <div class="col-lg-4 text-center">
+                                    <a  class="btn btn-success" href="{% url 'post_approval'
+                                            post_pk=ch_post.pk view_pk=post.pk %}">Approve</a>
+                                </div>
+
+                            {% endif %}
+
+                            {% if not post == ch_post.parent %}
+
+                                <div class="col-lg-4 text-center">
+                                    <a  class="btn btn-danger" href="{% url 'post_reject'
+                                            post_pk=ch_post.pk view_pk=post.pk %}">Reject</a>
+                                </div>
+
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>
@@ -154,8 +163,21 @@
                     <h3 class="panel-title">{{nomi.nomi_post.club}}</h3>
                 </div>
                 <div class="panel-body">
-                    <p class="profile-post-name"><a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}">
+
+                    <div class="row">
+                        <div class="col-lg-4 text-center">
+                            <p class="profile-post-name"><a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}">
                         <span></span>{{nomi.name}}</a></p>
+                        </div>
+                        <div class="col-lg-4 text-center">
+                            <a  class="btn btn-success" href="{% url 'nomi_approval'
+                                nomi.pk %}">Approve</a>
+                        </div>
+                        <div class="col-lg-4 text-center">
+                            <a  class="btn btn-danger" href="{% url 'nomi_reject'
+                                nomi.pk %}">Reject</a>
+                        </div>
+                    </div>
                 </div>
             </div>
             {% endfor %}
