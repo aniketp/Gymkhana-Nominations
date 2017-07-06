@@ -96,7 +96,7 @@ form view
                 {{form|bootstrap}}
             </form>
         </div>
-        {% if not inst_user %}
+        {% if not inst_user  %}
                 <div>
                 {% if result_approval.0 %}
                     {% if nomi.nomination.status == 'Interview period' and nomi.interview_status == 'Interview Done' %}
@@ -169,6 +169,7 @@ form view
 
                 <br>
                 <br>
+            {% if comments %}
                 <div>
                     <h4>Comments</h4>
                 </div>
@@ -199,6 +200,8 @@ form view
                     </div>
                 </div>
                 {% endfor %}
+            {% endif %}
+
             </div>
 
     {% endif %}
