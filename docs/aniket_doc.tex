@@ -30,7 +30,7 @@ The project repository can be found \textbf{\href{https://github.com/SummerCamp1
 
 
 \section{Description}
-The main aim of the project is to develop a portal through which admins can release nominations for their child posts. The target group can apply for the same. The portal can keep track of each and every process the application goes through, e.g release, submission, approval from higher authority, interview remarks, final selection and increment in power if selected. The detailed documentation can be found \textit{here}. 
+The main aim of the project is to develop a portal through which admins can release nominations for their child posts. The target group can apply for the same. The portal can keep track of each and every process the application goes through, e.g release, submission, approval from higher authority, interview remarks, final selection and increment in power if selected. The detailed documentation can be found \textbf{\href{http://aniketpandey.com/gymkhana-doc}{here}}. 
 
 \section{Timeline}
 \subsection{Week 1}
@@ -64,7 +64,28 @@ The main aim of the project is to develop a portal through which admins can rele
 	\item Fixed the error in which the new user was not able to see his index view after logging in. Passed the username before the user logged-in, so as to create a user instance and allowing him to update his profile.
 	\item Added commenting functionality in the nominee's filled form. So during the interview, panel can record comments about the candidate.
 	\item Finished off the main structure of the project, only thing that remains to be done is to enhance the look by altering the font-sizes, background colour etc.
-	\item Started writing an API-refernce of the code for future maintenance. 
+	\item Started writing an API-reference of the code for future maintenance. 
+\end{enumerate}
+
+\subsection{Week 5}
+\begin{enumerate}
+	\item In this week, I worked on inculcating ratification process of the posts in our portal. For that, we created a separate post Senate which is the parent of every Gen-Sec. Gen-Sec can send final list to senate after whose approval, posts are assigned to the applicants.
+	\item We also worked on the feature that a particular post-holder can cancel approval requests by which the editing rights are a brought back to the concerned post form the parent post. Right now, only that level which has the approval can edit anything regarding the nomination results.
+	\item We also modified commenting in the applicant's response. It is now related to commenting feature in facebook. That is, you write something, it gets published beneath the user response, and everyone can view it. 
+\end{enumerate}
+
+\subsection{Week 6}
+\begin{enumerate}
+	\item We started working on a new feature of our app, the Student Search. This search feature is different from the conventional student search where you can search for a person only through his Club/Post. For example you want to know who all are in SnT Council. Or who is the Secretary of Films Club etc.
+	\item Designed search layout. Made sure that search feature was equally responsive on mobile devices. Fixed few bugs about absence of post-holders. In that case, returned empty list. Also created a public profile, by clicking on an individual search result. You can view the concerned individual's Current Post. Post Histories and his basic profile.
+	\item Wrote a separate view for senate approvals. Made sure that senate did not appear in 'My Posts' dropdown. and if senate was the only post that user had, removed the Post dropdown form the panel. 
+\end{enumerate}
+
+\subsection{Week 7}
+\begin{enumerate}
+	\item With our Project finally completed, we started testing our code. Worked on few examples, and removed few creepy bugs.
+	\item Made a feature to add separate interview panelists. Customised it so that the post holders of parent post are already assigned the panelist tag. And re-adding is removed. 
+	\item Corrected few bugs on returning multiple values and Object not being present in database.
 \end{enumerate}
 
 \end{document}
