@@ -28,9 +28,30 @@
                 </div>
                     {% for nomi in result_query %}
                     {% if nomi|to_class_name == 'Nomination' %}
-                            <div class="panel panel-success">
+                            {% if nomi.deadline < today.date  %}
+                            <div  class="panel panel-danger" style="border: 3px solid red; ">
                                 <div class="panel-heading" style="background-color: #a09233">
-                                    <h3 class="panel-title" style="font-weight: bolder; font-size: 20px">{{ nomi.name.upper }}</h3>
+                                    <h3 class="panel-title" style="font-weight: bolder; font-size: 20px">{{ nomi.name.upper }}  y</h3>
+                                    <span style="font-weight: bolder">Preference : </span>
+                                    <span class="label label-primary">{{nomi.year_choice}}</span>
+                                    <span class="label label-success">{{nomi.dept_choice}}</span>
+                                </div>
+
+
+                                <div class="panel-body">
+                                    <div><span style="font-weight: bold">Release Date: </span> {{nomi.opening_date}}</div>
+                                    <p style="color:red"><span style="font-weight:bolder"> Deadline :  </span>{{nomi.deadline}}</p>
+                                    {% autoescape off %}
+                                        <p>{{nomi.description|slice:":200"}} ...</p>
+                                    {% endautoescape %}
+                                    <a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}"
+                                       class="btn btn-sm read-more-button btn-danger">Read More</a>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div  class="panel panel-success">
+                                <div class="panel-heading" style="background-color: #a09233">
+                                    <h3 class="panel-title" style="font-weight: bolder; font-size: 20px">{{ nomi.name.upper }} no</h3>
                                     <span style="font-weight: bolder">Preference : </span>
                                     <span class="label label-primary">{{nomi.year_choice}}</span>
                                     <span class="label label-success">{{nomi.dept_choice}}</span>
@@ -47,6 +68,7 @@
                                        class="btn btn-sm read-more-button btn-danger">Read More</a>
                                 </div>
                             </div>
+                            {% endif %}
 
 
                         {% elif nomi|group_status %}
