@@ -121,6 +121,7 @@
                          <br>
                          <hr>
 
+                     {% if request.user in parents %}
                          <div class="well">
                              <form action="" method="post">
                                 {% csrf_token %}
@@ -161,12 +162,11 @@
                                                                     {{ panelist.userprofile.name }}</li>
                                                             </div>
                                                             <div class="col-lg-2">
-                                                                <a href="{% url 'remove_panelist' nomi_pk=nomi.pk
-                                                                        user_pk=panelist.pk %}">
-                                                                <div class="btn btn-sm" style="width: 20px; height: 20px;">
-                                                                    <i class="fa fa-times fa-lg" aria-hidden="true"></i>
-                                                                </div>
-                                                                </a>
+                                            <a href="{% url 'remove_panelist' nomi_pk=nomi.pk user_pk=panelist.pk %}">
+                                            <div class="btn btn-sm" style="width: 20px; height: 20px;">
+                                                <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+                                            </div>
+                                            </a>
                                                             </div>
                                                         {% endfor %}
                                                     </ul>
@@ -178,6 +178,7 @@
 
                               </form>
                          </div>
+                     {% endif %}
 
                      </div>
             </div>
