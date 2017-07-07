@@ -35,7 +35,7 @@
                                     <div><span style="font-weight: bold">Release Date: </span> {{nomi.opening_date}}</div>
                                     <p><span style="font-weight: bolder"> Deadline :  </span>{{nomi.deadline}}</p>
                                     {% autoescape off %}
-                                        <p>{{nomi.brief_desc}} ...</p>
+                                        <p>{{nomi.description|slice:":200"}} ....</p>
                                     {% endautoescape %}
                                     <div class="col-lg-2">
                                         <a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}"
