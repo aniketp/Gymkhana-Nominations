@@ -16,6 +16,8 @@ from gymkhana.settings import DOMAIN_NAME
 from .forms import *
 from .models import *
 
+# main index view for user
+# is_safe
 
 @login_required
 def index(request):
@@ -54,6 +56,8 @@ def index(request):
         return HttpResponseRedirect(reverse('login'))
 
 
+# a view for retification purpose
+# is_safe
 @login_required
 def senate_view(request):
     nomi_ratify = Nomination.objects.filter(status='Sent for ratification')
@@ -171,19 +175,28 @@ def child_post_view(request, pk):
 
 
 
-    confirm_form = ConfirmApplication(request.POST or None)
-    if confirm_form.is_valid():
-        post.tag_perms = 'Can create'
+    give_form = BlankForm(request.POST or None)
+    if give_form.is_valid():
+        if post.tag_perms == 'normal':
+            post.tag_perms = 'Can create'
+        else:
+            post.tag_perms = 'normal'
+
         post.save()
         return HttpResponseRedirect(reverse('child_post', kwargs={'pk': pk}))
 
 
 
+
     if request.user in parent.post_holders.all():
         return render(request, 'child_post1.html', {'post': post,'nominations': nominations,'parent':parent,
-                                                    'tag_form': tag_form, 'confirm_form': confirm_form})
+                                                    'tag_form': tag_form, 'give_form': give_form})
     else:
         return render(request, 'no_access.html')
+
+
+
+
 
 
 @login_required
@@ -631,13 +644,7 @@ def applications(request, pk):
         if form_confirm.is_valid():
             nomination.status = 'Interview period'
             nomination.save()
-            return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
-                                                               'form_confirm': form_confirm, 'pending': pending,
-                                                               'accepted': accepted, 'perm': permission,
-                                                               'result_approval': results_approval,
-                                                               'rejected': rejected, 'status': status,
-                                                               'senate_perm': senate_permission})
-
+            return HttpResponseRedirect(reverse('applicants', kwargs={'pk': pk}))
         return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
                                                            'form_confirm': form_confirm,
                                                            'result_approval': results_approval,
