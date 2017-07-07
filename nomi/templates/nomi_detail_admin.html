@@ -41,17 +41,21 @@
                         <div class="row">
                             {% if power_to_send %}
 
-                            <div class="col-lg-4 text-center">
+                            <div class="col-lg-3 text-center">
                                 <a href="{% url 'final_nomi_approval' nomi_pk=nomi.pk %}"
                                    style="width: auto" class="btn btn-success">Approve And Send To User</a>
                             </div>
+                            <div class="col-lg-3 text-center">
+                                <a href="{% url 'nomi_reject' nomi_pk=nomi.pk %}"
+                                   style="width: auto" class="btn btn-success">Reject</a>
+                            </div>
 
-                            <div class="col-lg-4 text-center">
+                            <div class="col-lg-3 text-center">
                                 <a href="{% url 'forms:creator_form' nomi.nomi_form.pk %}"
                                    class="btn btn-primary">Edit Nomination</a>
                             </div>
 
-                            <div class="col-lg-4 text-center">
+                            <div class="col-lg-3 text-center">
                                 <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
                             </div>
 
@@ -65,7 +69,8 @@
                                     <div class="col-lg-6 text-center">
                                         <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
                                     </div>
-                                {% else%}
+                                {% else %}
+                                    {% if user in nomi.nomi_post.parent.post_holders.all %}
                                     <div class="col-lg-4 text-center">
                                         <a class="btn btn-success" style="width: auto"
                                        href="{% url 'nomi_approval' nomi_pk=nomi.pk %}">Send to parent for approval</a>
@@ -79,6 +84,27 @@
                                     <div class="col-lg-4 text-center">
                                         <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
                                     </div>
+                                    {% else %}
+                                    <div class="col-lg-3 text-center">
+                                        <a class="btn btn-success" style="width: auto"
+                                       href="{% url 'nomi_approval' nomi_pk=nomi.pk %}">Send to parent for approval</a>
+                                    </div>
+                                     <div class="col-lg-3 text-center">
+                                        <a class="btn btn-success" style="width: auto"
+                                       href="{% url 'nomi_reject' nomi_pk=nomi.pk %}">Reject</a>
+                                    </div>
+
+                                    <div class="col-lg-3 text-center">
+                                        <a href="{% url 'forms:creator_form' nomi.nomi_form.pk %}"
+                                           class="btn btn-primary">Edit Nomination</a>
+                                    </div>
+
+                                    <div class="col-lg-3 text-center">
+                                        <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
+                                    </div>
+
+
+                                    {% endif %}
 
                                 {% endif %}
 
