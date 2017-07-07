@@ -150,7 +150,7 @@ def post_create(request, pk):
         post_form = PostForm(parent)
 
     if request.user in parent.post_holders.all():
-        return render(request, 'nomi/post_form.html', context={'form': post_form, 'parent': parentr})
+        return render(request, 'nomi/post_form.html', context={'form': post_form, 'parent': parent})
     else:
         return render(request, 'no_access.html')
 
