@@ -35,29 +35,28 @@
                                 {% csrf_token %}
                                 <p>{{tag_form|bootstrap}}</p>
 
-                                <input class="btn btn-success btn-block" type="submit" value="submit" />
+                                <input class="btn btn-success" type="submit" value="submit" />
 
                             </form>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 text-center">
-                    {% if post.tag_perms == 'normal' %}
-                        <div class="dropdown show">
-                            <button class="btn btn-secondary btn-warning dropdown-toggle" type="button"
-                                 id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Give tag permission
-                            </button>
-                            <div class="dropdown-menu " role="menu">
-                                <form action="" method="post" style="display: inline">
-                                    {% csrf_token %}
-                                    <p>{{confirm_form|bootstrap}}</p>
-                                    <input class="btn btn-success btn-block" type="submit" value="submit" />
-                                </form>
-                            </div>
-                        </div>
+                <div class="col-lg-1"></div>
+                <div class="col-lg-5 text-center">
+                    {% if post.tag_perms == 'Can create' %}
+                    <form action="" method="post" >
+                        {% csrf_token %}
+                        <p>{{give_form|bootstrap}}</p>
+                        <input class="btn btn-success btn-block" type="submit" value="Take tag permission" />
+                    </form>
+
                     {% else %}
-                       <p>Tag permission given</p>
+                    <form action="" method="post" style="display: inline">
+                        {% csrf_token %}
+                        <p>{{give_form|bootstrap}}</p>
+                        <input class="btn btn-success btn-block" type="submit" value="Give tag permission" />
+                    </form>
+
                     {% endif %}
                 </div>
             </div>

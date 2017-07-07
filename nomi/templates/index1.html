@@ -29,7 +29,7 @@
                     {% for nomi in result_query %}
                     {% if nomi|to_class_name == 'Nomination' %}
                             {% if nomi.deadline < today.date  %}
-                            <div  class="panel panel-danger" style="border: 3px solid red; ">
+                            <div  class="panel panel-danger" ">
                                 <div class="panel-heading" style="background-color: #a09233">
                                     <h3 class="panel-title" style="font-weight: bolder; font-size: 20px">{{ nomi.name.upper }}  y</h3>
                                     <span style="font-weight: bolder">Preference : </span>
