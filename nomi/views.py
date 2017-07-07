@@ -361,6 +361,17 @@ def nomi_detail(request, nomi_pk):
 
 
 @login_required
+def remove_panelist(request, nomi_pk, user_pk):
+    nomination = Nomination.objects.get(pk=nomi_pk)
+    panelist = User.objects.get(pk=user_pk)
+
+    panel = nomination.interview_panel
+    panel.remove(panelist)
+
+    return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
+
+
+@login_required
 def nomi_approval(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     access = False
