@@ -114,4 +114,7 @@ urlpatterns = [
     # nominations/remove_from_group/2/42
     url(r'^remove_from_group/(?P<nomi_pk>\d+)/(?P<gr_pk>\d+)/$', views.remove_from_group, name='remove_from_group'),
 
+    # nominations/remove_panelist/23/2
+    url(r'^remove_panelist/(?P<nomi_pk>\d+)/(?P<user_pk>\d+)/$', views.remove_panelist, name='remove_panelist'),
+
 ]
