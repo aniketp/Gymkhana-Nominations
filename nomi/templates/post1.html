@@ -136,7 +136,7 @@
             {% endfor %}
         </div>
 
-        <!-- npmi approval ----------------------------------------------------------------------------------------------   -->
+        <!-- nomi approval ----------------------------------------------------------------------------------------------   -->
         <div class="tab-pane fade profile-nominations" id="nomi-approval">
             <br>
             {% if post.perms == "can approve post and send nominations to users" %}
@@ -168,14 +168,6 @@
                         <div class="col-lg-4 text-center">
                             <p class="profile-post-name"><a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}">
                         <span></span>{{nomi.name}}</a></p>
-                        </div>
-                        <div class="col-lg-4 text-center">
-                            <a  class="btn btn-success" href="{% url 'nomi_approval'
-                                nomi.pk %}">Approve</a>
-                        </div>
-                        <div class="col-lg-4 text-center">
-                            <a  class="btn btn-danger" href="{% url 'nomi_reject'
-                                nomi.pk %}">Reject</a>
                         </div>
                     </div>
                 </div>

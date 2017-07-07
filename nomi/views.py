@@ -391,8 +391,7 @@ def nomi_reject(request, nomi_pk):
             break
     if access:
         to_remove = view_post
-        nomi.nomi_approvals.add(to_remove)
-        nomi.tags.remove(to_remove.club)
+        nomi.nomi_approvals.remove(to_remove)
         return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view_post.pk}))
     else:
         return render(request, 'no_access.html')
