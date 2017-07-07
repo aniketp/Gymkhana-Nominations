@@ -1,0 +1,94 @@
+\documentclass[12pt,a4paper]{scrartcl}
+
+\usepackage[top=1.5in]{geometry}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks, linkcolor=brown
+}
+
+\title{\textbf{Gymkhana Nominations Portal}}
+\subtitle{Summer Project - Programming Club}
+\date{31 May 2017}
+\author{Ashish Kumar}
+
+\begin{document}
+\maketitle
+
+\section{Acknowledgement}
+\textit{I would like to thank Programming Club for giving me the opportunity to create the portal and learn about backend web development in Django}.
+
+\section{Repository}
+The project repository can be found \textbf{\href{https://github.com/SummerCamp17/Gymkhana-Nominations}{here}} and the live project is hosted \textbf{\href{https://gymkhana.pythonanywhere.com}{here}}.
+
+\subsection{Mentors}
+\begin{itemize}
+	\item Kunal Kapila
+	\item Yash Srivastav
+	\item Pratham Verma
+\end{itemize}
+
+
+\section{Description}
+The main aim of the project is to develop a portal through which post-holders can make nominations for their child posts and send it to their parent post for approval and so on.When it reaches the top authority for approval he/she can release nominations to users. The target group can apply for the same. The portal can keep track of each and every process the application goes through, e.g release, submission, approval from higher authority, interview remarks, final selection and increment in power if selected.
+\section{Timeline}
+\subsection{Week 1}
+\begin{enumerate}
+	\item We started off by creating a simple web-app about a library through which normal users can issue a book and depending on the availability, librarian (aka admin) can either reject or accept the issuance.Furthermore users were also notified in notification section. This was meant as an exercise for the actual project, and to get familiar with django.
+	\item Having learned the basics of django,started learning about using signals in django, deploying website on server and integrating IITk Authentication.
+	\item Decided to use django-filter for better and fast extraction of data and added filters for books and authors. Final code till now looks clean and user friendly.
+	\item Started working on the main project and created a basic one level version of the portal but without forms.
+\end{enumerate}
+
+\subsection{Week 2}
+\begin{enumerate}
+	\item Started learning and creating Dynamic forms. Completed the basic version in which form-creator can add multiple questions with specific type like short answer, multiple correct, integertype, etc. However struggled with how to save and store their filled answers effectively.
+	\item After getting the detailed flowchart from mentors, We started working on the models of Portal. Created Post model with infinite nesting, each one having a parent post, and thus extending the portal to multi-level.
+	\item Merged \textit{Dynamic Forms} as a separate app in project and linked with 'create nomination'. Improved the filled forms saving and displaying model by  using the \textit{Json} library of python to store filled-answers.
+\end{enumerate}
+
+\subsection{Week 3}
+\begin{enumerate}
+	\item Completed various features on the post model and newly created Nomination model.Features include sending the post and nomination to parent posts for approval,giving access rights to the right posts,etc.
+	\item Created PostHistory module to store  each user's current and past posts details like time period of post. worked on their views and rendered the history data in profile view.
+	\item Added filter feature to the site through which admin or user can filter by clubs(nesting included),and other preferences like batch.
+	\item On completion of most of Backend, we discussed the possibility of using Angular 2 as a front end framework, however, due to some compatibility issue of Angular with Dynamic Forms and few other models, we had to use inbuilt django template system for writing frontend with the help of bootstrap. Also learned the basic of angular2 and django-rest framework.
+	\item Finished off the nomination hierarchy, now all the nominations that are released are first sent to the parent post, then on his approval , the process continues till it reaches the Gen-Sec level post. On his approval, the nominations are released to the public for applying. Meanwhile, the nomination creator and all the approving authority can view the applicants’ answers.
+
+\end{enumerate}
+
+\subsection{Week 4}
+\begin{enumerate}
+	\item Worked on Post application period feature of portal. Added features like marking applicant as interviewed status,commenting on filled answer form and final status of application.
+	\item Integrated django template syntax into simple bootstraped templates and  together completed most of frontend to make site good looking. As most Frontend was renewed,we took care of power of normal user and post holders and reflected that in templates.
+	\item Worked on User Profile module,integrated user detail, current posts, past post history, currently filled nomination and their status.
+	\item Included components like replacing and appending to assign selected applicants to post after interview period. However this part needs to be merged with ratification feature.
+	\item We together worked on several little bugs in project and completed a nice working version.Things that are needed to be included are ratification by senate, grouping of same type of nominations,etc.
+
+\end{enumerate}
+
+\subsection{Week 5}
+\begin{enumerate}
+    \item After taking mentors feedback on current version of portal,We listed changes in current features and new features to be added. Worked on their logic for implementation.
+    \item Improved Commenting feature on filled applications such that interviewers can comment individually and others can see who comments what.Previously it was like panel comment.
+    \item Redefined rights on Interview of a nomination. Now nomination creator first compiles the interview result and sent to its parent for approval where parent can make changes and it goes upto ratification.
+
+   \item Created Nomination Grouping module through which gen sec level posts can club same type of nomination under a common title.Used a multiple checkbox form that takes a dynamic list of choice for selecting group of nominations. Users will see Grouped Nomination on portal,however application of these nomination would be taken individually.
+\end{enumerate}
+
+\subsection{Week 6}
+\begin{enumerate}
+	\item We started working on a new feature of our app, the Student Search. This search feature is different from the conventional student search where you can search for a person only through his Club/Post. For example you want to know who all are in SnT Council. Or who is the Secretary of Films Club etc.
+	\item Worked on the backend part of Student Search module.Improved Search logic and  removed its dependence on Dango-filter module. Fixed few bugs about absence of post-holders. In that case, returned empty list.
+	\item Corrected bugs in  Nomination Description working. Now it renders different line and also supports html.
+    \item Took mentors feedback and cleared some doubts regarding interview panel and ratification.
+\end{enumerate}
+
+\subsection{Week 7}
+\begin{enumerate}
+	\item With our Project finally completed, we started testing our code. Worked on few examples, and removed few creepy bugs.
+	\item Made a feature to add separate interview panelists.Parent Post can assign users of Campus to deal with a Nomination. Customized it so that the post holders of parent post are already assigned the panelist tag. And re-adding is removed.
+	\item Corrected few bugs on returning multiple values and Object not being present in database.
+\end{enumerate}
+
+\end{document}
