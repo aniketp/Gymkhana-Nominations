@@ -30,6 +30,10 @@ class ClubForm(forms.Form):
     club_name = forms.CharField()
 
 
+class BlankForm(forms.Form):
+    pass
+
+
 class ConfirmApplication(forms.Form):
     Tick_the_box_for_confirmation = forms.CharField(max_length=100, widget=forms.CheckboxInput())
 
