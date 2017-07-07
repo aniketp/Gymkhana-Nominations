@@ -28,27 +28,6 @@
                 </div>
                     {% for nomi in result_query %}
                     {% if nomi|to_class_name == 'Nomination' %}
-
-                        {% if current_time > nomi.deadline %}
-                            <p>Time is up</p>
-                            <div class="panel panel-success">
-                                <div class="panel-heading" style="background-color: #a09233">
-                                    <h3 class="panel-title" style="font-weight: bolder; font-size: 20px">{{ nomi.name.upper }}</h3>
-                                    <span style="font-weight: bolder">Preference : </span>
-                                    <span class="label label-primary">{{nomi.year_choice}}</span>
-                                    <span class="label label-success">{{nomi.dept_choice}}</span>
-                                </div>
-
-
-                                <div class="panel-body">
-                                    <div><span style="font-weight: bold">Release Date: </span> {{nomi.opening_date}}</div>
-                                    <p><span style="font-weight: bolder"> Deadline :  </span>{{nomi.deadline}}</p>
-                                    <p>{{nomi.description|slice:":200"}} ...</p>
-                                    <a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}"
-                                       class="btn btn-sm read-more-button btn-danger">Read More</a>
-                                </div>
-                            </div>
-                        {% else %}
                             <div class="panel panel-success">
                                 <div class="panel-heading" style="background-color: #a09233">
                                     <h3 class="panel-title" style="font-weight: bolder; font-size: 20px">{{ nomi.name.upper }}</h3>
@@ -68,7 +47,7 @@
                                        class="btn btn-sm read-more-button btn-danger">Read More</a>
                                 </div>
                             </div>
-                        {% endif %}
+
 
                         {% elif nomi|group_status %}
 
