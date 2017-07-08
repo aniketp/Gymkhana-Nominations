@@ -38,8 +38,8 @@ urlpatterns = [
     url(r'^answers/(?P<pk>\d+)/$', views.nomination_answer, name='nomi_answer'),
 
     # nominations/answers/2/comment/23
-    url(r'^comment/(?P<pk>\d+)/$', views.CommentUpdate.as_view(), name='comment_update'),
-    url(r'^comment/(?P<pk>\d+)/delete/$', views.CommentDelete.as_view(), name='comment_delete'),
+    url(r'^comment/(?P<pk>\d+)/(?P<form_pk>\d+)$', views.CommentUpdate.as_view(), name='comment_update'),
+    url(r'^comment/(?P<pk>\d+)/(?P<form_pk>\d+)/delete/$', views.CommentDelete.as_view(), name='comment_delete'),
 
     # nominations/applicants/2 (redirect)
     url(r'^accept/(?P<pk>\d+)/$', views.accept_nomination, name='accept'),
