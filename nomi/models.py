@@ -88,6 +88,7 @@ class Nomination(models.Model):
             history.save()
 
         self.nomi_post.post_holders.clear()
+
         self.append()
         return self.nomi_post.post_holders
 

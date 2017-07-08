@@ -16,7 +16,10 @@ from gymkhana.settings import DOMAIN_NAME
 from .forms import *
 from .models import *
 
-# main index view for user
+
+
+# main index view for user,contains all nomination to be filled by normal user,
+# have club filter that filter both nomination and its group..
 # is_safe
 
 @login_required
@@ -41,10 +44,10 @@ def index(request):
             grouped_nomi = GroupNomination.objects.filter(status='out')
             nomi = Nomination.objects.filter(group_status='normal').filter(status='Nomination out')
             result_query = sorted(chain(nomi, grouped_nomi), key=attrgetter('opening_date'), reverse=True)
-            current_time = datetime.now()
+
 
             return render(request, 'index1.html', context={'posts': posts, 'username': username,
-                                                           'current_time': current_time, 'club_filter': club_filter,
+                                                            'club_filter': club_filter,
                                                            'result_query': result_query,'today':today})
 
         except ObjectDoesNotExist:
@@ -56,25 +59,11 @@ def index(request):
         return HttpResponseRedirect(reverse('login'))
 
 
-# a view for retification purpose
+
+# a view link for user who have some post....
+# It include the all nomination that the given user have perms to see whether it is being created or out or in interview period...
 # is_safe
-@login_required
-def senate_view(request):
-    nomi_ratify = Nomination.objects.filter(status='Sent for ratification')
-    all_posts = Post.objects.filter(post_holders=request.user)
-    access = False
-
-    for post in all_posts:
-        if post.perms == 'can ratify the post':
-            access = True
-            break
-
-    if access:
-        return render(request, 'senate_view.html', context={'nomi': nomi_ratify})
-
-    else:
-        return render(request, 'no_access.html')
-
+# to add -------  nomi that the user has been added as panel ********
 
 @login_required
 def admin_portal(request):
@@ -105,6 +94,35 @@ def admin_portal(request):
                                                          'club_filter': club_filter})
 
 
+
+# a view for retification purpose
+# is_safe
+
+@login_required
+def senate_view(request):
+    nomi_ratify = Nomination.objects.filter(status='Sent for ratification')
+    all_posts = Post.objects.filter(post_holders=request.user)
+    access = False
+
+    for post in all_posts:
+        if post.perms == 'can ratify the post':
+            access = True
+            break
+
+    if access:
+        return render(request, 'senate_view.html', context={'nomi': nomi_ratify})
+
+    else:
+        return render(request, 'no_access.html')
+
+
+## ----------------------------------------------------------------------------------------------------------------
+##################    POST RELATED VIEWS   #####################
+## ----------------------------------------------------------------------------------------------------------------
+
+# a view for a given post....contains all thing required for working on that post...
+# tips...use redirect if using form as button
+# is_safe
 @login_required
 def post_view(request, pk):
     post = Post.objects.get(pk=pk)
@@ -114,15 +132,15 @@ def post_view(request, pk):
     post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
     nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
     group_nomi_approvals = GroupNomination.objects.filter(status='created').filter(approvals=post)
-    result_approvals = Nomination.objects.filter(result_approvals=post).exclude(status='work_done').\
-        exclude(status='Nomination_created')
+
+
+    result_approvals = Nomination.objects.filter(result_approvals=post).exclude(status='work_done').exclude(status='Nomination_created')
 
     if request.method == 'POST':
         tag_form = ClubForm(request.POST)
         if tag_form.is_valid():
             Club.objects.create(club_name=tag_form.cleaned_data['club_name'], club_parent=post.club)
             return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
-
     else:
         tag_form = ClubForm
 
@@ -137,6 +155,9 @@ def post_view(request, pk):
         return render(request, 'no_access.html')
 
 
+# view for parent post to create new child post
+# is_safe
+
 @login_required
 def post_create(request, pk):
     parent = Post.objects.get(pk=pk)
@@ -145,7 +166,7 @@ def post_create(request, pk):
         if post_form.is_valid():
             club_id = post_form.cleaned_data['club']
             club = Club.objects.get(pk=club_id)
-            post = Post.objects.create(post_name=post_form.cleaned_data['post_name'],
+            Post.objects.create(post_name=post_form.cleaned_data['post_name'],
                                        club=club, parent=parent)
 
             return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
@@ -160,6 +181,9 @@ def post_create(request, pk):
         return render(request, 'no_access.html')
 
 
+# view for child post related stuff for parent post only
+# is_safe
+
 @login_required
 def child_post_view(request, pk):
     post = Post.objects.get(pk=pk)
@@ -172,7 +196,6 @@ def child_post_view(request, pk):
     if tag_form.is_valid():
         Club.objects.create(club_name=tag_form.cleaned_data['club_name'], club_parent=post.club)
         return HttpResponseRedirect(reverse('child_post', kwargs={'pk': pk}))
-
 
 
     give_form = BlankForm(request.POST or None)
@@ -191,6 +214,7 @@ def child_post_view(request, pk):
     if request.user in parent.post_holders.all():
         return render(request, 'child_post1.html', {'post': post,'nominations': nominations,'parent':parent,
                                                     'tag_form': tag_form, 'give_form': give_form})
+
     else:
         return render(request, 'no_access.html')
 
