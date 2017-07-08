@@ -48,7 +48,7 @@ urlpatterns = [
 
     # nominations/append/2 (redirect)
     url(r'^append/fdybdjhhvjdk5878fkjjgj521/(?P<pk>\d+)$', views.append_user, name='append_user'),
-    url(r'^append/fdybdjhhvjdk5878fkjjgj521/(?P<pk>\d+)$', views.replace_user, name='replace_user'),
+    url(r'^replace/fdybdjhhvjdk5878fkjjgj521/(?P<pk>\d+)$', views.replace_user, name='replace_user'),
 
     # nominations/create
     url(r'^create/(?P<pk>\d+)/$', views.nomination_create, name='nomi_create'),
