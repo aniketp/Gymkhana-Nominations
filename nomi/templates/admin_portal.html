@@ -24,7 +24,7 @@
 
                             <div class="panel panel-success">
                                 <div class="panel-heading" style="background-color: #eb4039">
-                        <h3 class="panel-title" style="font-weight: bolder; font-size: 20px">{{ nomi.name.upper }}</h3>
+                                    <h3 class="panel-title" style="font-weight: bolder; font-size: 20px">{{ nomi.name.upper }}</h3>
                                     <span style="font-weight: bolder">Preference : </span>
                                     <span class="label label-primary">{{nomi.year_choice}}</span>
                                     <span class="label label-success">{{nomi.dept_choice}}</span>
@@ -32,8 +32,19 @@
 
 
                                 <div class="panel-body">
-                                    <div><span style="font-weight: bold">Release Date: </span> {{nomi.opening_date}}</div>
-                                    <p><span style="font-weight: bolder"> Deadline :  </span>{{nomi.deadline}}</p>
+                                    {% if nomi.status == 'Nomination out' %}
+                                        <div>
+                                            <p style="margin-bottom: 0; display: inline-block; margin-right: 10%">
+                                                <span style="font-weight: bolder"> Status : {{nomi.status}}</span></p>
+                                            <p style="margin-bottom: 0; display: inline-block">
+                                                <span style="font-weight: bolder"> Deadline :</span> {{nomi.deadline}}</p>
+                                        </div>
+                                    {% else %}
+                                        <p style="margin-bottom: 0; display: inline-block; margin-right: 10%">
+                                                <span style="font-weight: bolder"> Status : {{nomi.status}}</span></p>
+                                    {% endif %}
+
+                                    <p><span style="font-weight: bolder"> Created by :  </span>{{nomi.nomi_post.parent.post_name}}</p>
                                     {% autoescape off %}
                                         <p>{{nomi.description|slice:":200"}} ....</p>
                                     {% endautoescape %}
@@ -48,7 +59,6 @@
                                     
                                 </div>
                             </div>
-
                     {% endfor %}
                 </div>
          </div>
