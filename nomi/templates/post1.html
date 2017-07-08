@@ -108,15 +108,13 @@
                             {% if post.perms == 'can approve post and send nominations to users' %}
 
                                 <div class="col-lg-4 text-center">
-                                    <a  class="btn btn-success" href="{% url 'final_post_approval'
-                                            post_pk=ch_post.pk view_pk=post.pk %}">Approve</a>
+                                    <a  class="btn btn-success" href="{% url 'final_post_approval' post_pk=ch_post.pk view_pk=post.pk %}">Approve</a>
                                 </div>
 
                             {% else %}
 
                                 <div class="col-lg-4 text-center">
-                                    <a  class="btn btn-success" href="{% url 'post_approval'
-                                            post_pk=ch_post.pk view_pk=post.pk %}">Approve</a>
+                                    <a  class="btn btn-success" href="{% url 'post_approval' post_pk=ch_post.pk view_pk=post.pk %}">Approve</a>
                                 </div>
 
                             {% endif %}
@@ -124,8 +122,7 @@
                             {% if not post == ch_post.parent %}
 
                                 <div class="col-lg-4 text-center">
-                                    <a  class="btn btn-danger" href="{% url 'post_reject'
-                                            post_pk=ch_post.pk view_pk=post.pk %}">Reject</a>
+                                    <a  class="btn btn-danger" href="{% url 'post_reject post_pk=ch_post.pk view_pk=post.pk %}">Reject</a>
                                 </div>
 
                             {% endif %}
