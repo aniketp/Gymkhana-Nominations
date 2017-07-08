@@ -182,14 +182,14 @@ form view
                         {% if comment.user.userprofile.user == request.user and result_approval.0 %}
                             <div class="col-lg-6 text-right">
 
-                                <form action="{% url 'comment_update' comment.pk %}" method="get" style="display: inline-block">
+                                <form action="{% url 'comment_update' pk=comment.pk form_pk=nomi.pk %}" method="get" style="display: inline-block">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-success btn-sm"  style="width: inherit">
                                         <span class="glyphicon glyphicon-edit"></span>
                                     </button>
                                 </form>
 
-                                <form action="{% url 'comment_delete' comment.pk %}" method="post" style="display: inline-block">
+                                <form action="{% url 'comment_delete' pk=comment.pk form_pk=nomi.pk %}" method="post" style="display: inline-block">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-danger btn-sm" style="width: inherit">
                                         <span class="glyphicon glyphicon-trash"></span>
