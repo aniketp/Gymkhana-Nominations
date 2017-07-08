@@ -904,12 +904,20 @@ class UserProfileUpdate(UpdateView):
 class CommentUpdate(UpdateView):
     model = Commment
     fields = ['comments']
-    success_url = reverse_lazy('index')
+    def get_success_url(self):
+        form_pk = self.kwargs['form_pk']
+        return reverse('nomi_answer', kwargs={'pk': form_pk})
+
+
 
 
 class CommentDelete(DeleteView):
     model = Commment
-    success_url = reverse_lazy('index')
+    def get_success_url(self):
+        form_pk = self.kwargs['form_pk']
+        return reverse('nomi_answer', kwargs={'pk': form_pk})
+
+
 
 
 
