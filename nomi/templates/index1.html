@@ -12,7 +12,6 @@
              {% if posts %}
               <li><a href="{% url 'admin_portal' %}" aria-expanded="false">Admin Portal</a></li>
              {% endif %}
-            <li><a href="#filter" data-toggle="tab" aria-expanded="true">Filter Nominations</a></li>
          </ul>
     </div>
 
@@ -20,16 +19,30 @@
          <div class="tab-pane fade active in profile-nominations" id="user">
                 <br>
 
-                <div>
 
-                <div>
-                    <h1 style="text-align: center">RELEASED NOMINATIONS</h1>
+                  <h1 style="text-align: center">RELEASED NOMINATIONS</h1>
                     <hr>
+             <div class="panel panel-default">
+                  <div class="panel-body">
+
+                    <form action="" method="post">
+                          {% csrf_token %}
+                        <div class = col-lg-8 >
+                           {{club_filter|bootstrap_horizontal}}
+                        </div>
+                    <div class="col-lg-3 text-center">
+                        <input type="submit" value="Submit" class="btn-success btn nomi-filter" />
+                    </div>
+                    </form>
+                  </div>
                 </div>
+
+
+
                     {% for nomi in result_query %}
                     {% if nomi|to_class_name == 'Nomination' %}
                             {% if nomi.deadline < today.date  %}
-                            <div  class="panel panel-danger" ">
+                            <div  class="panel panel-danger">
                                 <div class="panel-heading" style="background-color: #a09233">
                                     <h3 class="panel-title" style="font-weight: bolder; font-size: 20px">{{ nomi.name.upper }}  y</h3>
                                     <span style="font-weight: bolder">Preference : </span>
@@ -77,39 +90,23 @@
                             <div class="panel-heading" style="background-color: #164552">
                             <h3 class="panel-title" style="font-weight: bolder; font-size: 20px">{{ nomi.name.upper }}</h3>
                             <span>Group of Nominations</span>
-                        </div>
+                            </div>
 
 
-                        <div class="panel-body">
+                            <div class="panel-body">
                             <p>{{nomi.description|slice:":200"}}</p>
                             <a href="{% url 'group_nomi_detail' pk=nomi.pk %}"
                             class="btn btn-sm read-more-button btn-info">See Detail</a>
-                        </div>
+                            </div>
                         </div>
                         {% endif %}
 
 
                     {% endfor %}
-                </div>
          </div>
+    </div>
 
-        <div class="tab-pane fade profile-nominations" id="filter">
-                <br>
-                <div class="panel panel-default">
-                  <div class="panel-heading">Filter Nominations</div>
-                  <div class="panel-body">
-                    <form action="" method="post">
-                            {% csrf_token %}
 
-                           {{club_filter|bootstrap}}
-                    <div class="col-lg-11 text-center">
-                        <input type="submit" value="Submit" class="btn-success btn nomi-filter" />
-                    </div>
-                    </form>
-                  </div>
-                </div>
-
-         </div>
     </div>
 </div>
 
