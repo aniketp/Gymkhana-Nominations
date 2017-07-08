@@ -76,7 +76,7 @@ def admin_portal(request):
         query = Nomination.objects.filter(nomi_approvals=post)
         admin_query = admin_query | query
 
-    panel_nomi = request.user.panel.all().filter(status = 'Interview period')
+    panel_nomi = request.user.panel.all().exclude(status= 'Nomination created')
 
     admin_query = admin_query | panel_nomi
 

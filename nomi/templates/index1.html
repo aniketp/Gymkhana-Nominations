@@ -94,7 +94,8 @@
 
 
                             <div class="panel-body">
-                            <p>{{nomi.description|slice:":200"}}</p>
+                                 <div><span style="font-weight: bold">Release Date: </span> {{nomi.opening_date}}</div>
+                            <p>{{nomi.description|slice:":500"}}....</p>
                             <a href="{% url 'group_nomi_detail' pk=nomi.pk %}"
                             class="btn btn-sm read-more-button btn-info">See Detail</a>
                             </div>
