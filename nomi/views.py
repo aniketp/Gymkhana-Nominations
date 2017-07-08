@@ -136,9 +136,7 @@ def post_view(request, pk):
     post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
     nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
     group_nomi_approvals = GroupNomination.objects.filter(status='created').filter(approvals=post)
-
-
-    result_approvals = Nomination.objects.filter(result_approvals=post).exclude(status='work_done').exclude(status='Nomination_created')
+    result_approvals = Nomination.objects.filter(result_approvals=post).exclude(status = 'Work done').exclude(status= 'Nomination created')
 
     if request.method == 'POST':
         tag_form = ClubForm(request.POST)
