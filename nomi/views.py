@@ -76,6 +76,10 @@ def admin_portal(request):
         query = Nomination.objects.filter(nomi_approvals=post)
         admin_query = admin_query | query
 
+    panel_nomi = request.user.panel.all().filter(status = 'Interview period')
+
+    admin_query = admin_query | panel_nomi
+
     admin_query = admin_query.distinct().exclude(status='Work done')
     admin_query_reverse = admin_query[::-1]
 
@@ -208,21 +212,14 @@ def child_post_view(request, pk):
         post.save()
         return HttpResponseRedirect(reverse('child_post', kwargs={'pk': pk}))
 
-
-
-
     if request.user in parent.post_holders.all():
         return render(request, 'child_post1.html', {'post': post,'nominations': nominations,'parent':parent,
                                                     'tag_form': tag_form, 'give_form': give_form})
-
     else:
         return render(request, 'no_access.html')
 
 
-
-
-
-
+# is_safe
 @login_required
 def post_approval(request, view_pk, post_pk):
     post = Post.objects.get(pk=post_pk)
@@ -235,7 +232,7 @@ def post_approval(request, view_pk, post_pk):
             access = True
             break
 
-    if access or request.user in post.parent.post_holders.all():
+    if access:
         to_add = viewer.parent
         post.post_approvals.add(to_add)
         post.tags.add(to_add.club)
@@ -267,7 +264,6 @@ def final_post_approval(request, view_pk, post_pk):
     post = Post.objects.get(pk=post_pk)
     viewer = Post.objects.get(pk=view_pk)
     to_add = viewer.parent
-    post.post_approvals.add(to_add)
     post.tags.add(to_add.club)
     post.status = 'Post approved'
     post.save()
@@ -669,6 +665,8 @@ def applications(request, pk):
             nomination.status = 'Interview period'
             nomination.save()
             return HttpResponseRedirect(reverse('applicants', kwargs={'pk': pk}))
+
+
         return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
                                                            'form_confirm': form_confirm,
                                                            'result_approval': results_approval,
