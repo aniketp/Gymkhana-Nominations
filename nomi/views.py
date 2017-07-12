@@ -64,11 +64,6 @@ def index(request):
 
 
 
-# a view link for user who have some post....
-# It include the all nomination that the given user have perms to see whether it is being created or out or in interview period...
-# is_safe
-# to add -------  nomi that the user has been added as panel ********
-
 @login_required
 def admin_portal(request):
     posts = Post.objects.filter(post_holders=request.user)
@@ -473,114 +468,6 @@ def copy_nomi_link(request, pk):
 
 
 ## ------------------------------------------------------------------------------------------------------------------ ##
-#########################################     GROUP NOMINATION VIEWS    ################################################
-## ------------------------------------------------------------------------------------------------------------------ ##
-
-
-@login_required
-def group_nominations(request, pk):
-    post = Post.objects.get(pk=pk)
-    child_posts = Post.objects.filter(parent=post)
-    child_posts_reverse = child_posts[::-1]
-    post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
-    nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
-
-    if request.method == 'POST':
-        groupform = SelectNomiForm(post, request.POST)
-        title_form = GroupNominationForm(request.POST)
-        if title_form.is_valid():
-            if groupform.is_valid():
-                group = GroupNomination.objects.create(name=title_form.cleaned_data['title'],
-                                                       description=title_form.cleaned_data['description'])
-                group.approvals.add(post)
-                for nomi_pk in groupform.cleaned_data['group']:
-                    # things to be performed on nomination
-                    nomi = Nomination.objects.get(pk=nomi_pk)
-                    group.nominations.add(nomi)
-                    for tag in nomi.tags.all():
-                        group.tags.add(tag)
-                    nomi.group_status = 'grouped'
-                    to_add = post.parent
-                    nomi.nomi_approvals.add(to_add)
-                    nomi.save()
-                    nomi.open_to_users()
-                return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
-
-    else:
-        title_form = GroupNominationForm
-        groupform = SelectNomiForm(post)
-
-    return render(request, 'nomi_group.html', context={'post': post, 'child_posts': child_posts_reverse,
-                                                       'post_approval': post_approvals, 'nomi_approval': nomi_approvals,
-                                                       'form': groupform, 'title_form': title_form})
-
-
-@login_required
-def group_nomi_detail(request, pk):
-    group_nomi = GroupNomination.objects.get(pk=pk)
-    admin = 0
-    for post in request.user.posts.all():
-        if post in group_nomi.approvals.all():
-            admin = post
-
-    form_confirm = ConfirmApplication(request.POST or None)
-    if form_confirm.is_valid():
-        group_nomi.status = 'out'
-        group_nomi.save()
-
-    return render(request, 'group_detail.html', {'group_nomi': group_nomi, 'admin': admin,
-                                                 'form_confirm': form_confirm})
-
-
-@login_required
-def add_to_group(request, pk, gr_pk):
-    post = Post.objects.get(pk=pk)
-    child_posts = Post.objects.filter(parent=post)
-    child_posts_reverse = child_posts[::-1]
-    post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
-    nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
-
-    if request.method == 'POST':
-        groupform = SelectNomiForm(post, request.POST)
-        if groupform.is_valid():
-            group = GroupNomination.objects.get(pk=gr_pk)
-
-            for nomi_pk in groupform.cleaned_data['group']:
-                # things to be performed on nomination
-                nomi = Nomination.objects.get(pk=nomi_pk)
-                group.nominations.add(nomi)
-                for tag in nomi.tags.all():
-                    group.tags.add(tag)
-                nomi.group_status = 'grouped'
-                to_add = post.parent
-                nomi.nomi_approvals.add(to_add)
-                nomi.save()
-                nomi.open_to_users()
-            return HttpResponseRedirect(reverse('group_nomi_detail', kwargs={'pk': gr_pk}))
-
-    else:
-        title_form = None
-        groupform = SelectNomiForm(post)
-
-    return render(request, 'nomi_group.html', context={'post': post, 'child_posts': child_posts_reverse,
-                                                       'post_approval': post_approvals, 'nomi_approval': nomi_approvals,
-                                                       'form': groupform, 'title_form': title_form})
-
-
-@login_required
-def remove_from_group(request, nomi_pk, gr_pk):
-    nomi = Nomination.objects.get(pk=nomi_pk)
-    group = GroupNomination.objects.get(pk=gr_pk)
-    group.nominations.remove(nomi)
-
-    nomi.group_status = 'normal'
-    nomi.status = 'Nomination created'
-    nomi.save()
-
-    return HttpResponseRedirect(reverse('group_nomi_detail', kwargs={'pk': gr_pk}))
-
-
-## ------------------------------------------------------------------------------------------------------------------ ##
 #########################################    NOMINATION MONITOR VIEWS   ################################################
 ## ------------------------------------------------------------------------------------------------------------------ ##
 
@@ -708,7 +595,6 @@ def nomination_answer(request, pk):
     questionnaire = application.nomination.nomi_form
     form = questionnaire.get_form(data)
 
-
     comments = Commment.objects.filter(nomi_instance=application)
     comments_reverse = comments[::-1]
     comment_form = CommentForm(request.POST or None)
@@ -761,6 +647,7 @@ def nomination_answer(request, pk):
     if comment_form.is_valid():
         Commment.objects.create(comments=comment_form.cleaned_data['comment'],
                                 nomi_instance=application, user=request.user)
+
         return HttpResponseRedirect(reverse('nomi_answer', kwargs={'pk': pk}))
 
     return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
@@ -768,6 +655,116 @@ def nomination_answer(request, pk):
                                                         'comments': comments_reverse, 'senate_perm': senate_perm,
                                                         'nomi_pk': nomination.pk, 'result_approval': results_approval,
                                                         'auth_user': auth_user})
+
+
+## ------------------------------------------------------------------------------------------------------------------ ##
+#########################################     GROUP NOMINATION VIEWS    ################################################
+## ------------------------------------------------------------------------------------------------------------------ ##
+
+
+@login_required
+def group_nominations(request, pk):
+    post = Post.objects.get(pk=pk)
+    child_posts = Post.objects.filter(parent=post)
+    child_posts_reverse = child_posts[::-1]
+    post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
+    nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
+
+    if request.method == 'POST':
+        groupform = SelectNomiForm(post, request.POST)
+        title_form = GroupNominationForm(request.POST)
+        if title_form.is_valid():
+            if groupform.is_valid():
+                group = GroupNomination.objects.create(name=title_form.cleaned_data['title'],
+                                                       description=title_form.cleaned_data['description'])
+                group.approvals.add(post)
+                for nomi_pk in groupform.cleaned_data['group']:
+                    # tasks to be performed on nomination
+                    nomi = Nomination.objects.get(pk=nomi_pk)
+                    group.nominations.add(nomi)
+                    for tag in nomi.tags.all():
+                        group.tags.add(tag)
+                    nomi.group_status = 'grouped'
+                    to_add = post.parent
+                    nomi.nomi_approvals.add(to_add)
+                    nomi.save()
+                    nomi.open_to_users()
+                return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
+
+    else:
+        title_form = GroupNominationForm
+        groupform = SelectNomiForm(post)
+
+    return render(request, 'nomi_group.html', context={'post': post, 'child_posts': child_posts_reverse,
+                                                       'post_approval': post_approvals, 'nomi_approval': nomi_approvals,
+                                                       'form': groupform, 'title_form': title_form})
+
+
+@login_required
+def group_nomi_detail(request, pk):
+    group_nomi = GroupNomination.objects.get(pk=pk)
+    admin = 0
+    for post in request.user.posts.all():
+        if post in group_nomi.approvals.all():
+            admin = post
+
+    form_confirm = ConfirmApplication(request.POST or None)
+    if form_confirm.is_valid():
+        group_nomi.status = 'out'
+        group_nomi.save()
+
+    return render(request, 'group_detail.html', {'group_nomi': group_nomi, 'admin': admin,
+                                                 'form_confirm': form_confirm})
+
+
+@login_required
+def add_to_group(request, pk, gr_pk):
+    post = Post.objects.get(pk=pk)
+    child_posts = Post.objects.filter(parent=post)
+    child_posts_reverse = child_posts[::-1]
+    post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
+    nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
+
+    if request.method == 'POST':
+        groupform = SelectNomiForm(post, request.POST)
+        if groupform.is_valid():
+            group = GroupNomination.objects.get(pk=gr_pk)
+
+            for nomi_pk in groupform.cleaned_data['group']:
+                # things to be performed on nomination
+                nomi = Nomination.objects.get(pk=nomi_pk)
+                group.nominations.add(nomi)
+                for tag in nomi.tags.all():
+                    group.tags.add(tag)
+                nomi.group_status = 'grouped'
+                to_add = post.parent
+                nomi.nomi_approvals.add(to_add)
+                nomi.save()
+                nomi.open_to_users()
+            return HttpResponseRedirect(reverse('group_nomi_detail', kwargs={'pk': gr_pk}))
+
+    else:
+        title_form = None
+        groupform = SelectNomiForm(post)
+
+    return render(request, 'nomi_group.html', context={'post': post, 'child_posts': child_posts_reverse,
+                                                       'post_approval': post_approvals, 'nomi_approval': nomi_approvals,
+                                                       'form': groupform, 'title_form': title_form})
+
+
+@login_required
+def remove_from_group(request, nomi_pk, gr_pk):
+    nomi = Nomination.objects.get(pk=nomi_pk)
+    group = GroupNomination.objects.get(pk=gr_pk)
+    group.nominations.remove(nomi)
+
+    nomi.group_status = 'normal'
+    nomi.status = 'Nomination created'
+    nomi.save()
+
+    return HttpResponseRedirect(reverse('group_nomi_detail', kwargs={'pk': gr_pk}))
+
+
 
 ## ------------------------------------------------------------------------------------------------------------------ ##
 ###########################################    RATIFICATION VIEWS    ###################################################

@@ -101,15 +101,36 @@ form view
                 {% if result_approval.0 %}
                     {% if nomi.nomination.status == 'Interview period' and nomi.interview_status == 'Interview Done' %}
 
-                    <div class="row text-center">
-                        <div class="col-lg-6">
-                            <a href="{% url 'accept' nomi.pk %} "><div class="btn btn-info read-more-button " >Accept</div></a>
-                        </div>
+                        {% if nomi.status %}
+                            {% if nomi.status == 'Accepted' %}
+                                <div class="row text-center">
+                                    <div class="col-lg-12">
+                                        <a href="{% url 'reject' nomi.pk %}"><div class="btn btn-danger
+                                        read-more-button">Reject</div></a>
+                                    </div>
+                                </div>
+                            {% elif nomi.status == 'Rejected' %}
+                                <div class="row text-center">
+                                    <div class="col-lg-12">
+                                        <a href="{% url 'accept' nomi.pk %} "><div class="btn btn-info
+                                         read-more-button">Accept</div></a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="row text-center">
+                                <div class="col-lg-6">
+                                    <a href="{% url 'accept' nomi.pk %} "><div class="btn btn-info
+                                     read-more-button">Accept</div></a>
+                                </div>
 
-                        <div class="col-lg-6">
-                            <a href="{% url 'reject' nomi.pk %}"><div class="btn btn-danger read-more-button ">Reject</div></a>
-                        </div>
-                    </div>
+                                <div class="col-lg-6">
+                                    <a href="{% url 'reject' nomi.pk %}"><div class="btn btn-danger
+                                    read-more-button">Reject</div></a>
+                                </div>
+                            </div>
+                        {% endif %}
+
                     {% elif nomi.nomination.status == 'Interview period' and nomi.interview_status == 'Interview Not Done' %}
                     <div class="row text-center">
                         <div class="col-lg-12">
@@ -120,13 +141,35 @@ form view
                     </div>
                     {% elif senate_perm %}
                     <div class="row text-center">
-                        <div class="col-lg-6 text-center">
-                            <a href="{% url 'accept' nomi.pk %} "><div class="btn btn-info read-more-button " >Accept</div></a>
-                        </div>
+                        {% if nomi.status %}
+                            {% if nomi.status == 'Accepted' %}
+                                <div class="row text-center">
+                                    <div class="col-lg-12">
+                                        <a href="{% url 'reject' nomi.pk %}"><div class="btn btn-danger
+                                        read-more-button">Reject</div></a>
+                                    </div>
+                                </div>
+                            {% elif nomi.status == 'Rejected' %}
+                                <div class="row text-center">
+                                    <div class="col-lg-12">
+                                        <a href="{% url 'accept' nomi.pk %} "><div class="btn btn-info
+                                         read-more-button">Accept</div></a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="row text-center">
+                                <div class="col-lg-6">
+                                    <a href="{% url 'accept' nomi.pk %} "><div class="btn btn-info
+                                     read-more-button">Accept</div></a>
+                                </div>
 
-                        <div class="col-lg-6 text-center">
-                            <a href="{% url 'reject' nomi.pk %}"><div class="btn btn-danger read-more-button ">Reject</div></a>
-                        </div>
+                                <div class="col-lg-6">
+                                    <a href="{% url 'reject' nomi.pk %}"><div class="btn btn-danger
+                                    read-more-button">Reject</div></a>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                     {% endif %}
                 {% endif %}

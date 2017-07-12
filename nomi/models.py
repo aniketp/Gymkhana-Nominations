@@ -56,7 +56,7 @@ class Nomination(models.Model):
     status = models.CharField(max_length=50, choices=STATUS, default='Nomination created')
     result_approvals = models.ManyToManyField(Post, related_name='result_approvals', symmetrical=False, blank=True)
     nomi_approvals = models.ManyToManyField(Post, related_name='nomi_approvals', symmetrical=False, blank=True)
-    group_status = models.CharField(max_length=50, choices= GROUP_STATUS, default='normal')
+    group_status = models.CharField(max_length=50, choices=GROUP_STATUS, default='normal')
     tags = models.ManyToManyField(Club, related_name='club_nomi', symmetrical=False, blank=True)
 
     opening_date = models.DateField(null=True, blank=True)
@@ -114,7 +114,7 @@ class GroupNomination(models.Model):
 
 class NominationInstance(models.Model):
     nomination = models.ForeignKey('Nomination', on_delete=models.CASCADE, null=True)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     status = models.CharField(max_length=20, choices=NOMI_STATUS,  null=True, blank=True, default=None)
     interview_status = models.CharField(max_length=20, choices=INTERVIEW_STATUS,  null=True, blank=True,
                                         default='Interview Not Done')
@@ -127,7 +127,7 @@ class NominationInstance(models.Model):
 class Commment(models.Model):
     comments = models.TextField(max_length=1000, null=True, blank=True)
     nomi_instance = models.ForeignKey(NominationInstance, on_delete=models.CASCADE, null=True)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
 
 def user_directory_path(instance, filename):
