@@ -17,6 +17,10 @@ from .forms import *
 from .models import *
 
 
+## ------------------------------------------------------------------------------------------------------------------ ##
+############################################     DASHBOARD VIEWS     ###################################################
+## ------------------------------------------------------------------------------------------------------------------ ##
+
 
 # main index view for user,contains all nomination to be filled by normal user,
 # have club filter that filter both nomination and its group..
@@ -47,8 +51,8 @@ def index(request):
 
 
             return render(request, 'index1.html', context={'posts': posts, 'username': username,
-                                                            'club_filter': club_filter,
-                                                           'result_query': result_query,'today':today})
+                                                           'club_filter': club_filter, 'today': today,
+                                                           'result_query': result_query})
 
         except ObjectDoesNotExist:
             profile = UserProfile.objects.create(user=request.user)
@@ -76,7 +80,7 @@ def admin_portal(request):
         query = Nomination.objects.filter(nomi_approvals=post)
         admin_query = admin_query | query
 
-    panel_nomi = request.user.panel.all().exclude(status= 'Nomination created')
+    panel_nomi = request.user.panel.all().exclude(status='Nomination created')
 
     admin_query = admin_query | panel_nomi
 
@@ -120,13 +124,15 @@ def senate_view(request):
         return render(request, 'no_access.html')
 
 
-## ----------------------------------------------------------------------------------------------------------------
-##################    POST RELATED VIEWS   #####################
-## ----------------------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------------------------ ##
+#########################################    POST RELATED VIEWS   ######################################################
+## ------------------------------------------------------------------------------------------------------------------ ##
 
-# a view for a given post....contains all thing required for working on that post...
-# tips...use redirect if using form as button
-# is_safe
+'''
+a view for a given post....contains all things required for working on that post...
+tips...use redirect if using form as button
+is_safe
+'''
 @login_required
 def post_view(request, pk):
     post = Post.objects.get(pk=pk)
@@ -136,7 +142,8 @@ def post_view(request, pk):
     post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
     nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
     group_nomi_approvals = GroupNomination.objects.filter(status='created').filter(approvals=post)
-    result_approvals = Nomination.objects.filter(result_approvals=post).exclude(status = 'Work done').exclude(status= 'Nomination created')
+    result_approvals = Nomination.objects.filter(result_approvals=post).exclude(status='Work done').\
+        exclude(status='Nomination created')
 
     if request.method == 'POST':
         tag_form = ClubForm(request.POST)
@@ -157,8 +164,6 @@ def post_view(request, pk):
         return render(request, 'no_access.html')
 
 
-# view for parent post to create new child post
-# is_safe
 
 @login_required
 def post_create(request, pk):
@@ -168,8 +173,7 @@ def post_create(request, pk):
         if post_form.is_valid():
             club_id = post_form.cleaned_data['club']
             club = Club.objects.get(pk=club_id)
-            Post.objects.create(post_name=post_form.cleaned_data['post_name'],
-                                       club=club, parent=parent)
+            Post.objects.create(post_name=post_form.cleaned_data['post_name'], club=club, parent=parent)
 
             return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
 
@@ -182,9 +186,6 @@ def post_create(request, pk):
     else:
         return render(request, 'no_access.html')
 
-
-# view for child post related stuff for parent post only
-# is_safe
 
 @login_required
 def child_post_view(request, pk):
@@ -211,7 +212,7 @@ def child_post_view(request, pk):
         return HttpResponseRedirect(reverse('child_post', kwargs={'pk': pk}))
 
     if request.user in parent.post_holders.all():
-        return render(request, 'child_post1.html', {'post': post,'nominations': nominations,'parent':parent,
+        return render(request, 'child_post1.html', {'post': post, 'nominations': nominations, 'parent':parent,
                                                     'tag_form': tag_form, 'give_form': give_form})
     else:
         return render(request, 'no_access.html')
@@ -276,6 +277,10 @@ def final_post_approval(request, view_pk, post_pk):
         return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view_pk}))
     else:
         return render(request, 'no_access.html')
+
+## ------------------------------------------------------------------------------------------------------------------ ##
+#########################################    NOMINATION RELATED VIEWS   ################################################
+## ------------------------------------------------------------------------------------------------------------------ ##
 
 
 @login_required
@@ -460,6 +465,19 @@ def final_nomi_approval(request, nomi_pk):
 
 
 @login_required
+def copy_nomi_link(request, pk):
+    url = DOMAIN_NAME + '/nominations/nomi_detail/' + str(pk) + '/'
+    pyperclip.copy(url)
+
+    return HttpResponseRedirect(reverse('admin_portal'))
+
+
+## ------------------------------------------------------------------------------------------------------------------ ##
+#########################################     GROUP NOMINATION VIEWS    ################################################
+## ------------------------------------------------------------------------------------------------------------------ ##
+
+
+@login_required
 def group_nominations(request, pk):
     post = Post.objects.get(pk=pk)
     child_posts = Post.objects.filter(parent=post)
@@ -499,7 +517,7 @@ def group_nominations(request, pk):
 
 @login_required
 def group_nomi_detail(request, pk):
-    group_nomi = GroupNomination.objects.get(pk = pk)
+    group_nomi = GroupNomination.objects.get(pk=pk)
     admin = 0
     for post in request.user.posts.all():
         if post in group_nomi.approvals.all():
@@ -562,6 +580,11 @@ def remove_from_group(request, nomi_pk, gr_pk):
     return HttpResponseRedirect(reverse('group_nomi_detail', kwargs={'pk': gr_pk}))
 
 
+## ------------------------------------------------------------------------------------------------------------------ ##
+#########################################    NOMINATION MONITOR VIEWS   ################################################
+## ------------------------------------------------------------------------------------------------------------------ ##
+
+
 @login_required
 def nomi_apply(request, pk):
     nomination = Nomination.objects.get(pk=pk)
@@ -592,16 +615,6 @@ def nomi_apply(request, pk):
     else:
         info = "You have applied for it already."
         return render(request, 'nomi_done.html', context={'info': info})
-
-
-
-@login_required
-def copy_nomi_link(request, pk):
-    url = DOMAIN_NAME + '/nominations/nomi_detail/' + str(pk) + '/'
-    pyperclip.copy(url)
-
-    return HttpResponseRedirect(reverse('admin_portal'))
-
 
 
 @login_required
@@ -756,7 +769,9 @@ def nomination_answer(request, pk):
                                                         'nomi_pk': nomination.pk, 'result_approval': results_approval,
                                                         'auth_user': auth_user})
 
-
+## ------------------------------------------------------------------------------------------------------------------ ##
+###########################################    RATIFICATION VIEWS    ###################################################
+## ------------------------------------------------------------------------------------------------------------------ ##
 
 @login_required
 def ratify(request, nomi_pk):
@@ -843,15 +858,10 @@ def result_approval(request, nomi_pk):
         return render(request, 'no_access.html')
 
 
-@login_required
-def accept_nomination(request, pk):
-    application = NominationInstance.objects.get(pk=pk)
-    id_accept = application.nomination.pk
-    application.status = 'Accepted'
-    application.save()
-
-    return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_accept}))
-
+'''
+mark_as_interviewed, reject_nomination, accept_nomination: Changes the interview status/ nomination_instance status
+of the applicant
+'''
 
 @login_required
 def mark_as_interviewed(request, pk):
@@ -864,6 +874,16 @@ def mark_as_interviewed(request, pk):
 
 
 @login_required
+def accept_nomination(request, pk):
+    application = NominationInstance.objects.get(pk=pk)
+    id_accept = application.nomination.pk
+    application.status = 'Accepted'
+    application.save()
+
+    return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_accept}))
+
+
+@login_required
 def reject_nomination(request, pk):
     application = NominationInstance.objects.get(pk=pk)
     id_reject = application.nomination.pk
@@ -872,6 +892,9 @@ def reject_nomination(request, pk):
 
     return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_reject}))
 
+'''
+append_user, replace_user: Adds and Removes the current post-holders according to their selection status
+'''
 
 @login_required
 def append_user(request, pk):
@@ -886,6 +909,10 @@ def replace_user(request, pk):
     nomi.replace()
     return HttpResponseRedirect(reverse('applicants', kwargs={'pk': pk}))
 
+
+## ------------------------------------------------------------------------------------------------------------------ ##
+############################################       PROFILE VIEWS      ##################################################
+## ------------------------------------------------------------------------------------------------------------------ ##
 
 
 @login_required
@@ -932,15 +959,15 @@ class UserProfileUpdate(UpdateView):
 class CommentUpdate(UpdateView):
     model = Commment
     fields = ['comments']
+
     def get_success_url(self):
         form_pk = self.kwargs['form_pk']
         return reverse('nomi_answer', kwargs={'pk': form_pk})
 
 
-
-
 class CommentDelete(DeleteView):
     model = Commment
+
     def get_success_url(self):
         form_pk = self.kwargs['form_pk']
         return reverse('nomi_answer', kwargs={'pk': form_pk})
