@@ -159,6 +159,8 @@ def post_view(request, pk):
         return render(request, 'no_access.html')
 
 
+# view to create a new post, a child post for a post can be created only by the post holders of that post...
+#is_safe
 
 @login_required
 def post_create(request, pk):
@@ -182,6 +184,8 @@ def post_create(request, pk):
         return render(request, 'no_access.html')
 
 
+# only parent post have access to this view
+# is_safe
 @login_required
 def child_post_view(request, pk):
     post = Post.objects.get(pk=pk)
@@ -212,7 +216,7 @@ def child_post_view(request, pk):
     else:
         return render(request, 'no_access.html')
 
-
+# the viewer_post which have access add its parent for approval of post and also add parent club as post tag..
 # is_safe
 @login_required
 def post_approval(request, view_pk, post_pk):
@@ -221,8 +225,8 @@ def post_approval(request, view_pk, post_pk):
 
 
     access = False
-    for apv_post in post.post_approvals.all():
-        if request.user in apv_post.post_holders.all():
+    for each_post in post.post_approvals.all():
+        if request.user in each_post.post_holders.all():
             access = True
             break
 
@@ -234,41 +238,45 @@ def post_approval(request, view_pk, post_pk):
     else:
         return render(request, 'no_access.html')
 
-
+# the viewer removes himself from approvals ,thus sending back the post down...
+# is_safe
 @login_required
 def post_reject(request, view_pk, post_pk):
     post = Post.objects.get(pk=post_pk)
     viewer = Post.objects.get(pk=view_pk)
-    to_add = viewer
+    to_remove = viewer
 
     access = False
-    for apv_post in post.post_approvals.all():
-        if request.user in apv_post.post_holders.all():
+    for each_post in post.post_approvals.all():
+        if request.user in each_post.post_holders.all():
             access = True
             break
 
     if access:
-        post.post_approvals.remove(to_add)
+        post.post_approvals.remove(to_remove)
 
     return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view_pk}))
 
 
+# final approval by gen-sec level, only add gymkhana tag to the given post,gen-sec parent not given post approval
+#is_safe
 @login_required
 def final_post_approval(request, view_pk, post_pk):
     post = Post.objects.get(pk=post_pk)
     viewer = Post.objects.get(pk=view_pk)
     to_add = viewer.parent
-    post.tags.add(to_add.club)
-    post.status = 'Post approved'
-    post.save()
+
 
     access = False
-    for apv_post in post.post_approvals.all():
-        if request.user in apv_post.post_holders.all():
+    for each_post in post.post_approvals.all():
+        if request.user in each_post.post_holders.all():
             access = True
             break
 
-    if access or request.user in post.parent.post_holders.all():
+    if access:
+        post.tags.add(to_add.club)
+        post.status = 'Post approved'
+        post.save()
         return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view_pk}))
     else:
         return render(request, 'no_access.html')
