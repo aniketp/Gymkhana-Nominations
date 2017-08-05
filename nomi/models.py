@@ -39,11 +39,27 @@ class Post(models.Model):
         return self.post_holders
 
 
+def default_end_date():
+    now = datetime.now()
+    end = now.replace(day=31, month=3, year=now.year)
+
+    if end > now:
+        return end
+    else:
+        next_year = now.year + 1
+        return end.replace(year=next_year)
+
+class Session(models.Model):
+    tenure = models.IntegerField(default=datetime.now().year, choices=SESSION_CHOICES, null=True)
+    end_date = models.DateField(default=default_end_date)
+
+
 class PostHistory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     start = models.DateField(auto_now_add=True)
     end = models.DateField(null=True, blank=True, editable=True)
+    post_tenure = models.ForeignKey(Session, on_delete=models.CASCADE, null=True)
 
 
 class Nomination(models.Model):
@@ -61,6 +77,7 @@ class Nomination(models.Model):
 
     opening_date = models.DateField(null=True, blank=True)
     deadline = models.DateField(null=True, blank=True, editable=True)
+    nomi_session = models.ForeignKey(Session, on_delete=models.CASCADE, null=True)
 
     interview_panel = models.ManyToManyField(User, related_name='panel', symmetrical=False, blank=True)
 
