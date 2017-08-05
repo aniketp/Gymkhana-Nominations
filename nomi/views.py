@@ -25,7 +25,6 @@ from .models import *
 # main index view for user,contains all nomination to be filled by normal user,
 # have club filter that filter both nomination and its group..
 # is_safe
-
 @login_required
 def index(request):
     if request.user.is_authenticated:
@@ -63,7 +62,9 @@ def index(request):
         return HttpResponseRedirect(reverse('login'))
 
 
-
+# contain all nomination for which user have rights whether created by him or created by his chil post
+# also shows nomination for which he has been added as interview panel
+# is_safe
 @login_required
 def admin_portal(request):
     posts = Post.objects.filter(post_holders=request.user)
@@ -100,7 +101,6 @@ def admin_portal(request):
 
 # a view for retification purpose
 # is_safe
-
 @login_required
 def senate_view(request):
     nomi_ratify = Nomination.objects.filter(status='Sent for ratification')
@@ -136,6 +136,7 @@ def post_view(request, pk):
 
     post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
     nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
+    re_nomi_approval = ReopenNomination.objects.filter(approvals = post).filter(nomi__status = 'Interview period and Reopening initiated')
     group_nomi_approvals = GroupNomination.objects.filter(status='created').filter(approvals=post)
     result_approvals = Nomination.objects.filter(result_approvals=post).exclude(status='Work done').\
         exclude(status='Nomination created')
@@ -152,7 +153,7 @@ def post_view(request, pk):
     if request.user in post.post_holders.all():
         return render(request, 'post1.html', context={'post': post, 'child_posts': child_posts_reverse,
                                                       'post_approval': post_approvals, 'tag_form': tag_form,
-                                                      'nomi_approval': nomi_approvals,
+                                                      'nomi_approval': nomi_approvals,'re_nomi_approval':re_nomi_approval,
                                                       'group_nomi_approvals': group_nomi_approvals,
                                                       'result_approvals': result_approvals})
     else:
@@ -161,7 +162,6 @@ def post_view(request, pk):
 
 # view to create a new post, a child post for a post can be created only by the post holders of that post...
 #is_safe
-
 @login_required
 def post_create(request, pk):
     parent = Post.objects.get(pk=pk)
@@ -334,9 +334,16 @@ def nomi_detail(request, nomi_pk):
 
     panelform = UserId(request.POST or None)
 
+    access = False
+    view_post = None
+    for apv_post in nomi.nomi_approvals.all():
+        if request.user in apv_post.post_holders.all():
+            access = True
+            view_post = apv_post
+            break
 
-
-    status = [None]*5
+    status = [None]*7
+    renomi_edit = 0
 
     if nomi.status == 'Nomination created':
         status[0] = True
@@ -346,16 +353,16 @@ def nomi_detail(request, nomi_pk):
         status[2] = True
     elif nomi.status == 'Sent for ratification':
         status[3] = True
-    else:
+    elif nomi.status == 'Interview period and Reopening initiated':
         status[4] = True
+        if view_post in nomi.renomination.approvals.all():
+            renomi_edit = 1
 
-    access = False
-    view_post = None
-    for apv_post in nomi.nomi_approvals.all():
-        if request.user in apv_post.post_holders.all():
-            access = True
-            view_post = apv_post
-            break
+    elif nomi.status == 'Interview period and Nomination reopened':
+        status[5] = True
+    else:
+        status[6] = True
+
 
     if access:
         if view_post.perms == 'normal':
@@ -366,6 +373,9 @@ def nomi_detail(request, nomi_pk):
             sent_to_parent = 1
         else:
             sent_to_parent = 0
+
+
+
 
         if panelform.is_valid():
             try:
@@ -386,7 +396,7 @@ def nomi_detail(request, nomi_pk):
         return render(request, 'nomi_detail_admin.html', context={'nomi': nomi, 'form': form, 'panelform': panelform,
                                                                   'sent_to_parent': sent_to_parent, 'status': status,
                                                                   'power_to_send': power_to_send, 'parents': parents,
-                                                                  'panelists': panelists_exclude_parent})
+                                                                  'panelists': panelists_exclude_parent,'renomi':renomi_edit})
 
 
     elif request.user in nomi.interview_panel.all():
@@ -475,6 +485,88 @@ def copy_nomi_link(request, pk):
     return HttpResponseRedirect(reverse('admin_portal'))
 
 
+
+## ------------------------------------------------------------------------------------------------------------------ ##
+#########################################   REOPEN NOMINATION MONITOR VIEWS   ################################################
+## ------------------------------------------------------------------------------------------------------------------ ##
+
+
+@login_required
+def reopen_nomi(request, nomi_pk):
+    nomi = Nomination.objects.get(pk=nomi_pk)
+    access = False
+    view_post = 0
+    for apv_post in nomi.nomi_approvals.all():
+        if request.user in apv_post.post_holders.all():
+            access = True
+            view_post = apv_post
+            break
+    if access:
+        re_nomi = ReopenNomination.objects.create(nomi=nomi)
+        re_nomi.approvals.add(view_post)
+        re_nomi.nomi.status = 'Interview period and Reopening initiated'
+        re_nomi.nomi.save()
+        return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
+    else:
+        return render(request, 'no_access.html')
+
+@login_required
+def re_nomi_approval(request, re_nomi_pk):
+    re_nomi = ReopenNomination.objects.get(pk=re_nomi_pk)
+    access = False
+    view_post = 0
+    for apv_post in re_nomi.approvals.all():
+        if request.user in apv_post.post_holders.all():
+            access = True
+            view_post = apv_post
+            break
+    if access:
+        to_add = view_post.parent
+        re_nomi.approvals.add(to_add)
+        return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': re_nomi.nomi.pk}))
+    else:
+        return render(request, 'no_access.html')
+
+
+@login_required
+def re_nomi_reject(request, re_nomi_pk):
+    re_nomi = ReopenNomination.objects.get(pk=re_nomi_pk)
+    access = False
+    view_post = 0
+    for apv_post in re_nomi.approvals.all():
+        if request.user in apv_post.post_holders.all():
+            access = True
+            view_post = apv_post
+            break
+    if access:
+        nomi = re_nomi.nomi
+        nomi.status = 'Interview Period'
+        nomi.save()
+        re_nomi.delete()
+        return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi.pk}))
+    else:
+        return render(request, 'no_access.html')
+
+
+@login_required
+def final_re_nomi_approval(request, re_nomi_pk):
+    re_nomi = ReopenNomination.objects.get(pk=re_nomi_pk)
+    access = False
+    view_post = 0
+    for apv_post in re_nomi.approvals.all():
+        if request.user in apv_post.post_holders.all():
+            access = True
+            view_post = apv_post
+            break
+    if access:
+        re_nomi.re_open_to_users()
+        nomi=re_nomi.nomi
+        re_nomi.delete()
+        return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi.pk}))
+    else:
+        return render(request, 'no_access.html')
+
+
 ## ------------------------------------------------------------------------------------------------------------------ ##
 #########################################    NOMINATION MONITOR VIEWS   ################################################
 ## ------------------------------------------------------------------------------------------------------------------ ##
@@ -520,7 +612,7 @@ def applications(request, pk):
     rejected = NominationInstance.objects.filter(nomination=nomination).filter(status='Rejected')
     pending = NominationInstance.objects.filter(nomination=nomination).filter(status=None)
 
-    status = [None]*5
+    status = [None]*7
 
     if nomination.status == 'Nomination created':
         status[0] = True
@@ -530,8 +622,14 @@ def applications(request, pk):
         status[2] = True
     elif nomination.status == 'Sent for ratification':
         status[3] = True
-    else:
+    elif nomination.status == 'Interview period and Reopening initiated':
         status[4] = True
+
+    elif nomination.status == 'Interview period and Nomination reopened':
+        status[5] = True
+    else:
+        status[6] = True
+
 
     view_post = None
     access = False

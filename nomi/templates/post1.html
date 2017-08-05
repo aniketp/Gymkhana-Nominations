@@ -127,9 +127,9 @@
 
                             {% endif %}
                         {% endif %}
-                    </div>
-                </div>
-            </div>
+                        </div>
+                     </div>
+                 </div>
             {% endfor %}
         </div>
 
@@ -156,6 +156,50 @@
                 </div>
             </div>
             {% endfor %}
+
+            {% for re_nomi in re_nomi_approval %}
+             <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{re_nomi.nomi.nomi_post.club}}---Renomination</h3>
+                </div>
+                <div class="panel-body">
+                    <p class="profile-post-name"><a href="{% url 'nomi_detail' re_nomi.nomi.pk %}">
+                        <span></span>{{re_nomi.nomi.name}}</a></p>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <p><span>Post : </span>{{re_nomi.nomi.nomi_post}}</p>
+                        </div>
+                        {% if post.parent in re_nomi.approvals.all %}
+                        <div class="col-lg-4 text-center">
+                            Status : Sent to parent
+                        </div>
+                        {% else %}
+                            {% if post.perms == 'can approve post and send nominations to users' %}
+
+                                <div class="col-lg-4 text-center">
+                                    <a  class="btn btn-success" href="{% url 'final_re_nomi_approval' re_nomi.pk %}">Approve</a>
+                                </div>
+
+                            {% else %}
+
+                                <div class="col-lg-4 text-center">
+                                    <a  class="btn btn-success" href="{% url 're_nomi_approval' re_nomi.pk  %}">Approve</a>
+                                </div>
+
+                            {% endif %}
+
+                                <div class="col-lg-4 text-center">
+                                    <a  class="btn btn-danger" href="{% url 're_nomi_reject' re_nomi.pk %}">Reject</a>
+                                </div>
+
+                        {% endif %}
+                        </div>
+                     </div>
+                 </div>
+
+
+            {% endfor %}
+
             {% for nomi in nomi_approval %}
             <div class="panel panel-info">
                 <div class="panel-heading">
