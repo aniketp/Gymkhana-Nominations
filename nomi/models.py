@@ -16,6 +16,12 @@ def default_end_date():
         next_year = now.year + 1
         return end.replace(year=next_year)
 
+def session_end_date(session):
+    now = datetime.now()
+    next_year = session + 1
+
+    return now.replace(day=31, month=3, year=next_year)
+
 
 class Session(models.Model):
     tenure = models.IntegerField(default=datetime.now().year, choices=SESSION_CHOICES, null=True)
@@ -59,7 +65,7 @@ class PostHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     start = models.DateField(auto_now_add=True)
     end = models.DateField(default=default_end_date, blank=True, editable=True)
-    post_tenure = models.ForeignKey(Session, on_delete=models.CASCADE, null=True)
+    post_tenure = models.IntegerField(choices=SESSION_CHOICES, null=True)
 
 
 class Nomination(models.Model):
@@ -76,9 +82,9 @@ class Nomination(models.Model):
     tags = models.ManyToManyField(Club, related_name='club_nomi', symmetrical=False, blank=True)
 
     opening_date = models.DateField(null=True, blank=True)
-    re_opening_date = models.DateField(null=True, blank=True,editable=True)
+    re_opening_date = models.DateField(null=True, blank=True, editable=True)
     deadline = models.DateField(null=True, blank=True, editable=True)
-    nomi_session = models.ForeignKey(Session, on_delete=models.CASCADE, null=True)
+    nomi_session = models.IntegerField(choices=SESSION_CHOICES, null=True)
 
     interview_panel = models.ManyToManyField(User, related_name='panel', symmetrical=False, blank=True)
 
@@ -91,10 +97,12 @@ class Nomination(models.Model):
 
     def append(self):
         selected = NominationInstance.objects.filter(nomination=self, status='Accepted')
+        session = self.nomi_session
+
         self.status = 'Work done'
         self.save()
         for each in selected:
-            PostHistory.objects.create(post=self.nomi_post, user=each.user)
+            PostHistory.objects.create(post=self.nomi_post, user=each.user, end=session_end_date(session))
             self.nomi_post.post_holders.add(each.user)
 
         return self.nomi_post.post_holders
@@ -116,20 +124,17 @@ class Nomination(models.Model):
         self.save()
         return self.status
 
+
 class ReopenNomination(models.Model):
-    nomi = models.OneToOneField(Nomination, on_delete = models.CASCADE)
-    approvals = models.ManyToManyField(Post,symmetrical = False , null = True)
-    reopening_date = models.DateField(null = True, blank= True)
+    nomi = models.OneToOneField(Nomination, on_delete=models.CASCADE)
+    approvals = models.ManyToManyField(Post, symmetrical=False)
+    reopening_date = models.DateField(null=True, blank=True)
 
     def re_open_to_users(self):
         self.nomi.status = 'Interview period and Nomination reopened'
         self.nomi.re_opening_date = datetime.now()
         self.nomi.save()
         return self.nomi
-
-
-
-
 
 
 class GroupNomination(models.Model):

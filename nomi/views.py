@@ -304,6 +304,7 @@ def nomination_create(request, pk):
             nomination = Nomination.objects.create(name=title_form.cleaned_data['title'],
                                                    description=title_form.cleaned_data['description'],
                                                    deadline=title_form.cleaned_data['deadline'],
+                                                   nomi_session=title_form.cleaned_data['nomi_session'],
                                                    nomi_form=questionnaire, nomi_post=post,
                                                    year_choice=title_form.cleaned_data['year_choice'],
                                                    hall_choice=title_form.cleaned_data['hall_choice'],
@@ -769,11 +770,11 @@ def nomination_answer(request, pk):
              return HttpResponseRedirect(reverse('nomi_answer', kwargs={'pk': pk}))
 
         return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
-                                                             'comment_form': comment_form,
-                                                             'comments': comments_reverse, 'senate_perm': senate_perm,
-                                                             'nomi_pk': nomination.pk,
-                                                             'result_approval': results_approval,
-                                                             'auth_user': auth_user})
+                                                            'comment_form': comment_form,
+                                                            'comments': comments_reverse, 'senate_perm': senate_perm,
+                                                            'nomi_pk': nomination.pk,
+                                                            'result_approval': results_approval,
+                                                            'auth_user': auth_user})
     else:
         return render(request, 'no_access.html')
 
