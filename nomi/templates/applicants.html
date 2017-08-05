@@ -12,15 +12,17 @@
 
     <!--  -------------------------------------------------------------------------------------------------   -->
     {% if status.0 %}  <!-- Nomination not out for application yet -->
-    <h3 class="text-center">Nomination under construction</h3>
+     <div class="well well-sm" style="padding-bottom: 20px">
+         <h2 class="text-center" style="color: #343e2e;">{{nomination.name}} </h2>
+         <h3 class="text-center">Nomination under construction</h3>
+     </div>
     {% endif %}
     <!-- --------------------------------------------------------------------------------------------------------  -->
     {% if status.1 %}  <!-- Nomination out for application -->
-
         <div class="well well-sm" style="padding-bottom: 20px">
-            <h2 class="text-center" style="color: #343e2e;">{{nomination.name}} </h2>
+         <h2 class="text-center" style="color: #343e2e;">{{nomination.name}} </h2>
+         <h3 class="text-center">Application Period</h3>
         </div>
-
 
         <div class="text-center">
             <div class="dropdown show">
@@ -96,15 +98,51 @@
 
         </div>
 
+        {% if pending %}
+            <div class="row">
+               <div class="text-center">
+                <div class="dropdown show">
+                 <button class="btn btn-secondary btn-danger dropdown-toggle" style="width: auto" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Reopen Nomination
+                 </button>
+                    <div class="dropdown-menu " role="menu">
+                        <form action="" method="post" style="display:inline">
+                         {% csrf_token %}
+                            <p>{{reopen|bootstrap}}</p>
+                         <input class="btn btn-success btn-block" type="submit" value="submit" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+            </div>
 
+        {% endif %}
 
         {% if not pending and not perm %}
-        <div class="well well-sm">
+        <div class="row">
             {% if result_approval.0 %}
-                <div class="text-center">
+                <div class="col-lg-6 text-center">
                     <a href="{% url 'result_approval' nomination.pk %}" class="btn btn-info" style="width: auto">
                         Send Result list for Approval
                     </a>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <div class="row">
+                        <div class="text-center">
+                            <div class="dropdown show">
+                            <button class="btn btn-secondary btn-danger dropdown-toggle" style="width: auto" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Reopen Nomination
+                            </button>
+                            <div class="dropdown-menu " role="menu">
+                                <form action="" method="post" style="display:inline">
+                                {% csrf_token %}
+                                    <p>{{reopen|bootstrap}}</p>
+                                <input class="btn btn-success btn-block" type="submit" value="submit" />
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
                 </div>
             {% elif result_approval.2 %}
                 <div class="text-center">
@@ -136,6 +174,7 @@
 
 
         <hr>
+
         <div class="row">
             <div class="col-lg-6 text-center">
                 <h4><span style=" font-size: 20px;color: #1b3013">Post:</span> {{ nomination.nomi_post }}</h4>

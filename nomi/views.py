@@ -349,7 +349,7 @@ def nomi_detail(request, nomi_pk):
 
     status = [None]*7
     renomi_edit = 0
-
+    p_in_rn = 0
     if nomi.status == 'Nomination created':
         status[0] = True
     elif nomi.status == 'Nomination out':
@@ -362,6 +362,8 @@ def nomi_detail(request, nomi_pk):
         status[4] = True
         if view_post in nomi.reopennomination.approvals.all():
             renomi_edit = 1
+            if view_post.parent in nomi.reopennomination.approvals.all():
+                p_in_rn = 1
 
     elif nomi.status == 'Interview period and Nomination reopened':
         status[5] = True
@@ -370,10 +372,10 @@ def nomi_detail(request, nomi_pk):
 
 
     if access:
-        if view_post.perms == 'normal':
-            power_to_send = 0
-        else:
+        if view_post.perms == 'can approve post and send nominations to users':
             power_to_send = 1
+        else:
+            power_to_send = 0
         if view_post.parent in nomi.nomi_approvals.all():
             sent_to_parent = 1
         else:
@@ -401,7 +403,8 @@ def nomi_detail(request, nomi_pk):
         return render(request, 'nomi_detail_admin.html', context={'nomi': nomi, 'form': form, 'panelform': panelform,
                                                                   'sent_to_parent': sent_to_parent, 'status': status,
                                                                   'power_to_send': power_to_send, 'parents': parents,
-                                                                  'panelists': panelists_exclude_parent,'renomi':renomi_edit})
+                                                                  'panelists': panelists_exclude_parent,'renomi':renomi_edit,
+                                                                  'p_in_rn':p_in_rn})
 
 
     elif request.user in nomi.interview_panel.all():
@@ -494,18 +497,22 @@ def copy_nomi_link(request, pk):
 ## ------------------------------------------------------------------------------------------------------------------ ##
 #########################################   REOPEN NOMINATION MONITOR VIEWS   ################################################
 ## ------------------------------------------------------------------------------------------------------------------ ##
-
-
-@login_required
-def reopen_nomi(request, nomi_pk):
+def get_access_and_post(request,nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     access = False
-    view_post = 0
+    view_post = None
     for apv_post in nomi.nomi_approvals.all():
         if request.user in apv_post.post_holders.all():
             access = True
             view_post = apv_post
             break
+    return access,view_post
+
+
+@login_required
+def reopen_nomi(request, nomi_pk):
+    access , view_post = get_access_and_post(request,nomi_pk)
+    nomi = Nomination.objects.get(pk=nomi_pk)
     if access:
         re_nomi = ReopenNomination.objects.create(nomi=nomi)
         re_nomi.approvals.add(view_post)
@@ -545,7 +552,7 @@ def re_nomi_reject(request, re_nomi_pk):
             break
     if access:
         nomi = re_nomi.nomi
-        nomi.status = 'Interview Period'
+        nomi.status = 'Interview period'
         nomi.save()
         re_nomi.delete()
         return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi.pk}))
@@ -668,12 +675,26 @@ def applications(request, pk):
             else:
                 results_approval[0] = True
 
-        form_confirm = ConfirmApplication(request.POST or None)
 
+        if request.method == 'POST':
+            reopen = DeadlineForm(request.POST)
+            if reopen.is_valid():
+                re_nomi = ReopenNomination.objects.create(nomi=nomination)
+                re_nomi.approvals.add(view_post)
+                nomination.deadline = reopen.cleaned_data['deadline']
+                nomination.status = 'Interview period and Reopening initiated'
+                nomination.save()
+                return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': pk}))
+        else:
+            reopen = DeadlineForm()
+
+
+        form_confirm = ConfirmApplication(request.POST or None)
         if form_confirm.is_valid():
             nomination.status = 'Interview period'
             nomination.save()
             return HttpResponseRedirect(reverse('applicants', kwargs={'pk': pk}))
+
 
 
         return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
@@ -681,7 +702,7 @@ def applications(request, pk):
                                                            'result_approval': results_approval,
                                                            'accepted': accepted, 'rejected': rejected, 'status': status,
                                                            'pending': pending, 'perm': permission,
-                                                           'senate_perm': senate_permission})
+                                                           'senate_perm': senate_permission,'reopen':reopen})
 
 
 

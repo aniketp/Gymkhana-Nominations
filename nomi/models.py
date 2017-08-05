@@ -78,7 +78,7 @@ class Nomination(models.Model):
     opening_date = models.DateField(null=True, blank=True)
     re_opening_date = models.DateField(null=True, blank=True,editable=True)
     deadline = models.DateField(null=True, blank=True, editable=True)
-    nomi_session = models.ForeignKey(Session, on_delete=models.CASCADE, null=True)
+    nomi_session = models.ForeignKey(Session, on_delete=models.CASCADE, null=True, blank= True)
 
     interview_panel = models.ManyToManyField(User, related_name='panel', symmetrical=False, blank=True)
 
@@ -118,7 +118,7 @@ class Nomination(models.Model):
 
 class ReopenNomination(models.Model):
     nomi = models.OneToOneField(Nomination, on_delete = models.CASCADE)
-    approvals = models.ManyToManyField(Post,symmetrical = False , null = True)
+    approvals = models.ManyToManyField(Post,symmetrical = False)
     reopening_date = models.DateField(null = True, blank= True)
 
     def re_open_to_users(self):

@@ -4,16 +4,29 @@
 
 {% block content %}
 
+<div class="profile-content">
 
-            <div class="profile-content">
-                <div class="jumbotron">
-                    <div class="jumbotron-title">
-                        <h1 style="text-align: center">{{nomi.name}}</h1>
-                    </div>
-                    <div class="jumbotron-club">
-                        <h4 style="font-size: 50px; text-align: center">{{nomi.nomi_post.club}}</h4>
-                    </div>
-                </div>
+
+    <div class="well well-sm" style="padding-bottom: 20px;background: rgb(143, 186, 178);">
+        <h2 class="text-center" style="color: #343e2e;">{{nomi.name}} </h2>
+        <h3 class="text-center">
+            {{nomi.status}}
+            {% if status.4 %}
+            <a href="{% url 're_nomi_reject' nomi.reopennomination.pk %}" class="btn btn-danger">Collapse Reopening</a>
+
+            {% endif %}
+        </h3>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-6 text-center">
+            <h4><span style=" font-size: 20px;color: #1b3013">Post:</span> {{ nomi.nomi_post }}</h4>
+        </div>
+        <div class="col-lg-6 text-center">
+            <h4><span style=" font-size: 20px;color: #1b3013">Club:</span> {{ nomi.nomi_post.club }}</h4>
+        </div>
+    </div>
+    <hr>
 
                     <div class="well well-lg">
                         <h1 style="text-align: center">Description</h1>
@@ -36,7 +49,7 @@
                     </div>
 
                      <div class="container-fluid">
-<!-- --------------------------------------------------------------------------------------------------------------  -->
+<!-- ---------------------------------------created-------------------------------------------------------------------  -->
                          {% if status.0 %}
                         <div class="row">
                             {% if power_to_send %}
@@ -115,7 +128,7 @@
                         </div>
                          {% endif %}
 
-<!-- --------------------------------------------------------------------------------------------------------------  -->
+<!-- ---------------------------------------------out----------------------------------------------------------------  -->
 
                          {% if status.1 %}
                          <div class="row">
@@ -128,24 +141,21 @@
                         </div>
                          {% endif %}
 
-<!-- --------------------------------------------------------------------------------------------------------------  -->
+<!-- -----------------------------------------------------interview---------------------------------------------------------  -->
 
                          {% if status.2 %}
                          <div class="row">
-                            <div class="col-lg-4 text-center">
+                            <div class="col-lg-6 text-center">
                                 <a href="{% url 'applicants' nomi.pk %}" class="btn btn-success">View Applicants</a>
                             </div>
-                             <div class="col-lg-4 text-center">
-                                <a href="{% url 'reopen_nomi' nomi.pk %}" class="btn btn-success">Reopen Nomination</a>
-                            </div>
 
-                            <div class="col-lg-4 text-center">
+                            <div class="col-lg-6 text-center">
                                 <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
                             </div>
                         </div>
                          {% endif %}
 
- <!-- --------------------------------------------------------------------------------------------------------------  -->
+ <!-- ------------------------------------------------------ratification--------------------------------------------------------  -->
 
                          {% if status.3 %}
                          <div class="row">
@@ -157,55 +167,52 @@
                             </div>
                         </div>
                          {% endif %}
-<!-- --------------------------------------------------------------------------------------------------------------  -->
+<!-- ----------------------------------------------------interview and reopen initiation----------------------------------------------------------  -->
                   {% if status.4 %}
                         <div class="row">
                             <div class="col-lg-4 text-center">
                                 <a href="{% url 'applicants' nomi.pk %}" class="btn btn-success">View Applicants</a>
                             </div>
                             {% if renomi %}
+                                {% if p_in_rn %}
                                     <div class="col-lg-6 text-center">
-                                        <div class=" btn btn-success disabled" style="width: auto">
-                                            Renomination initiated</div>
+                                        <div class="btn btn-warning disabled" style="width: auto">
+                                        Sent to parent for reopening approval
+                                        </div>
                                     </div>
-
+                                {% else %}
                                     <div class="col-lg-4 text-center">
                                         <a href="{% url 'forms:creator_form' nomi.nomi_form.pk %}"
-                                           class="btn btn-primary">Edit Nomination</a>
+                                        class="btn btn-primary">Edit Nomination</a>
                                     </div>
-
-                                    <div class="col-lg-4 text-center">
-                                        <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
-                                    </div>
-
+                                    {% if power_to_send %}
+                                        <div class="col-lg-4 text-center">
+                                            <a href="{% url 'final_re_nomi_approval' nomi.reopennomination.pk %}" class="btn btn-info">Reopen to user</a>
+                                        </div>
+                                    {% else %}
+                                        <div class="col-lg-4 text-center">
+                                            <a href="{% url 're_nomi_approval' nomi.reopennomination.pk %}" class="btn btn-info">Send to parent</a>
+                                        </div>
+                                    {% endif %}
                                 {% endif %}
+                            {% endif %}
 
                         </div>
                    {% endif %}
 
 
-<!-- --------------------------------------------------------------------------------------------------------------  -->
+<!-- -----------------------------------------interview and reopen---------------------------------------------------------------------  -->
                    {% if status.5 %}
                         <div class="row">
-                            <div class="col-lg-4 text-center">
+                            <div class="col-lg-6 text-center">
                                 <a href="{% url 'applicants' nomi.pk %}" class="btn btn-success">View Applicants</a>
                             </div>
-                            {% if renomi %}
-                                    <div class="col-lg-6 text-center">
-                                        <div class=" btn btn-success disabled" style="width: auto">
-                                            Renomination opened</div>
-                                    </div>
-
-                                    <div class="col-lg-4 text-center">
-                                        <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
-                                    </div>
-
-                                {% endif %}
-
+                            <div class="col-lg-6 text-center">
+                                <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
+                            </div>
                         </div>
                    {% endif %}
 <!-- --------------------------------------------------------------------------------------------------------------  -->
-
                          <br>
                          <hr>
 
@@ -237,28 +244,35 @@
                                                 <h3 style="text-align: center">List of Panel Members</h3>
                                                 <br>
                                                 <div class="jumbotron" style="background-color: inherit">
-                                                    <ul>
-                                                        {% for parent in parents %}
-                                                            <div class="col-lg-10">
-                                                                <li style="font-weight: bold">
-                                                                    {{ parent.userprofile.name }}</li>
-                                                            </div>
-                                                        {% endfor %}
-                                                        {% for panelist in panelists %}
-                                                            <div class="col-lg-10">
-                                                                <li style="font-weight: bold">
-                                                                    {{ panelist.userprofile.name }}</li>
-                                                            </div>
-                                                            <div class="col-lg-2">
-                                            <a href="{% url 'remove_panelist' nomi_pk=nomi.pk user_pk=panelist.pk %}">
-                                            <div class="btn btn-sm" style="width: 20px; height: 20px;">
-                                                <i class="fa fa-times fa-lg" aria-hidden="true"></i>
-                                            </div>
-                                            </a>
-                                                            </div>
-                                                        {% endfor %}
-                                                    </ul>
-                                                </div>
+                                                    <div class="col-lg-10">
+                                                    <table class="table table-hover">
+                                                         <tbody>
+
+                                                             {% for parent in parents %}
+                                                             <tr>
+                                                             <th  class="text-left">
+                                                                 {{ parent.userprofile.name }}
+                                                             </td>
+                                                             </tr>
+                                                             {% endfor %}
+
+                                                            {% for panelist in panelists %}
+                                                             <tr>
+                                                             <th class="text-left">
+                                                                    {{ panelist.userprofile.name }}
+                                                                 <a href="{% url 'remove_panelist' nomi_pk=nomi.pk user_pk=panelist.pk %}">
+                                                                    <div class="btn btn-sm" style="width: 30px; height: 30px;">
+                                                                    <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+                                                                    </div>
+                                                                 </a>
+
+                                                             </th>
+                                                             </tr>
+                                                             {% endfor %}
+                                                         </tbody>
+                                                    </table>
+                                                        <hr>
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>

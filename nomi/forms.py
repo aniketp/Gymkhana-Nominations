@@ -26,6 +26,9 @@ class PostForm(forms.Form):
 class ClubForm(forms.Form):
     club_name = forms.CharField()
 
+class DeadlineForm(forms.Form):
+    deadline = forms.DateField(required=True, initial=datetime.now(), help_text="Format YYYY-MM-DD")
+
 
 class BlankForm(forms.Form):
     pass

@@ -6,14 +6,19 @@
 
 
             <div class="profile-content">
-                <div class="jumbotron">
-                    <div class="jumbotron-title">
-                        <h1 style="text-align: center">{{nomi.name}}</h1>
-                    </div>
-                    <div class="jumbotron-club">
-                        <h4 style="font-size: 50px; text-align: center">{{nomi.nomi_post.club}}</h4>
-                    </div>
+                <div class="well well-sm" style="padding-bottom: 20px;background: rgb(143, 186, 178);">
+                <h2 class="text-center" style="color: #343e2e;">{{nomi.name}} </h2>
                 </div>
+                <hr>
+                <div class="row">
+                <div class="col-lg-6 text-center">
+                <h4><span style=" font-size: 20px;color: #1b3013">Post:</span> {{ nomi.nomi_post }}</h4>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <h4><span style=" font-size: 20px;color: #1b3013">Club:</span> {{ nomi.nomi_post.club }}</h4>
+                </div>
+                </div>
+                 <hr>
 
                     <div class="well well-lg">
                         <h1 style="text-align: center">Description</h1>
