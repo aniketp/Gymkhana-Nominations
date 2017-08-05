@@ -1,0 +1,88 @@
+{% extends "base2.html" %}
+{% block title %}
+form view
+{% endblock %}
+
+{% load bootstrap %}
+{% load staticfiles %}
+
+{% block profile %}
+            <div class="profile-sidebar">
+                <!-- SIDEBAR USERPIC -->
+                <div class="profile-userpic">
+                    <img src="{{ nomi_user.image_url }}" class="img-responsive" alt="">
+                </div>
+
+                <div class="profile-usertitle">
+                    <div class="profile-usertitle-name">
+                        Applicant : {{nomi_user.name}}
+                    </div>
+                    <div class="profile-usertitle-job">
+                        {{nomi_user.programme}} <br> {{nomi_user.department}}
+                    </div>
+                </div>
+
+                <div class="profile-usermenu">
+                    <table class="table table-striped table-hover ">
+
+                        <tbody>
+                        <tr>
+                            <td id="topic">Batch</td>
+                            <td>{{nomi_user.year}} </td>
+                        </tr>
+                        <tr>
+                            <td id="topic">Roll No.</td>
+                            <td>{{nomi_user.roll_no}} </td>
+                        </tr>
+                        <tr>
+                            <td id="topic">Address</td>
+                            <td>{{nomi_user.room_no}} , Hall-{{nomi_user.hall}}</td>
+                        </tr>
+                        <tr>
+                            <td id="topic">Contact No.</td>
+                            <td>{{nomi_user.contact}}</td>
+                        </tr>
+                        <tr>
+                            <td id="topic">Email ID</td>
+                            <td>{{nomi_user.user}}@iitk.ac.in</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- END MENU -->
+            </div>
+            {% endblock %}
+
+
+{% block content %}
+<div class="profile-content">
+    <div class=" text-right">
+        <a href="{% url 'profile' %}">
+            <div style="width: inherit" class="btn btn-warning"><span class="glyphicon glyphicon-arrow-left"></span> Go Back</div>
+        </a>
+    </div>
+
+        <h1 style="color: #5c4a6c;" class="intro-text text-center">
+            <strong>{{ nomi_user.name }}'s Answer</strong>
+        </h1>
+        <hr>
+
+         <h2 class="intro-text text-center">
+            <strong>{{nomi.nomination.name}}</strong>
+        </h2>
+        <hr>
+
+    </div>
+
+    <div class="well">
+
+        <div>
+           <h4>Response</h4>
+        </div>
+
+        <div>
+            <form  action="" method="post">
+                {% csrf_token %}
+                {{form|bootstrap}}
+            </form>
+        </div>

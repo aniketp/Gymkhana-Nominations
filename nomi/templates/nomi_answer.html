@@ -57,19 +57,12 @@ form view
 {% block content %}
 <div class="profile-content">
 
-    {% if not inst_user %}
         <div class=" text-right">
             <a href="{% url 'applicants' nomi_pk %}">
                 <div style="width: inherit" class="btn btn-warning"><span class="glyphicon glyphicon-arrow-left"></span> Go Back</div>
             </a>
         </div>
-    {% elif inst_user %}
-        <div class=" text-right">
-            <a href="{% url 'profile' %}">
-                <div style="width: inherit" class="btn btn-warning"><span class="glyphicon glyphicon-arrow-left"></span> Go Back</div>
-            </a>
-        </div>
-    {% endif %}
+
 
     <div class="row">
         <h1 style="color: #5c4a6c;" class="intro-text text-center">
@@ -96,7 +89,10 @@ form view
                 {{form|bootstrap}}
             </form>
         </div>
-        {% if not inst_user  %}
+
+
+
+
                 <div>
                 {% if result_approval.0 %}
                     {% if nomi.nomination.status == 'Interview period' or 'Interview period and Reopening initiated' or 'Interview period and Nomination reopened' and nomi.interview_status == 'Interview Done' %}
@@ -174,10 +170,10 @@ form view
                     {% endif %}
                 {% endif %}
                 </div>
-            {% endif %}
+
     </div>
 
-    {% if not inst_user %}
+
 
         <div>
 
@@ -245,7 +241,6 @@ form view
 
             </div>
 
-    {% endif %}
 </div>
 
 {% endblock content %}

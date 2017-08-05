@@ -713,59 +713,70 @@ def nomination_answer(request, pk):
     all_posts = Post.objects.filter(post_holders=request.user)
     nomination = application.nomination
     auth_user = UserProfile.objects.get(user=request.user)
-
+    access = False
     senate_perm = False
     for post in all_posts:
         if post.perms == 'can ratify the post':
-            senate_perm = True
+            senate = post
+            access = True
+            if senate in nomination.result_approvals.all():
+                senate_perm = True
             break
 
-    inst_user = False
-    if application.user == request.user:
-        inst_user = True
-
-
-
     view_post = None
+
     for post in nomination.nomi_approvals.all():
         if post in all_posts:
             view_post = post
+            access = True
             break
 
-    # result approval things    send,sent,cancel
-    results_approval = [None]*3
 
-    if view_post in nomination.result_approvals.all():
-        if view_post.parent in nomination.result_approvals.all():
-            results_approval[1] = True
-            grand_parent = view_post.parent.parent
-            if grand_parent not in nomination.result_approvals.all():
-                results_approval[2] = True
-        else:
-            results_approval[0] = True
-
-    if request.user in nomination.interview_panel.all():
-        view_post = nomination.nomi_post.parent
-        if view_post.parent in nomination.result_approvals.all():
-            results_approval[1] = True
-            grand_parent = view_post.parent.parent
-            if grand_parent not in nomination.result_approvals.all():
-                results_approval[2] = True
-        else:
-            results_approval[0] = True
+    if application.user == request.user:
+        return render(request, 'nomi_answer_user.html', context={'form': form, 'nomi': application, 'nomi_user': applicant})
 
 
-    if comment_form.is_valid():
-        Commment.objects.create(comments=comment_form.cleaned_data['comment'],
-                                nomi_instance=application, user=request.user)
 
-        return HttpResponseRedirect(reverse('nomi_answer', kwargs={'pk': pk}))
 
-    return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
-                                                        'comment_form': comment_form, 'inst_user': inst_user,
-                                                        'comments': comments_reverse, 'senate_perm': senate_perm,
-                                                        'nomi_pk': nomination.pk, 'result_approval': results_approval,
-                                                        'auth_user': auth_user})
+    if access:
+
+         # result approval things    send,sent,cancel
+        results_approval = [None]*3
+
+        if view_post in nomination.result_approvals.all():
+            if view_post.parent in nomination.result_approvals.all():
+                results_approval[1] = True
+                grand_parent = view_post.parent.parent
+                if grand_parent not in nomination.result_approvals.all():
+                    results_approval[2] = True
+            else:
+                results_approval[0] = True
+
+        if request.user in nomination.interview_panel.all():
+            view_post = nomination.nomi_post.parent
+            if view_post.parent in nomination.result_approvals.all():
+                results_approval[1] = True
+                grand_parent = view_post.parent.parent
+                if grand_parent not in nomination.result_approvals.all():
+                    results_approval[2] = True
+            else:
+                results_approval[0] = True
+
+        if comment_form.is_valid():
+             Commment.objects.create(comments=comment_form.cleaned_data['comment'],
+                                     nomi_instance=application, user=request.user)
+
+             return HttpResponseRedirect(reverse('nomi_answer', kwargs={'pk': pk}))
+
+        return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
+                                                             'comment_form': comment_form,
+                                                             'comments': comments_reverse, 'senate_perm': senate_perm,
+                                                             'nomi_pk': nomination.pk,
+                                                             'result_approval': results_approval,
+                                                             'auth_user': auth_user})
+    else:
+        return render(request, 'no_access.html')
+
 
 
 ## ------------------------------------------------------------------------------------------------------------------ ##
