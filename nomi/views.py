@@ -37,6 +37,8 @@ def index(request):
                 club = Club.objects.get(pk=club_filter.cleaned_data['club'])
                 grouped_nomi = club.club_group.all().filter(status='out')
                 nomi = club.club_nomi.all().filter(group_status='normal').filter(status='Nomination out')
+                re_nomi =  club.club_nomi.all().filter(group_status='normal').filter(status='Interview period and Nomination reopened')
+                nomi = nomi | re_nomi
                 result_query = sorted(chain(nomi, grouped_nomi), key=attrgetter('opening_date'), reverse=True)
 
 
@@ -46,6 +48,9 @@ def index(request):
 
             grouped_nomi = GroupNomination.objects.filter(status='out')
             nomi = Nomination.objects.filter(group_status='normal').filter(status='Nomination out')
+            re_nomi = Nomination.objects.filter(group_status='normal').filter(status='Interview period and Nomination reopened')
+            nomi = nomi | re_nomi
+
             result_query = sorted(chain(nomi, grouped_nomi), key=attrgetter('opening_date'), reverse=True)
 
 
@@ -355,7 +360,7 @@ def nomi_detail(request, nomi_pk):
         status[3] = True
     elif nomi.status == 'Interview period and Reopening initiated':
         status[4] = True
-        if view_post in nomi.renomination.approvals.all():
+        if view_post in nomi.reopennomination.approvals.all():
             renomi_edit = 1
 
     elif nomi.status == 'Interview period and Nomination reopened':
@@ -404,7 +409,7 @@ def nomi_detail(request, nomi_pk):
 
 
     else:
-        if status[1]:
+        if status[1] or status[5]:
             return render(request, 'nomi_detail_user.html', context={'nomi': nomi})
         else:
             return render(request, 'no_access.html')
@@ -1032,6 +1037,8 @@ def profile_view(request):
     pk = request.user.pk
     history = PostHistory.objects.filter(user=request.user)
     pending_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Nomination out')
+    pending_re_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Interview period and Nomination reopened')
+    pending_nomi = pending_nomi | pending_re_nomi
     interview_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Interview period')
     declared_nomi = NominationInstance.objects.filter(user=request.user).\
         filter(nomination__status='Sent for ratification')
