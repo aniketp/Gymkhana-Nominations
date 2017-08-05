@@ -983,6 +983,10 @@ def accept_nomination(request, pk):
     application.status = 'Accepted'
     application.save()
 
+    comment = '<strong>' + str(request.user.userprofile.name) + '</strong>' + ' Accepted '\
+              + '<strong>' + str(application.user.userprofile.name) + '</strong>'
+    status = Commment.objects.create(comments=comment, nomi_instance=application)
+
     return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_accept}))
 
 
@@ -992,6 +996,11 @@ def reject_nomination(request, pk):
     id_reject = application.nomination.pk
     application.status = 'Rejected'
     application.save()
+
+    comment = '<strong>' + str(request.user.userprofile.name) + '</strong>' + ' Rejected ' \
+              + '<strong>' + str(application.user.userprofile.name) + '</strong>'
+    length = len(request.user.userprofile.name)
+    status = Commment.objects.create(comments=comment, nomi_instance=application, name_length=length)
 
     return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_reject}))
 
