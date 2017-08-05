@@ -99,7 +99,7 @@ form view
         {% if not inst_user  %}
                 <div>
                 {% if result_approval.0 %}
-                    {% if nomi.nomination.status == 'Interview period' and nomi.interview_status == 'Interview Done' %}
+                    {% if nomi.nomination.status == 'Interview period' or 'Interview period and Reopening initiated' or 'Interview period and Nomination reopened' and nomi.interview_status == 'Interview Done' %}
 
                         {% if nomi.status %}
                             {% if nomi.status == 'Accepted' %}
@@ -131,7 +131,7 @@ form view
                             </div>
                         {% endif %}
 
-                    {% elif nomi.nomination.status == 'Interview period' and nomi.interview_status == 'Interview Not Done' %}
+                    {% elif nomi.nomination.status == 'Interview period' or 'Interview period and Reopening initiated' or 'Interview period and Nomination reopened' and nomi.interview_status == 'Interview Not Done' %}
                     <div class="row text-center">
                         <div class="col-lg-12">
                             <a href="{% url 'interviewed' nomi.pk %}">
@@ -180,7 +180,7 @@ form view
     {% if not inst_user %}
 
         <div>
-            {% if not nomi.nomination.status == 'Sent for ratification' and result_approval.0 %}
+
                 <hr>
                 <br>
 
@@ -201,7 +201,6 @@ form view
                     </form>
                 </div>
 
-            {% endif %}
 
                 <br>
                 <br>

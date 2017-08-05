@@ -90,6 +90,19 @@ urlpatterns = [
     # nominations/final_nomi_approve/2/43/21
     url(r'^final_nomi_approve/(?P<nomi_pk>\d+)/$', views.final_nomi_approval, name='final_nomi_approval'),
 
+
+    url(r'^re_nomi/(?P<nomi_pk>\d+)/$', views.reopen_nomi, name='reopen_nomi'),
+     # nominations/post_approve/2
+    url(r'^re_nomi_approve/(?P<re_nomi_pk>\d+)/$', views.re_nomi_approval, name='re_nomi_approval'),
+
+    # nominations/nomi_reject/2
+    url(r'^re_nomi_reject/(?P<re_nomi_pk>\d+)/$', views.re_nomi_reject, name='re_nomi_reject'),
+
+    # nominations/final_nomi_approve/2/43/21
+    url(r'^final_re_nomi_approve/(?P<re_nomi_pk>\d+)/$', views.final_re_nomi_approval, name='final_re_nomi_approval'),
+
+
+
     # nominations/group_nomi/2
     url(r'^group_nomi/(?P<pk>\d+)/$', views.group_nominations, name='group_nomi'),
 

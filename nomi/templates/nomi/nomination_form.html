@@ -17,14 +17,15 @@
                 <div style="padding: 0 35px;">
                     <form action="" method="post" style="display: inline">
                         {% csrf_token %}
-                        <table>
+                        <div>
                             {{form|bootstrap}}
-                        </table>
+                        </div>
                         <div class="col-md-6">
                         <input class="btn btn-success btn-block" type="submit" value="submit and start adding question in form" />
                         </div>
                     </form>
                 </div>
+
     </div>
 {% endblock content %}
 

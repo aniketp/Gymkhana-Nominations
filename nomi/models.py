@@ -76,6 +76,7 @@ class Nomination(models.Model):
     tags = models.ManyToManyField(Club, related_name='club_nomi', symmetrical=False, blank=True)
 
     opening_date = models.DateField(null=True, blank=True)
+    re_opening_date = models.DateField(null=True, blank=True,editable=True)
     deadline = models.DateField(null=True, blank=True, editable=True)
     nomi_session = models.ForeignKey(Session, on_delete=models.CASCADE, null=True)
 
@@ -114,6 +115,21 @@ class Nomination(models.Model):
         self.opening_date = datetime.now()
         self.save()
         return self.status
+
+class ReopenNomination(models.Model):
+    nomi = models.OneToOneField(Nomination, on_delete = models.CASCADE)
+    approvals = models.ManyToManyField(Post,symmetrical = False , null = True)
+    reopening_date = models.DateField(null = True, blank= True)
+
+    def re_open_to_users(self):
+        self.nomi.status = 'Interview period and Nomination reopened'
+        self.nomi.re_opening_date = datetime.now()
+        self.nomi.save()
+        return self.nomi
+
+
+
+
 
 
 class GroupNomination(models.Model):
