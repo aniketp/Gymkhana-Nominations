@@ -130,4 +130,7 @@ urlpatterns = [
     # nominations/remove_panelist/23/2
     url(r'^remove_panelist/(?P<nomi_pk>\d+)/(?P<user_pk>\d+)/$', views.remove_panelist, name='remove_panelist'),
 
+    # nominations/renew
+    url(r'^renew/$', views.end_tenure, name='end_tenure'),
+
 ]

@@ -2,7 +2,7 @@ import json
 from itertools import chain
 from operator import attrgetter
 import pyperclip
-import datetime
+from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
@@ -1037,6 +1037,27 @@ def replace_user(request, pk):
     nomi.replace()
     return HttpResponseRedirect(reverse('applicants', kwargs={'pk': pk}))
 
+@login_required
+def end_tenure(request):
+    posts = Post.objects.all()
+
+    for post in posts:
+        for holder in post.post_holders.all():
+            try:
+                history = PostHistory.objects.get(post=post, user=holder)
+
+                if datetime.now() > history.end:
+                    post.post_holders.remove(holder)
+
+            except ObjectDoesNotExist:
+                return HttpResponseRedirect(reverse('index'))
+
+    return HttpResponseRedirect(reverse('index'))
+
+    # Import all posts of all clubs
+    # Check if their session has expired (31-3-2018 has passed)
+    # Remove them from the post
+    # Create the post history (No need, its already created)
 
 ## ------------------------------------------------------------------------------------------------------------------ ##
 ############################################       PROFILE VIEWS      ##################################################

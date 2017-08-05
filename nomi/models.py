@@ -6,6 +6,21 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.utils import timezone
 
+def default_end_date():
+    now = datetime.now()
+    end = now.replace(day=31, month=3, year=now.year)
+
+    if end > now:
+        return end
+    else:
+        next_year = now.year + 1
+        return end.replace(year=next_year)
+
+
+class Session(models.Model):
+    tenure = models.IntegerField(default=datetime.now().year, choices=SESSION_CHOICES, null=True)
+    end_date = models.DateField(default=default_end_date)
+
 
 class Club(models.Model):
     club_name = models.CharField(max_length=100, null=True)
@@ -32,33 +47,18 @@ class Post(models.Model):
     def remove_holders(self):
         for holder in self.post_holders.all():
             history = PostHistory.objects.get(post=self, user=holder)
-            history.end = datetime.now()
-            history.save()
 
-        self.post_holders.clear()
+            if datetime.now() > history.end:
+                self.post_holders.remove(holder)
+
         return self.post_holders
-
-
-def default_end_date():
-    now = datetime.now()
-    end = now.replace(day=31, month=3, year=now.year)
-
-    if end > now:
-        return end
-    else:
-        next_year = now.year + 1
-        return end.replace(year=next_year)
-
-class Session(models.Model):
-    tenure = models.IntegerField(default=datetime.now().year, choices=SESSION_CHOICES, null=True)
-    end_date = models.DateField(default=default_end_date)
 
 
 class PostHistory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     start = models.DateField(auto_now_add=True)
-    end = models.DateField(null=True, blank=True, editable=True)
+    end = models.DateField(default=default_end_date, blank=True, editable=True)
     post_tenure = models.ForeignKey(Session, on_delete=models.CASCADE, null=True)
 
 
@@ -102,7 +102,7 @@ class Nomination(models.Model):
     def replace(self):
         for holder in self.nomi_post.post_holders.all():
             history = PostHistory.objects.get(post=self.nomi_post, user=holder)
-            history.end = datetime.now()
+            history.end = default_end_date()
             history.save()
 
         self.nomi_post.post_holders.clear()
