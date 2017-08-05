@@ -213,7 +213,13 @@ form view
                 <div class="well well-sm" style="padding-bottom: 10px">
                     <div class="row">
                         <div class="col-lg-6">
-                            <p><span style="font-weight: bold">{{comment.user.userprofile.name}}: </span> {{comment.comments}}</p>
+                            {% if comment.user %}
+                                <p><span style="font-weight: bold">{{comment.user.userprofile.name}}: </span> {{comment.comments}}</p>
+                            {% else %}
+                                {% autoescape off %}
+                                <p><span>{{comment.comments}}</span></p>
+                                {% endautoescape %}
+                            {% endif %}
                         </div>
                         {% if comment.user.userprofile.user == request.user and result_approval.0 %}
                             <div class="col-lg-6 text-right">
