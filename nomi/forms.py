@@ -17,13 +17,10 @@ class PostForm(forms.Form):
         self.fields['post_name'] = forms.CharField()
         if parent.club.club_set.all():
             self.fields['club'] = forms.ChoiceField(
-                choices=[(o.id, o) for o in Club.objects.filter(club_parent=parent.club)],
-                widget=forms.Select
-         )
+                choices=[(o.id, o) for o in Club.objects.filter(club_parent=parent.club)], widget=forms.Select)
+
         else:
-            self.fields['club'] = forms.ChoiceField(
-                choices=[(parent.club.id, parent.club)],
-                widget=forms.Select)
+            self.fields['club'] = forms.ChoiceField(choices=[(parent.club.id, parent.club)], widget=forms.Select)
 
 
 class ClubForm(forms.Form):
