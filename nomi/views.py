@@ -141,7 +141,7 @@ def post_view(request, pk):
 
     post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
     nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
-    re_nomi_approval = ReopenNomination.objects.filter(approvals = post).filter(nomi__status = 'Interview period and Reopening initiated')
+    re_nomi_approval = ReopenNomination.objects.filter(approvals = post).filter(nomi__status='Interview period and Reopening initiated')
     group_nomi_approvals = GroupNomination.objects.filter(status='created').filter(approvals=post)
     result_approvals = Nomination.objects.filter(result_approvals=post).exclude(status='Work done').\
         exclude(status='Nomination created')
@@ -198,7 +198,7 @@ def senate_post_create(request, pk):
             club_id = post_form.cleaned_data['club']
             club = Club.objects.get(pk=club_id)
             Post.objects.create(post_name=post_form.cleaned_data['post_name'], club=club, parent=parent,
-                                perms="can approve post and send nominations to users")
+                                perms="can approve post and send nominations to users", status='Post on work')
 
             return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
 
