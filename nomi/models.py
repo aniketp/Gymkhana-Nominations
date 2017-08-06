@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from .choices import *
-from datetime import datetime
+from datetime import datetime,date
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.utils import timezone
@@ -24,8 +24,36 @@ def session_end_date(session):
 
 
 class Session(models.Model):
-    tenure = models.IntegerField(default=datetime.now().year, choices=SESSION_CHOICES, null=True)
-    end_date = models.DateField(default=default_end_date)
+    start_year = models.IntegerField(default=date.today().year, unique= True)
+    end_year = models.IntegerField(null = True)
+    tenure = models.IntegerField(default=datetime.now().year, choices=SESSION_CHOICES, null=True, blank=True)
+    end_date = models.DateField(default=date.today,null = True)
+
+    def get_current_session(self):
+        now = date.today()
+        end = now.replace(day=31, month=3, year=now.year)
+
+        if end > now:
+            self.start_year = now.year - 1
+            self.end_year = now.year
+            self.end_date =end
+        else:
+            self.start_year = now.year
+            self.end_year = now.year +1
+            next_year = now.year + 1
+            self.end_date = end.replace(year=next_year)
+
+        self.save()
+        return self
+
+    def get_next_session(self):
+        c_session = self.get_current_session()
+        self.start_year = c_session.start_year +1
+        self.end_year = c_session.end_year +1
+        self.end_date = c_session.end_date.replace(year=self.end_year)
+        self.save()
+        return self
+
 
 
 class Club(models.Model):
@@ -127,15 +155,9 @@ class Nomination(models.Model):
 
 
 class ReopenNomination(models.Model):
-<<<<<<< HEAD
     nomi = models.OneToOneField(Nomination, on_delete = models.CASCADE)
     approvals = models.ManyToManyField(Post,symmetrical = False)
     reopening_date = models.DateField(null = True, blank= True)
-=======
-    nomi = models.OneToOneField(Nomination, on_delete=models.CASCADE)
-    approvals = models.ManyToManyField(Post, symmetrical=False)
-    reopening_date = models.DateField(null=True, blank=True)
->>>>>>> ae7ec43afe5f66beff93f385a21fa6199fa3e58a
 
     def re_open_to_users(self):
         self.nomi.status = 'Interview period and Nomination reopened'
