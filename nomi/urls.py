@@ -53,6 +53,9 @@ urlpatterns = [
     # nominations/create
     url(r'^create/(?P<pk>\d+)/$', views.nomination_create, name='nomi_create'),
 
+    # nominations/create/senate
+    url(r'^create/senate/(?P<pk>\d+)/$', views.senate_nomination_create, name='senate_nomi_create'),
+
     # nominations/2/update
     url(r'^(?P<pk>\d+)/update/$', views.NominationUpdate.as_view(), name='nomi_update'),
 
@@ -64,6 +67,9 @@ urlpatterns = [
 
     # nominations/createpost/2
     url(r'^createpost/(?P<pk>\d+)/$', views.post_create, name='post_create'),
+
+    # nominations/createpost/senate/2
+    url(r'^createpost/senate/(?P<pk>\d+)/$', views.senate_post_create, name='senate_post_create'),
 
     # nominations/post_approve/2/34
     url(r'^post_approve/(?P<post_pk>\d+)/(?P<view_pk>\d+)/$', views.post_approval, name='post_approval'),
@@ -92,7 +98,8 @@ urlpatterns = [
 
 
     url(r'^re_nomi/(?P<nomi_pk>\d+)/$', views.reopen_nomi, name='reopen_nomi'),
-     # nominations/post_approve/2
+
+    # nominations/post_approve/2
     url(r'^re_nomi_approve/(?P<re_nomi_pk>\d+)/$', views.re_nomi_approval, name='re_nomi_approval'),
 
     # nominations/nomi_reject/2
@@ -100,7 +107,6 @@ urlpatterns = [
 
     # nominations/final_nomi_approve/2/43/21
     url(r'^final_re_nomi_approve/(?P<re_nomi_pk>\d+)/$', views.final_re_nomi_approval, name='final_re_nomi_approval'),
-
 
 
     # nominations/group_nomi/2

@@ -36,7 +36,7 @@ class Session(models.Model):
         if end > now:
             self.start_year = now.year - 1
             self.end_year = now.year
-            self.end_date =end
+            self.end_date = end
         else:
             self.start_year = now.year
             self.end_year = now.year +1
@@ -113,7 +113,7 @@ class Nomination(models.Model):
     re_opening_date = models.DateField(null=True, blank=True, editable=True)
     deadline = models.DateField(null=True, blank=True, editable=True)
 
-    nomi_session = models.ForeignKey(Session, on_delete=models.CASCADE, null=True, blank= True)
+    nomi_session = models.IntegerField(choices=SESSION_CHOICES, null=True, blank=True)
 
     interview_panel = models.ManyToManyField(User, related_name='panel', symmetrical=False, blank=True)
 

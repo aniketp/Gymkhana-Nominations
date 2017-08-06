@@ -141,7 +141,7 @@ def post_view(request, pk):
 
     post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
     nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
-    re_nomi_approval = ReopenNomination.objects.filter(approvals = post).filter(nomi__status = 'Interview period and Reopening initiated')
+    re_nomi_approval = ReopenNomination.objects.filter(approvals = post).filter(nomi__status='Interview period and Reopening initiated')
     group_nomi_approvals = GroupNomination.objects.filter(status='created').filter(approvals=post)
     result_approvals = Nomination.objects.filter(result_approvals=post).exclude(status='Work done').\
         exclude(status='Nomination created')
@@ -158,7 +158,7 @@ def post_view(request, pk):
     if request.user in post.post_holders.all():
         return render(request, 'post1.html', context={'post': post, 'child_posts': child_posts_reverse,
                                                       'post_approval': post_approvals, 'tag_form': tag_form,
-                                                      'nomi_approval': nomi_approvals,'re_nomi_approval':re_nomi_approval,
+                                                      'nomi_approval': nomi_approvals, 're_nomi_approval':re_nomi_approval,
                                                       'group_nomi_approvals': group_nomi_approvals,
                                                       'result_approvals': result_approvals})
     else:
@@ -176,6 +176,29 @@ def post_create(request, pk):
             club_id = post_form.cleaned_data['club']
             club = Club.objects.get(pk=club_id)
             Post.objects.create(post_name=post_form.cleaned_data['post_name'], club=club, parent=parent)
+
+            return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
+
+    else:
+        club = parent.club
+        post_form = PostForm(parent)
+
+    if request.user in parent.post_holders.all():
+        return render(request, 'nomi/post_form.html', context={'form': post_form, 'parent': parent})
+    else:
+        return render(request, 'no_access.html')
+
+
+@login_required
+def senate_post_create(request, pk):
+    parent = Post.objects.get(pk=pk)
+    if request.method == 'POST':
+        post_form = PostForm(parent, request.POST)
+        if post_form.is_valid():
+            club_id = post_form.cleaned_data['club']
+            club = Club.objects.get(pk=club_id)
+            Post.objects.create(post_name=post_form.cleaned_data['post_name'], club=club, parent=parent,
+                                perms="can approve post and send nominations to users", status='Post on work')
 
             return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
 
@@ -318,6 +341,38 @@ def nomination_create(request, pk):
         title_form = NominationForm()
 
     return render(request, 'nomi/nomination_form.html', context={'form': title_form, 'post': post})
+
+
+@login_required
+def senate_nomination_create(request, pk):
+    post = Post.objects.get(pk=pk)
+    if request.method == 'POST':
+        title_form = NominationForm(request.POST)
+        if title_form.is_valid():
+            post = Post.objects.get(pk=pk)
+
+            questionnaire = Questionnaire.objects.create(name=title_form.cleaned_data['title'])
+
+            nomination = Nomination.objects.create(name=title_form.cleaned_data['title'],
+                                                   description=title_form.cleaned_data['description'],
+                                                   opening_date=datetime.now(),
+                                                   deadline=title_form.cleaned_data['deadline'],
+                                                   nomi_session=title_form.cleaned_data['nomi_session'],
+                                                   nomi_form=questionnaire, nomi_post=post,
+                                                   status='Nomination out',
+                                                   year_choice=title_form.cleaned_data['year_choice'],
+                                                   hall_choice=title_form.cleaned_data['hall_choice'],
+                                                   dept_choice=title_form.cleaned_data['dept_choice'],
+                                                   )
+
+            pk = questionnaire.pk
+            return HttpResponseRedirect(reverse('forms:creator_form', kwargs={'pk': pk}))
+
+    else:
+        title_form = NominationForm()
+
+    return render(request, 'nomi/nomination_form.html', context={'form': title_form, 'post': post})
+
 
 
 class NominationUpdate(UpdateView):
