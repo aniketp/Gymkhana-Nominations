@@ -25,7 +25,11 @@
         <div class="container-fluid">
               {% if post.tag_perms == 'Can create' %}
              <div class="col-lg-6 text-center">
-                <a  class="btn btn-success" href="{% url 'post_create' post.pk %}">Create a New Post</a>
+                {% if not post.perms == 'can ratify the post' %}
+                    <a class="btn btn-success" href="{% url 'post_create' post.pk %}">Create a New Post</a>
+                {% else %}
+                    <a class="btn btn-success" href="{% url 'senate_post_create' post.pk %}">Create a New Post</a>
+                {% endif %}
             </div>
             <div class="col-lg-6 text-center">
                 <div class="dropdown col-lg-12">

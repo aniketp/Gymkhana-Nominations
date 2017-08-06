@@ -92,6 +92,7 @@ class Nomination(models.Model):
 
     nomi_session = models.IntegerField(null=True)
 
+
     interview_panel = models.ManyToManyField(User, related_name='panel', symmetrical=False, blank=True)
 
     year_choice = models.CharField(max_length=100, choices=YEAR_1, null=True)

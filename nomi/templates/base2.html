@@ -40,22 +40,17 @@
                 <li><a href="{% url 'profile' %}" id="navbar-links">Profile</a></li>
                 {% block posts%}
                     {% if my_posts %}
-                        {% if senate and length == 1 %}
-                        {% else %}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" id="navbar-links" data-toggle="dropdown" role="button"
                                aria-expanded="false">My Posts <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
 
                                     {% for post in my_posts %}
-                                        {% if not post.perms == 'can ratify the post' %}
                                             <li><a href="{% url 'post_view' post.pk %}" >{{post.post_name}}</a></li>
-                                        {% endif %}
                                     {% endfor %}
 
                             </ul>
                         </li>
-                        {% endif %}
                     {% endif %}
 
                     {% if senate %}
