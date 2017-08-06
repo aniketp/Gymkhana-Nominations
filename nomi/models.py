@@ -36,7 +36,7 @@ class Session(models.Model):
         if end > now:
             self.start_year = now.year - 1
             self.end_year = now.year
-            self.end_date =end
+            self.end_date = end
         else:
             self.start_year = now.year
             self.end_year = now.year +1
