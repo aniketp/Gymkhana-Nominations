@@ -158,7 +158,7 @@ def post_view(request, pk):
     if request.user in post.post_holders.all():
         return render(request, 'post1.html', context={'post': post, 'child_posts': child_posts_reverse,
                                                       'post_approval': post_approvals, 'tag_form': tag_form,
-                                                      'nomi_approval': nomi_approvals,'re_nomi_approval':re_nomi_approval,
+                                                      'nomi_approval': nomi_approvals, 're_nomi_approval':re_nomi_approval,
                                                       'group_nomi_approvals': group_nomi_approvals,
                                                       'result_approvals': result_approvals})
     else:
@@ -176,6 +176,29 @@ def post_create(request, pk):
             club_id = post_form.cleaned_data['club']
             club = Club.objects.get(pk=club_id)
             Post.objects.create(post_name=post_form.cleaned_data['post_name'], club=club, parent=parent)
+
+            return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
+
+    else:
+        club = parent.club
+        post_form = PostForm(parent)
+
+    if request.user in parent.post_holders.all():
+        return render(request, 'nomi/post_form.html', context={'form': post_form, 'parent': parent})
+    else:
+        return render(request, 'no_access.html')
+
+
+@login_required
+def senate_post_create(request, pk):
+    parent = Post.objects.get(pk=pk)
+    if request.method == 'POST':
+        post_form = PostForm(parent, request.POST)
+        if post_form.is_valid():
+            club_id = post_form.cleaned_data['club']
+            club = Club.objects.get(pk=club_id)
+            Post.objects.create(post_name=post_form.cleaned_data['post_name'], club=club, parent=parent,
+                                perms="can approve post and send nominations to users")
 
             return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
 
