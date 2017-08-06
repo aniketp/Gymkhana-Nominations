@@ -27,7 +27,7 @@ admin.site.register(Post, PostAdmin)
 
 
 class ClubAdmin(admin.ModelAdmin):
-    list_display = ('pk','club_name', 'club_parent')
+    list_display = ('pk', 'club_name', 'club_parent')
 
 admin.site.register(Club, ClubAdmin)
 
@@ -37,8 +37,13 @@ class PostHistoryAdmin(admin.ModelAdmin):
 
 admin.site.register(PostHistory, PostHistoryAdmin)
 
-admin.site.register(GroupNomination)
 
+class DeratificationAdmin(admin.ModelAdmin):
+    list_display = ('name', 'post', 'status')
+
+admin.site.register(Deratification, DeratificationAdmin)
+
+
+admin.site.register(GroupNomination)
 admin.site.register(ReopenNomination)
 admin.site.register(Session)
-

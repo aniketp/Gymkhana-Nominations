@@ -62,8 +62,12 @@
     <ul class="nav nav-tabs">
         <li class="active"><a href="#child-posts" data-toggle="tab" aria-expanded="true">Posts under you</a></li>
         <li><a href="#post-approval" data-toggle="tab" aria-expanded="false">Posts to be approved ({{post_approval.count}})</a></li>
-        <li><a href="#nomi-approval" data-toggle="tab" aria-expanded="false">Nominations to be approved ({{ nomi_approval.count }})</a></li>
-        <li><a href="#declared" data-toggle="tab" aria-expanded="false">Results to be approved</a></li>
+        {% if not post.perms == 'can ratify the post' %}
+            <li><a href="#nomi-approval" data-toggle="tab" aria-expanded="false">Nominations to be approved ({{ nomi_approval.count }})</a></li>
+        {% else %}
+            <li><a href="#nomi-approval" data-toggle="tab" aria-expanded="false">Deratification requests (not work)</a></li>
+        {% endif %}
+        <li><a href="#declared" data-toggle="tab" aria-expanded="false">Results to be approved ({{ result_approvals.count }})</a></li>
     </ul>
 
     <div id="myTabContent" class="tab-content">

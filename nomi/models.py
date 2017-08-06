@@ -191,6 +191,12 @@ class NominationInstance(models.Model):
         return str(self.user) + ' ' + str(self.id)
 
 
+class Deratification(models.Model):
+    name = models.CharField(max_length=30, null=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
+    status = models.BooleanField(default=False)
+
+
 class Commment(models.Model):
     comments = models.TextField(max_length=1000, null=True, blank=True)
     nomi_instance = models.ForeignKey(NominationInstance, on_delete=models.CASCADE, null=True)
