@@ -14,11 +14,6 @@
     <a href="{% url 'end_tenure' %}">
         <div class="btn btn-success">Renew</div>
     </a>
-    {% for post in my_posts %}
-        <li><a href="{% url 'post_view' post.pk %}" >{{post.post_name}}</a></li>
-    {% endfor %}
-
-
 
     {% for nomi in nomi %}
 

@@ -113,7 +113,7 @@ class Nomination(models.Model):
     re_opening_date = models.DateField(null=True, blank=True, editable=True)
     deadline = models.DateField(null=True, blank=True, editable=True)
 
-    nomi_session = models.ForeignKey(Session, on_delete=models.CASCADE, null=True, blank= True)
+    nomi_session = models.IntegerField(choices=SESSION_CHOICES, null=True, blank=True)
 
     interview_panel = models.ManyToManyField(User, related_name='panel', symmetrical=False, blank=True)
 
