@@ -29,30 +29,7 @@ class Session(models.Model):
     tenure = models.IntegerField(default=datetime.now().year, choices=SESSION_CHOICES, null=True, blank=True)
     end_date = models.DateField(default=date.today,null = True)
 
-    def get_current_session(self):
-        now = date.today()
-        end = now.replace(day=31, month=3, year=now.year)
 
-        if end > now:
-            self.start_year = now.year - 1
-            self.end_year = now.year
-            self.end_date =end
-        else:
-            self.start_year = now.year
-            self.end_year = now.year +1
-            next_year = now.year + 1
-            self.end_date = end.replace(year=next_year)
-
-        self.save()
-        return self
-
-    def get_next_session(self):
-        c_session = self.get_current_session()
-        self.start_year = c_session.start_year +1
-        self.end_year = c_session.end_year +1
-        self.end_date = c_session.end_date.replace(year=self.end_year)
-        self.save()
-        return self
 
 
 
@@ -113,7 +90,7 @@ class Nomination(models.Model):
     re_opening_date = models.DateField(null=True, blank=True, editable=True)
     deadline = models.DateField(null=True, blank=True, editable=True)
 
-    nomi_session = models.ForeignKey(Session, on_delete=models.CASCADE, null=True, blank= True)
+    nomi_session = models.IntegerField(null=True)
 
     interview_panel = models.ManyToManyField(User, related_name='panel', symmetrical=False, blank=True)
 

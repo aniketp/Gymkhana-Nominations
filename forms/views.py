@@ -21,12 +21,13 @@ def creator_form(request, pk):
         d_form.save()
         return HttpResponseRedirect(reverse('forms:creator_form', kwargs={'pk': pk}))
 
-    return render(request, 'forms/creator_form.html', context={'form': form, 'questions': questions, 'd_form': d_form,
-                                                               'questionnaire': questionnaire, 'pk': pk})
+    return render(request, 'forms/nomi_ques_and_des.html', context={'form': form, 'questions': questions, 'd_form': d_form,
+                                                               'pk': pk,'nomi':nomi})
 
 
 def add_ques(request, pk):
     questionnaire = Questionnaire.objects.get(pk=pk)
+    nomi = questionnaire.nomination
 
     if request.method == 'POST':
         form = BuildQuestion(request.POST)
@@ -39,7 +40,7 @@ def add_ques(request, pk):
     else:
         form = BuildQuestion()
 
-    return render(request, 'forms/build_ques.html', context={'form': form, 'questionnaire': questionnaire})
+    return render(request, 'forms/build_ques.html', context={'form': form, 'nomi':nomi})
 
 
 class QuestionUpdate(UpdateView):
@@ -52,27 +53,5 @@ class QuestionUpdate(UpdateView):
         qk = self.kwargs['qk']
         return reverse('forms:creator_form', kwargs={'pk': qk})
 
-## not in use
-def show_form(request, pk):
-    questionnaire = get_object_or_404(Questionnaire, id=pk)
-    form = questionnaire.get_form(request.POST or None)
-    pk = questionnaire.pk
-    tk = questionnaire.nomination.pk
 
-    if form.is_valid():
-        questionnaire.add_answer(request.user, form.cleaned_data)
-        return HttpResponseRedirect(reverse('nomi_apply', kwargs={'pk': tk}))
-
-    return render(request, 'forms/show_form.html', context={'form': form, 'questionnaire': questionnaire, 'pk': pk})
-
-
-def show_answer_form(request, pk):
-    questionnaire = get_object_or_404(Questionnaire, id=pk)
-    filled_form = FilledForm.objects.filter(questionnaire=questionnaire).filter(applicant=request.user)
-    actual_form = filled_form[0]
-    data = json.loads(actual_form.data)
-    form = questionnaire.get_form(data)
-    return render(request, 'forms/ans_form.html', context={'form': form})
-
-## -----------------------------------------------
 

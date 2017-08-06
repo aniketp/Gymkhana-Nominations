@@ -18,3 +18,7 @@ def group_status(group):
             break
 
     return out
+
+@register.filter
+def give_session(st_year):
+    return str(st_year) + " - " + str(st_year+1)

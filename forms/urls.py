@@ -16,13 +16,4 @@ urlpatterns = [
     url(r'^update/ques/(?P<pk>\d+)/(?P<qk>\d+)/$',views.QuestionUpdate.as_view(),name='ques_update'),
 
 
-
-    # forms/2 ----not in project use
-    url(r'^(?P<pk>\d+)/$', views.show_form, name='show_form'),
-
-    # forms/ans/2   ---not in use
-    url(r'^ans/(?P<pk>\d+)/$', views.show_answer_form, name='ans_form'),
-
-
-
 ]

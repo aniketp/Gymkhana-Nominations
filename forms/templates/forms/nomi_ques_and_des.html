@@ -1,29 +1,42 @@
 {% extends "base2.html" %}
 {% block title %}
-Nomination Form
+Edit nomination
 {% endblock %}
 
 {% load bootstrap %}
 {% load staticfiles %}
+{% load temp_tags %}
+
+
+
 
 {% block content %}
     <div class="profile-content">
-                <div class="jumbotron jumbotron-post">
-                    <div class="jumbotron-title">
-                        <h1 style="text-align: center">{{ questionnaire.name }}</h1>
-                    </div>
-                    <div class="jumbotron-club">
-                        <h3 style="font-size: 35px; text-align: center"></h3>
-                    </div>
-                </div>
+        <div class="well well-sm" style="padding-bottom: 20px;background: rgb(143, 186, 178);">
+            <h2 class="text-center" style="color: #343e2e;">{{nomi.name}} </h2>
+            <h3 class="text-center">
+                {{nomi.status}}
 
+            </h3>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-lg-6 text-center">
+                <h4><span style=" font-size: 20px;color: #1b3013">Post:</span> {{ nomi.nomi_post }}</h4>
+            </div>
+            <div class="col-lg-6 text-center">
+                <h4><span style=" font-size: 20px;color: #1b3013">Club:</span> {{ nomi.nomi_post.club }} ( {{ nomi.nomi_session|give_session }} )</h4>
+            </div>
+        </div>
+        <hr>
+        <br>
 
 
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#edit-questions" data-toggle="tab">Edit Form Questions</a></li>
                     <li><a href="#preview" data-toggle="tab">Preview Nomination Form</a></li>
                     <li><a href="#descript" data-toggle="tab">Edit Description</a></li>
-                    <li><a class="=btn btn-success" href = "{% url 'nomi_detail' questionnaire.nomination.pk %}">See Detail</a> </li>
+                    <li><a class="=btn btn-success" href = "{% url 'nomi_detail' nomi.pk %}">See Detail</a> </li>
                 </ul>
                 <div id="myTabContent" class="tab-content">
                     <div class="tab-pane fade active in" id="edit-questions">
