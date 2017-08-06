@@ -17,19 +17,9 @@ def default_end_date():
         return end.replace(year=next_year)
 
 def session_end_date(session):
-    now = datetime.now()
+    now = date.today()
     next_year = session + 1
-
     return now.replace(day=31, month=3, year=next_year)
-
-
-class Session(models.Model):
-    start_year = models.IntegerField(default=date.today().year, unique= True)
-    end_year = models.IntegerField(null = True)
-    tenure = models.IntegerField(default=datetime.now().year, choices=SESSION_CHOICES, null=True, blank=True)
-    end_date = models.DateField(default=date.today,null = True)
-
-
 
 
 
@@ -69,8 +59,8 @@ class PostHistory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     start = models.DateField(auto_now_add=True)
-    end = models.DateField(default=default_end_date, blank=True, editable=True)
-    post_tenure = models.IntegerField(choices=SESSION_CHOICES, null=True)
+    end = models.DateField(null= True,blank=True, editable=True)
+    post_session = models.IntegerField(null=True)
 
 
 class Nomination(models.Model):
@@ -109,7 +99,7 @@ class Nomination(models.Model):
         self.status = 'Work done'
         self.save()
         for each in selected:
-            PostHistory.objects.create(post=self.nomi_post, user=each.user, end=session_end_date(session))
+            PostHistory.objects.create(post=self.nomi_post, user=each.user, end=session_end_date(session) , post_session = session)
             self.nomi_post.post_holders.add(each.user)
 
         return self.nomi_post.post_holders

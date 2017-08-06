@@ -40,5 +40,5 @@ admin.site.register(PostHistory, PostHistoryAdmin)
 admin.site.register(GroupNomination)
 
 admin.site.register(ReopenNomination)
-admin.site.register(Session)
+
 
