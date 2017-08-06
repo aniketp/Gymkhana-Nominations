@@ -118,3 +118,9 @@ SESSION_CHOICES = (
         (2017, 2017),
         (2018, 2018),
 )
+
+DERATIFICATION = (
+    ('safe', 'safe'),
+    ('requested', 'requested'),
+    ('deratified', 'deratified'),
+)

@@ -1053,6 +1053,16 @@ def result_approval(request, nomi_pk):
     else:
         return render(request, 'no_access.html')
 
+@login_required
+def create_deratification_request(request, post_pk, user_pk):
+    post = Post.objects.get(pk=post_pk)
+    user = post.post_holders.get(pk=user_pk)
+
+    deratify = Deratification.objects.create(name=user, post=post, status='requested',
+                                             deratify_approvals=post.parent.parent)
+
+    return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk}))
+
 
 '''
 mark_as_interviewed, reject_nomination, accept_nomination: Changes the interview status/ nomination_instance status
