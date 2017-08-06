@@ -123,9 +123,9 @@ class Nomination(models.Model):
 
 
 class ReopenNomination(models.Model):
-    nomi = models.OneToOneField(Nomination, on_delete = models.CASCADE)
-    approvals = models.ManyToManyField(Post,symmetrical = False)
-    reopening_date = models.DateField(null = True, blank= True)
+    nomi = models.OneToOneField(Nomination, on_delete=models.CASCADE)
+    approvals = models.ManyToManyField(Post,symmetrical=False)
+    reopening_date = models.DateField(null=True, blank=True)
 
     def re_open_to_users(self):
         self.nomi.status = 'Interview period and Nomination reopened'
@@ -157,6 +157,13 @@ class NominationInstance(models.Model):
 
     def __str__(self):
         return str(self.user) + ' ' + str(self.id)
+
+
+class Deratification(models.Model):
+    name = models.ForeignKey(User, max_length=30, null=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
+    status = models.CharField(max_length=10, choices=DERATIFICATION, default='safe')
+    deratify_approvals = models.ManyToManyField(Post, related_name='deratify_approvals', symmetrical=False, blank=True)
 
 
 class Commment(models.Model):

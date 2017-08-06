@@ -1049,6 +1049,52 @@ def result_approval(request, nomi_pk):
     else:
         return render(request, 'no_access.html')
 
+@login_required
+def create_deratification_request(request, post_pk, user_pk):     # Unsecure
+    post = Post.objects.get(pk=post_pk)
+    user = post.post_holders.get(pk=user_pk)
+
+    deratify = Deratification.objects.create(name=user, post=post, status='requested',
+                                             deratify_approvals=post.parent.parent)
+
+    return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk}))
+
+
+@login_required
+def approve_deratification_request(request):
+    objects = Deratification.objects.all()
+    my_posts = Post.objects.filter(post_holders=request.user)
+
+    access = False
+    for case in objects:
+        for approvals in case.deratify_approvals.all():
+            if request.user in approvals.post_holders.all():
+                access = True
+
+    if access:
+        for post in my_posts:
+            if post.perms == 'can ratify the post':
+                final_deratification()
+
+            else:
+                pass
+
+    # import deratification objects (of which cureent user is part of administration)
+    # check is the post is senate or not
+    # if not, replace the approval with the parent
+
+
+@login_required
+def reject_deratification_request(request, post_pk, user_pk):
+    pass
+
+
+@login_required
+def final_deratification(request, post_pk, user_pk):
+    pass
+    # import deratification objects (of which cureent user is part of administration)
+    # the post is senate
+    # remove the post holder
 
 '''
 mark_as_interviewed, reject_nomination, accept_nomination: Changes the interview status/ nomination_instance status
@@ -1088,8 +1134,7 @@ def reject_nomination(request, pk):
 
     comment = '<strong>' + str(request.user.userprofile.name) + '</strong>' + ' Rejected ' \
               + '<strong>' + str(application.user.userprofile.name) + '</strong>'
-    length = len(request.user.userprofile.name)
-    status = Commment.objects.create(comments=comment, nomi_instance=application, name_length=length)
+    status = Commment.objects.create(comments=comment, nomi_instance=application)
 
     return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_reject}))
 
