@@ -53,6 +53,9 @@ urlpatterns = [
     # nominations/create
     url(r'^create/(?P<pk>\d+)/$', views.nomination_create, name='nomi_create'),
 
+    # nominations/create/senate
+    url(r'^create/senate/(?P<pk>\d+)/$', views.senate_nomination_create, name='senate_nomi_create'),
+
     # nominations/2/update
     url(r'^(?P<pk>\d+)/update/$', views.NominationUpdate.as_view(), name='nomi_update'),
 

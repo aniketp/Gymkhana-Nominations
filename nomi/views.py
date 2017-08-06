@@ -343,6 +343,38 @@ def nomination_create(request, pk):
     return render(request, 'nomi/nomination_form.html', context={'form': title_form, 'post': post})
 
 
+@login_required
+def senate_nomination_create(request, pk):
+    post = Post.objects.get(pk=pk)
+    if request.method == 'POST':
+        title_form = NominationForm(request.POST)
+        if title_form.is_valid():
+            post = Post.objects.get(pk=pk)
+
+            questionnaire = Questionnaire.objects.create(name=title_form.cleaned_data['title'])
+
+            nomination = Nomination.objects.create(name=title_form.cleaned_data['title'],
+                                                   description=title_form.cleaned_data['description'],
+                                                   opening_date=datetime.now(),
+                                                   deadline=title_form.cleaned_data['deadline'],
+                                                   nomi_session=title_form.cleaned_data['nomi_session'],
+                                                   nomi_form=questionnaire, nomi_post=post,
+                                                   status='Nomination out',
+                                                   year_choice=title_form.cleaned_data['year_choice'],
+                                                   hall_choice=title_form.cleaned_data['hall_choice'],
+                                                   dept_choice=title_form.cleaned_data['dept_choice'],
+                                                   )
+
+            pk = questionnaire.pk
+            return HttpResponseRedirect(reverse('forms:creator_form', kwargs={'pk': pk}))
+
+    else:
+        title_form = NominationForm()
+
+    return render(request, 'nomi/nomination_form.html', context={'form': title_form, 'post': post})
+
+
+
 class NominationUpdate(UpdateView):
     model = Nomination
     fields = ['name', 'description', 'year_choice', 'hall_choice', 'dept_choice']

@@ -86,7 +86,13 @@
                     <h2>Nominations for the post</h2>
                     <div class="row">
                         <div class="col-lg-12 text-center">
-                            <a href="{% url 'nomi_create' post.pk %}" class="btn btn-primary nomi-button">Create a New Nomination</a>
+                            {% if post.parent.perms == 'can ratify the post' %}
+                                <a href="{% url 'senate_nomi_create' post.pk %}"
+                                   class="btn btn-primary nomi-button">Create a New Nomination</a>
+                            {% else %}
+                                <a href="{% url 'nomi_create' post.pk %}"
+                                   class="btn btn-primary nomi-button">Create a New Nomination</a>
+                            {% endif %}
                         </div>
                     </div>
                     <br>
