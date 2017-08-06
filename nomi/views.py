@@ -292,9 +292,6 @@ def post_reject(request, view_pk, post_pk):
 def final_post_approval(request, view_pk, post_pk):
     post = Post.objects.get(pk=post_pk)
     viewer = Post.objects.get(pk=view_pk)
-    to_add = viewer.parent
-
-
     access = False
     for each_post in post.post_approvals.all():
         if request.user in each_post.post_holders.all():
@@ -302,7 +299,6 @@ def final_post_approval(request, view_pk, post_pk):
             break
 
     if access:
-        post.tags.add(to_add.club)
         post.status = 'Post approved'
         post.save()
         return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view_pk}))

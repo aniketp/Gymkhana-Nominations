@@ -109,7 +109,7 @@
                             Status : Sent to parent
                         </div>
                         {% else %}
-                            {% if post.perms == 'can approve post and send nominations to users' %}
+                            {% if post.perms == 'can ratify the post' %}
 
                                 <div class="col-lg-4 text-center">
                                     <a  class="btn btn-success" href="{% url 'final_post_approval' post_pk=ch_post.pk view_pk=post.pk %}">Approve</a>
