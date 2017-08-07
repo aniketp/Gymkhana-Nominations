@@ -48,7 +48,6 @@ urlpatterns = [
 
     # nominations/append/2 (redirect)
     url(r'^append/fdybdjhhvjdk5878fkjjgj521/(?P<pk>\d+)$', views.append_user, name='append_user'),
-    url(r'^replace/fdybdjhhvjdk5878fkjjgj521/(?P<pk>\d+)$', views.replace_user, name='replace_user'),
 
     # nominations/create
     url(r'^create/(?P<pk>\d+)/$', views.nomination_create, name='nomi_create'),
@@ -119,7 +118,7 @@ urlpatterns = [
     url(r'^cancel_result_approval/(?P<nomi_pk>\d+)/$', views.cancel_result_approval, name='cancel_result_approval'),
 
     # nominations/ratify/2
-    url(r'^ratify/(?P<nomi_pk>\d+)/$', views.ratify, name='ratify'),
+    url(r'^request_ratify/(?P<nomi_pk>\d+)/$', views.request_ratify, name='request_ratify'),
 
     # nominations/cancel_ratify/2
     url(r'^cancel_ratify/(?P<nomi_pk>\d+)/$', views.cancel_ratify, name='cancel_ratify'),

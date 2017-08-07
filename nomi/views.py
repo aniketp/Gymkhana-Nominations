@@ -740,6 +740,13 @@ def applications(request, pk):
         else:
             reopen = DeadlineForm()
 
+        if request.method == 'POST':
+            ratify = ConfirmApplication(request.POST)
+            if ratify.is_valid():
+                nomination.append()
+                return HttpResponseRedirect(reverse('applicants', kwargs={'pk': pk}))
+        else:
+            ratify = ConfirmApplication()
 
         form_confirm = ConfirmApplication(request.POST or None)
         if form_confirm.is_valid():
@@ -754,7 +761,7 @@ def applications(request, pk):
                                                            'result_approval': results_approval,
                                                            'accepted': accepted, 'rejected': rejected, 'status': status,
                                                            'pending': pending, 'perm': permission,
-                                                           'senate_perm': senate_permission,'reopen':reopen})
+                                                           'senate_perm': senate_permission,'reopen':reopen,'ratify':ratify})
 
 
 
@@ -966,7 +973,7 @@ def remove_from_group(request, nomi_pk, gr_pk):
 ## ------------------------------------------------------------------------------------------------------------------ ##
 
 @login_required
-def ratify(request, nomi_pk):
+def request_ratify(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     access = False
     view_post = None
@@ -1144,16 +1151,21 @@ append_user, replace_user: Adds and Removes the current post-holders according t
 
 @login_required
 def append_user(request, pk):
-    nomi = Nomination.objects.get(pk=pk)
-    nomi.append()
-    return HttpResponseRedirect(reverse('applicants', kwargs={'pk': pk}))
+    posts = request.user.posts.all()
+    access = False
+    for post in posts:
+        if post.perms == "can ratify the post":
+            access = True
+            break
+
+    if access:
+        nomi = Nomination.objects.get(pk=pk)
+        nomi.append()
+        return HttpResponseRedirect(reverse('applicants', kwargs={'pk': pk}))
+    else:
+        return render(request, 'no_access.html')
 
 
-@login_required
-def replace_user(request, pk):
-    nomi = Nomination.objects.get(pk=pk)
-    nomi.replace()
-    return HttpResponseRedirect(reverse('applicants', kwargs={'pk': pk}))
 
 @login_required
 def end_tenure(request):
