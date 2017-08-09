@@ -495,9 +495,16 @@ def nomi_approval(request, nomi_pk):
             view_post = apv_post
             break
     if access:
-        to_add = view_post.parent
-        nomi.nomi_approvals.add(to_add)
-        nomi.tags.add(to_add.club)
+        if view_post.elder_brother:
+            to_add = view_post.elder_brother
+            nomi.nomi_approvals.add(to_add)
+            nomi.tags.add(to_add.parent.club)
+            nomi.tags.add(to_add.club)
+        else:
+            to_add = view_post.parent
+            nomi.nomi_approvals.add(to_add)
+            nomi.tags.add(to_add.club)
+
         return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
     else:
         return render(request, 'no_access.html')
@@ -532,8 +539,15 @@ def final_nomi_approval(request, nomi_pk):
             view_post = apv_post
             break
     if access:
-        to_add = view_post.parent
-        nomi.tags.add(to_add.club)
+        if view_post.elder_brother:
+            to_add = view_post.elder_brother
+            nomi.tags.add(to_add.parent.club)
+            nomi.tags.add(to_add.club)
+
+        else:
+            to_add = view_post.parent
+            nomi.tags.add(to_add.club)
+
         nomi.open_to_users()
         return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
     else:

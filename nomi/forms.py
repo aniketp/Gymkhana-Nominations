@@ -39,6 +39,7 @@ class PostForm(forms.Form):
     def __init__(self, parent, *args, **kwargs):
         super(PostForm, self).__init__(*args, **kwargs)
         self.fields['post_name'] = forms.CharField()
+
         if parent.perms == 'can ratify the post':
             self.fields['elder_brother'] = forms.ChoiceField(
                 choices=[(o.id, o) for o in Post.objects.filter(parent=parent)], widget=forms.Select)
