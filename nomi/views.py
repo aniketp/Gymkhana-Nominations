@@ -37,7 +37,7 @@ def index(request):
                 club = Club.objects.get(pk=club_filter.cleaned_data['club'])
                 grouped_nomi = club.club_group.all().filter(status='out')
                 nomi = club.club_nomi.all().filter(group_status='normal').filter(status='Nomination out')
-                re_nomi =  club.club_nomi.all().filter(group_status='normal').filter(status='Interview period and Nomination reopened')
+                re_nomi = club.club_nomi.all().filter(group_status='normal').filter(status='Interview period and Nomination reopened')
                 nomi = nomi | re_nomi
                 result_query = sorted(chain(nomi, grouped_nomi), key=attrgetter('opening_date'), reverse=True)
 
@@ -197,7 +197,10 @@ def senate_post_create(request, pk):
         if post_form.is_valid():
             club_id = post_form.cleaned_data['club']
             club = Club.objects.get(pk=club_id)
-            Post.objects.create(post_name=post_form.cleaned_data['post_name'], club=club, parent=parent,
+            elder_brother_id = post_form.cleaned_data['elder_brother']
+            elder_brother = Post.objects.get(pk=elder_brother_id)
+            Post.objects.create(post_name=post_form.cleaned_data['post_name'],
+                                elder_brother=elder_brother, club=club, parent=parent,
                                 perms="can approve post and send nominations to users", status='Post on work')
 
             return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))

@@ -38,8 +38,9 @@ class Club(models.Model):
 class Post(models.Model):
     post_name = models.CharField(max_length=500, null=True)
     club = models.ForeignKey(Club, on_delete=models.CASCADE, null=True, blank=True)
-    tags = models.ManyToManyField(Club, related_name='club_posts', symmetrical=False,blank=True)
+    tags = models.ManyToManyField(Club, related_name='club_posts', symmetrical=False, blank=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    elder_brother = models.ForeignKey('self', related_name="elder", on_delete=models.CASCADE, null=True, blank=True)
     post_holders = models.ManyToManyField(User, related_name='posts', blank=True)
     post_approvals = models.ManyToManyField('self', related_name='approvals', symmetrical=False, blank=True)
     status = models.CharField(max_length=50, choices=POST_STATUS, default='Post created')
@@ -102,13 +103,14 @@ class Nomination(models.Model):
 
 
         session = Session.objects.filter(start_year=st_year).first()
-        if session == None:
+        if session is None:
             session = Session.objects.create(start_year = st_year)
 
         self.status = 'Work done'
         self.save()
         for each in selected:
-            PostHistory.objects.create(post=self.nomi_post, user=each.user, end=session_end_date(session.start_year) , post_session = session)
+            PostHistory.objects.create(post=self.nomi_post, user=each.user, end=session_end_date(session.start_year),
+                                       post_session = session)
             self.nomi_post.post_holders.add(each.user)
 
         return self.nomi_post.post_holders
