@@ -40,7 +40,7 @@ class Post(models.Model):
     club = models.ForeignKey(Club, on_delete=models.CASCADE, null=True, blank=True)
     tags = models.ManyToManyField(Club, related_name='club_posts', symmetrical=False, blank=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
-    elder_brother = models.ForeignKey('self', related_name="elder", on_delete=models.CASCADE, null=True, blank=True)
+    elder_brother = models.ForeignKey('self', related_name="elder", on_delete=models.CASCADE, null=True)
     post_holders = models.ManyToManyField(User, related_name='posts', blank=True)
     post_approvals = models.ManyToManyField('self', related_name='approvals', symmetrical=False, blank=True)
     status = models.CharField(max_length=50, choices=POST_STATUS, default='Post created')
@@ -235,6 +235,9 @@ def ensure_parent_in_post_approvals(sender, **kwargs):
         if parent:
             post.post_approvals.add(parent)
             post.tags.add(parent.club)
+        big_bro = post.elder_brother
+
+            # add big bro if SNT want teckriti post in info module ask kunal
 
         if post.club:
             post.tags.add(post.club)

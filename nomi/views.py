@@ -175,7 +175,7 @@ def post_create(request, pk):
         if post_form.is_valid():
             club_id = post_form.cleaned_data['club']
             club = Club.objects.get(pk=club_id)
-            Post.objects.create(post_name=post_form.cleaned_data['post_name'], club=club, parent=parent)
+            Post.objects.create(post_name=post_form.cleaned_data['post_name'], club=club, parent=parent,elder_brother= parent)
 
             return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
 
@@ -498,7 +498,7 @@ def nomi_approval(request, nomi_pk):
         if view_post.elder_brother:
             to_add = view_post.elder_brother
             nomi.nomi_approvals.add(to_add)
-            nomi.tags.add(to_add.parent.club)
+            nomi.tags.add(view_post.parent.club)
             nomi.tags.add(to_add.club)
         else:
             to_add = view_post.parent
@@ -541,7 +541,7 @@ def final_nomi_approval(request, nomi_pk):
     if access:
         if view_post.elder_brother:
             to_add = view_post.elder_brother
-            nomi.tags.add(to_add.parent.club)
+            nomi.tags.add(view_post.parent.club)
             nomi.tags.add(to_add.club)
 
         else:
@@ -602,7 +602,7 @@ def re_nomi_approval(request, re_nomi_pk):
             view_post = apv_post
             break
     if access:
-        to_add = view_post.parent
+        to_add = view_post.elder_brother
         re_nomi.approvals.add(to_add)
         return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': re_nomi.nomi.pk}))
     else:
