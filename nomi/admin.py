@@ -46,3 +46,4 @@ admin.site.register(Deratification, DeratificationAdmin)
 
 admin.site.register(GroupNomination)
 admin.site.register(ReopenNomination)
+admin.site.register(Session)

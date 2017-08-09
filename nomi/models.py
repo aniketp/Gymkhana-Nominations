@@ -21,7 +21,11 @@ def session_end_date(session):
     next_year = session + 1
     return now.replace(day=31, month=3, year=next_year)
 
+class Session(models.Model):
+    start_year = models.IntegerField(unique=True)
 
+    def __str__(self):
+        return str(self.start_year)
 
 class Club(models.Model):
     club_name = models.CharField(max_length=100, null=True)
@@ -60,7 +64,7 @@ class PostHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     start = models.DateField(auto_now_add=True)
     end = models.DateField(null= True,blank=True, editable=True)
-    post_session = models.IntegerField(null=True)
+    post_session = models.ForeignKey(Session,on_delete = models.CASCADE, null=True)
 
 
 class Nomination(models.Model):
@@ -94,12 +98,17 @@ class Nomination(models.Model):
 
     def append(self):
         selected = NominationInstance.objects.filter(nomination=self, status='Accepted')
-        session = self.nomi_session
+        st_year = self.nomi_session
+
+
+        session = Session.objects.filter(start_year=st_year).first()
+        if session == None:
+            session = Session.objects.create(start_year = st_year)
 
         self.status = 'Work done'
         self.save()
         for each in selected:
-            PostHistory.objects.create(post=self.nomi_post, user=each.user, end=session_end_date(session) , post_session = session)
+            PostHistory.objects.create(post=self.nomi_post, user=each.user, end=session_end_date(session.start_year) , post_session = session)
             self.nomi_post.post_holders.add(each.user)
 
         return self.nomi_post.post_holders
