@@ -201,7 +201,7 @@ def senate_post_create(request, pk):
             elder_brother = Post.objects.get(pk=elder_brother_id)
             Post.objects.create(post_name=post_form.cleaned_data['post_name'],
                                 elder_brother=elder_brother, club=club, parent=parent,
-                                perms="can approve post and send nominations to users", status='Post on work')
+                                perms=post_form.cleaned_data['power'], status='Post on work')
 
             return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
 
@@ -284,12 +284,12 @@ def post_reject(request, view_pk, post_pk):
             break
 
     if access:
-        post.post_approvals.remove(to_remove)
+        post.delete()
 
     return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view_pk}))
 
 
-# final approval by gen-sec level, only add gymkhana tag to the given post,gen-sec parent not given post approval
+# final approval by senate
 #is_safe
 @login_required
 def final_post_approval(request, view_pk, post_pk):
@@ -427,7 +427,7 @@ def nomi_detail(request, nomi_pk):
 
 
     if access:
-        if view_post.perms == 'can approve post and send nominations to users':
+        if view_post.perms == 'can approve post and send nominations to users' or view_post.perms == 'can ratify the post':
             power_to_send = 1
         else:
             power_to_send = 0
@@ -544,7 +544,7 @@ def final_nomi_approval(request, nomi_pk):
             nomi.tags.add(view_post.parent.club)
             nomi.tags.add(to_add.club)
 
-        else:
+        if view_post.parent:
             to_add = view_post.parent
             nomi.tags.add(to_add.club)
 

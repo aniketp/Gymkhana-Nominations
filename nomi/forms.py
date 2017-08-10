@@ -43,6 +43,8 @@ class PostForm(forms.Form):
         if parent.perms == 'can ratify the post':
             self.fields['elder_brother'] = forms.ChoiceField(
                 choices=[(parent.id,parent)] + [(o.id, o) for o in Post.objects.filter(parent=parent)], widget=forms.Select)
+            self.fields['power'] = forms.ChoiceField(
+                choices=[("normal", "normal"), ("can approve post and send nominations to users", "can approve and send nominations to users")], widget=forms.Select)
 
         if parent.club.club_set.all():
             self.fields['club'] = forms.ChoiceField(
