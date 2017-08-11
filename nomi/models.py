@@ -40,9 +40,10 @@ class Post(models.Model):
     club = models.ForeignKey(Club, on_delete=models.CASCADE, null=True, blank=True)
     tags = models.ManyToManyField(Club, related_name='club_posts', symmetrical=False, blank=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
-    elder_brother = models.ForeignKey('self', related_name="elder", on_delete=models.CASCADE, null=True,blank=True)
+    elder_brother = models.ForeignKey('self', related_name="little_bro", on_delete=models.CASCADE, null=True,blank=True)
     post_holders = models.ManyToManyField(User, related_name='posts', blank=True)
     post_approvals = models.ManyToManyField('self', related_name='approvals', symmetrical=False, blank=True)
+    take_approval = models.ForeignKey('self', related_name="give_approval", on_delete=models.SET_NULL, null=True,blank=True)
     status = models.CharField(max_length=50, choices=POST_STATUS, default='Post created')
     perms = models.CharField(max_length=200, choices=POST_PERMS, default='normal')
     tag_perms = models.CharField(max_length=20, choices=TAG_PERMS, default='normal')
@@ -74,18 +75,20 @@ class Nomination(models.Model):
     brief_desc = models.TextField(max_length=300, null=True, blank=True)
     nomi_post = models.ForeignKey(Post, null=True)
     nomi_form = models.OneToOneField('forms.Questionnaire', null=True, blank=True)
+    nomi_session = models.IntegerField(null=True)
 
     status = models.CharField(max_length=50, choices=STATUS, default='Nomination created')
     result_approvals = models.ManyToManyField(Post, related_name='result_approvals', symmetrical=False, blank=True)
     nomi_approvals = models.ManyToManyField(Post, related_name='nomi_approvals', symmetrical=False, blank=True)
+
     group_status = models.CharField(max_length=50, choices=GROUP_STATUS, default='normal')
+
     tags = models.ManyToManyField(Club, related_name='club_nomi', symmetrical=False, blank=True)
 
     opening_date = models.DateField(null=True, blank=True)
     re_opening_date = models.DateField(null=True, blank=True, editable=True)
     deadline = models.DateField(null=True, blank=True, editable=True)
 
-    nomi_session = models.IntegerField(null=True)
 
 
     interview_panel = models.ManyToManyField(User, related_name='panel', symmetrical=False, blank=True)
@@ -174,7 +177,7 @@ class Deratification(models.Model):
     name = models.ForeignKey(User, max_length=30, null=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
     status = models.CharField(max_length=10, choices=DERATIFICATION, default='safe')
-    deratify_approvals = models.ManyToManyField(Post, related_name='deratify_approvals', symmetrical=False, blank=True)
+    deratify_approval = models.ForeignKey(Post,related_name='to_deratify',on_delete=models.CASCADE,null = True)
 
 
 class Commment(models.Model):
@@ -221,6 +224,7 @@ def ensure_parent_in_approvals(sender, **kwargs):
         nomi.tags.add(post.club)
         nomi.tags.add(parent.club)
 
+
     if nomi.description:
         if not nomi.brief_desc:
             nomi.brief_desc = nomi.description[:280]
@@ -235,11 +239,12 @@ def ensure_parent_in_post_approvals(sender, **kwargs):
         if parent:
             post.post_approvals.add(parent)
             post.tags.add(parent.club)
-        big_bro = post.elder_brother
 
-            # add big bro if SNT want teckriti post in info module ask kunal
+        big_bro = post.elder_brother
+        if big_bro:
+            post.tags.add(big_bro.club)
 
         if post.club:
             post.tags.add(post.club)
-        
+
 

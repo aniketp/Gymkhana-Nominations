@@ -68,7 +68,7 @@
                  <div>
                      <ul class="list-group">
                          <li class="list-group-item">
-                             {% if parent.perms == 'can approve post and send nominations to users' %}
+                             {% if parent.perms == 'can ratify the post' %}
                              <a class="list-group-item" href="{% url 'final_post_approval' post_pk=post.pk view_pk=parent.pk %}">Approve the post</a>
                              {% else %}
                                 {% if parent.parent in post.post_approvals.all %}
@@ -116,7 +116,12 @@
                     <div style="height: 215px; overflow-y: scroll">
                         <ol>
                             {% for post_holder in post.post_holders.all %}
-                            <li>{{post_holder.userprofile.name}}</li>
+                            <li>
+                                
+                                {{post_holder.userprofile.name}}  --
+                                <a href="{% url 'request_deratify' post_pk=post.pk user_pk=post_holder.pk %}">initiate_deratification</a>
+
+                            </li>
                             {% endfor %}
                         </ol>
                     </div>

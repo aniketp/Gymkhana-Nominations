@@ -33,19 +33,21 @@
                 {% endif %}
             </div>
             <div class="col-lg-6 text-center">
-                <div class="dropdown col-lg-12">
-                    <div class="btn btn-secondary btn-danger dropdown-toggle" type="button"
-                     id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Create a new Tag
-                </div>
-
-                 <div class="dropdown-menu " role="menu">
-                     <form action="" method="post">
-                         {% csrf_token %}
-                         <p>{{tag_form|bootstrap}}</p>
-                         <input class="btn btn-success btn-block text-center" type="submit" value="submit" />
-                     </form>
-                 </div>
+                <div class="text-center">
+                    <div class="btn-group">
+                        <button class="btn btn-secondary btn-danger dropdown-toggle" style="width: auto" type="button"
+                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                             Create a new tag
+                            <i class="fa fa-caret-down  fa-lg" aria-hidden="true"></i>
+                        </button>
+                         <div class="dropdown-menu " role="menu">
+                             <form action="" method="post" style="display: inline">
+                                 {% csrf_token %}
+                                 <p>{{tag_form|bootstrap}}</p>
+                                 <input class="btn btn-success btn-block" type="submit" value="submit" />
+                             </form>
+                         </div>
+                    </div>
                 </div>
             </div>
             {% else %}
@@ -63,12 +65,11 @@
     <ul class="nav nav-tabs">
         <li class="active"><a href="#child-posts" data-toggle="tab" aria-expanded="true">Posts under you</a></li>
         <li><a href="#post-approval" data-toggle="tab" aria-expanded="false">Posts to be approved ({{post_approval.count}})</a></li>
-        {% if not post.perms == 'can ratify the post' %}
-            <li><a href="#nomi-approval" data-toggle="tab" aria-expanded="false">Nominations to be approved ({{ nomi_approval.count }})</a></li>
-        {% else %}
-            <li><a href="#nomi-approval" data-toggle="tab" aria-expanded="false">Deratification requests (not work)</a></li>
-        {% endif %}
+        <li><a href="#nomi-approval" data-toggle="tab" aria-expanded="false">Nominations to be approved ({{ count }})</a></li>
         <li><a href="#declared" data-toggle="tab" aria-expanded="false">Results to be approved ({{ result_approvals.count }})</a></li>
+        {% if to_deratify %}
+        <li><a href="#to_deratify" data-toggle="tab" aria-expanded="false">Users to be deratified ({{ to_deratify.count }})</a></li>
+        {% endif %}
     </ul>
 
     <div id="myTabContent" class="tab-content">
@@ -114,27 +115,15 @@
                             Status : Sent to parent
                         </div>
                         {% else %}
-                            {% if post.perms == 'can ratify the post' %}
-
                                 <div class="col-lg-4 text-center">
-                                    <a  class="btn btn-success" href="{% url 'final_post_approval' post_pk=ch_post.pk view_pk=post.pk %}">Approve</a>
+                                    <a  class="btn btn-success" href="{% url 'post_approval' post_pk=ch_post.pk %}">Approve</a>
                                 </div>
 
-                            {% else %}
 
                                 <div class="col-lg-4 text-center">
-                                    <a  class="btn btn-success" href="{% url 'post_approval' post_pk=ch_post.pk view_pk=post.pk %}">Approve</a>
+                                    <a  class="btn btn-danger" href="{% url 'post_reject' post_pk=ch_post.pk  %}">Delete</a>
                                 </div>
 
-                            {% endif %}
-
-                            {% if not post == ch_post.parent %}
-
-                                <div class="col-lg-4 text-center">
-                                    <a  class="btn btn-danger" href="{% url 'post_reject' post_pk=ch_post.pk view_pk=post.pk %}">Reject</a>
-                                </div>
-
-                            {% endif %}
                         {% endif %}
                         </div>
                      </div>
@@ -146,7 +135,7 @@
         <div class="tab-pane fade profile-nominations" id="nomi-approval">
             <br>
             {% if nomi_approval %}
-            {% if post.perms == "can approve post and send nominations to users" %}
+            {% if post.perms == "can approve post and send nominations to users" or post.perms == "can ratify the post" %}
             <a href="{% url 'group_nomi' post.pk %}">
                 <div class="btn btn-secondary btn-info ">Group Nominations</div>
             </a>
@@ -248,6 +237,44 @@
             {% endfor %}
 
         </div>
+
+        {% if to_deratify %}
+
+         <!-- to_deratify----------------------------------------------------------------------------------------------   -->
+        <div class="tab-pane fade profile-nominations" id="to_deratify">
+            <br>
+            {% for each in to_deratify %}
+
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{each.post}}</h3>
+                </div>
+                <div class="panel-body">
+                    <p class="profile-post-name">
+                        <span>Name: </span>{{each.name.userprofile.name}} (requested to be deratified)</p>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <p><span>club : </span>{{each.post.club}}</p>
+                        </div>
+
+                                <div class="col-lg-4 text-center">
+                                    <a  class="btn btn-success" href="{% url 'approve_deratify' each.pk %}">Approve</a>
+                                </div>
+
+
+                                <div class="col-lg-4 text-center">
+                                    <a  class="btn btn-danger" href="{% url 'cancel_deratify' each.pk  %}">Cancel</a>
+                                </div>
+
+
+                        </div>
+                     </div>
+                 </div>
+            {% endfor %}
+        </div>
+
+        {% endif %}
+
 
     </div>
 

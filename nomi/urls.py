@@ -71,14 +71,11 @@ urlpatterns = [
     url(r'^createpost/senate/(?P<pk>\d+)/$', views.senate_post_create, name='senate_post_create'),
 
     # nominations/post_approve/2/34
-    url(r'^post_approve/(?P<post_pk>\d+)/(?P<view_pk>\d+)/$', views.post_approval, name='post_approval'),
+    url(r'^post_approve/(?P<post_pk>\d+)/$', views.post_approval, name='post_approval'),
 
     # nominations/post_reject/2/43
-    url(r'^post_reject/(?P<post_pk>\d+)/(?P<view_pk>\d+)/$', views.post_reject, name='post_reject'),
+    url(r'^post_reject/(?P<post_pk>\d+)/$', views.post_reject, name='post_reject'),
 
-    # nominations/final_post_approve/2/43
-    url(r'^final_post_approve/(?P<post_pk>\d+)/(?P<view_pk>\d+)/$', views.final_post_approval,
-        name='final_post_approval'),
 
     # nominations/child_post/2/8
     url(r'^child_post/(?P<pk>\d+)/$', views.child_post_view, name='child_post'),
@@ -137,5 +134,14 @@ urlpatterns = [
 
     # nominations/renew
     url(r'^renew/$', views.end_tenure, name='end_tenure'),
+
+
+    # nominations/ratify/2
+    url(r'^request_deratify/(?P<post_pk>\d+)/(?P<user_pk>\d+)/$', views.create_deratification_request, name='request_deratify'),
+
+    url(r'^approve_deratify/(?P<pk>\d+)/$', views.approve_deratification_request, name='approve_deratify'),
+
+    # nominations/cancel_ratify/2
+    url(r'^cancel_deratify/(?P<pk>\d+)/$', views.reject_deratification_request, name='cancel_deratify'),
 
 ]

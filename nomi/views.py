@@ -143,8 +143,9 @@ def post_view(request, pk):
     nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
     re_nomi_approval = ReopenNomination.objects.filter(approvals = post).filter(nomi__status='Interview period and Reopening initiated')
     group_nomi_approvals = GroupNomination.objects.filter(status='created').filter(approvals=post)
-    result_approvals = Nomination.objects.filter(result_approvals=post).exclude(status='Work done').\
-        exclude(status='Nomination created')
+    result_approvals = Nomination.objects.filter(result_approvals=post).exclude(status='Work done').exclude(status='Nomination created')
+    count = nomi_approvals.count() + group_nomi_approvals.count() + re_nomi_approval.count()
+    to_deratify = Deratification.objects.filter(deratify_approval = post).filter(status = 'requested')
 
     if request.method == 'POST':
         tag_form = ClubForm(request.POST)
@@ -160,7 +161,7 @@ def post_view(request, pk):
                                                       'post_approval': post_approvals, 'tag_form': tag_form,
                                                       'nomi_approval': nomi_approvals, 're_nomi_approval':re_nomi_approval,
                                                       'group_nomi_approvals': group_nomi_approvals,
-                                                      'result_approvals': result_approvals})
+                                                      'result_approvals': result_approvals,'count':count,"to_deratify":to_deratify})
     else:
         return render(request, 'no_access.html')
 
@@ -175,8 +176,9 @@ def post_create(request, pk):
         if post_form.is_valid():
             club_id = post_form.cleaned_data['club']
             club = Club.objects.get(pk=club_id)
-            Post.objects.create(post_name=post_form.cleaned_data['post_name'], club=club, parent=parent,elder_brother= parent)
-
+            post = Post.objects.create(post_name=post_form.cleaned_data['post_name'], club=club, parent=parent,elder_brother= parent)
+            post.take_approval = parent
+            post.save()
             return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
 
     else:
@@ -250,80 +252,66 @@ def child_post_view(request, pk):
 # the viewer_post which have access add its parent for approval of post and also add parent club as post tag..
 # is_safe
 @login_required
-def post_approval(request, view_pk, post_pk):
+def post_approval(request, post_pk):
     post = Post.objects.get(pk=post_pk)
-    viewer = Post.objects.get(pk=view_pk)
-
-
     access = False
-    for each_post in post.post_approvals.all():
-        if request.user in each_post.post_holders.all():
-            access = True
-            break
+    if request.user in post.take_approval.post_holders.all():
+        access = True
+
 
     if access:
-        to_add = viewer.parent
-        post.post_approvals.add(to_add)
-        post.tags.add(to_add.club)
-        return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view_pk}))
+        if post.take_approval.perms == "can ratify the post":
+            post.status = 'Post approved'
+            post.save()
+            return HttpResponseRedirect(reverse('post_view', kwargs={'pk': post.take_approval.pk}))
+        else:
+            to_add = post.take_approval.parent
+            current = post.take_approval
+            post.post_approvals.add(to_add)
+            post.tags.add(to_add.club)
+            post.take_approval = to_add
+            post.save()
+            return HttpResponseRedirect(reverse('post_view', kwargs={'pk': current.pk}))
     else:
         return render(request, 'no_access.html')
 
-# the viewer removes himself from approvals ,thus sending back the post down...
+# the viewer removes himself from approvals ,thus delete the post down...
 # is_safe
 @login_required
-def post_reject(request, view_pk, post_pk):
+def post_reject(request, post_pk):
     post = Post.objects.get(pk=post_pk)
-    viewer = Post.objects.get(pk=view_pk)
-    to_remove = viewer
 
     access = False
-    for each_post in post.post_approvals.all():
-        if request.user in each_post.post_holders.all():
-            access = True
-            break
+    if request.user in post.take_approval.post_holders.all():
+        access = True
+
 
     if access:
         post.delete()
 
-    return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view_pk}))
+    return HttpResponseRedirect(reverse('post_view', kwargs={'pk': post.take_approval.pk}))
 
 
-# final approval by senate
-#is_safe
-@login_required
-def final_post_approval(request, view_pk, post_pk):
-    post = Post.objects.get(pk=post_pk)
-    viewer = Post.objects.get(pk=view_pk)
-    access = False
-    for each_post in post.post_approvals.all():
-        if request.user in each_post.post_holders.all():
-            access = True
-            break
 
-    if access:
-        post.status = 'Post approved'
-        post.save()
-        return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view_pk}))
-    else:
-        return render(request, 'no_access.html')
 
 ## ------------------------------------------------------------------------------------------------------------------ ##
 #########################################    NOMINATION RELATED VIEWS   ################################################
 ## ------------------------------------------------------------------------------------------------------------------ ##
 
-
+# only post parent should create nomi...
+# safe
 @login_required
 def nomination_create(request, pk):
     post = Post.objects.get(pk=pk)
-    if request.method == 'POST':
-        title_form = NominationForm(request.POST)
-        if title_form.is_valid():
-            post = Post.objects.get(pk=pk)
+    if request.user in post.parent.post_holders.all():
+        if request.method == 'POST':
+            title_form = NominationForm(request.POST)
+            if title_form.is_valid():
+                post = Post.objects.get(pk=pk)
 
-            questionnaire = Questionnaire.objects.create(name=title_form.cleaned_data['title'])
+                questionnaire = Questionnaire.objects.create(name=title_form.cleaned_data['title'])
 
-            nomination = Nomination.objects.create(name=title_form.cleaned_data['title'],
+                nomination = Nomination.objects.create(name=title_form.cleaned_data['title'],
                                                    description=title_form.cleaned_data['description'],
                                                    deadline=title_form.cleaned_data['deadline'],
                                                    nomi_session=title_form.cleaned_data['nomi_session'],
@@ -333,13 +321,16 @@ def nomination_create(request, pk):
                                                    dept_choice=title_form.cleaned_data['dept_choice'],
                                                    )
 
-            pk = questionnaire.pk
-            return HttpResponseRedirect(reverse('forms:creator_form', kwargs={'pk': pk}))
+                pk = questionnaire.pk
+                return HttpResponseRedirect(reverse('forms:creator_form', kwargs={'pk': pk}))
+
+        else:
+            title_form = NominationForm()
+
+        return render(request, 'nomi/nomination_form.html', context={'form': title_form, 'post': post})
 
     else:
-        title_form = NominationForm()
-
-    return render(request, 'nomi/nomination_form.html', context={'form': title_form, 'post': post})
+        return render(request, 'no_access.html')
 
 
 @login_required
@@ -487,6 +478,7 @@ def remove_panelist(request, nomi_pk, user_pk):
 @login_required
 def nomi_approval(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
+
     access = False
     view_post = 0
     for apv_post in nomi.nomi_approvals.all():
@@ -494,17 +486,18 @@ def nomi_approval(request, nomi_pk):
             access = True
             view_post = apv_post
             break
+
     if access:
         if view_post.elder_brother:
             to_add = view_post.elder_brother
             nomi.nomi_approvals.add(to_add)
             nomi.tags.add(view_post.parent.club)
             nomi.tags.add(to_add.club)
+
         else:
             to_add = view_post.parent
             nomi.nomi_approvals.add(to_add)
             nomi.tags.add(to_add.club)
-
         return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
     else:
         return render(request, 'no_access.html')
@@ -904,8 +897,9 @@ def group_nominations(request, pk):
                     for tag in nomi.tags.all():
                         group.tags.add(tag)
                     nomi.group_status = 'grouped'
-                    to_add = post.parent
-                    nomi.nomi_approvals.add(to_add)
+                    if post.parent:
+                        to_add = post.parent
+                        nomi.nomi_approvals.add(to_add)
                     nomi.save()
                     nomi.open_to_users()
                 return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
@@ -956,8 +950,9 @@ def add_to_group(request, pk, gr_pk):
                 for tag in nomi.tags.all():
                     group.tags.add(tag)
                 nomi.group_status = 'grouped'
-                to_add = post.parent
-                nomi.nomi_approvals.add(to_add)
+                if post.parent:
+                    to_add = post.parent
+                    nomi.nomi_approvals.add(to_add)
                 nomi.save()
                 nomi.open_to_users()
             return HttpResponseRedirect(reverse('group_nomi_detail', kwargs={'pk': gr_pk}))
@@ -1074,51 +1069,51 @@ def result_approval(request, nomi_pk):
         return render(request, 'no_access.html')
 
 @login_required
-def create_deratification_request(request, post_pk, user_pk):     # Unsecure
+def create_deratification_request(request, post_pk, user_pk):
     post = Post.objects.get(pk=post_pk)
-    user = post.post_holders.get(pk=user_pk)
+    user =User.objects.get(pk=user_pk)
 
-    deratify = Deratification.objects.create(name=user, post=post, status='requested',
-                                             deratify_approvals=post.parent.parent)
+    if request.user in post.parent.post_holders.all():
+        deratify = Deratification.objects.create(name=user, post=post,status = 'requested', deratify_approval=post.parent)
+
 
     return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk}))
 
 
 @login_required
-def approve_deratification_request(request):
-    objects = Deratification.objects.all()
-    my_posts = Post.objects.filter(post_holders=request.user)
+def approve_deratification_request(request,pk):
+    to_deratify = Deratification.objects.get(pk = pk)
+    view = to_deratify.deratify_approval
+    if request.user in view.post_holders.all():
+        if view.perms == "can ratify the post":
+             to_deratify.post.post_holders.remove(to_deratify.name)
+             history=PostHistory.objects.filter(user=to_deratify.name).filter(post = to_deratify.post)
+             history.delete()
+             to_deratify.status = 'deratified'
+             to_deratify.save()
 
-    access = False
-    for case in objects:
-        for approvals in case.deratify_approvals.all():
-            if request.user in approvals.post_holders.all():
-                access = True
+        else:
+            to_deratify.deratify_approval = view.parent
+            to_deratify.save()
 
-    if access:
-        for post in my_posts:
-            if post.perms == 'can ratify the post':
-                final_deratification()
-
-            else:
-                pass
-
-    # import deratification objects (of which cureent user is part of administration)
-    # check is the post is senate or not
-    # if not, replace the approval with the parent
+        return HttpResponseRedirect(reverse('post_view', kwargs={'pk':view.pk}))
+    else:
+        return render(request, 'no_access.html')
 
 
-@login_required
-def reject_deratification_request(request, post_pk, user_pk):
-    pass
 
 
 @login_required
-def final_deratification(request, post_pk, user_pk):
-    pass
-    # import deratification objects (of which cureent user is part of administration)
-    # the post is senate
-    # remove the post holder
+def reject_deratification_request(request, pk):
+    to_deratify = Deratification.objects.get(pk=pk)
+    view = to_deratify.deratify_approval
+    if request.user in view.post_holders.all():
+        to_deratify.delete()
+
+    else:
+        return render(request, 'no_access.html')
+
+
 
 '''
 mark_as_interviewed, reject_nomination, accept_nomination: Changes the interview status/ nomination_instance status

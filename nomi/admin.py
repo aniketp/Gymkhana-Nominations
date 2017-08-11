@@ -38,10 +38,8 @@ class PostHistoryAdmin(admin.ModelAdmin):
 admin.site.register(PostHistory, PostHistoryAdmin)
 
 
-class DeratificationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'post', 'status')
 
-admin.site.register(Deratification, DeratificationAdmin)
+admin.site.register(Deratification)
 
 
 admin.site.register(GroupNomination)
