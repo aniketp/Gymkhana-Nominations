@@ -406,7 +406,7 @@ def nomi_detail(request, nomi_pk):
             power_to_send = 1
         else:
             power_to_send = 0
-        if view_post.parent in nomi.nomi_approvals.all():
+        if view_post.elder_brother in nomi.nomi_approvals.all():
             sent_to_parent = 1
         else:
             sent_to_parent = 0
@@ -961,9 +961,10 @@ def request_ratify(request, nomi_pk):
     access, view_post = get_access_and_post_for_result(request,nomi_pk)
 
     if access:
-        to_add = view_post.parent
-        nomi.result_approvals.add(to_add)
-        nomi.nomi_approvals.add(to_add)
+        if view_post.parent:
+            to_add = view_post.parent
+            nomi.result_approvals.add(to_add)
+            nomi.nomi_approvals.add(to_add)
         nomi.status = 'Sent for ratification'
         nomi.save()
 
@@ -979,9 +980,10 @@ def cancel_ratify(request, nomi_pk):
     access, view_post = get_access_and_post_for_result(request,nomi_pk)
 
     if access:
-        to_remove = view_post.parent
-        nomi.result_approvals.remove(to_remove)
-        nomi.nomi_approvals.remove(to_remove)
+        if view_post.parent:
+            to_remove = view_post.parent
+            nomi.result_approvals.remove(to_remove)
+            nomi.nomi_approvals.remove(to_remove)
         nomi.status = 'Interview period'
         nomi.save()
 

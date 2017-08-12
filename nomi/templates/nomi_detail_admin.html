@@ -60,12 +60,12 @@
                                 <a href="{% url 'final_nomi_approval' nomi_pk=nomi.pk %}"
                                    style="width: auto" class="btn btn-success">Approve And Send To User</a>
                             </div>
-                            {% if not user in nomi.nomi_post.parent.post_holders.all %}
-                            <div class="col-lg-3 text-center">
+                                {% if not user in nomi.nomi_post.parent.post_holders.all %}
+                                <div class="col-lg-3 text-center">
                                 <a href="{% url 'nomi_reject' nomi_pk=nomi.pk %}"
                                    style="width: auto" class="btn btn-success">Reject</a>
-                            </div>
-                            {% endif %}
+                                </div>
+                                {% endif %}
 
                             <div class="col-lg-3 text-center">
                                 <a href="{% url 'forms:creator_form' nomi.nomi_form.pk %}"
