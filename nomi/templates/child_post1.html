@@ -66,19 +66,7 @@
             <div class="container-fluid">
                 {% if post.status == 'Post created' %}
                  <div>
-                     <ul class="list-group">
-                         <li class="list-group-item">
-                             {% if parent.perms == 'can ratify the post' %}
-                             <a class="list-group-item" href="{% url 'final_post_approval' post_pk=post.pk view_pk=parent.pk %}">Approve the post</a>
-                             {% else %}
-                                {% if parent.parent in post.post_approvals.all %}
-                                         <a class="list-group-item">Approval request sent to parent</a>
-                                {% else%}
-                                        <a class="list-group-item" href="{% url 'post_approval' post_pk=post.pk view_pk=parent.pk %}">send to parent for approval</a>
-                                {% endif %}
-                             {% endif %}
-                         </li>
-                     </ul>
+                  <h3>The post has not been approved yet</h3>
                  </div>
 
                 {% else %}
@@ -86,13 +74,9 @@
                     <h2>Nominations for the post</h2>
                     <div class="row">
                         <div class="col-lg-12 text-center">
-                            {% if post.parent.perms == 'can ratify the post' %}
-                                <a href="{% url 'senate_nomi_create' post.pk %}"
-                                   class="btn btn-primary nomi-button">Create a New Nomination</a>
-                            {% else %}
+
                                 <a href="{% url 'nomi_create' post.pk %}"
                                    class="btn btn-primary nomi-button">Create a New Nomination</a>
-                            {% endif %}
                         </div>
                     </div>
                     <br>
@@ -117,7 +101,7 @@
                         <ol>
                             {% for post_holder in post.post_holders.all %}
                             <li>
-                                
+
                                 {{post_holder.userprofile.name}}  --
                                 <a href="{% url 'request_deratify' post_pk=post.pk user_pk=post_holder.pk %}">initiate_deratification</a>
 

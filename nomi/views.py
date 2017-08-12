@@ -140,10 +140,15 @@ def post_view(request, pk):
     child_posts_reverse = child_posts[::-1]
 
     post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
+    post_to_be_approved = Post.objects.filter(take_approval = post).filter(status = 'Post created')
+    post_count = post_to_be_approved.count()
+    post_approvals = post_to_be_approved|post_approvals
+    post_approvals = post_approvals.distinct()
+
     nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
     re_nomi_approval = ReopenNomination.objects.filter(approvals = post).filter(nomi__status='Interview period and Reopening initiated')
     group_nomi_approvals = GroupNomination.objects.filter(status='created').filter(approvals=post)
-    result_approvals = Nomination.objects.filter(result_approvals=post).exclude(status='Work done').exclude(status='Nomination created')
+    result_approvals = Nomination.objects.filter(result_approvals=post).exclude(status='Work done').exclude(status='Nomination created').exclude(status='Nomination out')
     count = nomi_approvals.count() + group_nomi_approvals.count() + re_nomi_approval.count()
     to_deratify = Deratification.objects.filter(deratify_approval = post).filter(status = 'requested')
 
@@ -161,7 +166,8 @@ def post_view(request, pk):
                                                       'post_approval': post_approvals, 'tag_form': tag_form,
                                                       'nomi_approval': nomi_approvals, 're_nomi_approval':re_nomi_approval,
                                                       'group_nomi_approvals': group_nomi_approvals,
-                                                      'result_approvals': result_approvals,'count':count,"to_deratify":to_deratify})
+                                                      'result_approvals': result_approvals,'count':count,
+                                                      "to_deratify":to_deratify,"post_count":post_count})
     else:
         return render(request, 'no_access.html')
 
@@ -333,36 +339,6 @@ def nomination_create(request, pk):
         return render(request, 'no_access.html')
 
 
-@login_required
-def senate_nomination_create(request, pk):
-    post = Post.objects.get(pk=pk)
-    if request.method == 'POST':
-        title_form = NominationForm(request.POST)
-        if title_form.is_valid():
-            post = Post.objects.get(pk=pk)
-
-            questionnaire = Questionnaire.objects.create(name=title_form.cleaned_data['title'])
-
-            nomination = Nomination.objects.create(name=title_form.cleaned_data['title'],
-                                                   description=title_form.cleaned_data['description'],
-                                                   opening_date=datetime.now(),
-                                                   deadline=title_form.cleaned_data['deadline'],
-                                                   nomi_session=title_form.cleaned_data['nomi_session'],
-                                                   nomi_form=questionnaire, nomi_post=post,
-                                                   status='Nomination out',
-                                                   year_choice=title_form.cleaned_data['year_choice'],
-                                                   hall_choice=title_form.cleaned_data['hall_choice'],
-                                                   dept_choice=title_form.cleaned_data['dept_choice'],
-                                                   )
-
-            pk = questionnaire.pk
-            return HttpResponseRedirect(reverse('forms:creator_form', kwargs={'pk': pk}))
-
-    else:
-        title_form = NominationForm()
-
-    return render(request, 'nomi/nomination_form.html', context={'form': title_form, 'post': post})
-
 
 
 class NominationUpdate(UpdateView):
@@ -376,6 +352,20 @@ class NominationDelete(DeleteView):
     success_url = reverse_lazy('index')
 
 
+
+# ****** in use...
+def get_access_and_post(request,nomi_pk):
+    nomi = Nomination.objects.get(pk=nomi_pk)
+    access = False
+    view_post = None
+    for post in nomi.nomi_approvals.all():
+        if request.user in post.post_holders.all():
+            access = True
+            view_post = post
+            break
+    return access,view_post
+
+
 @login_required
 def nomi_detail(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
@@ -385,13 +375,7 @@ def nomi_detail(request, nomi_pk):
 
     panelform = UserId(request.POST or None)
 
-    access = False
-    view_post = None
-    for apv_post in nomi.nomi_approvals.all():
-        if request.user in apv_post.post_holders.all():
-            access = True
-            view_post = apv_post
-            break
+    access, view_post = get_access_and_post(request, nomi_pk)
 
     status = [None]*7
     renomi_edit = 0
@@ -479,13 +463,7 @@ def remove_panelist(request, nomi_pk, user_pk):
 def nomi_approval(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
 
-    access = False
-    view_post = 0
-    for apv_post in nomi.nomi_approvals.all():
-        if request.user in apv_post.post_holders.all():
-            access = True
-            view_post = apv_post
-            break
+    access, view_post = get_access_and_post(request, nomi_pk)
 
     if access:
         if view_post.elder_brother:
@@ -506,13 +484,8 @@ def nomi_approval(request, nomi_pk):
 @login_required
 def nomi_reject(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
-    access = False
-    view_post = 0
-    for apv_post in nomi.nomi_approvals.all():
-        if request.user in apv_post.post_holders.all():
-            access = True
-            view_post = apv_post
-            break
+    access, view_post = get_access_and_post(request, nomi_pk)
+
     if access:
         to_remove = view_post
         nomi.nomi_approvals.remove(to_remove)
@@ -524,13 +497,8 @@ def nomi_reject(request, nomi_pk):
 @login_required
 def final_nomi_approval(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
-    access = False
-    view_post = 0
-    for apv_post in nomi.nomi_approvals.all():
-        if request.user in apv_post.post_holders.all():
-            access = True
-            view_post = apv_post
-            break
+    access, view_post = get_access_and_post(request, nomi_pk)
+
     if access:
         if view_post.elder_brother:
             to_add = view_post.elder_brother
@@ -559,16 +527,6 @@ def copy_nomi_link(request, pk):
 ## ------------------------------------------------------------------------------------------------------------------ ##
 #########################################   REOPEN NOMINATION MONITOR VIEWS   ################################################
 ## ------------------------------------------------------------------------------------------------------------------ ##
-def get_access_and_post(request,nomi_pk):
-    nomi = Nomination.objects.get(pk=nomi_pk)
-    access = False
-    view_post = None
-    for apv_post in nomi.nomi_approvals.all():
-        if request.user in apv_post.post_holders.all():
-            access = True
-            view_post = apv_post
-            break
-    return access,view_post
 
 
 @login_required
@@ -584,16 +542,25 @@ def reopen_nomi(request, nomi_pk):
     else:
         return render(request, 'no_access.html')
 
+
+# ****** in use...
+def get_access_and_post_for_renomi(request,re_nomi_pk):
+    re_nomi = ReopenNomination.objects.get(pk=re_nomi_pk)
+    access = False
+    view_post = None
+    for post in re_nomi.approvals.all():
+        if request.user in post.post_holders.all():
+            access = True
+            view_post = post
+            break
+    return access,view_post
+
+
 @login_required
 def re_nomi_approval(request, re_nomi_pk):
     re_nomi = ReopenNomination.objects.get(pk=re_nomi_pk)
-    access = False
-    view_post = 0
-    for apv_post in re_nomi.approvals.all():
-        if request.user in apv_post.post_holders.all():
-            access = True
-            view_post = apv_post
-            break
+    access , view_post = get_access_and_post_for_renomi(request,re_nomi_pk)
+
     if access:
         to_add = view_post.elder_brother
         re_nomi.approvals.add(to_add)
@@ -605,13 +572,7 @@ def re_nomi_approval(request, re_nomi_pk):
 @login_required
 def re_nomi_reject(request, re_nomi_pk):
     re_nomi = ReopenNomination.objects.get(pk=re_nomi_pk)
-    access = False
-    view_post = 0
-    for apv_post in re_nomi.approvals.all():
-        if request.user in apv_post.post_holders.all():
-            access = True
-            view_post = apv_post
-            break
+    access , view_post = get_access_and_post_for_renomi(request,re_nomi_pk)
     if access:
         nomi = re_nomi.nomi
         nomi.status = 'Interview period'
@@ -625,13 +586,8 @@ def re_nomi_reject(request, re_nomi_pk):
 @login_required
 def final_re_nomi_approval(request, re_nomi_pk):
     re_nomi = ReopenNomination.objects.get(pk=re_nomi_pk)
-    access = False
-    view_post = 0
-    for apv_post in re_nomi.approvals.all():
-        if request.user in apv_post.post_holders.all():
-            access = True
-            view_post = apv_post
-            break
+    access , view_post = get_access_and_post_for_renomi(request,re_nomi_pk)
+
     if access:
         re_nomi.re_open_to_users()
         nomi=re_nomi.nomi
@@ -705,15 +661,11 @@ def applications(request, pk):
         status[6] = True
 
 
-    view_post = None
-    access = False
-    for apv_post in nomination.nomi_approvals.all():
-        if request.user in apv_post.post_holders.all():
-            view_post = apv_post
-            access = True
-            break
 
-# if user post in parent tree
+    access, view_post = get_access_and_post(request,pk)
+
+
+    # if user post in parent tree
     if access:
         permission = None
         senate_permission = None
@@ -750,13 +702,7 @@ def applications(request, pk):
         else:
             reopen = DeadlineForm()
 
-        if request.method == 'POST':
-            ratify = ConfirmApplication(request.POST)
-            if ratify.is_valid():
-                nomination.append()
-                return HttpResponseRedirect(reverse('applicants', kwargs={'pk': pk}))
-        else:
-            ratify = ConfirmApplication()
+
 
         form_confirm = ConfirmApplication(request.POST or None)
         if form_confirm.is_valid():
@@ -771,7 +717,7 @@ def applications(request, pk):
                                                            'result_approval': results_approval,
                                                            'accepted': accepted, 'rejected': rejected, 'status': status,
                                                            'pending': pending, 'perm': permission,
-                                                           'senate_perm': senate_permission,'reopen':reopen,'ratify':ratify})
+                                                           'senate_perm': senate_permission,'reopen':reopen})
 
 
 
@@ -813,13 +759,7 @@ def nomination_answer(request, pk):
                 senate_perm = True
             break
 
-    view_post = None
-
-    for post in nomination.nomi_approvals.all():
-        if post in all_posts:
-            view_post = post
-            access = True
-            break
+    access, view_post = get_access_and_post(request,nomination.pk)
 
 
     if application.user == request.user:
@@ -882,35 +822,38 @@ def group_nominations(request, pk):
     post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
     nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
 
-    if request.method == 'POST':
-        groupform = SelectNomiForm(post, request.POST)
-        title_form = GroupNominationForm(request.POST)
-        if title_form.is_valid():
-            if groupform.is_valid():
-                group = GroupNomination.objects.create(name=title_form.cleaned_data['title'],
-                                                       description=title_form.cleaned_data['description'])
-                group.approvals.add(post)
-                for nomi_pk in groupform.cleaned_data['group']:
-                    # tasks to be performed on nomination
-                    nomi = Nomination.objects.get(pk=nomi_pk)
-                    group.nominations.add(nomi)
-                    for tag in nomi.tags.all():
-                        group.tags.add(tag)
-                    nomi.group_status = 'grouped'
-                    if post.parent:
-                        to_add = post.parent
-                        nomi.nomi_approvals.add(to_add)
-                    nomi.save()
-                    nomi.open_to_users()
-                return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
+    if request.user in post.post_holders.all():
+        if request.method == 'POST':
+            groupform = SelectNomiForm(post, request.POST)
+            title_form = GroupNominationForm(request.POST)
+            if title_form.is_valid():
+                if groupform.is_valid():
+                    group = GroupNomination.objects.create(name=title_form.cleaned_data['title'],
+                                                           description=title_form.cleaned_data['description'])
+                    group.approvals.add(post)
+                    for nomi_pk in groupform.cleaned_data['group']:
+                        # tasks to be performed on nomination
+                        nomi = Nomination.objects.get(pk=nomi_pk)
+                        group.nominations.add(nomi)
+                        for tag in nomi.tags.all():
+                            group.tags.add(tag)
+                        nomi.group_status = 'grouped'
+                        if post.parent:
+                            to_add = post.parent
+                            nomi.nomi_approvals.add(to_add)
+                        nomi.save()
+                        nomi.open_to_users()
+                    return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
 
+        else:
+            title_form = GroupNominationForm
+            groupform = SelectNomiForm(post)
+
+        return render(request, 'nomi_group.html', context={'post': post, 'child_posts': child_posts_reverse,
+                                                           'post_approval': post_approvals, 'nomi_approval': nomi_approvals,
+                                                           'form': groupform, 'title_form': title_form})
     else:
-        title_form = GroupNominationForm
-        groupform = SelectNomiForm(post)
-
-    return render(request, 'nomi_group.html', context={'post': post, 'child_posts': child_posts_reverse,
-                                                       'post_approval': post_approvals, 'nomi_approval': nomi_approvals,
-                                                       'form': groupform, 'title_form': title_form})
+        return render(request, 'no_access.html')
 
 
 @login_required
@@ -984,17 +927,39 @@ def remove_from_group(request, nomi_pk, gr_pk):
 ###########################################    RATIFICATION VIEWS    ###################################################
 ## ------------------------------------------------------------------------------------------------------------------ ##
 
+
+
+# ****** in use...
+def get_access_and_post_for_result(request, nomi_pk):
+    nomi =Nomination.objects.get(pk=nomi_pk)
+    access = False
+    view_post = None
+    for post in nomi.result_approvals.all():
+        if request.user in post.post_holders.all():
+            access = True
+            view_post = post
+            break
+    return access, view_post
+
+@login_required
+def ratify(request, nomi_pk):
+    nomi = Nomination.objects.get(pk=nomi_pk)
+    access, view_post = get_access_and_post_for_result(request,nomi_pk)
+
+    if access:
+        if  view_post.perms == "can ratify the post":
+            nomi.append()
+            return HttpResponseRedirect(reverse('applicants', kwargs={'pk': nomi_pk}))
+
+    else:
+        return render(request, 'no_access.html')
+
+
 @login_required
 def request_ratify(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
-    access = False
-    view_post = None
+    access, view_post = get_access_and_post_for_result(request,nomi_pk)
 
-    for apv_post in nomi.nomi_approvals.all():
-        if request.user in apv_post.post_holders.all():
-            access = True
-            view_post = apv_post
-            break
     if access:
         to_add = view_post.parent
         nomi.result_approvals.add(to_add)
@@ -1011,14 +976,8 @@ def request_ratify(request, nomi_pk):
 @login_required
 def cancel_ratify(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
-    access = False
-    view_post = None
+    access, view_post = get_access_and_post_for_result(request,nomi_pk)
 
-    for apv_post in nomi.nomi_approvals.all():
-        if request.user in apv_post.post_holders.all():
-            access = True
-            view_post = apv_post
-            break
     if access:
         to_remove = view_post.parent
         nomi.result_approvals.remove(to_remove)
@@ -1035,13 +994,8 @@ def cancel_ratify(request, nomi_pk):
 @login_required
 def cancel_result_approval(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
-    access = False
-    view_post = None
-    for apv_post in nomi.nomi_approvals.all():
-        if request.user in apv_post.post_holders.all():
-            access = True
-            view_post = apv_post
-            break
+    access, view_post = get_access_and_post_for_result(request,nomi_pk)
+
     if access:
         to_remove = view_post.parent
         if to_remove.parent not in nomi.result_approvals.all():
@@ -1054,13 +1008,8 @@ def cancel_result_approval(request, nomi_pk):
 @login_required
 def result_approval(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
-    access = False
-    view_post = None
-    for apv_post in nomi.nomi_approvals.all():
-        if request.user in apv_post.post_holders.all():
-            access = True
-            view_post = apv_post
-            break
+    access, view_post = get_access_and_post_for_result(request,nomi_pk)
+
     if access:
         to_add = view_post.parent
         nomi.result_approvals.add(to_add)
@@ -1074,7 +1023,7 @@ def create_deratification_request(request, post_pk, user_pk):
     user =User.objects.get(pk=user_pk)
 
     if request.user in post.parent.post_holders.all():
-        deratify = Deratification.objects.create(name=user, post=post,status = 'requested', deratify_approval=post.parent)
+        Deratification.objects.create(name=user, post=post,status = 'requested', deratify_approval=post.parent)
 
 
     return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk}))
@@ -1120,42 +1069,76 @@ mark_as_interviewed, reject_nomination, accept_nomination: Changes the interview
 of the applicant
 '''
 
+def get_access_and_post_for_int(request, nomi_pk):
+    nomi =Nomination.objects.get(pk=nomi_pk)
+    access = False
+    view_post = None
+    for post in nomi.result_approvals.all():
+        if request.user in post.post_holders.all():
+            access = True
+            view_post = post
+            break
+
+    for post in nomi.nomi_approvals.all():
+        if request.user in post.post_holders.all():
+            access = True
+            view_post = post
+            break
+
+
+    return access, view_post
+
 @login_required
 def mark_as_interviewed(request, pk):
+
     application = NominationInstance.objects.get(pk=pk)
     id_nomi = application.nomination.pk
-    application.interview_status = 'Interview Done'
-    application.save()
-
-    return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_nomi}))
+    access, view_post = get_access_and_post_for_int(request,id_nomi)
+    if access:
+        application.interview_status = 'Interview Done'
+        application.save()
+        return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_nomi}))
+    else:
+        return render(request, 'no_access.html')
 
 
 @login_required
 def accept_nomination(request, pk):
     application = NominationInstance.objects.get(pk=pk)
     id_accept = application.nomination.pk
-    application.status = 'Accepted'
-    application.save()
+    access, view_post = get_access_and_post_for_int(request, id_accept)
+    if access:
+        application.status = 'Accepted'
+        application.save()
 
-    comment = '<strong>' + str(request.user.userprofile.name) + '</strong>' + ' Accepted '\
-              + '<strong>' + str(application.user.userprofile.name) + '</strong>'
-    status = Commment.objects.create(comments=comment, nomi_instance=application)
+        comment = '<strong>' + str(request.user.userprofile.name) + '</strong>' + ' Accepted '\
+                  + '<strong>' + str(application.user.userprofile.name) + '</strong>'
+        status = Commment.objects.create(comments=comment, nomi_instance=application)
 
-    return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_accept}))
+        return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_accept}))
+    else:
+        return render(request, 'no_access.html')
+
+
 
 
 @login_required
 def reject_nomination(request, pk):
     application = NominationInstance.objects.get(pk=pk)
     id_reject = application.nomination.pk
-    application.status = 'Rejected'
-    application.save()
+    access, view_post = get_access_and_post_for_int(request, id_reject)
+    if access:
+        application.status = 'Rejected'
+        application.save()
 
-    comment = '<strong>' + str(request.user.userprofile.name) + '</strong>' + ' Rejected ' \
-              + '<strong>' + str(application.user.userprofile.name) + '</strong>'
-    status = Commment.objects.create(comments=comment, nomi_instance=application)
+        comment = '<strong>' + str(request.user.userprofile.name) + '</strong>' + ' Rejected ' \
+                  + '<strong>' + str(application.user.userprofile.name) + '</strong>'
+        status = Commment.objects.create(comments=comment, nomi_instance=application)
 
-    return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_reject}))
+        return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_reject}))
+    else:
+        return render(request, 'no_access.html')
+
 
 '''
 append_user, replace_user: Adds and Removes the current post-holders according to their selection status
@@ -1214,8 +1197,7 @@ def profile_view(request):
     pending_re_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Interview period and Nomination reopened')
     pending_nomi = pending_nomi | pending_re_nomi
     interview_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Interview period')
-    declared_nomi = NominationInstance.objects.filter(user=request.user).\
-        filter(nomination__status='Sent for ratification')
+    declared_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Sent for ratification')
 
     try:
         user_profile = UserProfile.objects.get(user__id=pk)

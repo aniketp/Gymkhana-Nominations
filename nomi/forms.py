@@ -85,6 +85,8 @@ class BlankForm(forms.Form):
 class ConfirmApplication(forms.Form):
     Tick_the_box_for_confirmation = forms.CharField(max_length=100, widget=forms.CheckboxInput())
 
+class RatifyApplication(forms.Form):
+    Tick_the_box_for_confirmation = forms.CharField(max_length=100, widget=forms.CheckboxInput())
 
 class CommentForm(forms.Form):
     comment = forms.CharField(widget=forms.Textarea)

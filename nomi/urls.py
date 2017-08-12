@@ -52,8 +52,6 @@ urlpatterns = [
     # nominations/create
     url(r'^create/(?P<pk>\d+)/$', views.nomination_create, name='nomi_create'),
 
-    # nominations/create/senate
-    url(r'^create/senate/(?P<pk>\d+)/$', views.senate_nomination_create, name='senate_nomi_create'),
 
     # nominations/2/update
     url(r'^(?P<pk>\d+)/update/$', views.NominationUpdate.as_view(), name='nomi_update'),
@@ -113,6 +111,9 @@ urlpatterns = [
 
     # nominations/cancel_result_approval/2
     url(r'^cancel_result_approval/(?P<nomi_pk>\d+)/$', views.cancel_result_approval, name='cancel_result_approval'),
+
+# nominations/ratify/2
+    url(r'^ratify/(?P<nomi_pk>\d+)/$', views.ratify, name='ratify'),
 
     # nominations/ratify/2
     url(r'^request_ratify/(?P<nomi_pk>\d+)/$', views.request_ratify, name='request_ratify'),
