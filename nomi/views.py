@@ -365,6 +365,17 @@ def get_access_and_post(request,nomi_pk):
             break
     return access,view_post
 
+def get_access_and_post_for_result(request, nomi_pk):
+    nomi =Nomination.objects.get(pk=nomi_pk)
+    access = False
+    view_post = None
+    for post in nomi.result_approvals.all():
+        if request.user in post.post_holders.all():
+            access = True
+            view_post = post
+            break
+    return access, view_post
+
 
 @login_required
 def nomi_detail(request, nomi_pk):
@@ -376,6 +387,8 @@ def nomi_detail(request, nomi_pk):
     panelform = UserId(request.POST or None)
 
     access, view_post = get_access_and_post(request, nomi_pk)
+    if not access:
+        access, view_post = get_access_and_post_for_result(request, nomi_pk)
 
     status = [None]*7
     renomi_edit = 0
@@ -502,11 +515,12 @@ def final_nomi_approval(request, nomi_pk):
     if access:
         if view_post.elder_brother:
             to_add = view_post.elder_brother
-            nomi.tags.add(view_post.parent.club)
+            nomi.nomi_approvals.add(to_add)
             nomi.tags.add(to_add.club)
 
         if view_post.parent:
             to_add = view_post.parent
+            nomi.nomi_approvals.add(to_add)
             nomi.tags.add(to_add.club)
 
         nomi.open_to_users()
@@ -600,6 +614,7 @@ def final_re_nomi_approval(request, re_nomi_pk):
 ## ------------------------------------------------------------------------------------------------------------------ ##
 #########################################    NOMINATION MONITOR VIEWS   ################################################
 ## ------------------------------------------------------------------------------------------------------------------ ##
+# ****** in use...
 
 
 @login_required
@@ -663,7 +678,8 @@ def applications(request, pk):
 
 
     access, view_post = get_access_and_post(request,pk)
-
+    if not access:
+        access,view_post = get_access_and_post_for_result(request,pk)
 
     # if user post in parent tree
     if access:
@@ -733,6 +749,7 @@ def applications(request, pk):
 
 
 
+
 @login_required
 def nomination_answer(request, pk):
     application = NominationInstance.objects.get(pk=pk)
@@ -760,6 +777,8 @@ def nomination_answer(request, pk):
             break
 
     access, view_post = get_access_and_post(request,nomination.pk)
+    if not access:
+        access, view_post = get_access_and_post_for_result(request, nomination.pk)
 
 
     if application.user == request.user:
@@ -768,7 +787,7 @@ def nomination_answer(request, pk):
 
 
 
-    if access:
+    if access or request.user in nomination.interview_panel.all():
 
          # result approval things    send,sent,cancel
         results_approval = [None]*3
@@ -928,19 +947,6 @@ def remove_from_group(request, nomi_pk, gr_pk):
 ## ------------------------------------------------------------------------------------------------------------------ ##
 
 
-
-# ****** in use...
-def get_access_and_post_for_result(request, nomi_pk):
-    nomi =Nomination.objects.get(pk=nomi_pk)
-    access = False
-    view_post = None
-    for post in nomi.result_approvals.all():
-        if request.user in post.post_holders.all():
-            access = True
-            view_post = post
-            break
-    return access, view_post
-
 @login_required
 def ratify(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
@@ -1071,7 +1077,7 @@ mark_as_interviewed, reject_nomination, accept_nomination: Changes the interview
 of the applicant
 '''
 
-def get_access_and_post_for_int(request, nomi_pk):
+def get_access_and_post_for_selection(request, nomi_pk):
     nomi =Nomination.objects.get(pk=nomi_pk)
     access = False
     view_post = None
@@ -1095,8 +1101,9 @@ def mark_as_interviewed(request, pk):
 
     application = NominationInstance.objects.get(pk=pk)
     id_nomi = application.nomination.pk
-    access, view_post = get_access_and_post_for_int(request,id_nomi)
-    if access:
+    nomination = Nomination.objects.get(pk=id_nomi)
+    access, view_post = get_access_and_post_for_selection(request,id_nomi)
+    if access or request.user in nomination.interview_panel.all():
         application.interview_status = 'Interview Done'
         application.save()
         return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_nomi}))
@@ -1108,8 +1115,9 @@ def mark_as_interviewed(request, pk):
 def accept_nomination(request, pk):
     application = NominationInstance.objects.get(pk=pk)
     id_accept = application.nomination.pk
-    access, view_post = get_access_and_post_for_int(request, id_accept)
-    if access:
+    nomination = Nomination.objects.get(pk=id_accept)
+    access, view_post = get_access_and_post_for_selection(request, id_accept)
+    if access or request.user in nomination.interview_panel.all():
         application.status = 'Accepted'
         application.save()
 
@@ -1128,8 +1136,9 @@ def accept_nomination(request, pk):
 def reject_nomination(request, pk):
     application = NominationInstance.objects.get(pk=pk)
     id_reject = application.nomination.pk
-    access, view_post = get_access_and_post_for_int(request, id_reject)
-    if access:
+    nomination = Nomination.objects.get(pk=id_reject)
+    access, view_post = get_access_and_post_for_selection(request, id_reject)
+    if access or request.user in nomination.interview_panel.all():
         application.status = 'Rejected'
         application.save()
 

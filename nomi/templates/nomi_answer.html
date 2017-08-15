@@ -95,19 +95,27 @@ form view
 
                 <div>
                 {% if result_approval.0 %}
-                    {% if nomi.nomination.status == 'Interview period' or 'Interview period and Reopening initiated' or 'Interview period and Nomination reopened' and nomi.interview_status == 'Interview Done' %}
-
+                    {% if nomi.nomination.status == 'Interview period' or nomi.nomination.status == 'Interview period and Reopening initiated' or nomi.nomination.status == 'Interview period and Nomination reopened' %}
                         {% if nomi.status %}
                             {% if nomi.status == 'Accepted' %}
                                 <div class="row text-center">
-                                    <div class="col-lg-12">
+                                    <div class="col-lg-6">
+                                        <a ><div class="btn btn-info
+                                         read-more-button">Accepted</div></a>
+                                    </div>
+
+                                    <div class="col-lg-6">
                                         <a href="{% url 'reject' nomi.pk %}"><div class="btn btn-danger
                                         read-more-button">Reject</div></a>
                                     </div>
                                 </div>
                             {% elif nomi.status == 'Rejected' %}
                                 <div class="row text-center">
-                                    <div class="col-lg-12">
+                                    <div class="col-lg-6">
+                                        <a><div class="btn btn-info
+                                         read-more-button">Rejected</div></a>
+                                    </div>
+                                    <div class="col-lg-6">
                                         <a href="{% url 'accept' nomi.pk %} "><div class="btn btn-info
                                          read-more-button">Accept</div></a>
                                     </div>
@@ -127,14 +135,16 @@ form view
                             </div>
                         {% endif %}
 
-                    {% elif nomi.nomination.status == 'Interview period' or 'Interview period and Reopening initiated' or 'Interview period and Nomination reopened' and nomi.interview_status == 'Interview Not Done' %}
-                    <div class="row text-center">
-                        <div class="col-lg-12">
-                            <a href="{% url 'interviewed' nomi.pk %}">
-                                <div style="width: auto" class="btn btn-danger read-more-button ">Interview Taken</div>
-                            </a>
+                        {% if nomi.interview_status == 'Interview Not Done' %}
+                        <hr>
+                        <div class="row text-center">
+                            <div class="col-lg-12">
+                                <a href="{% url 'interviewed' nomi.pk %}">
+                                    <div style="width: auto" class="btn btn-danger read-more-button ">Interview Taken</div>
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                        {% endif %}
                     {% elif senate_perm %}
                     <div class="row text-center">
                         {% if nomi.status %}
