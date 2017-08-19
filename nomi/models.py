@@ -196,7 +196,6 @@ class UserProfile(models.Model):
     user_img = models.ImageField(upload_to=user_directory_path, null=True, blank=True)
     name = models.CharField(max_length=40, blank=True)
     roll_no = models.IntegerField(null=True)
-    year = models.CharField(max_length=4, choices=YEAR, default='Y16')
     programme = models.CharField(max_length=7, choices=PROGRAMME, default='B.Tech')
     department = models.CharField(max_length=200, choices=DEPT, default='AE')
     hall = models.CharField(max_length=10, choices=HALL, default=1)
