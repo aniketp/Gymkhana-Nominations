@@ -322,9 +322,6 @@ def nomination_create(request, pk):
                                                    deadline=title_form.cleaned_data['deadline'],
                                                    nomi_session=title_form.cleaned_data['nomi_session'],
                                                    nomi_form=questionnaire, nomi_post=post,
-                                                   year_choice=title_form.cleaned_data['year_choice'],
-                                                   hall_choice=title_form.cleaned_data['hall_choice'],
-                                                   dept_choice=title_form.cleaned_data['dept_choice'],
                                                    )
 
                 pk = questionnaire.pk
@@ -343,7 +340,7 @@ def nomination_create(request, pk):
 
 class NominationUpdate(UpdateView):
     model = Nomination
-    fields = ['name', 'description', 'year_choice', 'hall_choice', 'dept_choice']
+    fields = ['name', 'description']
     success_url = reverse_lazy('index')
 
 
