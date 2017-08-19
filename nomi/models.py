@@ -168,6 +168,8 @@ class NominationInstance(models.Model):
     interview_status = models.CharField(max_length=20, choices=INTERVIEW_STATUS,  null=True, blank=True,
                                         default='Interview Not Done')
     filled_form = models.OneToOneField('forms.FilledForm', null=True, blank=True)
+    timestamp = models.DateField(auto_now_add=True)
+    edit_time = models.DateField(null=True, auto_now=True)
 
     def __str__(self):
         return str(self.user) + ' ' + str(self.id)
@@ -177,7 +179,7 @@ class Deratification(models.Model):
     name = models.ForeignKey(User, max_length=30, null=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
     status = models.CharField(max_length=10, choices=DERATIFICATION, default='safe')
-    deratify_approval = models.ForeignKey(Post,related_name='to_deratify',on_delete=models.CASCADE,null = True)
+    deratify_approval = models.ForeignKey(Post, related_name='to_deratify',on_delete=models.CASCADE,null = True)
 
 
 class Commment(models.Model):

@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from nomi.models import Post, Club , PostHistory, Session
-from info.forms import ClubForm, PostForm, SessionForm,current_session
+from nomi.models import Post, Club, PostHistory, Session
+from info.forms import ClubForm, PostForm, SessionForm, current_session
 
 
 def index(request):
@@ -37,7 +37,7 @@ def index(request):
                                                   'query_posts': query_posts})
 
 
-def archieve(request):
+def post_holder_search(request):
     club = None
     session = current_session()
     query_posts = None

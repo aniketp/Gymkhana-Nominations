@@ -4,6 +4,6 @@ from . import views
 app_name = 'info'
 
 urlpatterns = [
-    url(r'^$', views.archieve, name='info'),
+    url(r'^$', views.post_holder_search, name='info'),
 
 ]
