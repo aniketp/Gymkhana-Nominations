@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from nomi.models import Post, Club , PostHistory, Session
+from nomi.models import *
 from info.forms import ClubForm, PostForm, SessionForm,current_session
-
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     club = None
@@ -36,7 +36,7 @@ def index(request):
     return render(request, 'index.html', context={'club_form': club_form, 'post_form': post_form,
                                                   'query_posts': query_posts})
 
-
+@login_required
 def archieve(request):
     club = None
     session = current_session()
@@ -58,9 +58,13 @@ def archieve(request):
                     club_form = ClubForm
                     post_form = None
                     query_users = PostHistory.objects.filter(post_session=session)
+                    query = '|'
+                    for each in query_users:
+                        query = query + '|' + str(each.user.pk)
+
                     return render(request, 'info.html',
                                   context={'club_form': club_form, 'post_form': post_form, 'session_form': session_form,
-                                           'query_users': query_users})
+                                           'query_users': query_users ,'query':query})
 
                 club = Club.objects.get(pk=club_form.cleaned_data['club'])
 
@@ -69,9 +73,12 @@ def archieve(request):
                     query_posts = post
                     post_form = PostForm(club)
                     query_users = PostHistory.objects.filter(post_session=session , post = query_posts)
+                    query = '|'
+                    for each in query_users:
+                        query = query + '|' + str(each.user.pk)
                     return render(request, 'info.html',
                               context={'club_form': club_form, 'post_form': post_form,'session_form':session_form,
-                                       'query_users': query_users})
+                                       'query_users': query_users,'query':query})
 
                 post_form = PostForm(club)
                 query_posts = club.club_posts.all()
@@ -80,9 +87,13 @@ def archieve(request):
                     post_user = PostHistory.objects.filter(post_session = session).filter(post = each)
                     query_users = query_users|post_user
 
+                query = '|'
+                for each in query_users:
+                    query = query + '|' + str(each.user.pk)
+
                 return render(request, 'info.html',
                           context={'club_form': club_form, 'post_form': post_form,'session_form':session_form,
-                                   'query_users': query_users})
+                                   'query_users': query_users,'query':query})
 
 
 
@@ -95,3 +106,15 @@ def archieve(request):
 
     return render(request, 'info.html', context={'club_form': club_form, 'post_form': post_form,'session_form':session_form,
                                                   'query_users': query_users})
+
+@login_required
+def get_mail(request, query):
+    mail_ids = ''
+    pk_list = query.split('|')
+    for user_pk in pk_list:
+        user = User.objects.get(pk = int(user_pk))
+        if len(mail_ids):
+            mail_ids = mail_ids + ', ' + str(user) + '@iitk.ac.in'
+        else:
+            mail_ids = str(user) + '@iitk.ac.in'
+    return render(request,'mail_id.html',context = {'mail_ids':mail_ids})

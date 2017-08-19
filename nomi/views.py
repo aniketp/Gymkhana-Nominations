@@ -1249,7 +1249,7 @@ def profile_view(request):
         user_profile = UserProfile.objects.get(user__id=pk)
         post_exclude_history = []    # In case a post is not registered in history
         for post in my_posts:
-            if post not in history.post:  # TODO : Need to review this piece of code
+            if post not in history:  # TODO : Need to review this piece of code
                 post_exclude_history.append(post)
 
         return render(request, 'profile.html', context={'user_profile': user_profile, 'history': history,
