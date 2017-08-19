@@ -843,11 +843,13 @@ def nomi_answer_edit(request, pk):
                 json_data = json.dumps(form.cleaned_data)
                 ans_form.data = json_data
                 ans_form.save()
+                application.save()
 
                 info = "Your application has been edited"
                 return render(request, 'nomi_done.html', context={'info': info})
 
-        return render(request, 'edit_nomi_answer.html', context={'form': form,'form_confirm':form_confirm, 'nomi': application, 'nomi_user': applicant})
+        return render(request, 'edit_nomi_answer.html', context={'form': form, 'form_confirm': form_confirm,
+                                                                 'nomi': application, 'nomi_user': applicant})
     else:
         return render(request, 'no_access.html')
 
