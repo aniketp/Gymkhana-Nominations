@@ -1,0 +1,30 @@
+{% extends 'base2.html' %}
+
+{% block content %}
+    <br>
+    <br>
+    <br>
+    <div>
+        <h1 style="text-align: center">LIST OF ALL NOMINATIONS</h1>
+        <hr>
+        <br>
+    </div>
+
+    {% for nomi in all_nomi %}
+        <div  class="panel panel-success">
+            <div class="panel-heading" style="background-color: #a09233">
+                <h3 class="panel-title" style="font-weight: bolder; font-size: 20px">{{ nomi.name.upper }}</h3>
+            </div>
+
+            <div class="panel-body">
+                <div><span style="font-weight: bold">Release Date: </span> {{nomi.opening_date}}</div>
+                <p><span style="font-weight: bolder"> Deadline :  </span>{{nomi.deadline}}</p>
+                {% autoescape off %}
+                    <p>{{nomi.description|slice:":200"}} ...</p>
+                {% endautoescape %}
+                <a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}"
+                   class="btn btn-sm read-more-button btn-danger">Read More</a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

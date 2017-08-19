@@ -65,8 +65,8 @@ class PostHistory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     start = models.DateField(auto_now_add=True)
-    end = models.DateField(null= True,blank=True, editable=True)
-    post_session = models.ForeignKey(Session,on_delete = models.CASCADE, null=True)
+    end = models.DateField(null=True, blank=True, editable=True)
+    post_session = models.ForeignKey(Session, on_delete=models.CASCADE, null=True)
 
 
 class Nomination(models.Model):
