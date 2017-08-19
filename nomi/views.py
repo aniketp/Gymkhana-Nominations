@@ -292,14 +292,57 @@ def post_reject(request, post_pk):
     access = False
     if request.user in post.take_approval.post_holders.all():
         access = True
+        view = post.take_approval
 
 
     if access:
         post.delete()
 
-    return HttpResponseRedirect(reverse('post_view', kwargs={'pk': post.take_approval.pk}))
+    return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view.pk}))
+
+## ------------------------------------------------------------------------------------------------------------------ ##
+#########################################    CLUB RELATED VIEWS   ######################################################
+## ------------------------------------------------------------------------------------------------------------------ ##
+
+# the viewer_post which have access add its parent for approval of club
+# is_safe
+@login_required
+def club_approval(request, club_pk):
+    club_create = ClubCreate.objects.get(pk=post_pk)
+    access = False
+    if request.user in club_create.take_approval.post_holders.all():
+        access = True
+        view = club_create.take_approval
 
 
+    if access:
+        if club_create.take_approval.perms == "can ratify the post":
+            Club.objects.create(club_name = club_create.club_name,club_parent = club_create.club_parent)
+            club_create.delete()
+            return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view.pk}))
+        else:
+            to_add = club_create.take_approval.parent
+            club_create.take_approval = to_add
+            club_create.save()
+            return HttpResponseRedirect(reverse('post_view', kwargs={'pk': current.pk}))
+    else:
+        return render(request, 'no_access.html')
+
+# the viewer removes himself from approvals ,thus delete the post down...
+# is_safe
+@login_required
+def club_reject(request, post_pk):
+    club_reject = ClubCreate.objects.get(pk=post_pk)
+
+    access = False
+    if request.user in club_reject.take_approval.post_holders.all():
+        access = True
+        view = club_reject.take_approval
+        
+    if access:
+        club_reject.delete()
+
+    return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view.pk}))
 
 
 ## ------------------------------------------------------------------------------------------------------------------ ##
@@ -668,31 +711,29 @@ def applications(request, pk):
         status[3] = True
     elif nomination.status == 'Interview period and Reopening initiated':
         status[4] = True
-
     elif nomination.status == 'Interview period and Nomination reopened':
         status[5] = True
     else:
         status[6] = True
 
-
-
-    access, view_post = get_access_and_post(request,pk)
+    access, view_post = get_access_and_post_for_result(request, pk)
     if not access:
-        access,view_post = get_access_and_post_for_result(request,pk)
+        access, view_post = get_access_and_post(request, pk)
+
 
     # if user post in parent tree
     if access:
         permission = None
         senate_permission = None
 
-        if view_post.perms == 'can approve post and send nominations to users':
+        if view_post.parent.perms == 'can ratify the post':
             permission = True
             senate_permission = False
         elif view_post.perms == 'can ratify the post':
             senate_permission = True
             permission = False
 
-        # result approval things    send,sent,cancel
+        # result approval things    can send,has been sent, can cancel
         results_approval = [None]*3
 
         if view_post in nomination.result_approvals.all():
@@ -1044,6 +1085,9 @@ def result_approval(request, nomi_pk):
     access, view_post = get_access_and_post_for_result(request,nomi_pk)
 
     if access:
+        if view_post == nomi.nomi_post.parent:
+            nomi.show_result = True
+
         to_add = view_post.parent
         nomi.result_approvals.add(to_add)
         return HttpResponseRedirect(reverse('applicants', kwargs={'pk': nomi_pk}))

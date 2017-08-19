@@ -15,8 +15,11 @@
          <h3 class="text-center">Nomination under construction</h3>
      </div>
     {% endif %}
+
     <!-- --------------------------------------------------------------------------------------------------------  -->
+
     {% if status.1 %}  <!-- Nomination out for application -->
+
         <div class="well well-sm" style="padding-bottom: 20px">
             <h2 class="text-center" style="color: #343e2e;"><a>{{nomination.name}}</a> </h2>
          <h3 class="text-center">Application Period</h3>
@@ -51,71 +54,69 @@
         <hr>
 
 
-     <ul class="nav nav-tabs">
-         <li class="active"><a href="#all" data-toggle="tab" aria-expanded="true">All Applications</a></li>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#all" data-toggle="tab" aria-expanded="true">All Applications</a></li>
+        </ul>
 
-     </ul>
-    <div id="myTabContent" class="tab-content">
-        <div class="tab-pane fade active in profile-nominations" id="all">
-            <br>
-            {% for nomi in applicants  %}
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
-                        </div>
-                        <div class="col-lg-5">
-                            <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
-                        </div>
-                        <div class="col-lg-4">
-                            <a href="{% url 'nomi_answer' nomi.pk %}">
-                                <div class="btn btn-info">View Application</div>
-                            </a>
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in profile-nominations" id="all">
+                <br>
+                {% for nomi in applicants  %}
+                <div class="panel panel-info">
+                    <div class="panel-body">
+                        <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
+                            </div>
+                            <div class="col-lg-5">
+                                <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
+                            </div>
+                            <div class="col-lg-4">
+                                <a href="{% url 'nomi_answer' nomi.pk %}">
+                                    <div class="btn btn-info">View Application</div>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
-    </div>
 
     {% endif %}
 
     <!-- --------------------------------------------------------------------------------------------------------   -->
-    {% if status.2 %}
+    {% if status.2 %}<!-- interview period -->
 
         <div class="well well-sm" style="padding-bottom: 20px">
             <h2 class="text-center" style="color: #343e2e;">{{nomination.name}} </h2>
-        {% if pending %}
-            <h3 class="text-center">Interview Period</h3>
-        {% endif %}
-        {% if  not pending %}
-            <h3 class="text-center">Result Compiled</h3>
-        {% endif %}
-
+            {% if pending %}
+                <h3 class="text-center">Interview Period</h3>
+            {% endif %}
+            {% if  not pending %}
+                <h3 class="text-center">Result Compiled</h3>
+            {% endif %}
         </div>
 
         {% if pending %}
             <div class="row">
                <div class="text-center">
-                <div class="btn-group">
-                 <button class="btn btn-secondary btn-danger dropdown-toggle" style="width: auto" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Reopen Nomination
-                     <i class="fa fa-spinner  fa-lg" aria-hidden="true"></i>
-                 </button>
-                    <div class="dropdown-menu " role="menu">
-                        <form action="" method="post" style="display:inline">
-                         {% csrf_token %}
-                            <p>{{reopen|bootstrap}}</p>
-                         <input class="btn btn-success btn-block" type="submit" value="submit" />
-                        </form>
+                    <div class="btn-group">
+                        <button class="btn btn-secondary btn-danger dropdown-toggle" style="width: auto" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                             Reopen Nomination
+                            <i class="fa fa-spinner  fa-lg" aria-hidden="true"></i>
+                        </button>
+                        <div class="dropdown-menu " role="menu">
+                            <form action="" method="post" style="display:inline">
+                             {% csrf_token %}
+                                <p>{{reopen|bootstrap}}</p>
+                             <input class="btn btn-success btn-block" type="submit" value="submit" />
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-            </div>
-
+             </div>
         {% endif %}
 
         {% if not pending and not perm and not senate_perm %}
@@ -130,18 +131,18 @@
                     <div class="row">
                         <div class="text-center">
                             <div class="dropdown show">
-                            <button class="btn btn-secondary btn-danger dropdown-toggle" style="width: auto" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Reopen Nomination
-                            </button>
-                            <div class="dropdown-menu " role="menu">
-                                <form action="" method="post" style="display:inline">
-                                {% csrf_token %}
-                                    <p>{{reopen|bootstrap}}</p>
-                                <input class="btn btn-success btn-block" type="submit" value="submit" />
-                                </form>
+                                <button class="btn btn-secondary btn-danger dropdown-toggle" style="width: auto" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Reopen Nomination
+                                </button>
+                                <div class="dropdown-menu " role="menu">
+                                    <form action="" method="post" style="display:inline">
+                                    {% csrf_token %}
+                                        <p>{{reopen|bootstrap}}</p>
+                                    <input class="btn btn-success btn-block" type="submit" value="submit" />
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     </div>
                 </div>
             {% elif result_approval.2 %}
@@ -162,30 +163,17 @@
 
         {% if not pending and perm and result_approval.0 %}
             <div class="text-center">
-                {% if nomination.status == 'Interview period' %}
-                    <a href="{% url 'request_ratify' nomination.pk %}" class="btn btn-info "
-                       style="width: auto">Send for Ratification</a>
-                {% elif nomination.status == 'Sent for ratification' %}
-                    <a href="{% url 'cancel_ratify' nomination.pk %}" class="btn btn-danger"
-                       style="width: auto">Cancel Ratification Request</a>
-                {% endif %}
+                <a href="{% url 'request_ratify' nomination.pk %}" class="btn btn-info "
+                   style="width: auto">Send for Ratification</a>
             </div>
         {% endif %}
 
         {% if not pending and senate_perm %}
             <div class="text-center">
-                {% if nomination.status == 'Interview period' %}
                     <a href="{% url 'request_ratify' nomination.pk %}" class="btn btn-info "
                        style="width: auto">Send for Ratification</a>
-                {% elif nomination.status == 'Sent for ratification' %}
-                    <a href="{% url 'cancel_ratify' nomination.pk %}" class="btn btn-danger"
-                       style="width: auto">Cancel Ratification Request</a>
-                {% endif %}
             </div>
         {% endif %}
-
-
-
 
         <hr>
 
@@ -200,151 +188,149 @@
         <hr>
 
 
-    <ul class="nav nav-tabs">
-        <li class="active"><a href="#all" data-toggle="tab" aria-expanded="true">All Applicants</a></li>
-        <li><a  href="#accepted" data-toggle="tab" aria-expanded="false">Accepted</a></li>
-        <li><a href="#rejected" data-toggle="tab" aria-expanded="false">Rejected</a></li>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#all" data-toggle="tab" aria-expanded="true">All Applicants</a></li>
+            <li><a  href="#accepted" data-toggle="tab" aria-expanded="false">Accepted</a></li>
+            <li><a href="#rejected" data-toggle="tab" aria-expanded="false">Rejected</a></li>
 
-        {% if pending %}
-            <li><a href="#pending" data-toggle="tab" aria-expanded="false">Pending</a></li>
-        {% endif %}
+            {% if pending %}
+                <li><a href="#pending" data-toggle="tab" aria-expanded="false">Pending</a></li>
+            {% endif %}
 
-     </ul>
-    <div id="myTabContent" class="tab-content">
-        <div class="tab-pane fade active in profile-nominations" id="all">
-            <br>
-            {% for nomi in applicants  %}
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
-                        </div>
-                        <div class="col-lg-5">
-                            <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
-                        </div>
-                        <div class="col-lg-4">
-                            <a href="{% url 'nomi_answer' nomi.pk %}">
-                                <div class="btn btn-info">View Application</div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        <div class="tab-pane fade  profile-nominations" id="accepted">
+         </ul>
+
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in profile-nominations" id="all">
                 <br>
-            {% for nomi in accepted  %}
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
-                        </div>
-                        <div class="col-lg-5">
-                            <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
-                        </div>
-                        <div class="col-lg-4">
-                            <a href="{% url 'nomi_answer' nomi.pk %}">
-                                <div class="btn btn-info">View Application</div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        <div class="tab-pane fade profile-nominations" id="rejected">
-                <br>
-            {% for nomi in rejected  %}
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
-                        </div>
-                        <div class="col-lg-5">
-                            <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
-                        </div>
-                        <div class="col-lg-4"">
-                            <a href="{% url 'nomi_answer' nomi.pk %}">
-                                <div class="btn btn-info">View Application</div>
-                            </a>
+                {% for nomi in applicants  %}
+                <div class="panel panel-info">
+                    <div class="panel-body">
+                        <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
+                            </div>
+                            <div class="col-lg-5">
+                                <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
+                            </div>
+                            <div class="col-lg-4">
+                                <a href="{% url 'nomi_answer' nomi.pk %}">
+                                    <div class="btn btn-info">View Application</div>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
-
-        {% if pending %}
-            <div class="tab-pane fade profile-nominations" id="pending">
+            <div class="tab-pane fade  profile-nominations" id="accepted">
                     <br>
-                {% for nomi in pending  %}
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <p><span style="font-weight: bold">Result Status :</span> Pending</p>
-                        </div>
-                        <div class="col-lg-5">
-                            <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
-                        </div>
-                        <div class="col-lg-4">
-                            <a href="{% url 'nomi_answer' nomi.pk %}">
-                                <div class="btn btn-info">View Application</div>
-                            </a>
+                {% for nomi in accepted  %}
+                <div class="panel panel-info">
+                    <div class="panel-body">
+                        <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
+                            </div>
+                            <div class="col-lg-5">
+                                <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
+                            </div>
+                            <div class="col-lg-4">
+                                <a href="{% url 'nomi_answer' nomi.pk %}">
+                                    <div class="btn btn-info">View Application</div>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
+            <div class="tab-pane fade profile-nominations" id="rejected">
+                    <br>
+                {% for nomi in rejected  %}
+                <div class="panel panel-info">
+                    <div class="panel-body">
+                        <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
+                            </div>
+                            <div class="col-lg-5">
+                                <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
+                            </div>
+                            <div class="col-lg-4"">
+                                <a href="{% url 'nomi_answer' nomi.pk %}">
+                                    <div class="btn btn-info">View Application</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-        {% endif %}
 
-    </div>
+            {% if pending %}
+                <div class="tab-pane fade profile-nominations" id="pending">
+                        <br>
+                    {% for nomi in pending  %}
+                <div class="panel panel-info">
+                    <div class="panel-body">
+                        <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <p><span style="font-weight: bold">Result Status :</span> Pending</p>
+                            </div>
+                            <div class="col-lg-5">
+                                <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
+                            </div>
+                            <div class="col-lg-4">
+                                <a href="{% url 'nomi_answer' nomi.pk %}">
+                                    <div class="btn btn-info">View Application</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                </div>
+            {% endif %}
+
     {% endif %}
 
     <!--  -------------------------------------------------------------------------------------------------------  -->
-{% if status.4 or status.5 %}
- {% if status.4 %}
-    <div class="well well-sm" style="padding-bottom: 20px">
-        <h2 class="text-center" style="color: #343e2e;"><a href="{% url 'nomi_detail' nomination.pk %}">{{nomination.name}} </a></h2>
-        <h3 class="text-center">Interview Period and Reopening initiated</h3>
-    </div>
- {% endif %}
+    {% if status.4 or status.5 %}
+        {% if status.4 %}
+            <div class="well well-sm" style="padding-bottom: 20px">
+                <h2 class="text-center" style="color: #343e2e;"><a href="{% url 'nomi_detail' nomination.pk %}">{{nomination.name}} </a></h2>
+                <h3 class="text-center">Interview Period and Reopening initiated</h3>
+            </div>
+         {% endif %}
 
-{% if status.5 %}
-    <div class="well well-sm" style="padding-bottom: 20px">
-        <h2 class="text-center" style="color: #343e2e;">{{nomination.name}} </h2>
-        <h3 class="text-center">Interview Period and Reopened</h3>
-    </div>
-<div class="text-center">
-            <div class="dropdown show">
-             <button class="btn btn-secondary btn-danger dropdown-toggle" style="width: auto" type="button"
-                     id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                 Close Renomination
-                 <i class="fa fa-times  fa-lg" aria-hidden="true"></i>
-             </button>
-             <div class="dropdown-menu " role="menu">
-                 <form action="" method="post" style="display: inline">
-                     {% csrf_token %}
-                     <p>{{form_confirm|bootstrap}}</p>
-                     <input class="btn btn-success btn-block" type="submit" value="submit" />
-                 </form>
-             </div>
-         </div>
-        </div>
- {% endif %}
-
-
-
+        {% if status.5 %}
+            <div class="well well-sm" style="padding-bottom: 20px">
+                <h2 class="text-center" style="color: #343e2e;">{{nomination.name}} </h2>
+                <h3 class="text-center">Interview Period and Reopened</h3>
+            </div>
+            <div class="text-center">
+                <div class="dropdown show">
+                     <button class="btn btn-secondary btn-danger dropdown-toggle" style="width: auto" type="button"
+                             id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         Close Renomination
+                         <i class="fa fa-times  fa-lg" aria-hidden="true"></i>
+                     </button>
+                     <div class="dropdown-menu " role="menu">
+                         <form action="" method="post" style="display: inline">
+                             {% csrf_token %}
+                             <p>{{form_confirm|bootstrap}}</p>
+                             <input class="btn btn-success btn-block" type="submit" value="submit" />
+                         </form>
+                     </div>
+                 </div>
+            </div>
+         {% endif %}
         <hr>
+
         <div class="row">
             <div class="col-lg-6 text-center">
                 <h4><span style=" font-size: 20px;color: #1b3013">Post:</span> {{ nomination.nomi_post }}</h4>
@@ -353,119 +339,120 @@
                 <h4><span style=" font-size: 20px;color: #1b3013">Club:</span> {{ nomination.nomi_post.club }}</h4>
             </div>
         </div>
+
         <hr>
 
 
 
- <ul class="nav nav-tabs">
-        <li class="active"><a href="#all" data-toggle="tab" aria-expanded="true">All Applicants</a></li>
-        <li><a  href="#accepted" data-toggle="tab" aria-expanded="false">Accepted</a></li>
-        <li><a href="#rejected" data-toggle="tab" aria-expanded="false">Rejected</a></li>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#all" data-toggle="tab" aria-expanded="true">All Applicants</a></li>
+            <li><a  href="#accepted" data-toggle="tab" aria-expanded="false">Accepted</a></li>
+            <li><a href="#rejected" data-toggle="tab" aria-expanded="false">Rejected</a></li>
 
-        {% if pending %}
-            <li><a href="#pending" data-toggle="tab" aria-expanded="false">Pending</a></li>
-        {% endif %}
+            {% if pending %}
+                <li><a href="#pending" data-toggle="tab" aria-expanded="false">Pending</a></li>
+            {% endif %}
 
-     </ul>
-    <div id="myTabContent" class="tab-content">
-        <div class="tab-pane fade active in profile-nominations" id="all">
-            <br>
-            {% for nomi in applicants  %}
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
-                        </div>
-                        <div class="col-lg-5">
-                            <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
-                        </div>
-                        <div class="col-lg-4">
-                            <a href="{% url 'nomi_answer' nomi.pk %}">
-                                <div class="btn btn-info">View Application</div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        <div class="tab-pane fade  profile-nominations" id="accepted">
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in profile-nominations" id="all">
                 <br>
-            {% for nomi in accepted  %}
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
-                        </div>
-                        <div class="col-lg-5">
-                            <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
-                        </div>
-                        <div class="col-lg-4">
-                            <a href="{% url 'nomi_answer' nomi.pk %}">
-                                <div class="btn btn-info">View Application</div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        <div class="tab-pane fade profile-nominations" id="rejected">
-                <br>
-            {% for nomi in rejected  %}
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
-                        </div>
-                        <div class="col-lg-5">
-                            <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
-                        </div>
-                        <div class="col-lg-4"">
-                            <a href="{% url 'nomi_answer' nomi.pk %}">
-                                <div class="btn btn-info">View Application</div>
-                            </a>
+                {% for nomi in applicants  %}
+                <div class="panel panel-info">
+                    <div class="panel-body">
+                        <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
+                            </div>
+                            <div class="col-lg-5">
+                                <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
+                            </div>
+                            <div class="col-lg-4">
+                                <a href="{% url 'nomi_answer' nomi.pk %}">
+                                    <div class="btn btn-info">View Application</div>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
-
-        {% if pending %}
-            <div class="tab-pane fade profile-nominations" id="pending">
+            <div class="tab-pane fade  profile-nominations" id="accepted">
                     <br>
-                {% for nomi in pending  %}
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <p><span style="font-weight: bold">Result Status :</span> Pending</p>
-                        </div>
-                        <div class="col-lg-5">
-                            <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
-                        </div>
-                        <div class="col-lg-4">
-                            <a href="{% url 'nomi_answer' nomi.pk %}">
-                                <div class="btn btn-info">View Application</div>
-                            </a>
+                {% for nomi in accepted  %}
+                <div class="panel panel-info">
+                    <div class="panel-body">
+                        <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
+                            </div>
+                            <div class="col-lg-5">
+                                <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
+                            </div>
+                            <div class="col-lg-4">
+                                <a href="{% url 'nomi_answer' nomi.pk %}">
+                                    <div class="btn btn-info">View Application</div>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
+            <div class="tab-pane fade profile-nominations" id="rejected">
+                <br>
+                {% for nomi in rejected  %}
+                    <div class="panel panel-info">
+                        <div class="panel-body">
+                            <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
+                                </div>
+                                <div class="col-lg-5">
+                                    <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
+                                </div>
+                                <div class="col-lg-4">
+                                    <a href="{% url 'nomi_answer' nomi.pk %}">
+                                        <div class="btn btn-info">View Application</div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
-        {% endif %}
 
-    </div>
-{% endif %}
+            {% if pending %}
+                <div class="tab-pane fade profile-nominations" id="pending">
+                        <br>
+                    {% for nomi in pending  %}
+                <div class="panel panel-info">
+                    <div class="panel-body">
+                        <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <p><span style="font-weight: bold">Result Status :</span> Pending</p>
+                            </div>
+                            <div class="col-lg-5">
+                                <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
+                            </div>
+                            <div class="col-lg-4">
+                                <a href="{% url 'nomi_answer' nomi.pk %}">
+                                    <div class="btn btn-info">View Application</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                </div>
+            {% endif %}
+
+        </div>
+    {% endif %}
 <!-- ----------------------------------------------------------------------------------------------------- ------   -->
 
     {% if nomination.status == 'Sent for ratification' %}
@@ -482,24 +469,15 @@
 
         <div>
             {% if not pending and perm %}
-                {% if nomination.status == 'Interview period' %}
-                    <div class="text-center">
-                        <a href="{% url 'request_ratify' nomination.pk %}" class="btn btn-info">Send for Ratification</a>
-                    </div>
-
-                {% elif nomination.status == 'Sent for ratification' %}
-                    <div class="text-center">
+                <div class="text-center">
                         <a href="{% url 'cancel_ratify' nomination.pk %}" class="btn btn-danger"
                    style="width: auto">Cancel Ratification Request</a>
-                    </div>
-                {% endif %}
+                </div>
             {% endif %}
-
             {% if senate_perm %}
-             <div class="text-center">
+                <div class="text-center">
                         <a href="{% url 'ratify' nomination.pk %}" class="btn btn-info">Ratify</a>
-                    </div>
-
+                </div>
             {% endif %}
         </div>
 
@@ -514,88 +492,86 @@
         </div>
         <hr>
 
-    <ul class="nav nav-tabs">
-         <li class="active"><a  href="#all" data-toggle="tab" aria-expanded="true">All Applicants</a></li>
-         <li><a href="#accepted" data-toggle="tab" aria-expanded="true">Accepted</a></li>
-        <li><a href="#rejected" data-toggle="tab" aria-expanded="false">Rejected</a></li>
+        <ul class="nav nav-tabs">
+             <li class="active"><a  href="#all" data-toggle="tab" aria-expanded="true">All Applicants</a></li>
+             <li><a href="#accepted" data-toggle="tab" aria-expanded="true">Accepted</a></li>
+            <li><a href="#rejected" data-toggle="tab" aria-expanded="false">Rejected</a></li>
 
 
-     </ul>
-    <div id="myTabContent" class="tab-content">
-
-        <div class="tab-pane fade active in profile-nominations" id="all">
-                <br>
-            {% for nomi in applicants  %}
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
-                        </div>
-                        <div class="col-lg-5">
-                            <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
-                        </div>
-                        <div class="col-lg-4">
-                            <a href="{% url 'nomi_answer' nomi.pk %}">
-                                <div class="btn btn-info">View Application</div>
-                            </a>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in profile-nominations" id="all">
+                    <br>
+                {% for nomi in applicants  %}
+                <div class="panel panel-info">
+                    <div class="panel-body">
+                        <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
+                            </div>
+                            <div class="col-lg-5">
+                                <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
+                            </div>
+                            <div class="col-lg-4">
+                                <a href="{% url 'nomi_answer' nomi.pk %}">
+                                    <div class="btn btn-info">View Application</div>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
-        <div class="tab-pane fade profile-nominations" id="accepted">
-                <br>
-            {% for nomi in accepted  %}
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
-                        </div>
-                        <div class="col-lg-5">
-                            <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
-                        </div>
-                        <div class="col-lg-4">
-                            <a href="{% url 'nomi_answer' nomi.pk %}">
-                                <div class="btn btn-info">View Application</div>
-                            </a>
+            <div class="tab-pane fade profile-nominations" id="accepted">
+                    <br>
+                {% for nomi in accepted  %}
+                <div class="panel panel-info">
+                    <div class="panel-body">
+                        <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
+                            </div>
+                            <div class="col-lg-5">
+                                <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
+                            </div>
+                            <div class="col-lg-4">
+                                <a href="{% url 'nomi_answer' nomi.pk %}">
+                                    <div class="btn btn-info">View Application</div>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
-        <div class="tab-pane fade profile-nominations" id="rejected">
-                <br>
-            {% for nomi in rejected %}
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
-                        </div>
-                        <div class="col-lg-5">
-                            <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
-                        </div>
-                        <div class="col-lg-4">
-                            <a href="{% url 'nomi_answer' nomi.pk %}">
-                                <div class="btn btn-info">View Application</div>
-                            </a>
+            <div class="tab-pane fade profile-nominations" id="rejected">
+                    <br>
+                {% for nomi in rejected %}
+                <div class="panel panel-info">
+                    <div class="panel-body">
+                        <p class="profile-post-name"><span>Applicant : <span style="color: #091837">{{nomi.user.userprofile.name}}</span></span></p>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <p><span style="font-weight: bold">Result Status :</span> {{ nomi.status }}</p>
+                            </div>
+                            <div class="col-lg-5">
+                                <p><span style="font-weight: bold">Interview status :</span> {{nomi.interview_status}}</p>
+                            </div>
+                            <div class="col-lg-4">
+                                <a href="{% url 'nomi_answer' nomi.pk %}">
+                                    <div class="btn btn-info">View Application</div>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
 
-    </div>
+        </div>
     {% endif %}
-
 
 
 
@@ -607,7 +583,6 @@
     <h3 class="text-center">Selected users have been assigned the Post.</h3>
 
     {% endif %}
-
 
 
 </div>

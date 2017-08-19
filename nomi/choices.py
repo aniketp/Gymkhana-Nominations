@@ -49,7 +49,7 @@ STATUS = (
         ('Interview period', 'Interview period'),
         ('Interview period and Reopening initiated','Interview period and Reopening initiated'),
         ('Interview period and Nomination reopened', 'Interview period and Nomination reopened'),
-        ('Sent for ratification', 'Sent for ratification'),
+        ('Sent for ratification', 'Sent for ratification')
         ('Work done', 'Work done')
 )
 
@@ -64,11 +64,15 @@ G_STATUS = (
         ('out', 'out')
 )
 
+CLUB_STATUS = (
+        ('Club created', 'Club created'),
+        ('Club approved', 'Club approved'),
+
+)
+
 POST_STATUS = (
         ('Post created', 'Post created'),
         ('Post approved', 'Post approved'),
-        ('Post rejected', 'Post rejected'),
-        ('Post on work', 'Post on work'),
 )
 
 POST_PERMS = (
