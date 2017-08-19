@@ -21,7 +21,7 @@ admin.site.register(NominationInstance, NominationInstanceAdmin)
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('post_name','pk', 'club', 'parent')
+    list_display = ('post_name', 'pk', 'club', 'parent')
 
 admin.site.register(Post, PostAdmin)
 

@@ -37,7 +37,8 @@ def index(request):
                 club = Club.objects.get(pk=club_filter.cleaned_data['club'])
                 grouped_nomi = club.club_group.all().filter(status='out')
                 nomi = club.club_nomi.all().filter(group_status='normal').filter(status='Nomination out')
-                re_nomi = club.club_nomi.all().filter(group_status='normal').filter(status='Interview period and Nomination reopened')
+                re_nomi = club.club_nomi.all().filter(group_status='normal').\
+                    filter(status='Interview period and Nomination reopened')
                 nomi = nomi | re_nomi
                 result_query = sorted(chain(nomi, grouped_nomi), key=attrgetter('opening_date'), reverse=True)
 
@@ -48,7 +49,8 @@ def index(request):
 
             grouped_nomi = GroupNomination.objects.filter(status='out')
             nomi = Nomination.objects.filter(group_status='normal').filter(status='Nomination out')
-            re_nomi = Nomination.objects.filter(group_status='normal').filter(status='Interview period and Nomination reopened')
+            re_nomi = Nomination.objects.filter(group_status='normal').\
+                filter(status='Interview period and Nomination reopened')
             nomi = nomi | re_nomi
 
             result_query = sorted(chain(nomi, grouped_nomi), key=attrgetter('opening_date'), reverse=True)
@@ -1226,23 +1228,34 @@ def end_tenure(request):
 @login_required
 def profile_view(request):
     pk = request.user.pk
-    history = PostHistory.objects.filter(user=request.user)
+
+    my_posts = Post.objects.filter(post_holders=request.user)
+    history = PostHistory.objects.filter(user=request.user).order_by('start')
 
     pending_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Nomination out')
-    pending_re_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Interview period and Nomination reopened')
+    pending_re_nomi = NominationInstance.objects.filter(user=request.user).\
+        filter(nomination__status='Interview period and Nomination reopened')
     pending_nomi = pending_nomi | pending_re_nomi
 
     interview_re_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Interview period and Reopening initiated')
     interview_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Interview period')
+
     interview_nomi = interview_nomi | interview_re_nomi
 
     declared_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Sent for ratification')
 
+
     try:
         user_profile = UserProfile.objects.get(user__id=pk)
+        post_exclude_history = []    # In case a post is not registered in history
+        for post in my_posts:
+            if post not in history.post:  # TODO : Need to review this piece of code
+                post_exclude_history.append(post)
+
         return render(request, 'profile.html', context={'user_profile': user_profile, 'history': history,
                                                         'pending_nomi': pending_nomi, 'declared_nomi': declared_nomi,
-                                                        'interview_nomi': interview_nomi})
+                                                        'interview_nomi': interview_nomi, 'my_posts': my_posts,
+                                                        'excluded_posts': post_exclude_history})
     except ObjectDoesNotExist:
         return HttpResponseRedirect('create')
 
@@ -1285,6 +1298,12 @@ class CommentDelete(DeleteView):
     def get_success_url(self):
         form_pk = self.kwargs['form_pk']
         return reverse('nomi_answer', kwargs={'pk': form_pk})
+
+
+def all_nominations(request):
+    all_nomi = Nomination.objects.all().exclude(status='Nomination created')
+
+    return render(request, 'all_nominations.html', context={'all_nomi': all_nomi})
 
 
 

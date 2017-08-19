@@ -59,10 +59,11 @@
                     {% endif %}
 
                     {% if senate %}
-                        <li><a href="{% url 'senate_view' %}" id="navbar-links">Senate</a></li>
+                        <li><a href="{% url 'senate_view' %}" id="navbar-links">Ratifications</a></li>
+                        <li><a href="{% url 'all_nominations' %}" id="navbar-links">All Nominations</a></li>
                     {% endif %}
                 {% endblock %}
-                <li><a href="{% url 'info:info' %}" id="navbar-links">Student Search</a></li>
+                <li><a href="{% url 'info:info' %}" id="navbar-links">Post Holders</a></li>
 
 
             </ul>

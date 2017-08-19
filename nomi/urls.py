@@ -13,6 +13,9 @@ urlpatterns = [
     # nominations/admin_portal
     url(r'^admin_portal$', views.admin_portal, name='admin_portal'),
 
+    # nominations/all
+    url(r'^all/$', views.all_nominations, name='all_nominations'),
+    
     # nominations/apply/2
     url(r'^apply/(?P<pk>\d+)/$', views.nomi_apply, name='nomi_apply'),
 
@@ -55,7 +58,6 @@ urlpatterns = [
     # nominations/create
     url(r'^create/(?P<pk>\d+)/$', views.nomination_create, name='nomi_create'),
 
-
     # nominations/2/update
     url(r'^(?P<pk>\d+)/update/$', views.NominationUpdate.as_view(), name='nomi_update'),
 
@@ -77,7 +79,6 @@ urlpatterns = [
     # nominations/post_reject/2/43
     url(r'^post_reject/(?P<post_pk>\d+)/$', views.post_reject, name='post_reject'),
 
-
     # nominations/child_post/2/8
     url(r'^child_post/(?P<pk>\d+)/$', views.child_post_view, name='child_post'),
 
@@ -93,7 +94,7 @@ urlpatterns = [
     # nominations/final_nomi_approve/2/43/21
     url(r'^final_nomi_approve/(?P<nomi_pk>\d+)/$', views.final_nomi_approval, name='final_nomi_approval'),
 
-
+    # nominations/re_nomi/2
     url(r'^re_nomi/(?P<nomi_pk>\d+)/$', views.reopen_nomi, name='reopen_nomi'),
 
     # nominations/post_approve/2
@@ -105,7 +106,6 @@ urlpatterns = [
     # nominations/final_nomi_approve/2/43/21
     url(r'^final_re_nomi_approve/(?P<re_nomi_pk>\d+)/$', views.final_re_nomi_approval, name='final_re_nomi_approval'),
 
-
     # nominations/group_nomi/2
     url(r'^group_nomi/(?P<pk>\d+)/$', views.group_nominations, name='group_nomi'),
 
@@ -115,7 +115,7 @@ urlpatterns = [
     # nominations/cancel_result_approval/2
     url(r'^cancel_result_approval/(?P<nomi_pk>\d+)/$', views.cancel_result_approval, name='cancel_result_approval'),
 
-# nominations/ratify/2
+    # nominations/ratify/2
     url(r'^ratify/(?P<nomi_pk>\d+)/$', views.ratify, name='ratify'),
 
     # nominations/ratify/2
@@ -138,7 +138,6 @@ urlpatterns = [
 
     # nominations/renew
     url(r'^renew/$', views.end_tenure, name='end_tenure'),
-
 
     # nominations/ratify/2
     url(r'^request_deratify/(?P<post_pk>\d+)/(?P<user_pk>\d+)/$', views.create_deratification_request, name='request_deratify'),

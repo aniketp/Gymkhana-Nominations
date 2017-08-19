@@ -56,66 +56,54 @@
 {% block content %}
     <div class="profile-content">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#current-posts" data-toggle="tab" aria-expanded="true">Your Current Posts</a></l
-                    <li class="active"><a href="#post-history" data-toggle="tab" aria-expanded="true">Your Post History</a></li>
+                    <li class="active"><a href="#post-history" data-toggle="tab" aria-expanded="true">Post History</a></li>
                     <li><a href="#pending" data-toggle="tab" aria-expanded="false">Pending Applications</a></li>
                     <li><a href="#declared" data-toggle="tab" aria-expanded="false">Nomination Results</a></li>
                 </ul>
                 <div id="myTabContent" class="tab-content">
 
-                    <div class="tab-pane fade active in profile-nominations" id="current-posts">
+                    <div class="tab-pane fade active in profile-nominations" id="post-history">
                         <br>
-                        {% for post in my_posts %}
-
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                <h3 class="panel-title" style="font-weight: bold">{{post.club.club_name.upper}}</h3>
-                            </div>
-                            <div class="panel-body" style="padding-bottom: 0">
-                                <div class="col-lg-6">
-                                    <p class="profile-post-name">
-                                        <span>Post: </span>{{post.post_name}}</p>
-                                    <p class="profile-post-name">
-                                        <span>Parent Club: </span>{{post.club.club_parent.club_name}}</p>
+                        {% for post in excluded_posts %}
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title" style="font-weight: bold">{{post.club.club_name.upper}}</h3>
                                 </div>
+                                <div class="panel-body">
+                                    <p class="profile-post-name"><span>Post: </span>{{post.post_name}}</p>
 
-                                <a href="{% url 'post_view' post.pk %}">
-                                    <div class="btn btn-primary col-lg-6">
-                                        View Details
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <p><span>Status: </span> Currently holding the Post</p>
+                                        </div>
                                     </div>
-                                </a>
+                                </div>
                             </div>
-                        </div>
-
                         {% endfor %}
-                    </div>
-
-                    <div class="tab-pane fade profile-nominations" id="post-history">
-                        <br>
                         {% for his in history %}
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                <h3 class="panel-title" style="font-weight: bold">{{his.post.club.club_name.upper}}</h3>
-                            </div>
-                            <div class="panel-body">
-                                <p class="profile-post-name"><span>Post: </span>{{his.post.post_name}}</p>
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title" style="font-weight: bold">{{his.post.club.club_name.upper}}</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <p class="profile-post-name"><span>Post: </span>{{his.post.post_name}}</p>
 
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <p><span>Start: </span>{{his.start}}</p>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <p><span>End: </span>
-                                            {% if his.end %}
-                                                {{his.end}}
-                                            {% else %}
-                                                currently holding the post
-                                            {% endif %}
-                                        </p>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <p><span>Start: </span>{{his.start}}</p>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <p><span>End: </span>
+                                                {% if his.end %}
+                                                    {{his.end}}
+                                                {% else %}
+                                                    Currently holding the post
+                                                {% endif %}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         {% endfor %}
                     </div>
 
