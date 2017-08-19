@@ -843,6 +843,7 @@ def nomi_answer_edit(request, pk):
                 json_data = json.dumps(form.cleaned_data)
                 ans_form.data = json_data
                 ans_form.save()
+                application.edit_time = datetime.now()
                 application.save()
 
                 info = "Your application has been edited"
@@ -1250,8 +1251,13 @@ def profile_view(request):
     try:
         user_profile = UserProfile.objects.get(user__id=pk)
         post_exclude_history = []    # In case a post is not registered in history
+
+        post_history = []
+        for his in history:
+            post_history.append(his.post)
+
         for post in my_posts:
-            if post not in history.post:  # TODO : Need to review this piece of code
+            if post not in post_history:  # TODO : Need to review this piece of code
                 post_exclude_history.append(post)
 
         return render(request, 'profile.html', context={'user_profile': user_profile, 'history': history,
