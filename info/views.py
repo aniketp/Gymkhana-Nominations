@@ -1,7 +1,9 @@
 from django.shortcuts import render
+
 from nomi.models import *
 from info.forms import ClubForm, PostForm, SessionForm,current_session
 from django.contrib.auth.decorators import login_required
+from info.forms import ClubForm, PostForm, SessionForm, current_session
 
 def index(request):
     club = None
@@ -36,8 +38,9 @@ def index(request):
     return render(request, 'index.html', context={'club_form': club_form, 'post_form': post_form,
                                                   'query_posts': query_posts})
 
+
 @login_required
-def archieve(request):
+def post_holder_search(request):
     club = None
     session = current_session()
     query_posts = None

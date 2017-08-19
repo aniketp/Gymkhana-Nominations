@@ -581,7 +581,7 @@ def copy_nomi_link(request, pk):
 
 
 ## ------------------------------------------------------------------------------------------------------------------ ##
-#########################################   REOPEN NOMINATION MONITOR VIEWS   ################################################
+#########################################   REOPEN NOMINATION MONITOR VIEWS   ##########################################
 ## ------------------------------------------------------------------------------------------------------------------ ##
 
 
@@ -884,11 +884,14 @@ def nomi_answer_edit(request, pk):
                 json_data = json.dumps(form.cleaned_data)
                 ans_form.data = json_data
                 ans_form.save()
+                application.edit_time = datetime.now()
+                application.save()
 
                 info = "Your application has been edited"
                 return render(request, 'nomi_done.html', context={'info': info})
 
-        return render(request, 'edit_nomi_answer.html', context={'form': form,'form_confirm':form_confirm, 'nomi': application, 'nomi_user': applicant})
+        return render(request, 'edit_nomi_answer.html', context={'form': form, 'form_confirm': form_confirm,
+                                                                 'nomi': application, 'nomi_user': applicant})
     else:
         return render(request, 'no_access.html')
 
@@ -1292,14 +1295,20 @@ def profile_view(request):
     try:
         user_profile = UserProfile.objects.get(user__id=pk)
         post_exclude_history = []    # In case a post is not registered in history
+
+        post_history = []
+        for his in history:
+            post_history.append(his.post)
+
         for post in my_posts:
-            if post not in history:  # TODO : Need to review this piece of code
+            if post not in post_history:
                 post_exclude_history.append(post)
 
         return render(request, 'profile.html', context={'user_profile': user_profile, 'history': history,
                                                         'pending_nomi': pending_nomi, 'declared_nomi': declared_nomi,
                                                         'interview_nomi': interview_nomi, 'my_posts': my_posts,
                                                         'excluded_posts': post_exclude_history})
+
     except ObjectDoesNotExist:
         return HttpResponseRedirect('create')
 
