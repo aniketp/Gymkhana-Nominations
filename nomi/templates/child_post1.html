@@ -8,6 +8,7 @@
     <div class="profile-content">
         <!-- heading ---------------------------------------------------------   --->
         <div class="container-fluid child-post-container">
+
             <div class="row box">
                 <div>
                     <h2>{{ post.post_name }}</h2>
@@ -18,81 +19,41 @@
                 </div>
             </div>
             <br>
+
         </div>
 
-         <!--  tag features---------------------------------------------------------   --->
 
-        {% if parent.tag_perms == 'Can create' %}
-            <div class="container-fluid">
-                <div class="col-lg-6 text-center">
-                    <div class="dropdown show">
-                        <button class="btn btn-secondary btn-primary dropdown-toggle" type="button"
-                             id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Create a new Tag
-                        </button>
-                        <div class="dropdown-menu " role="menu">
-                            <form action="" method="post" style="display: inline">
-                                {% csrf_token %}
-                                <p>{{tag_form|bootstrap}}</p>
 
-                                <input class="btn btn-success" type="submit" value="submit" />
-
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-1"></div>
-                <div class="col-lg-5 text-center">
-                    {% if post.tag_perms == 'Can create' %}
-                    <form action="" method="post" >
-                        {% csrf_token %}
-                        <p>{{give_form|bootstrap}}</p>
-                        <input class="btn btn-success btn-block" type="submit" value="Take tag permission" />
-                    </form>
-
-                    {% else %}
-                    <form action="" method="post" style="display: inline">
-                        {% csrf_token %}
-                        <p>{{give_form|bootstrap}}</p>
-                        <input class="btn btn-success btn-block" type="submit" value="Give tag permission" />
-                    </form>
-
-                    {% endif %}
-                </div>
+        <div class="container-fluid">
+            {% if post.status == 'Post created' %}
+            <div>
+                <h3>The post has not been approved yet</h3>
             </div>
-        {% endif %}
 
-
-            <div class="container-fluid">
-                {% if post.status == 'Post created' %}
-                 <div>
-                  <h3>The post has not been approved yet</h3>
-                 </div>
-
-                {% else %}
-                <div class="col-lg-6 col-sm-6 nomination-list" style="min-height: 280px;">
-                    <h2>Nominations for the post</h2>
-                    <div class="row">
-                        <div class="col-lg-12 text-center">
-
-                                <a href="{% url 'nomi_create' post.pk %}"
-                                   class="btn btn-primary nomi-button">Create a New Nomination</a>
-                        </div>
+            {% else %}
+            <div class="col-lg-6 col-sm-6 nomination-list" style="min-height: 280px;">
+                <h2>Nominations for the post</h2>
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <a href="{% url 'nomi_create' post.pk %}"
+                           class="btn btn-primary nomi-button">Create a New Nomination</a>
                     </div>
-                    <br>
-
-
-                    {% for nomination in nominations %}
-                    {% if not nomination.status == 'Work done' %}
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <a  href="{% url 'nomi_detail' nomi_pk=nomination.pk %}">{{nomination.name}}</a>
-                        </div>
-                    </div>
-                    {% endif %}
-                    {% endfor %}
                 </div>
-                <div class="col-lg-1 col-sm-1"></div>
+                <br>
+
+
+                {% for nomination in nominations %}
+                {% if not nomination.status == 'Work done' %}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <a  href="{% url 'nomi_detail' nomi_pk=nomination.pk %}">{{nomination.name}}</a>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                </div>
+
+
                 <div class="col-lg-5 col-sm-6 nomination-list">
                     <div class="post-holder-list">
                         <h2>List of post holders</h2>
@@ -109,8 +70,8 @@
                             {% endfor %}
                         </ol>
                     </div>
-                {% endif %}
                 </div>
-            </div>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}

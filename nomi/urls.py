@@ -79,6 +79,13 @@ urlpatterns = [
     # nominations/post_reject/2/43
     url(r'^post_reject/(?P<post_pk>\d+)/$', views.post_reject, name='post_reject'),
 
+    # nominations/post_approve/2/34
+    url(r'^club_approve/(?P<club_pk>\d+)/$', views.club_approval, name='club_approval'),
+
+    # nominations/post_reject/2/43
+    url(r'^club_reject/(?P<club_pk>\d+)/$', views.club_reject, name='club_reject'),
+
+
     # nominations/child_post/2/8
     url(r'^child_post/(?P<pk>\d+)/$', views.child_post_view, name='child_post'),
 

@@ -39,8 +39,8 @@ class Club(models.Model):
 class ClubCreate(models.Model):
     club_name = models.CharField(max_length=100, null=True)
     club_parent = models.ForeignKey('self', null=True, blank=True)
-    take_approval = models.ForeignKey('Post', related_name="give_approval", on_delete=models.SET_NULL, null=True,blank=True)
-
+    take_approval = models.ForeignKey('Post', related_name="give_club_approval", on_delete=models.SET_NULL, null=True,blank=True)
+    requested_by = models.ForeignKey('Post', related_name="club_request", on_delete=models.SET_NULL, null=True,blank=True)
     def __str__(self):
         return self.club_name
 
@@ -56,7 +56,6 @@ class Post(models.Model):
     take_approval = models.ForeignKey('self', related_name="give_approval", on_delete=models.SET_NULL, null=True,blank=True)
     status = models.CharField(max_length=50, choices=POST_STATUS, default='Post created')
     perms = models.CharField(max_length=200, choices=POST_PERMS, default='normal')
-    tag_perms = models.CharField(max_length=20, choices=TAG_PERMS, default='normal')
 
     def __str__(self):
         return self.post_name

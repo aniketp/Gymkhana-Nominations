@@ -142,6 +142,7 @@ def post_view(request, pk):
     child_posts_reverse = child_posts[::-1]
 
     post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
+    entity_approvals = ClubCreate.objects.filter(take_approval=post)
     post_to_be_approved = Post.objects.filter(take_approval = post).filter(status = 'Post created')
     post_count = post_to_be_approved.count()
     post_approvals = post_to_be_approved|post_approvals
@@ -157,7 +158,7 @@ def post_view(request, pk):
     if request.method == 'POST':
         tag_form = ClubForm(request.POST)
         if tag_form.is_valid():
-            Club.objects.create(club_name=tag_form.cleaned_data['club_name'], club_parent=post.club)
+            ClubCreate.objects.create(club_name=tag_form.cleaned_data['club_name'], club_parent=post.club, take_approval = post, requested_by = post)
             return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
     else:
         tag_form = ClubForm
@@ -169,7 +170,7 @@ def post_view(request, pk):
                                                       'nomi_approval': nomi_approvals, 're_nomi_approval':re_nomi_approval,
                                                       'group_nomi_approvals': group_nomi_approvals,
                                                       'result_approvals': result_approvals,'count':count,
-                                                      "to_deratify":to_deratify,"post_count":post_count})
+                                                      "to_deratify":to_deratify,"post_count":post_count,'entity_approvals':entity_approvals})
     else:
         return render(request, 'no_access.html')
 
@@ -234,12 +235,6 @@ def child_post_view(request, pk):
     nominations = Nomination.objects.filter(nomi_post=post)
 
 
-    ## tag features
-    tag_form = ClubForm(request.POST or None)
-    if tag_form.is_valid():
-        Club.objects.create(club_name=tag_form.cleaned_data['club_name'], club_parent=post.club)
-        return HttpResponseRedirect(reverse('child_post', kwargs={'pk': pk}))
-
 
     give_form = BlankForm(request.POST or None)
     if give_form.is_valid():
@@ -253,7 +248,7 @@ def child_post_view(request, pk):
 
     if request.user in parent.post_holders.all():
         return render(request, 'child_post1.html', {'post': post, 'nominations': nominations, 'parent':parent,
-                                                    'tag_form': tag_form, 'give_form': give_form})
+                                                     'give_form': give_form})
     else:
         return render(request, 'no_access.html')
 
@@ -308,7 +303,7 @@ def post_reject(request, post_pk):
 # is_safe
 @login_required
 def club_approval(request, club_pk):
-    club_create = ClubCreate.objects.get(pk=post_pk)
+    club_create = ClubCreate.objects.get(pk=club_pk)
     access = False
     if request.user in club_create.take_approval.post_holders.all():
         access = True
@@ -324,15 +319,15 @@ def club_approval(request, club_pk):
             to_add = club_create.take_approval.parent
             club_create.take_approval = to_add
             club_create.save()
-            return HttpResponseRedirect(reverse('post_view', kwargs={'pk': current.pk}))
+            return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view.pk}))
     else:
         return render(request, 'no_access.html')
 
 # the viewer removes himself from approvals ,thus delete the post down...
 # is_safe
 @login_required
-def club_reject(request, post_pk):
-    club_reject = ClubCreate.objects.get(pk=post_pk)
+def club_reject(request, club_pk):
+    club_reject = ClubCreate.objects.get(pk=club_pk)
 
     access = False
     if request.user in club_reject.take_approval.post_holders.all():

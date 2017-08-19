@@ -49,8 +49,8 @@ STATUS = (
         ('Interview period', 'Interview period'),
         ('Interview period and Reopening initiated','Interview period and Reopening initiated'),
         ('Interview period and Nomination reopened', 'Interview period and Nomination reopened'),
-        ('Sent for ratification', 'Sent for ratification')
-        ('Work done', 'Work done')
+        ('Sent for ratification', 'Sent for ratification'),
+        ('Work done', 'Work done'),
 )
 
 GROUP_STATUS = (
