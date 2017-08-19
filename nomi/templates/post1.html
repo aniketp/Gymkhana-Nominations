@@ -64,10 +64,8 @@
 
     <ul class="nav nav-tabs">
         <li class="active"><a href="#child-posts" data-toggle="tab" aria-expanded="true">Posts under you</a></li>
-        <li><a href="#approvals" data-toggle="tab" aria-expanded="true">Approvals</a></li>
-        {% if to_deratify %}
+        <li><a href="#approvals" data-toggle="tab" aria-expanded="true">Pending Approvals</a></li>
         <li><a href="#to_deratify" data-toggle="tab" aria-expanded="false">Users to be deratified ({{ to_deratify.count }})</a></li>
-        {% endif %}
     </ul>
 
     <div id="myTabContent" class="tab-content">
@@ -98,6 +96,7 @@
                 <li><a href="#post-approval" data-toggle="tab" aria-expanded="false">Posts to be approved ({{post_count}})</a></li>
                 <li><a href="#nomi-approval" data-toggle="tab" aria-expanded="false">Nominations to be approved ({{ count }})</a></li>
                 <li><a href="#declared" data-toggle="tab" aria-expanded="false">Results to be approved ({{ result_approvals.count }})</a></li>
+                <li><a href="#declared" data-toggle="tab" aria-expanded="false">Entities to be approved</a></li>
             </ul>
 
             <div id="myTabContent" class="tab-content">
@@ -247,10 +246,6 @@
             </div>
         </div>
 
-
-
-        {% if to_deratify %}
-
          <!-- to_deratify----------------------------------------------------------------------------------------------   -->
         <div class="tab-pane fade profile-nominations" id="to_deratify">
             <br>
@@ -262,7 +257,7 @@
                 </div>
                 <div class="panel-body">
                     <p class="profile-post-name">
-                        <span>Name: </span>{{each.name.userprofile.name}} (requested to be deratified)</p>
+                        <span>Name: </span>{{each.name.userprofile.name}} (Requested for Deratification)</p>
                     <div class="row">
                         <div class="col-lg-4">
                             <p><span>club : </span>{{each.post.club}}</p>
@@ -272,20 +267,15 @@
                                     <a  class="btn btn-success" href="{% url 'approve_deratify' each.pk %}">Approve</a>
                                 </div>
 
-
                                 <div class="col-lg-4 text-center">
                                     <a  class="btn btn-danger" href="{% url 'cancel_deratify' each.pk  %}">Cancel</a>
                                 </div>
-
 
                         </div>
                      </div>
                  </div>
             {% endfor %}
         </div>
-
-        {% endif %}
-
 
     </div>
 

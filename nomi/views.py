@@ -1257,7 +1257,7 @@ def profile_view(request):
             post_history.append(his.post)
 
         for post in my_posts:
-            if post not in post_history:  # TODO : Need to review this piece of code
+            if post not in post_history:
                 post_exclude_history.append(post)
 
         return render(request, 'profile.html', context={'user_profile': user_profile, 'history': history,
