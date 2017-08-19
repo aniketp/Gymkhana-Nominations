@@ -38,7 +38,7 @@ class Club(models.Model):
 
 class ClubCreate(models.Model):
     club_name = models.CharField(max_length=100, null=True)
-    club_parent = models.ForeignKey('self', null=True, blank=True)
+    club_parent = models.ForeignKey(Club, null=True, blank=True)
     take_approval = models.ForeignKey('Post', related_name="give_club_approval", on_delete=models.SET_NULL, null=True,blank=True)
     requested_by = models.ForeignKey('Post', related_name="club_request", on_delete=models.SET_NULL, null=True,blank=True)
     def __str__(self):

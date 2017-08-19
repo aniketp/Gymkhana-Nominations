@@ -22,7 +22,9 @@ def current_session():
 
 
 class ClubForm(forms.Form):
-    club = forms.ChoiceField( choices=[('NA','------------')] + [(o.id, o) for o in Club.objects.all()],  widget=forms.Select,required= False )
+    def __init__(self, *args, **kwargs):
+        super(ClubForm, self).__init__(*args, **kwargs)
+        self.fields["club"] = forms.ChoiceField( choices=[('NA','------------')] + [(o.id, o) for o in Club.objects.all()],  widget=forms.Select,required= False )
 
 
 class PostForm(forms.Form):

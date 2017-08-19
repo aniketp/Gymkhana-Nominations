@@ -158,7 +158,10 @@ def post_view(request, pk):
     if request.method == 'POST':
         tag_form = ClubForm(request.POST)
         if tag_form.is_valid():
-            ClubCreate.objects.create(club_name=tag_form.cleaned_data['club_name'], club_parent=post.club, take_approval = post, requested_by = post)
+            if post.perms == "can ratify the post":
+                Club.objects.create(club_name = tag_form.cleaned_data['club_name'], club_parent=post.club)
+            else:
+                ClubCreate.objects.create(club_name=tag_form.cleaned_data['club_name'], club_parent=post.club, take_approval = post, requested_by = post)
             return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
     else:
         tag_form = ClubForm

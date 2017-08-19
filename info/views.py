@@ -4,6 +4,7 @@ from nomi.models import *
 from info.forms import ClubForm, PostForm, SessionForm,current_session
 from django.contrib.auth.decorators import login_required
 from info.forms import ClubForm, PostForm, SessionForm, current_session
+from nomi.forms import BlankForm
 
 def index(request):
     club = None
@@ -39,12 +40,26 @@ def index(request):
                                                   'query_posts': query_posts})
 
 
+def get_mail(query_users):
+    mail_ids = ''
+    for each in query_users:
+        if len(mail_ids):
+            mail_ids = mail_ids + ', ' + str(each.user) + '@iitk.ac.in'
+        else:
+            mail_ids = str(each.user) + '@iitk.ac.in'
+
+    return mail_ids
+
+
 @login_required
 def post_holder_search(request):
     club = None
     session = current_session()
     query_posts = None
     query_users = PostHistory.objects.none()
+
+    get_ids = BlankForm(request.POST or None)
+    status = None
 
     if request.method == 'POST':
         session_form = SessionForm(request.POST)
@@ -61,13 +76,10 @@ def post_holder_search(request):
                     club_form = ClubForm
                     post_form = None
                     query_users = PostHistory.objects.filter(post_session=session)
-                    query = '|'
-                    for each in query_users:
-                        query = query + '|' + str(each.user.pk)
-
+                    get_ids = get_mail(query_users)
                     return render(request, 'info.html',
                                   context={'club_form': club_form, 'post_form': post_form, 'session_form': session_form,
-                                           'query_users': query_users ,'query':query})
+                                           'query_users': query_users ,'get_ids':get_ids})
 
                 club = Club.objects.get(pk=club_form.cleaned_data['club'])
 
@@ -76,12 +88,12 @@ def post_holder_search(request):
                     query_posts = post
                     post_form = PostForm(club)
                     query_users = PostHistory.objects.filter(post_session=session , post = query_posts)
-                    query = '|'
-                    for each in query_users:
-                        query = query + '|' + str(each.user.pk)
+
+                    get_ids = get_mail(query_users)
+
                     return render(request, 'info.html',
                               context={'club_form': club_form, 'post_form': post_form,'session_form':session_form,
-                                       'query_users': query_users,'query':query})
+                                       'query_users': query_users,'get_ids':get_ids})
 
                 post_form = PostForm(club)
                 query_posts = club.club_posts.all()
@@ -90,13 +102,11 @@ def post_holder_search(request):
                     post_user = PostHistory.objects.filter(post_session = session).filter(post = each)
                     query_users = query_users|post_user
 
-                query = '|'
-                for each in query_users:
-                    query = query + '|' + str(each.user.pk)
+                get_ids = get_mail(query_users)
 
                 return render(request, 'info.html',
                           context={'club_form': club_form, 'post_form': post_form,'session_form':session_form,
-                                   'query_users': query_users,'query':query})
+                                   'query_users': query_users,'get_ids':get_ids})
 
 
 
@@ -105,19 +115,10 @@ def post_holder_search(request):
         post_form = None
         session_form = SessionForm(initial={'year': session.id})
         query_users = PostHistory.objects.filter(post_session = session)
-
+        get_ids = get_mail(query_users)
 
     return render(request, 'info.html', context={'club_form': club_form, 'post_form': post_form,'session_form':session_form,
-                                                  'query_users': query_users})
+                                                  'query_users': query_users,'get_ids':get_ids})
 
-@login_required
-def get_mail(request, query):
-    mail_ids = ''
-    pk_list = query.split('|')
-    for user_pk in pk_list:
-        user = User.objects.get(pk = int(user_pk))
-        if len(mail_ids):
-            mail_ids = mail_ids + ', ' + str(user) + '@iitk.ac.in'
-        else:
-            mail_ids = str(user) + '@iitk.ac.in'
-    return render(request,'mail_id.html',context = {'mail_ids':mail_ids})
+
+
