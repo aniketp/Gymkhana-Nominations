@@ -824,6 +824,32 @@ def nomination_answer(request, pk):
         return render(request, 'no_access.html')
 
 
+def nomi_answer_edit(request, pk):
+    application = NominationInstance.objects.get(pk=pk)
+    if application.user == request.user:
+        ans_form = application.filled_form
+        data = json.loads(ans_form.data)
+        applicant = application.user.userprofile
+        questionnaire = application.nomination.nomi_form
+        form = questionnaire.get_form(request.POST or data)
+        nomination = application.nomination
+
+        form_confirm = ConfirmApplication(request.POST or None)
+
+        if form_confirm.is_valid():
+            if form.is_valid():
+                json_data = json.dumps(form.cleaned_data)
+                ans_form.data = json_data
+                ans_form.save()
+
+                info = "Your application has been edited"
+                return render(request, 'nomi_done.html', context={'info': info})
+
+        return render(request, 'edit_nomi_answer.html', context={'form': form,'form_confirm':form_confirm, 'nomi': application, 'nomi_user': applicant})
+    else:
+        return render(request, 'no_access.html')
+
+
 
 ## ------------------------------------------------------------------------------------------------------------------ ##
 #########################################     GROUP NOMINATION VIEWS    ################################################
@@ -1201,10 +1227,15 @@ def end_tenure(request):
 def profile_view(request):
     pk = request.user.pk
     history = PostHistory.objects.filter(user=request.user)
+
     pending_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Nomination out')
     pending_re_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Interview period and Nomination reopened')
     pending_nomi = pending_nomi | pending_re_nomi
+
+    interview_re_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Interview period and Reopening initiated')
     interview_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Interview period')
+    interview_nomi = interview_nomi | interview_re_nomi
+
     declared_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Sent for ratification')
 
     try:

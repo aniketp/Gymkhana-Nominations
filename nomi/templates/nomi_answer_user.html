@@ -72,8 +72,6 @@ form view
         </h2>
         <hr>
 
-    </div>
-
     <div class="well">
 
         <div>
@@ -84,8 +82,12 @@ form view
             <form  action="" method="post">
                 {% csrf_token %}
                 {{form|bootstrap}}
+
             </form>
         </div>
+
+    </div>
+</div>
 
 
 {% endblock %}

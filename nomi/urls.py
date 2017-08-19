@@ -16,6 +16,9 @@ urlpatterns = [
     # nominations/apply/2
     url(r'^apply/(?P<pk>\d+)/$', views.nomi_apply, name='nomi_apply'),
 
+    # nominations/edit/2
+    url(r'^answer_edit/(?P<pk>\d+)/$', views.nomi_answer_edit, name='nomi_answer_edit'),
+
     # nominations/copy_nomi_link/2
     url(r'^copy_nomi_link/(?P<pk>\d+)/$', views.copy_nomi_link, name='copy_nomi_link'),
 
