@@ -21,10 +21,30 @@ def current_session():
     return session
 
 
+def make_club_choice(parent,i):
+    global GLOBAL_CHOICE
+    child_clubs = Club.objects.filter(club_parent = parent)
+
+    if parent == None:
+        GLOBAL_CHOICE = [('NA', 'ALL')]
+    else:
+        GLOBAL_CHOICE = GLOBAL_CHOICE + [(parent.id , '-' *2*  i + '>' + ' ' + str(parent))]
+
+
+    if child_clubs:
+        for each in child_clubs:
+            make_club_choice(each,i+1)
+
+    return GLOBAL_CHOICE
+
+
+
+
+
 class ClubForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(ClubForm, self).__init__(*args, **kwargs)
-        self.fields["club"] = forms.ChoiceField( choices=[('NA','------------')] + [(o.id, o) for o in Club.objects.all()],  widget=forms.Select,required= False )
+        self.fields["club"] = forms.ChoiceField( choices=make_club_choice(None,0),  widget=forms.Select,required= False )
 
 
 class PostForm(forms.Form):
