@@ -37,7 +37,7 @@
                     <div class="btn-group">
                         <button class="btn btn-secondary btn-danger dropdown-toggle" style="width: auto" type="button"
                         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                             Create a new tag
+                             Create a new Entity
                             <i class="fa fa-caret-down  fa-lg" aria-hidden="true"></i>
                         </button>
                          <div class="dropdown-menu " role="menu">
@@ -64,9 +64,7 @@
 
     <ul class="nav nav-tabs">
         <li class="active"><a href="#child-posts" data-toggle="tab" aria-expanded="true">Posts under you</a></li>
-        <li><a href="#post-approval" data-toggle="tab" aria-expanded="false">Posts to be approved ({{post_count}})</a></li>
-        <li><a href="#nomi-approval" data-toggle="tab" aria-expanded="false">Nominations to be approved ({{ count }})</a></li>
-        <li><a href="#declared" data-toggle="tab" aria-expanded="false">Results to be approved ({{ result_approvals.count }})</a></li>
+        <li><a href="#approvals" data-toggle="tab" aria-expanded="true">Approvals</a></li>
         {% if to_deratify %}
         <li><a href="#to_deratify" data-toggle="tab" aria-expanded="false">Users to be deratified ({{ to_deratify.count }})</a></li>
         {% endif %}
@@ -95,148 +93,161 @@
             {% endfor %}
         </div>
 
-        <!-- post approval ----------------------------------------------------------------------------------------------   -->
-        <div class="tab-pane fade profile-nominations" id="post-approval">
-            <br>
-            {% for ch_post in post_approval %}
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{ch_post.club}}</h3>
-                </div>
-                <div class="panel-body">
-                    <p class="profile-post-name"><a href="{% url 'child_post' pk=ch_post.pk %}">
-                        <span>Post: </span>{{ch_post.post_name}}</a></p>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <p><span>Parent : </span>{{ch_post.parent}}</p>
+        <div class="tab-pane fade profile-nominations" id="approvals">
+            <ul class="nav nav-tabs">
+                <li><a href="#post-approval" data-toggle="tab" aria-expanded="false">Posts to be approved ({{post_count}})</a></li>
+                <li><a href="#nomi-approval" data-toggle="tab" aria-expanded="false">Nominations to be approved ({{ count }})</a></li>
+                <li><a href="#declared" data-toggle="tab" aria-expanded="false">Results to be approved ({{ result_approvals.count }})</a></li>
+            </ul>
+
+            <div id="myTabContent" class="tab-content">
+
+            <!-- post approval -----------------------------------------------------------------------------------   -->
+                <div class="tab-pane fade profile-nominations" id="post-approval">
+                    <br>
+                    {% for ch_post in post_approval %}
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{ch_post.club}}</h3>
                         </div>
-                        {% if post.parent in ch_post.post_approvals.all %}
-                        <div class="col-lg-4 text-center">
-                            Status : Sent to parent
-                        </div>
-                        {% else %}
-                                <div class="col-lg-4 text-center">
-                                    <a  class="btn btn-success" href="{% url 'post_approval' post_pk=ch_post.pk %}">Approve</a>
+                        <div class="panel-body">
+                            <p class="profile-post-name"><a href="{% url 'child_post' pk=ch_post.pk %}">
+                                <span>Post: </span>{{ch_post.post_name}}</a></p>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <p><span>Parent : </span>{{ch_post.parent}}</p>
                                 </div>
-
-
+                                {% if post.parent in ch_post.post_approvals.all %}
                                 <div class="col-lg-4 text-center">
-                                    <a  class="btn btn-danger" href="{% url 'post_reject' post_pk=ch_post.pk  %}">Delete</a>
+                                    Status : Sent to parent
                                 </div>
+                                {% else %}
+                                        <div class="col-lg-4 text-center">
+                                            <a  class="btn btn-success" href="{% url 'post_approval' post_pk=ch_post.pk %}">Approve</a>
+                                        </div>
 
-                        {% endif %}
-                        </div>
-                     </div>
-                 </div>
-            {% endfor %}
-        </div>
 
-        <!-- nomi approval ----------------------------------------------------------------------------------------------   -->
-        <div class="tab-pane fade profile-nominations" id="nomi-approval">
-            <br>
-            {% if nomi_approval %}
-            {% if post.perms == "can approve post and send nominations to users" or post.perms == "can ratify the post" %}
-            <a href="{% url 'group_nomi' post.pk %}">
-                <div class="btn btn-secondary btn-info ">Group Nominations</div>
-            </a>
-            {% endif %}
-            {% endif %}
-            <br>
-            <br>
-            {% for group in group_nomi_approvals %}
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Group of nominations</h3>
+                                        <div class="col-lg-4 text-center">
+                                            <a  class="btn btn-danger" href="{% url 'post_reject' post_pk=ch_post.pk  %}">Delete</a>
+                                        </div>
+
+                                {% endif %}
+                                </div>
+                             </div>
+                         </div>
+                    {% endfor %}
                 </div>
-                <div class="panel-body">
-                    <p class="profile-post-name"><a href="{% url 'group_nomi_detail' group.pk %}">
-                        <span></span>{{group.name}}</a></p>
-                </div>
-            </div>
-            {% endfor %}
 
-            {% for re_nomi in re_nomi_approval %}
-             <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{re_nomi.nomi.nomi_post.club}}---Renomination</h3>
-                </div>
-                <div class="panel-body">
-                    <p class="profile-post-name"><a href="{% url 'nomi_detail' re_nomi.nomi.pk %}">
-                        <span></span>{{re_nomi.nomi.name}}</a></p>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <p><span>Post : </span>{{re_nomi.nomi.nomi_post}}</p>
+                <!-- nomi approval ----------------------------------------------------------------------------------------------   -->
+                <div class="tab-pane fade profile-nominations" id="nomi-approval">
+                    <br>
+                    {% if nomi_approval %}
+                    {% if post.perms == "can approve post and send nominations to users" or post.perms == "can ratify the post" %}
+                    <a href="{% url 'group_nomi' post.pk %}">
+                        <div class="btn btn-secondary btn-info ">Group Nominations</div>
+                    </a>
+                    {% endif %}
+                    {% endif %}
+                    <br>
+                    <br>
+                    {% for group in group_nomi_approvals %}
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Group of nominations</h3>
                         </div>
-                        {% if post.parent in re_nomi.approvals.all %}
-                        <div class="col-lg-4 text-center">
-                            Status : Sent to parent
+                        <div class="panel-body">
+                            <p class="profile-post-name"><a href="{% url 'group_nomi_detail' group.pk %}">
+                                <span></span>{{group.name}}</a></p>
                         </div>
-                        {% else %}
-                            {% if post.perms == 'can approve post and send nominations to users' %}
+                    </div>
+                    {% endfor %}
 
+                    {% for re_nomi in re_nomi_approval %}
+                     <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{re_nomi.nomi.nomi_post.club}}---Renomination</h3>
+                        </div>
+                        <div class="panel-body">
+                            <p class="profile-post-name"><a href="{% url 'nomi_detail' re_nomi.nomi.pk %}">
+                                <span></span>{{re_nomi.nomi.name}}</a></p>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <p><span>Post : </span>{{re_nomi.nomi.nomi_post}}</p>
+                                </div>
+                                {% if post.parent in re_nomi.approvals.all %}
                                 <div class="col-lg-4 text-center">
-                                    <a  class="btn btn-success" href="{% url 'final_re_nomi_approval' re_nomi.pk %}">Approve</a>
+                                    Status : Sent to parent
                                 </div>
+                                {% else %}
+                                    {% if post.perms == 'can approve post and send nominations to users' %}
 
-                            {% else %}
+                                        <div class="col-lg-4 text-center">
+                                            <a  class="btn btn-success" href="{% url 'final_re_nomi_approval' re_nomi.pk %}">Approve</a>
+                                        </div>
 
-                                <div class="col-lg-4 text-center">
-                                    <a  class="btn btn-success" href="{% url 're_nomi_approval' re_nomi.pk  %}">Approve</a>
+                                    {% else %}
+
+                                        <div class="col-lg-4 text-center">
+                                            <a  class="btn btn-success" href="{% url 're_nomi_approval' re_nomi.pk  %}">Approve</a>
+                                        </div>
+
+                                    {% endif %}
+
+                                        <div class="col-lg-4 text-center">
+                                            <a  class="btn btn-danger" href="{% url 're_nomi_reject' re_nomi.pk %}">Reject</a>
+                                        </div>
+
+                                {% endif %}
                                 </div>
+                             </div>
+                         </div>
 
-                            {% endif %}
 
-                                <div class="col-lg-4 text-center">
-                                    <a  class="btn btn-danger" href="{% url 're_nomi_reject' re_nomi.pk %}">Reject</a>
-                                </div>
+                    {% endfor %}
 
-                        {% endif %}
+                    {% for nomi in nomi_approval %}
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{nomi.nomi_post.club}}</h3>
                         </div>
-                     </div>
-                 </div>
+                        <div class="panel-body">
 
-
-            {% endfor %}
-
-            {% for nomi in nomi_approval %}
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{nomi.nomi_post.club}}</h3>
+                            <div class="row">
+                                <div class="col-lg-4 text-center">
+                                    <p class="profile-post-name"><a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}">
+                                <span></span>{{nomi.name}}</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
-                <div class="panel-body">
 
-                    <div class="row">
-                        <div class="col-lg-4 text-center">
+                <!-- result approval ----------------------------------------------------------------------------------------------   -->
+                <div class="tab-pane fade profile-nominations" id="declared">
+                    <br>
+                    {% for nomi in result_approvals %}
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{nomi.nomi_post.club}}</h3>
+                        </div>
+                        <div class="panel-body">
                             <p class="profile-post-name"><a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}">
-                        <span></span>{{nomi.name}}</a></p>
+                                <span></span>{{nomi.name}}</a></p>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <p><span>Status : </span>{{nomi.status}}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    {% endfor %}
+
                 </div>
             </div>
-            {% endfor %}
         </div>
 
-        <!-- result approval ----------------------------------------------------------------------------------------------   -->
-        <div class="tab-pane fade profile-nominations" id="declared">
-            <br>
-            {% for nomi in result_approvals %}
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{nomi.nomi_post.club}}</h3>
-                </div>
-                <div class="panel-body">
-                    <p class="profile-post-name"><a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}">
-                        <span></span>{{nomi.name}}</a></p>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <p><span>Status : </span>{{nomi.status}}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
 
-        </div>
 
         {% if to_deratify %}
 
