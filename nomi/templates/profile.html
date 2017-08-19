@@ -128,8 +128,11 @@
                             </div>
                             <div class="panel-body">
                                 <p class="col-lg-6"><span>Status: </span>Application Submitted</p>
-                                <a href="{% url 'nomi_answer' p_nomi.pk %}" class="btn btn-warning col-lg-6"
+                                <a href="{% url 'nomi_answer' p_nomi.pk %}" class="btn btn-info col-lg-4"
                                    style="width: auto">View Your Application</a>
+
+                                <a href="{% url 'nomi_answer_edit' p_nomi.pk %}" class="btn btn-warning col-lg-4"
+                                   style="width: auto">Edit Your Application</a>
                             </div>
                         </div>
                         {% endfor %}

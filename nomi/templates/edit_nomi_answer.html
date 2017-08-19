@@ -63,7 +63,7 @@ form view
     </div>
 
         <h1 style="color: #5c4a6c;" class="intro-text text-center">
-            <strong>{{ nomi_user.name }}'s Answer</strong>
+            <strong>Edit {{ nomi_user.name }}'s Answer</strong>
         </h1>
         <hr>
 
@@ -80,9 +80,12 @@ form view
 
         <div>
             <form  action="" method="post">
-                {% csrf_token %}
-                {{form|bootstrap}}
-
+                            {% csrf_token %}
+                        <p>
+                            {{form|bootstrap}}
+                            {{form_confirm|bootstrap}}
+                        </p>
+                <input  class="btn btn-primary btn-large" type="submit" value="Confirm Submission" />
             </form>
         </div>
 
