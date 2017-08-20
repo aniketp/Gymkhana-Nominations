@@ -222,7 +222,7 @@ def senate_post_create(request, pk):
             elder_brother = Post.objects.get(pk=elder_brother_id)
             Post.objects.create(post_name=post_form.cleaned_data['post_name'],
                                 elder_brother=elder_brother, club=club, parent=parent,
-                                perms=post_form.cleaned_data['power'], status='Post on work')
+                                perms=post_form.cleaned_data['power'], status='Post approved')
 
             return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
 
@@ -696,6 +696,16 @@ def nomi_apply(request, pk):
         return render(request, 'nomi_done.html', context={'info': info})
 
 
+def get_mails(query_users):
+    mail_ids = ''
+    for each in query_users:
+        if len(mail_ids):
+            mail_ids = mail_ids + ', ' + str(each.user) + '@iitk.ac.in'
+        else:
+            mail_ids = str(each.user) + '@iitk.ac.in'
+
+    return mail_ids
+
 @login_required
 def applications(request, pk):
     nomination = Nomination.objects.get(pk=pk)
@@ -703,6 +713,9 @@ def applications(request, pk):
     accepted = NominationInstance.objects.filter(nomination=nomination).filter(status='Accepted')
     rejected = NominationInstance.objects.filter(nomination=nomination).filter(status='Rejected')
     pending = NominationInstance.objects.filter(nomination=nomination).filter(status=None)
+
+    mail_ids = [get_mails(applicants),get_mails(accepted),get_mails(rejected),get_mails(pending)]
+
 
     status = [None]*7
 
@@ -731,9 +744,10 @@ def applications(request, pk):
         permission = None
         senate_permission = None
 
-        if view_post.parent.perms == 'can ratify the post':
-            permission = True
-            senate_permission = False
+        if view_post.parent:
+            if view_post.parent.perms == 'can ratify the post':
+                permission = True
+                senate_permission = False
         elif view_post.perms == 'can ratify the post':
             senate_permission = True
             permission = False
@@ -774,7 +788,7 @@ def applications(request, pk):
 
 
         return render(request, 'applicants.html', context={'nomination': nomination, 'applicants': applicants,
-                                                           'form_confirm': form_confirm,
+                                                           'form_confirm': form_confirm,'mail_ids':mail_ids,
                                                            'result_approval': results_approval,
                                                            'accepted': accepted, 'rejected': rejected, 'status': status,
                                                            'pending': pending, 'perm': permission,
