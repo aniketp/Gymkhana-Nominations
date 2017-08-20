@@ -53,6 +53,10 @@
                         </li>
                     {% endif %}
 
+                    {% if interviews %}
+                        <li><a href="{% url 'interviews' %}" id="navbar-links">Interviews</a></li>
+                    {% endif %}
+
                     {% if senate %}
                         <li><a href="{% url 'senate_view' %}" id="navbar-links">Ratifications</a></li>
                         <li><a href="{% url 'all_nominations' %}" id="navbar-links">All Nominations</a></li>

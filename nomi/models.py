@@ -98,8 +98,6 @@ class Nomination(models.Model):
     re_opening_date = models.DateField(null=True, blank=True, editable=True)
     deadline = models.DateField(null=True, blank=True, editable=True)
 
-
-
     interview_panel = models.ManyToManyField(User, related_name='panel', symmetrical=False, blank=True)
 
     year_choice = models.CharField(max_length=100, choices=YEAR_1, null=True)

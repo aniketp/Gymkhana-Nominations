@@ -126,6 +126,13 @@ def senate_view(request):
         return render(request, 'no_access.html')
 
 
+@login_required
+def interview_list(request):
+    interviews = Nomination.objects.filter(interview_panel=request.user)
+
+    return render(request, 'interviews.html', context={'interviews': interviews})
+
+
 ## ------------------------------------------------------------------------------------------------------------------ ##
 #########################################    POST RELATED VIEWS   ######################################################
 ## ------------------------------------------------------------------------------------------------------------------ ##
@@ -1355,8 +1362,6 @@ def all_nominations(request):
     all_nomi = Nomination.objects.all().exclude(status='Nomination created')
 
     return render(request, 'all_nominations.html', context={'all_nomi': all_nomi})
-
-
 
 
 

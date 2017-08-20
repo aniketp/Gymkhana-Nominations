@@ -11,7 +11,10 @@ urlpatterns = [
     url(r'^senate/$', views.senate_view, name='senate_view'),
 
     # nominations/admin_portal
-    url(r'^admin_portal$', views.admin_portal, name='admin_portal'),
+    url(r'^admin_portal/$', views.admin_portal, name='admin_portal'),
+
+    # nominations/interviews
+    url(r'^interviews/$', views.interview_list, name='interviews'),
 
     # nominations/all
     url(r'^all/$', views.all_nominations, name='all_nominations'),

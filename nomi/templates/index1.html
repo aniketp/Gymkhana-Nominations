@@ -6,17 +6,14 @@
 {% block content %}
 <div class="profile-content ">
 
-    <div>
+    {% comment %}<div>
          <ul class="nav nav-tabs">
              <li class="active"><a href="#user" data-toggle="tab" aria-expanded="true">User Portal</a></li>
-             {% if posts %}
+             {% if not True %}
               <li><a href="{% url 'admin_portal' %}" aria-expanded="false">Admin Portal</a></li>
              {% endif %}
          </ul>
-    </div>
-
-    <div id="myTabContent" class="tab-content">
-         <div class="tab-pane fade active in profile-nominations" id="user">
+    </div>{% endcomment %}
                 <br>
                   <h1 style="text-align: center">RELEASED NOMINATIONS</h1>
                     <hr>
@@ -98,9 +95,6 @@
 
 
                     {% endfor %}
-         </div>
-    </div>
-
 
     </div>
 </div>

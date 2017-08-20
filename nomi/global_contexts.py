@@ -1,4 +1,4 @@
-from .models import Post, UserProfile
+from .models import *
 from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -7,6 +7,8 @@ def context(request):
         try:
             my_profile = UserProfile.objects.get(user=request.user)
             my_posts = Post.objects.filter(post_holders=request.user)
+            interviews = Nomination.objects.filter(interview_panel=request.user)
+
             length = len(my_posts)
             senate = False
 
@@ -14,7 +16,8 @@ def context(request):
                 if post.perms == 'can ratify the post':
                     senate = True
 
-            return {'my_posts': my_posts, 'my_profile': my_profile, 'senate': senate, 'length': length}
+            return {'my_posts': my_posts, 'my_profile': my_profile, 'senate': senate, 'length': length,
+                    'interviews': interviews}
 
         except ObjectDoesNotExist:
             return {'my_posts': 0, 'my_profile': 0}
