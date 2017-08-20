@@ -125,15 +125,10 @@
             <div class="profile-content ">
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <ul class="nav nav-tabs">
-                                <li class="active"><a href="#post_holders" data-toggle="tab" aria-expanded="true">PostHolders Search</a></li>
-                                <li><a href="#mails" data-toggle="tab" aria-expanded="true">Get Email Id</a></li>
-                            </ul>
-
-                        </div>
+                    <div style="padding-bottom: inherit" class="panel-heading">
+                        <p>POST HOLDERS SEARCH</p>
                     </div>
+
                     <div class="panel-body">
                         {% if not post_form %}
                             <form action="" method="post">
@@ -177,69 +172,86 @@
                     </div>
                 </div>
 
-               <div id="myTabContent" class="tab-content">
 
-                        <div class="tab-pane fade active in profile-nominations" id="post_holders">
+                <div class="container-fluid">
+                    {% for each in query_users %}
+                        <div class="row-fluid">
 
+                            <div class="col-lg-6">
+                                {% if each.user.userprofile %}
+                                    <a style="color: black;" href="{% url 'public_profile' each.user.userprofile.pk %}"><div
+                                            class="panel panel-default panel-success">
+                                        <div class="panel-body">
+                                            <div class="col-lg-3">
+                                                <img style="border-radius: 10%" src="{{ each.user.userprofile.image_url }}" alt="Pic here"
+                                                width="90px" height="90px">
+                                            </div>
 
-                        <div class="container-fluid">
-                            {% for each in query_users %}
-                                    <div class="row-fluid">
+                                            <div class="col-lg-9">
+                                                <p style="text-decoration: none"><span style="font-weight: bold;">
+                                                    Name: </span>{{ each.user.userprofile.name }}</p>
+                                                <p style="text-decoration: none"><span style="font-weight: bold;">
+                                                    Post: </span>{{ each.post }}</p>
+                                                <p style="text-decoration: none"><span style="font-weight: bold;">
+                                                    Club: </span>{{ each.post.club }}</p>
+                                            </div>
+                                        </div>
+                                    </div></a>
+                                {%else%}
+                                 <div style="color: black" class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div class="col-lg-3">
+                                                <img style="border-radius: 10%" src="{{ each.userprofile.image_url }}" alt="Pic here"
+                                                width="100%" height="100%">
+                                            </div>
 
-                                        <div class="col-lg-6">
-                                            {% if each.user.userprofile %}
-                                                <a style="color: black;" href="{% url 'public_profile' each.user.userprofile.pk %}"><div class="panel panel-default panel-success">
-                                                    <div class="panel-body">
-                                                        <div class="col-lg-3">
-                                                            <img style="border-radius: 10%" src="{{ each.user.userprofile.image_url }}" alt="Pic here"
-                                                            width="90px" height="90px">
-                                                        </div>
-
-                                                        <div class="col-lg-9">
-                                                            <p style="text-decoration: none"><span style="font-weight: bold;">
-                                                                Name: </span>{{ each.user.userprofile.name }}</p>
-                                                            <p style="text-decoration: none"><span style="font-weight: bold;">
-                                                                Post: </span>{{ each.post }}</p>
-                                                            <p style="text-decoration: none"><span style="font-weight: bold;">
-                                                                Club: </span>{{ each.post.club }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div></a>
-                                            {%else%}
-                                             <div style="color: black" class="panel panel-default">
-                                                    <div class="panel-body">
-                                                        <div class="col-lg-3">
-                                                            <img style="border-radius: 10%" src="{{ each.userprofile.image_url }}" alt="Pic here"
-                                                            width="100%" height="100%">
-                                                        </div>
-
-                                                        <div class="col-lg-9">
-                                                            <p><span style="font-weight: bold;">Name: </span>{{ each.user.userprofile.name }}</p>
-                                                            <p><span style="font-weight: bold;">Post: </span>{{ each.post }}</p>
-                                                            <p><span style="font-weight: bold;">Club: </span>{{ each.post.club }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            {% endif %}
-
+                                            <div class="col-lg-9">
+                                                <p><span style="font-weight: bold;">Name: </span>{{ each.user.userprofile.name }}</p>
+                                                <p><span style="font-weight: bold;">Post: </span>{{ each.post }}</p>
+                                                <p><span style="font-weight: bold;">Club: </span>{{ each.post.club }}</p>
+                                            </div>
                                         </div>
                                     </div>
-                            {% endfor %}
+                                {% endif %}
+
+                            </div>
                         </div>
+                    {% endfor %}
+                </div>
 
 
+               <div class="container">
+                    <!-- Trigger the modal with a button -->
+                    <button type="button" style="width: auto; position: fixed; left: 90%; top: 85vh " class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                    </button>
 
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal" role="dialog">
+                        <div class="modal-dialog">
+
+                          <!-- Modal content-->
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                              <h4 class="modal-title" style="text-align: center">Email Addresses</h4>
+                            </div>
+                            <div class="modal-body">
+                              <p>{{get_ids}}</p>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                          </div>
                         </div>
+                    </div>
+                </div>
+            </div>
 
-                   <div class="tab-pane fade profile-nominations" id="mails">
-                       {{get_ids}}
-                   </div>
-
-         </div>
+            {% endblock %}
+        </div>
     </div>
-</div>
 
-{% endblock %}
 </div>
 
 
