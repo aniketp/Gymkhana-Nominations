@@ -58,7 +58,7 @@
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#post-history" data-toggle="tab" aria-expanded="true">Post History</a></li>
                     <li><a href="#pending" data-toggle="tab" aria-expanded="false">Pending Applications</a></li>
-                    <li><a href="#declared" data-toggle="tab" aria-expanded="false">Nomination Results</a></li>
+                    <li><a href="#declared" data-toggle="tab" aria-expanded="false">Tentative Results</a></li>
                 </ul>
                 <div id="myTabContent" class="tab-content">
 
@@ -149,8 +149,12 @@
                                 <h3 class="panel-title">{{ nomi.nomination.name }}</h3>
                             </div>
                             <div class="panel-body">
-                                <p><span>Status:</span>{{nomi.status}}</p>
-                                <a href="#" class="btn btn-danger">View Results</a>
+                                <p>
+                                    <span>Status : </span>{{nomi.status}}
+                                    {% if nomi.status == "Accepted" %}
+                                    (Currently sent to senate for Ratification)
+                                    {% endif %}
+                                </p>
                             </div>
                         </div>
                         {% endfor %}

@@ -149,17 +149,20 @@ def post_view(request, pk):
     child_posts_reverse = child_posts[::-1]
 
     post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
-    entity_approvals = ClubCreate.objects.filter(take_approval=post)
     post_to_be_approved = Post.objects.filter(take_approval = post).filter(status = 'Post created')
     post_count = post_to_be_approved.count()
     post_approvals = post_to_be_approved|post_approvals
     post_approvals = post_approvals.distinct()
 
+    entity_approvals = ClubCreate.objects.filter(take_approval=post)
+    entity_by_me = ClubCreate.objects.filter(requested_by=post)
+
     nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
     re_nomi_approval = ReopenNomination.objects.filter(approvals = post).filter(nomi__status='Interview period and Reopening initiated')
     group_nomi_approvals = GroupNomination.objects.filter(status='created').filter(approvals=post)
-    result_approvals = Nomination.objects.filter(result_approvals=post).exclude(status='Work done').exclude(status='Nomination created').exclude(status='Nomination out')
     count = nomi_approvals.count() + group_nomi_approvals.count() + re_nomi_approval.count()
+
+    result_approvals = Nomination.objects.filter(result_approvals=post).exclude(status='Work done').exclude(status='Nomination created').exclude(status='Nomination out')
     to_deratify = Deratification.objects.filter(deratify_approval = post).filter(status = 'requested')
 
     if request.method == 'POST':
@@ -168,7 +171,7 @@ def post_view(request, pk):
             if post.perms == "can ratify the post":
                 Club.objects.create(club_name = tag_form.cleaned_data['club_name'], club_parent=post.club)
             else:
-                ClubCreate.objects.create(club_name=tag_form.cleaned_data['club_name'], club_parent=post.club, take_approval = post, requested_by = post)
+                ClubCreate.objects.create(club_name=tag_form.cleaned_data['club_name'], club_parent=post.club, take_approval = post.parent, requested_by = post)
             return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
     else:
         tag_form = ClubForm
@@ -178,7 +181,7 @@ def post_view(request, pk):
         return render(request, 'post1.html', context={'post': post, 'child_posts': child_posts_reverse,
                                                       'post_approval': post_approvals, 'tag_form': tag_form,
                                                       'nomi_approval': nomi_approvals, 're_nomi_approval':re_nomi_approval,
-                                                      'group_nomi_approvals': group_nomi_approvals,
+                                                      'group_nomi_approvals': group_nomi_approvals,'entity_by_me':entity_by_me,
                                                       'result_approvals': result_approvals,'count':count,
                                                       "to_deratify":to_deratify,"post_count":post_count,'entity_approvals':entity_approvals})
     else:
@@ -196,7 +199,8 @@ def post_create(request, pk):
             club_id = post_form.cleaned_data['club']
             club = Club.objects.get(pk=club_id)
             post = Post.objects.create(post_name=post_form.cleaned_data['post_name'], club=club, parent=parent,elder_brother= parent)
-            post.take_approval = parent
+            post.take_approval = parent.parent
+            post.post_approvals.add(parent.parent)
             post.save()
             return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
 
@@ -302,8 +306,9 @@ def post_reject(request, post_pk):
 
     if access:
         post.delete()
-
-    return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view.pk}))
+        return HttpResponseRedirect(reverse('post_view', kwargs={'pk': view.pk}))
+    else:
+        return render(request, 'no_access.html')
 
 ## ------------------------------------------------------------------------------------------------------------------ ##
 #########################################    CLUB RELATED VIEWS   ######################################################
@@ -597,6 +602,8 @@ def reopen_nomi(request, nomi_pk):
     if access:
         re_nomi = ReopenNomination.objects.create(nomi=nomi)
         re_nomi.approvals.add(view_post)
+        if view_post.elder_brother:
+            re_nomi.approvals.add(view_post.elder_brother)
         re_nomi.nomi.status = 'Interview period and Reopening initiated'
         re_nomi.nomi.save()
         return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi_pk}))
@@ -706,18 +713,8 @@ def get_mails(query_users):
 
     return mail_ids
 
-@login_required
-def applications(request, pk):
-    nomination = Nomination.objects.get(pk=pk)
-    applicants = NominationInstance.objects.filter(nomination=nomination)
-    accepted = NominationInstance.objects.filter(nomination=nomination).filter(status='Accepted')
-    rejected = NominationInstance.objects.filter(nomination=nomination).filter(status='Rejected')
-    pending = NominationInstance.objects.filter(nomination=nomination).filter(status=None)
-
-    mail_ids = [get_mails(applicants),get_mails(accepted),get_mails(rejected),get_mails(pending)]
-
-
-    status = [None]*7
+def get_nomi_status(nomination):
+    status = [None] * 7
 
     if nomination.status == 'Nomination created':
         status[0] = True
@@ -733,6 +730,21 @@ def applications(request, pk):
         status[5] = True
     else:
         status[6] = True
+
+    return status
+
+@login_required
+def applications(request, pk):
+    nomination = Nomination.objects.get(pk=pk)
+    applicants = NominationInstance.objects.filter(nomination=nomination)
+    accepted = NominationInstance.objects.filter(nomination=nomination).filter(status='Accepted')
+    rejected = NominationInstance.objects.filter(nomination=nomination).filter(status='Rejected')
+    pending = NominationInstance.objects.filter(nomination=nomination).filter(status=None)
+
+    mail_ids = [get_mails(applicants),get_mails(accepted),get_mails(rejected),get_mails(pending)]
+
+
+    status = get_nomi_status(nomination)
 
     access, view_post = get_access_and_post_for_result(request, pk)
     if not access:
@@ -822,22 +834,22 @@ def nomination_answer(request, pk):
     comments_reverse = comments[::-1]
     comment_form = CommentForm(request.POST or None)
 
-    all_posts = Post.objects.filter(post_holders=request.user)
     nomination = application.nomination
-    auth_user = UserProfile.objects.get(user=request.user)
+    status = get_nomi_status(nomination)
+
     access = False
+    access, view_post = get_access_and_post(request, nomination.pk)
+    if not access:
+        access, view_post = get_access_and_post_for_result(request, nomination.pk)
+
+    all_posts = Post.objects.filter(post_holders=request.user)
     senate_perm = False
     for post in all_posts:
         if post.perms == 'can ratify the post':
-            senate = post
             access = True
-            if senate in nomination.result_approvals.all():
-                senate_perm = True
+            senate_perm = True
             break
 
-    access, view_post = get_access_and_post(request,nomination.pk)
-    if not access:
-        access, view_post = get_access_and_post_for_result(request, nomination.pk)
 
 
     if application.user == request.user:
@@ -879,9 +891,8 @@ def nomination_answer(request, pk):
         return render(request, 'nomi_answer.html', context={'form': form, 'nomi': application, 'nomi_user': applicant,
                                                             'comment_form': comment_form,
                                                             'comments': comments_reverse, 'senate_perm': senate_perm,
-                                                            'nomi_pk': nomination.pk,
-                                                            'result_approval': results_approval,
-                                                            'auth_user': auth_user})
+                                                             'status':status,
+                                                            'result_approval': results_approval})
     else:
         return render(request, 'no_access.html')
 
@@ -909,7 +920,7 @@ def nomi_answer_edit(request, pk):
                 info = "Your application has been edited"
                 return render(request, 'nomi_done.html', context={'info': info})
 
-        return render(request, 'edit_nomi_answer.html', context={'form': form, 'form_confirm': form_confirm,
+        return render(request, 'nomi_answer_edit.html', context={'form': form, 'form_confirm': form_confirm,
                                                                  'nomi': application, 'nomi_user': applicant})
     else:
         return render(request, 'no_access.html')
@@ -1178,13 +1189,6 @@ def get_access_and_post_for_selection(request, nomi_pk):
             view_post = post
             break
 
-    for post in nomi.nomi_approvals.all():
-        if request.user in post.post_holders.all():
-            access = True
-            view_post = post
-            break
-
-
     return access, view_post
 
 @login_required
@@ -1197,7 +1201,7 @@ def mark_as_interviewed(request, pk):
     if access or request.user in nomination.interview_panel.all():
         application.interview_status = 'Interview Done'
         application.save()
-        return HttpResponseRedirect(reverse('applicants', kwargs={'pk': id_nomi}))
+        return HttpResponseRedirect(reverse('nomi_answer', kwargs={'pk': pk}))
     else:
         return render(request, 'no_access.html')
 

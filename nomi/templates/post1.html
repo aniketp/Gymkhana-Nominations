@@ -79,9 +79,11 @@
                     <p class="profile-post-name"><a href="{% url 'child_post' pk=ch_post.pk %}">
                         <span>Post: </span>{{ch_post.post_name}}</a></p>
                     <div class="row">
+                        {% if ch_post.status == "Post created" %}
                         <div class="col-lg-6">
-                            <p><span>Status : </span>{{ch_post.status}}</p>
+                            <p><span>Status : </span> Post not approved by senate</p>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -93,7 +95,9 @@
                 <li><a href="#post-approval" data-toggle="tab" aria-expanded="false">Posts to be approved ({{post_count}})</a></li>
                 <li><a href="#nomi-approval" data-toggle="tab" aria-expanded="false">Nominations to be approved ({{ count }})</a></li>
                 <li><a href="#declared" data-toggle="tab" aria-expanded="false">Results to be approved ({{ result_approvals.count }})</a></li>
-                <li><a href="#club-approval" data-toggle="tab" aria-expanded="false">Entities to be approved</a></li>
+                {% if entity_approvals.count or entity_by_me.count %}
+                <li><a href="#club-approval" data-toggle="tab" aria-expanded="false">Entities to be approved ({{ entity_approvals.count }})</a></li>
+                {% endif %}
             </ul>
 
             <div id="myTabContent" class="tab-content">
@@ -139,9 +143,9 @@
                     <br>
                     {% if nomi_approval %}
                     {% if post.perms == "can approve post and send nominations to users" or post.perms == "can ratify the post" %}
-                    <a href="{% url 'group_nomi' post.pk %}">
-                        <div class="btn btn-secondary btn-info ">Group Nominations</div>
-                    </a>
+                        <a href="{% url 'group_nomi' post.pk %}">
+                            <div class="btn btn-secondary btn-info ">Group Nominations</div>
+                        </a>
                     {% endif %}
                     {% endif %}
                     <br>
@@ -175,7 +179,7 @@
                                     Status : Sent to parent
                                 </div>
                                 {% else %}
-                                    {% if post.perms == 'can approve post and send nominations to users' %}
+                                    {% if post.perms == "can approve post and send nominations to users" or post.perms == "can ratify the post" %}
 
                                         <div class="col-lg-4 text-center">
                                             <a  class="btn btn-success" href="{% url 'final_re_nomi_approval' re_nomi.pk %}">Approve</a>
@@ -240,6 +244,8 @@
                     {% endfor %}
                 </div>
 
+
+                {% if entity_approvals.count or entity_by_me.count %}
                 <!-- entity approval ----------------------------------------------------------------------------------------------   -->
                 <div class="tab-pane fade profile-nominations" id="club-approval">
                     <br>
@@ -249,7 +255,7 @@
                             <h3 class="panel-title">{{club.club_name}}</h3>
                         </div>
                         <div class="panel-body">
-                            <p class="profile-post-name"><a href="{% url 'child_post' pk=ch_post.pk %}">
+                            <p class="profile-post-name"><a>
                                 <span>Parent Club: </span>{{club.club_parent}}</a></p>
                             <div class="row">
                                 <div class="col-lg-4">
@@ -257,12 +263,12 @@
                                 </div>
 
                                 <div class="col-lg-4 text-center">
-                                    <a  class="btn btn-success" href="{% url 'club_approval' club_pk=ch_post.pk %}">Approve</a>
+                                    <a  class="btn btn-success" href="{% url 'club_approval' club_pk=club.pk %}">Approve</a>
                                 </div>
 
 
                                 <div class="col-lg-4 text-center">
-                                    <a  class="btn btn-danger" href="{% url 'club_reject' club_pk=ch_post.pk  %}">Delete</a>
+                                    <a  class="btn btn-danger" href="{% url 'club_reject' club_pk=club.pk  %}">Delete</a>
                                 </div>
 
                             </div>
@@ -270,7 +276,33 @@
                     </div>
                     {% endfor %}
 
+                    {% for club in entity_by_me %}
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{club.club_name}}</h3>
+                        </div>
+                        <div class="panel-body">
+                            <p class="profile-post-name"><a>
+                                <span>Parent Club: </span>{{club.club_parent}}</a></p>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <p><span>Requested By  : </span>{{club.requested_by}}</p>
+                                </div>
+
+                                <div class="col-lg-4 text-center">
+                                    <p><span>Pending at  : </span>{{club.take_approval}}</p>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
                 </div>
+                {% endif %}
+
 
             </div>
         </div>
