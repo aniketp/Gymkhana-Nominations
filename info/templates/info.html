@@ -122,106 +122,125 @@
         </div>
         <div class="col-lg-9 col-md-9">
             {% block content %}
-                <div class="profile-content ">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <h3>Student Search</h3>
-                            </div>
+            <div class="profile-content ">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#post_holders" data-toggle="tab" aria-expanded="true">PostHolders Search</a></li>
+                                <li><a href="#mails" data-toggle="tab" aria-expanded="true">Get Email Id</a></li>
+                            </ul>
+
                         </div>
-                        <div class="panel-body">
-                            {% if not post_form %}
-                                <form action="" method="post">
-                                    <div class="col-lg-6">
-                                        {% csrf_token %}
-                                        {{session_form|bootstrap}}
+                    </div>
+                    <div class="panel-body">
+                        {% if not post_form %}
+                            <form action="" method="post">
+                                <div class="col-lg-6">
+                                    {% csrf_token %}
+                                    {{session_form|bootstrap}}
+                                </div>
+                                <div class="col-lg-6">
+                                    {% csrf_token %}
+                                    {{club_form|bootstrap}}
+                                </div>
+
+                                <div class="col-lg-12 text-center">
+                                    <input type="submit" style="margin-left: 0" value="Submit" class="btn btn-success nomi-filter" />
+                                </div>
+                            </form>
+                        {% else %}
+                            <form action="" method="post">
+                                <div class="row-fluid">
+                                    <div class="col-lg-4">
+                                    {% csrf_token %}
+                                    {{session_form|bootstrap}}
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-4">
                                         {% csrf_token %}
                                         {{club_form|bootstrap}}
                                     </div>
 
+                                    <div class="col-lg-4">
+                                        {% csrf_token %}
+                                        {{post_form|bootstrap}}
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
                                     <div class="col-lg-12 text-center">
                                         <input type="submit" style="margin-left: 0" value="Submit" class="btn btn-success nomi-filter" />
                                     </div>
-                                </form>
-                            {% else %}
-                                <form action="" method="post">
-                                    <div class="row-fluid">
-                                        <div class="col-lg-4">
-                                        {% csrf_token %}
-                                        {{session_form|bootstrap}}
-                                        </div>
-                                        <div class="col-lg-4">
-                                            {% csrf_token %}
-                                            {{club_form|bootstrap}}
-                                        </div>
-
-                                        <div class="col-lg-4">
-                                            {% csrf_token %}
-                                            {{post_form|bootstrap}}
-                                        </div>
-                                    </div>
-                                    <div class="row-fluid">
-                                        <div class="col-lg-12 text-center">
-                                            <input type="submit" style="margin-left: 0" value="Submit"
-                                                   class="btn btn-success nomi-filter" />
-                                        </div>
-                                    </div>
-                                </form>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                <div class="container-fluid">
-                    {% for each in query_users %}
-                            <div class="row-fluid">
-                                <div class="col-lg-6">
-                                    {% if each.user.userprofile %}
-                                        <a style="color: black;" href="{% url 'public_profile' each.user.userprofile.pk %}"><div class="panel panel-default panel-success">
-                                            <div class="panel-body">
-                                                <div class="col-lg-3">
-                                                    <img style="border-radius: 10%" src="{{ each.user.userprofile.image_url }}" alt="Pic here"
-                                                    width="90px" height="90px">
-                                                </div>
-
-                                                <div class="col-lg-9">
-                                                    <p style="text-decoration: none"><span style="font-weight: bold;">
-                                                        Name: </span>{{ each.user.userprofile.name }}</p>
-                                                    <p style="text-decoration: none"><span style="font-weight: bold;">
-                                                        Post: </span>{{ each.post }}</p>
-                                                    <p style="text-decoration: none"><span style="font-weight: bold;">
-                                                        Club: </span>{{ each.post.club }}</p>
-                                                </div>
-                                            </div>
-                                        </div></a>
-                                    {%else%}
-                                     <div style="color: black" class="panel panel-default">
-                                            <div class="panel-body">
-                                                <div class="col-lg-3">
-                                                    <img style="border-radius: 10%" src="{{ each.userprofile.image_url }}" alt="Pic here"
-                                                    width="100%" height="100%">
-                                                </div>
-
-                                                <div class="col-lg-9">
-                                                    <p><span style="font-weight: bold;">Name: </span>{{ each.user.userprofile.name }}</p>
-                                                    <p><span style="font-weight: bold;">Post: </span>{{ each.post }}</p>
-                                                    <p><span style="font-weight: bold;">Club: </span>{{ each.post.club }}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-
                                 </div>
-                            </div>
-                    {% endfor %}
+                            </form>
+                        {% endif %}
+                    </div>
                 </div>
+
+               <div id="myTabContent" class="tab-content">
+
+                        <div class="tab-pane fade active in profile-nominations" id="post_holders">
+
+
+                        <div class="container-fluid">
+                            {% for each in query_users %}
+                                    <div class="row-fluid">
+
+                                        <div class="col-lg-6">
+                                            {% if each.user.userprofile %}
+                                                <a style="color: black;" href="{% url 'public_profile' each.user.userprofile.pk %}"><div class="panel panel-default panel-success">
+                                                    <div class="panel-body">
+                                                        <div class="col-lg-3">
+                                                            <img style="border-radius: 10%" src="{{ each.user.userprofile.image_url }}" alt="Pic here"
+                                                            width="90px" height="90px">
+                                                        </div>
+
+                                                        <div class="col-lg-9">
+                                                            <p style="text-decoration: none"><span style="font-weight: bold;">
+                                                                Name: </span>{{ each.user.userprofile.name }}</p>
+                                                            <p style="text-decoration: none"><span style="font-weight: bold;">
+                                                                Post: </span>{{ each.post }}</p>
+                                                            <p style="text-decoration: none"><span style="font-weight: bold;">
+                                                                Club: </span>{{ each.post.club }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div></a>
+                                            {%else%}
+                                             <div style="color: black" class="panel panel-default">
+                                                    <div class="panel-body">
+                                                        <div class="col-lg-3">
+                                                            <img style="border-radius: 10%" src="{{ each.userprofile.image_url }}" alt="Pic here"
+                                                            width="100%" height="100%">
+                                                        </div>
+
+                                                        <div class="col-lg-9">
+                                                            <p><span style="font-weight: bold;">Name: </span>{{ each.user.userprofile.name }}</p>
+                                                            <p><span style="font-weight: bold;">Post: </span>{{ each.post }}</p>
+                                                            <p><span style="font-weight: bold;">Club: </span>{{ each.post.club }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+
+                                        </div>
+                                    </div>
+                            {% endfor %}
+                        </div>
+
+
+
+                        </div>
+
+                   <div class="tab-pane fade profile-nominations" id="mails">
+                       {{get_ids}}
+                   </div>
+
          </div>
     </div>
 </div>
 
 {% endblock %}
-        </div>
+</div>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

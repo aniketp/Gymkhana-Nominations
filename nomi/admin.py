@@ -45,3 +45,5 @@ admin.site.register(Deratification)
 admin.site.register(GroupNomination)
 admin.site.register(ReopenNomination)
 admin.site.register(Session)
+
+admin.site.register(ClubCreate)
