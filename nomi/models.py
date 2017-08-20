@@ -169,7 +169,7 @@ class NominationInstance(models.Model):
                                         default='Interview Not Done')
     filled_form = models.OneToOneField('forms.FilledForm', null=True, blank=True)
     timestamp = models.DateField(auto_now_add=True)
-    edit_time = models.DateField(null=True, default=datetime.now())
+    edit_time = models.DateField(null=True, default=timezone.now)
 
     def __str__(self):
         return str(self.user) + ' ' + str(self.id)
