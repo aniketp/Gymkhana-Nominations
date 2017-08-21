@@ -229,6 +229,10 @@
                     <button type="button" style="width: auto; position: fixed; left: 90%; top: 85vh " class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                         <i class="fa fa-envelope" aria-hidden="true"></i>
                     </button>
+                   <a href="{% url 'info:get_csv' session_pk=set.0 club_pk=set.1 post_pk=set.2 %}" style="width: auto; position: fixed; left: 90%; top: 92vh "class="btn btn-danger" style="width: auto">
+                       <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                   </a>
+
 
                     <!-- Modal -->
                     <div class="modal fade" id="myModal" role="dialog">
@@ -250,6 +254,7 @@
                         </div>
                     </div>
                 </div>
+
 
 
 
