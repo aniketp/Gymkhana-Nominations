@@ -2,13 +2,15 @@ import json
 from itertools import chain
 from operator import attrgetter
 import pyperclip
-from datetime import datetime
+
+from datetime import date,datetime
+import csv
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render,HttpResponse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from forms.models import Questionnaire
@@ -128,7 +130,7 @@ def senate_view(request):
 
 @login_required
 def interview_list(request):
-    interviews = Nomination.objects.filter(interview_panel=request.user)
+    interviews = Nomination.objects.filter(interview_panel=request.user).exclude(status = 'Work done')
 
     return render(request, 'interviews.html', context={'interviews': interviews})
 
@@ -733,6 +735,31 @@ def get_nomi_status(nomination):
 
     return status
 
+def get_accepted_csv(request,nomi_pk):
+    # Create the HttpResponse object with the appropriate CSV header.
+    nomination = Nomination.objects.get(pk=nomi_pk)
+    accepted = NominationInstance.objects.filter(nomination=nomination).filter(status='Accepted')
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="accepted.csv"'
+
+    writer = csv.writer(response)
+
+    writer.writerow([str(nomination.name),'SELECTED APPLICANTS', str(date.today())])
+    writer.writerow(['S.No','Name', 'Email','Roll','Address','Contact'])
+    i=1
+    for each in accepted:
+        try :
+            profile = each.user.userprofile
+            writer.writerow([str(i),each.user.userprofile,str(each.user)+'@iitk.ac.in',str(profile.roll_no),str(profile.room_no)+'/'+ str(profile.hall),str(profile.contact)])
+        except:
+            writer.writerow([str(i),each.user,str(each.user)+'@iitk.ac.in',str(each.start)])
+
+
+        i = i + 1
+
+    return response
+
 @login_required
 def applications(request, pk):
     nomination = Nomination.objects.get(pk=pk)
@@ -914,7 +941,7 @@ def nomi_answer_edit(request, pk):
                 json_data = json.dumps(form.cleaned_data)
                 ans_form.data = json_data
                 ans_form.save()
-                application.edit_time = datetime.now()
+                application.edit_time = date.today()
                 application.save()
 
                 info = "Your application has been edited"

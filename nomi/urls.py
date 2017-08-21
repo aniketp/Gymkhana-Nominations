@@ -43,6 +43,8 @@ urlpatterns = [
     # nominations/applicants/2
     url(r'^applicants/(?P<pk>\d+)/$', views.applications, name='applicants'),
 
+    url(r'^applicants_csv/(?P<nomi_pk>\d+)/$', views.get_accepted_csv, name='accepted_csv'),
+
     # nominations/answers/2
     url(r'^answers/(?P<pk>\d+)/$', views.nomination_answer, name='nomi_answer'),
 
