@@ -1,6 +1,25 @@
 PROGRAMME = (
         ('B.Tech', 'B.Tech'),
         ('B.S', 'B.S'),
+        ('BS-MBA', 'BS-MBA'),
+        ('BS-MS', 'BS-MS'),
+        ('BS-MT', 'BS-MT'),
+        ('BT-M.Des', 'BT-M.Des'),
+        ('BT-MBA', 'BT-MBA'),
+        ('BT-MS', 'BT-MS'),
+        ('Exchng Prog.', 'Exchng Prog.'),
+        ('MBA', 'MBA'),
+        ('MDes', 'MDes'),
+        ('MS-Research', 'MS-Research'),
+        ('MSc(2 yr)', 'MSc(2 yr)'),
+        ('MSc(Int)', 'MSc(Int)'),
+        ('MT(Dual)', 'MT(Dual)'),
+        ('MTech', 'MTech'),
+        ('PGPEX-VLM', 'PGPEX-VLM'),
+        ('PhD', 'PhD'),
+        ('PhD(Dual)', 'PhD(Dual)'),
+        ('Prep.', 'Prep.'),
+        ('SURGE', 'SURGE')
 )
 
 DEPT = (
@@ -16,7 +35,12 @@ DEPT = (
         ('Chemistry', 'CHM'),
         ('Mathematics & Scientific Computing', 'MTH'),
         ('Physics', 'PHY'),
-        ('Earth Sciences', 'ES')
+        ('Earth Sciences', 'ES'),
+        ('Cognitive Sciences', 'Cognitive Sciences'),
+        ('Humanities and Social Sciences', 'HSS'),
+        ('Laser Technology', 'Laser Technology'),
+        ('Photonics Science & Engineering', 'Photonics Science & Engg.'),
+        ('Statistics', 'Statistics')
 )
 
 YEAR = (
@@ -105,7 +129,12 @@ DEPT_1 = (
         ('Chemistry', 'CHM'),
         ('Mathematics & Scientific Computing', 'MTH'),
         ('Physics', 'PHY'),
-        ('Earth Sciences', 'ES')
+        ('Earth Sciences', 'ES'),
+        ('Cognitive Sciences', 'Cognitive Sciences'),
+        ('Humanities and Social Sciences', 'HSS'),
+        ('Laser Technology', 'Laser Technology'),
+        ('Photonics Science & Engineering', 'Photonics Science & Engg.'),
+        ('Statistics', 'Statistics')
 )
 
 YEAR_1 = (
