@@ -175,8 +175,10 @@ def post_view(request, pk):
             else:
                 ClubCreate.objects.create(club_name=tag_form.cleaned_data['club_name'], club_parent=post.club, take_approval = post.parent, requested_by = post)
             return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
+
     else:
         tag_form = ClubForm
+
 
 
     if request.user in post.post_holders.all():
@@ -192,6 +194,7 @@ def post_view(request, pk):
 
 # view to create a new post, a child post for a post can be created only by the post holders of that post...
 #is_safe
+# parent is simply added ,goes directly to parent for approval
 @login_required
 def post_create(request, pk):
     parent = Post.objects.get(pk=pk)
@@ -214,6 +217,8 @@ def post_create(request, pk):
         return render(request, 'nomi/post_form.html', context={'form': post_form, 'parent': parent})
     else:
         return render(request, 'no_access.html')
+
+
 
 
 @login_required
@@ -293,6 +298,32 @@ def post_approval(request, post_pk):
             return HttpResponseRedirect(reverse('post_view', kwargs={'pk': current.pk}))
     else:
         return render(request, 'no_access.html')
+
+
+def edit_post_name(request,post_pk):
+    post = Post.objects.get(pk=post_pk)
+    access = False
+    if request.user in post.take_approval.post_holders.all():
+        access = True
+
+    if access:
+        if request.method == 'POST':
+            edit_post  = ChangePostName(request.POST)
+            if edit_post.is_valid():
+                post.post_name = edit_post.cleaned_data['post_name']
+                post.save()
+                return HttpResponseRedirect(reverse('edit_post_name', kwargs={'post_pk': post_pk}))
+
+
+        else:
+            edit_post = ChangePostName
+
+        return render(request, 'edit_post_name.html', {'post': post,  'edit_post': edit_post})
+    else:
+        return render(request, 'no_access.html')
+
+
+
 
 # the viewer removes himself from approvals ,thus delete the post down...
 # is_safe
@@ -566,7 +597,7 @@ def final_nomi_approval(request, nomi_pk):
     nomi = Nomination.objects.get(pk=nomi_pk)
     access, view_post = get_access_and_post(request, nomi_pk)
 
-    if access:
+    if access and (view_post.perms == "can ratify the post" or view_post.perms =="can approve post and send nominations to users") :
         if view_post.elder_brother:
             to_add = view_post.elder_brother
             nomi.nomi_approvals.add(to_add)
@@ -632,9 +663,15 @@ def re_nomi_approval(request, re_nomi_pk):
     access , view_post = get_access_and_post_for_renomi(request,re_nomi_pk)
 
     if access:
-        to_add = view_post.elder_brother
-        re_nomi.approvals.add(to_add)
-        return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': re_nomi.nomi.pk}))
+        if view_post.perms == "can ratify the post" or view_post.perms =="can approve post and send nominations to users":
+            re_nomi.re_open_to_users()
+            nomi = re_nomi.nomi
+            re_nomi.delete()
+            return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': nomi.pk}))
+        else:
+            to_add = view_post.elder_brother
+            re_nomi.approvals.add(to_add)
+            return HttpResponseRedirect(reverse('nomi_detail', kwargs={'nomi_pk': re_nomi.nomi.pk}))
     else:
         return render(request, 'no_access.html')
 
@@ -677,7 +714,8 @@ def final_re_nomi_approval(request, re_nomi_pk):
 def nomi_apply(request, pk):
     nomination = Nomination.objects.get(pk=pk)
     count = NominationInstance.objects.filter(nomination=nomination).filter(user=request.user).count()
-    if not count:
+
+    if not count or (nomination.status == "Nomination out" or nomination.status =="Interview period and Nomination reopened"):
         if nomination.nomi_form:
             questionnaire = nomination.nomi_form
             form = questionnaire.get_form(request.POST or None)
@@ -701,7 +739,10 @@ def nomi_apply(request, pk):
                 return render(request, 'nomi_done.html', context={'info': info})
 
     else:
-        info = "You have applied for it already."
+        info = "You have applied for it already.You can edit it through profile module."
+
+        if not (nomination.status == "Nomination out" or nomination.status =="Interview period and Nomination reopened"):
+            info =  "Nomination has been closed"
         return render(request, 'nomi_done.html', context={'info': info})
 
 
@@ -926,13 +967,14 @@ def nomination_answer(request, pk):
 
 def nomi_answer_edit(request, pk):
     application = NominationInstance.objects.get(pk=pk)
-    if application.user == request.user:
+    nomination = application.nomination
+
+    if application.user == request.user and (nomination.status == "Nomination out" or nomination.status =="Interview period and Nomination reopened") :
         ans_form = application.filled_form
         data = json.loads(ans_form.data)
         applicant = application.user.userprofile
         questionnaire = application.nomination.nomi_form
         form = questionnaire.get_form(request.POST or data)
-        nomination = application.nomination
 
         form_confirm = ConfirmApplication(request.POST or None)
 
@@ -1082,7 +1124,8 @@ def ratify(request, nomi_pk):
         if  view_post.perms == "can ratify the post":
             nomi.append()
             return HttpResponseRedirect(reverse('applicants', kwargs={'pk': nomi_pk}))
-
+        else:
+            return render(request, 'no_access.html')
     else:
         return render(request, 'no_access.html')
 
@@ -1195,7 +1238,7 @@ def reject_deratification_request(request, pk):
     view = to_deratify.deratify_approval
     if request.user in view.post_holders.all():
         to_deratify.delete()
-
+        return HttpResponseRedirect(reverse('post_view', kwargs={'pk':view.pk}))
     else:
         return render(request, 'no_access.html')
 
@@ -1376,13 +1419,13 @@ def public_profile(request, pk):
 
 class UserProfileCreate(CreateView):
     model = UserProfile
-    fields = ['name', 'roll_no', 'year', 'programme', 'department', 'user_img', 'hall', 'room_no', 'contact']
+    fields = ['name', 'roll_no', 'programme', 'department', 'user_img', 'hall', 'room_no', 'contact']
     success_url = reverse_lazy('index')
 
 
 class UserProfileUpdate(UpdateView):
     model = UserProfile
-    fields = ['name', 'roll_no', 'year', 'programme', 'department', 'user_img', 'hall', 'room_no', 'contact']
+    fields = ['name', 'roll_no', 'programme', 'department', 'user_img', 'hall', 'room_no', 'contact']
     success_url = reverse_lazy('index')
 
 

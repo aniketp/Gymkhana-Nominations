@@ -50,6 +50,9 @@ class PostForm(forms.Form):
         else:
             self.fields['club'] = forms.ChoiceField(choices=[(parent.club.id, parent.club)], widget=forms.Select)
 
+class ChangePostName(forms.Form):
+    post_name = forms.CharField()
+
 class PostWithBroForm(forms.Form):
     def __init__(self, parent, *args, **kwargs):
         super(PostForm, self).__init__(*args, **kwargs)

@@ -1,6 +1,8 @@
 {% extends 'base2.html' %}
 {% load staticfiles %}
 {% load bootstrap %}
+{% load temp_tags %}
+
 
 {% block title %}Child_post{% endblock %}
 
@@ -64,7 +66,11 @@
                             <li>
 
                                 {{post_holder.userprofile.name}}  --
+                                {% if post_holder|check_deratificaton:post %}
+                                  deratification requested
+                                {% else %}
                                 <a href="{% url 'request_deratify' post_pk=post.pk user_pk=post_holder.pk %}">initiate_deratification</a>
+                                {% endif %}
 
                             </li>
                             {% endfor %}

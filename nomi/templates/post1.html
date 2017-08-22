@@ -111,8 +111,14 @@
                             <h3 class="panel-title">{{ch_post.club}}</h3>
                         </div>
                         <div class="panel-body">
-                            <p class="profile-post-name"><a href="{% url 'child_post' pk=ch_post.pk %}">
-                                <span>Post: </span>{{ch_post.post_name}}</a></p>
+                            <p class="profile-post-name"><a  href="{% url 'child_post' pk=ch_post.pk %}">
+                                <span>Post: </span>{{ch_post.post_name}} </a>
+                                {% if ch_post.take_approval == post %}
+                                 <a  href="{% url 'edit_post_name' ch_post.pk %}"> <i class="fa fa-pencil-square-o" aria-hidden="true"> </i> </a>
+                                {% endif %}
+
+                            </p>
+
                             <div class="row">
                                 <div class="col-lg-4">
                                     <p><span>Parent : </span>{{ch_post.parent}}</p>
@@ -182,7 +188,7 @@
                                     {% if post.perms == "can approve post and send nominations to users" or post.perms == "can ratify the post" %}
 
                                         <div class="col-lg-4 text-center">
-                                            <a  class="btn btn-success" href="{% url 'final_re_nomi_approval' re_nomi.pk %}">Approve</a>
+                                            <a  class="btn btn-success" href="{% url 're_nomi_approval' re_nomi.pk %}">Reopen to users</a>
                                         </div>
 
                                     {% else %}

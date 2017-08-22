@@ -1,4 +1,5 @@
 from django import template
+from nomi.models import Deratification
 
 register = template.Library()
 
@@ -22,3 +23,13 @@ def group_status(group):
 @register.filter
 def give_session(st_year):
     return str(st_year) + " - " + str(st_year+1)
+
+
+@register.filter
+def check_deratificaton(user,post):
+    out = False
+    derati = Deratification.objects.filter(post = post).filter(name = user)
+    if derati:
+        out = True
+
+    return out

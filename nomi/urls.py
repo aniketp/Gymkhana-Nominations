@@ -81,6 +81,8 @@ urlpatterns = [
     # nominations/post_approve/2/34
     url(r'^post_approve/(?P<post_pk>\d+)/$', views.post_approval, name='post_approval'),
 
+    url(r'^edit_post_name/(?P<post_pk>\d+)/$', views.edit_post_name, name='edit_post_name'),
+
     # nominations/post_reject/2/43
     url(r'^post_reject/(?P<post_pk>\d+)/$', views.post_reject, name='post_reject'),
 

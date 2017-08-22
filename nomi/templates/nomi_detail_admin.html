@@ -29,24 +29,24 @@
     </div>
     <hr>
 
-                    <div class="well well-lg">
-                        <h1 style="text-align: center">Description</h1>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <p style="font-size: medium;"><span style="font-weight: bolder;">Nomination Deadline:
-                                </span> {{ nomi.deadline }}</p>
-                            </div>
+    <div class="well well-lg">
+        <h1 style="text-align: center">Description</h1>
+        <div class="row">
+            <div class="col-lg-6">
+                <p style="font-size: medium;"><span style="font-weight: bolder;">Nomination Deadline:
+                </span> {{ nomi.deadline }}</p>
+            </div>
 
-                        </div>
-                        <p style="border-top: 1px solid #000000; height: 1px;"><br></p>
-                        <p style="text-align: justify">
-                            {% autoescape off %}
-                            {{nomi.description|linebreaks}}
-                            {% endautoescape %}
-                        </p>
-                    </div>
+        </div>
+        <p style="border-top: 1px solid #000000; height: 1px;"><br></p>
+        <p style="text-align: justify">
+            {% autoescape off %}
+            {{nomi.description|linebreaks}}
+            {% endautoescape %}
+        </p>
+    </div>
 
-                     <div class="container-fluid">
+    <div class="container-fluid">
 <!-- ---------------------------------------created-------------------------------------------------------------------  -->
                          {% if status.0 %}
                         <div class="row">
@@ -185,7 +185,7 @@
                                     </div>
                                     {% if power_to_send %}
                                         <div class="col-lg-4 text-center">
-                                            <a href="{% url 'final_re_nomi_approval' nomi.reopennomination.pk %}" class="btn btn-info">Reopen to user</a>
+                                            <a href="{% url 're_nomi_approval' nomi.reopennomination.pk %}" class="btn btn-info">Reopen to user</a>
                                         </div>
                                     {% else %}
                                         <div class="col-lg-4 text-center">
@@ -211,77 +211,93 @@
                         </div>
                    {% endif %}
 <!-- --------------------------------------------------------------------------------------------------------------  -->
+        {% if status.6 %}
+
+                        <div class="row">
+                            <div class="col-lg-6 text-center">
+                                <a href="{% url 'applicants' nomi.pk %}" class="btn btn-success">View Applicants</a>
+                            </div>
+                            <div class="col-lg-6 text-center">
+                                <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
+                            </div>
+                        </div>
+
+
+        {% endif %}
+
+        <!-- --------------------------------------------------------------------------------------------------------------  -->
+
                          <br>
                          <hr>
 
-                     {% if request.user in parents %}
-                         <div class="well">
-                             <form action="" method="post">
-                                {% csrf_token %}
+        {% if request.user in parents %}
+        <div class="well">
+             <form action="" method="post">
+                {% csrf_token %}
 
-                                <div class="container-fluid">
+                <div class="container-fluid">
 
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div>
-                                                <h3 style="text-align: center">Add Interview Panel Members</h3>
-                                                <br>
-                                                <p style="font-weight: bold">Roll No.</p>
-                                            </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div>
+                                <h3 style="text-align: center">Add Interview Panel Members</h3>
+                                <br>
+                                <p style="font-weight: bold">Roll No.</p>
+                            </div>
 
-                                            {{panelform|bootstrap_inline}}
+                            {{panelform|bootstrap_inline}}
 
-                                            <br><br>
+                            <br><br>
 
-                                            <div class="text-center">
-                                                <input class="btn btn-warning" type="submit" value="Add to panel" />
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div>
-                                                <h3 style="text-align: center">List of Panel Members</h3>
-                                                <br>
-                                                <div class="jumbotron" style="background-color: inherit">
-                                                    <div class="col-lg-10">
-                                                    <table class="table table-hover">
-                                                         <tbody>
+                            <div class="text-center">
+                                <input class="btn btn-warning" type="submit" value="Add to panel" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div>
+                                <h3 style="text-align: center">List of Panel Members</h3>
+                                <br>
+                                <div class="jumbotron" style="background-color: inherit">
+                                    <div class="col-lg-10">
+                                    <table class="table table-hover">
+                                         <tbody>
 
-                                                             {% for parent in parents %}
-                                                             <tr>
-                                                             <th  class="text-left">
-                                                                 {{ parent.userprofile.name }}
-                                                             </td>
-                                                             </tr>
-                                                             {% endfor %}
+                                             {% for parent in parents %}
+                                             <tr>
+                                             <th  class="text-left">
+                                                 {{ parent.userprofile.name }}
+                                             </td>
+                                             </tr>
+                                             {% endfor %}
 
-                                                            {% for panelist in panelists %}
-                                                             <tr>
-                                                             <th class="text-left">
-                                                                    {{ panelist.userprofile.name }}
-                                                                 <a href="{% url 'remove_panelist' nomi_pk=nomi.pk user_pk=panelist.pk %}">
-                                                                    <div class="btn btn-sm" style="width: 30px; height: 30px;">
-                                                                    <i class="fa fa-times fa-lg" aria-hidden="true"></i>
-                                                                    </div>
-                                                                 </a>
-
-                                                             </th>
-                                                             </tr>
-                                                             {% endfor %}
-                                                         </tbody>
-                                                    </table>
-                                                        <hr>
+                                            {% for panelist in panelists %}
+                                             <tr>
+                                             <th class="text-left">
+                                                    {{ panelist.userprofile.name }}
+                                                 <a href="{% url 'remove_panelist' nomi_pk=nomi.pk user_pk=panelist.pk %}">
+                                                    <div class="btn btn-sm" style="width: 30px; height: 30px;">
+                                                    <i class="fa fa-times fa-lg" aria-hidden="true"></i>
                                                     </div>
-                                            </div>
-                                        </div>
+                                                 </a>
+
+                                             </th>
+                                             </tr>
+                                             {% endfor %}
+                                         </tbody>
+                                    </table>
+                                        <hr>
                                     </div>
-                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                              </form>
-                         </div>
-                     {% endif %}
+              </form>
+         </div>
+        {% endif %}
 
-                     </div>
-            </div>
+    </div>
+</div>
 
 
 
