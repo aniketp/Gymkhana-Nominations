@@ -15,7 +15,7 @@ def current_session():
         st_year = now.year
 
     session = Session.objects.filter(start_year=st_year).first()
-    if session == None:
+    if session is None:
         session = Session.objects.create(start_year=st_year)
 
     return session
@@ -25,10 +25,10 @@ def make_club_choice(parent,i):
     global GLOBAL_CHOICE
     child_clubs = Club.objects.filter(club_parent = parent)
 
-    if parent == None:
+    if parent is None:
         GLOBAL_CHOICE = [('NA', 'ALL')]
     else:
-        GLOBAL_CHOICE = GLOBAL_CHOICE + [(parent.id , '-' *2*  i + '>' + ' ' + str(parent))]
+        GLOBAL_CHOICE = GLOBAL_CHOICE + [(parent.id , '. ' *2*  i + '' + ' ' + str(parent))]
 
 
     if child_clubs:

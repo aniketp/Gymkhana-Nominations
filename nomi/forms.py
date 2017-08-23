@@ -111,4 +111,17 @@ class GroupNominationForm(forms.Form):
 
 
 class ClubFilter(forms.Form):
-    club = forms.ChoiceField( choices=[('','------------')] + [(o.id, o) for o in Club.objects.all()],  widget=forms.Select )
+    def __init__(self, *args, **kwargs):
+        super(ClubFilter, self).__init__(*args, **kwargs)
+        self.fields["club"] = forms.ChoiceField( choices=[('', '------------')] + [(o.id, o) for o in Club.objects.all()],
+                                                 widget=forms.Select)
+
+
+class PostHolderForm(forms.Form):
+    SESSION_CHOICE = (
+        get_current_session(),
+        get_next_session(),
+    )
+
+    email = forms.CharField(label='Email Address')
+    session = forms.ChoiceField(choices=SESSION_CHOICE, widget=forms.ChoiceField, label='Session')

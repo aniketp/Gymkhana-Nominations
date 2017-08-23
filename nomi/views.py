@@ -171,9 +171,10 @@ def post_view(request, pk):
         tag_form = ClubForm(request.POST)
         if tag_form.is_valid():
             if post.perms == "can ratify the post":
-                Club.objects.create(club_name = tag_form.cleaned_data['club_name'], club_parent=post.club)
+                Club.objects.create(club_name=tag_form.cleaned_data['club_name'], club_parent=post.club)
             else:
-                ClubCreate.objects.create(club_name=tag_form.cleaned_data['club_name'], club_parent=post.club, take_approval = post.parent, requested_by = post)
+                ClubCreate.objects.create(club_name=tag_form.cleaned_data['club_name'], club_parent=post.club,
+                                          take_approval=post.parent, requested_by=post)
             return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
 
     else:
@@ -184,12 +185,56 @@ def post_view(request, pk):
     if request.user in post.post_holders.all():
         return render(request, 'post1.html', context={'post': post, 'child_posts': child_posts_reverse,
                                                       'post_approval': post_approvals, 'tag_form': tag_form,
-                                                      'nomi_approval': nomi_approvals, 're_nomi_approval':re_nomi_approval,
-                                                      'group_nomi_approvals': group_nomi_approvals,'entity_by_me':entity_by_me,
-                                                      'result_approvals': result_approvals,'count':count,
-                                                      "to_deratify":to_deratify,"post_count":post_count,'entity_approvals':entity_approvals})
+                                                      'nomi_approval': nomi_approvals,
+                                                      'group_nomi_approvals': group_nomi_approvals,
+                                                      'entity_by_me': entity_by_me, 're_nomi_approval': re_nomi_approval,
+                                                      'result_approvals': result_approvals, 'count': count,
+                                                      "to_deratify": to_deratify, "post_count": post_count,
+                                                      'entity_approvals': entity_approvals})
     else:
         return render(request, 'no_access.html')
+
+
+@login_required
+def add_post_holder(request, post_pk):
+    post = Post.objects.get(pk=post_pk)
+
+    return render(request, 'add_post_holder.html', context={'post': post})
+
+
+@login_required
+def post_holder_form(request, post_pk):   # pk of the Post
+    users = UserProfile.objects.all()
+    post = Post.objects.get(pk=post_pk)
+
+    user_email = []
+
+    for user in users:
+        user_email.append(user + '@iitk.ac.in')
+
+    if request.method == 'POST':
+        post_holder_Form = PostHolderForm(request.POST)
+        if post_holder_Form.is_valid():
+            email = post_holder_Form.cleaned_data['email']
+            session = post_holder_Form.cleaned_data['session']
+
+            try:
+                if email in user_email:
+                    username = email[:-11]
+                    name = User.objects.get(username=username)
+                    post.post_holders.add(name)
+
+                    PostHistory.objects.create(post=post, user=username, session=session)
+
+                    return True
+
+            except ObjectDoesNotExist:
+                return render(request, 'add_post_holder.html', context={'form': post_holder_Form})
+
+        else:
+            return render(request, 'add_post_holder.html', context={'form': post_holder_Form})
+
+    return HttpResponseRedirect(reverse('post_view', kwargs={'pk': post_pk}))
 
 
 # view to create a new post, a child post for a post can be created only by the post holders of that post...

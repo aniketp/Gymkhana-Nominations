@@ -161,4 +161,7 @@ urlpatterns = [
     # nominations/cancel_ratify/2
     url(r'^cancel_deratify/(?P<pk>\d+)/$', views.reject_deratification_request, name='cancel_deratify'),
 
+    # nominations/add_post_holder/2
+    url(r'^add_post_holder/(?P<post_pk>\d+)/$', views.add_post_holder, name='add_post_holder'),
+
 ]
