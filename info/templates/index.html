@@ -187,7 +187,8 @@
                             <div class="row-fluid">
                                 <div class="col-lg-6">
                                     {% if students.userprofile %}
-                                        <a style="color: black;" href="{% url 'public_profile' students.userprofile.pk %}"><div class="panel panel-default panel-success">
+                                        <a style="color: black;" href="{% url 'public_profile' students.userprofile.pk %}"><div
+                                                class="panel panel-default panel-success">
                                             <div class="panel-body">
                                                 <div class="col-lg-3">
                                                     <img style="border-radius: 10%" src="{{ students.userprofile.image_url }}" alt="Pic here"

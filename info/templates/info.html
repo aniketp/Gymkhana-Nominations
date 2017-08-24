@@ -186,8 +186,8 @@
                                     <a style="color: black;" href="{% url 'public_profile' each.user.userprofile.pk %}"><div
                                             class="panel panel-default panel-success">
                                         <div class="panel-body">
-                                            <div class="col-lg-3">
-                                                <img style="border-radius: 10%" src="{{ each.user.userprofile.image_url }}" alt="Pic here"
+                                            <div style="padding-left: 0" class="col-lg-3">
+                                                <img style="border-radius: 10%" src="{{ each.user.userprofile.image_url }}" alt="Image not Found"
                                                 width="90px" height="90px">
                                             </div>
 
@@ -203,10 +203,10 @@
                                     </div></a>
                                 {%else%}
                                  <div style="color: black" class="panel panel-default">
-                                        <div class="panel-body">
+                                        <div style="padding-left: 0" class="panel-body">
                                             <div class="col-lg-3">
-                                                <img style="border-radius: 10%" src="{{ each.userprofile.image_url }}" alt="Pic here"
-                                                width="100%" height="100%">
+                                                <img style="border-radius: 10%" src="{{ each.userprofile.image_url }}" alt="Image not Found"
+                                                width="90px" height="90px">
                                             </div>
 
                                             <div class="col-lg-9">

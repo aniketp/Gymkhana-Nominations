@@ -331,3 +331,6 @@ body {
     display: none;
   }
 }
+.tooltip-layout {
+    text-align: right;
+}

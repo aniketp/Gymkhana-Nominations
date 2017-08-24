@@ -28,12 +28,12 @@
 
         <div class="container-fluid">
             {% if post.status == 'Post created' %}
-            <div>
-                <h3>The post has not been approved yet</h3>
-            </div>
-
+                <div>
+                    <h3 style="text-align: center">The Post has not been Approved Yet</h3>
+                </div>
             {% else %}
-            <div class="col-lg-6 col-sm-6 nomination-list" style="min-height: 280px;">
+
+            <div class="col-lg-6 nomination-list" style="min-height: 50vh">
                 <h2>Nominations for the post</h2>
                 <div class="row">
                     <div class="col-lg-12 text-center">
@@ -42,42 +42,57 @@
                     </div>
                 </div>
                 <br>
-
-
-                {% for nomination in nominations %}
-                {% if not nomination.status == 'Work done' %}
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <a  href="{% url 'nomi_detail' nomi_pk=nomination.pk %}">{{nomination.name}}</a>
-                    </div>
+                <div style="height: 30vh; overflow-y: scroll">
+                    {% for nomination in nominations %}
+                        {% if not nomination.status == 'Work done' %}
+                            <div class="well well-sm" style="max-width: 95%">
+                                <div>
+                                    <a href="{% url 'nomi_detail' nomi_pk=nomination.pk %}"
+                                       style="text-decoration: none; color: #1b3013">{{nomination.name}}</a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
                 </div>
-                {% endif %}
-                {% endfor %}
+
+            </div>
+
+            <div class="col-lg-6 nomination-list">
+                <div class="post-holder-list">
+                    <h2>List of post holders</h2>
                 </div>
+                <div style="height: 40vh; overflow-y: scroll">
+                    <ol>
+                        {% for post_holder in post.post_holders.all %}
+                        <li>
+                            {{post_holder.userprofile.name}} --->
+                            {% if post_holder|check_deratificaton:post %}
+                              Deratification Requested
+                            {% else %}
+                            <span style="text-align: right">
+                                    <a href="{% url 'request_deratify' post_pk=post.pk user_pk=post_holder.pk %}"
+                                       style="text-align: right"
+                                    data-toggle="tooltip" data-placement="top" title="Remove from Post">
+                                        <i class="fa fa-trash" aria-hidden="true"></i></a>
+                            </span>
+                            <span style="text-align: right">
+                                    <a href="{% url 'request_deratify' post_pk=post.pk user_pk=post_holder.pk %}"
+                                       style="text-align: right"
+                                    data-toggle="tooltip" data-placement="top" title="End tenure">
+                                        <i class="fa fa-reply" aria-hidden="true"></i></a>
+                            </span>
 
+                            {% endif %}
 
-                <div class="col-lg-5 col-sm-6 nomination-list">
-                    <div class="post-holder-list">
-                        <h2>List of post holders</h2>
-                    </div>
-                    <div style="height: 215px; overflow-y: scroll">
-                        <ol>
-                            {% for post_holder in post.post_holders.all %}
-                            <li>
-
-                                {{post_holder.userprofile.name}}  --
-                                {% if post_holder|check_deratificaton:post %}
-                                  deratification requested
-                                {% else %}
-                                <a href="{% url 'request_deratify' post_pk=post.pk user_pk=post_holder.pk %}">initiate_deratification</a>
-                                {% endif %}
-
-                            </li>
-                            {% endfor %}
-                        </ol>
-                    </div>
+                        </li>
+                        {% endfor %}
+                    </ol>
                 </div>
+            </div>
             {% endif %}
         </div>
     </div>
+
+
 {% endblock %}
+

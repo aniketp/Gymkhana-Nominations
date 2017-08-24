@@ -10,29 +10,39 @@
           <p style="font-weight: bold; color: #19294b">Group of Nominations</p>
         <div class="jumbotron-title">
             <h1 style="text-align: center">{{group_nomi.name}}</h1>
-
         </div>
+    </div>
+
+    <div class="well" style="margin-top: -1em">
         {% if admin %}
         {% if group_nomi.status == 'created' %}
-        <ul class="nav nav-tabs">
-            <li><a href="{% url 'add_to_group' pk=admin.pk gr_pk=group_nomi.pk %}" class="btn  read-more-button btn-info">Add New</a></li>
-            <li class="dropdown show">
-                 <button class="btn btn-secondary btn-danger dropdown-toggle" type="button"
-                         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Open to Users
-                </button>
-                <div class="dropdown-menu " role="menu">
-                 <form action="" method="post" style="display: inline">
-                     {% csrf_token %}
-                     <p>{{form_confirm|bootstrap}}</p>
-                     <input class="btn btn-success btn-block" type="submit" value="submit" />
-                 </form>
-                </div>
-            </li>
-        </ul>
-        {% endif %}
-        {% endif %}
+            <div class="container-fluid text-center">
+                <div class="row">
+                    <div class="col-lg-6"><a href="{% url 'add_to_group' pk=admin.pk gr_pk=group_nomi.pk %}">
+                        <div style="width: auto" class="btn read-more-button btn-info"> Add a New Nomination </div>
+                        </a>
+                    </div>
 
+                    <div class="col-lg-6" style="margin-top: 0.6em">
+                        <div class="dropdown show">
+                             <button class="btn btn-secondary btn-danger dropdown-toggle" type="button"
+                                     id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                 Open to Users
+                            </button>
+
+                            <div class="dropdown-menu" role="menu">
+                             <form action="" method="post" style="display: inline">
+                                 {% csrf_token %}
+                                 <p>{{form_confirm|bootstrap}}</p>
+                                 <input class="btn btn-success btn-block" type="submit" value="submit" />
+                             </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% endif %}
     </div>
 
      <div>
@@ -51,12 +61,17 @@
                     <div><span style="font-weight: bold">Release Date: </span> {{nomi.opening_date}}</div>
                     <p><span style="font-weight: bolder"> Deadline :  </span>{{nomi.deadline}}</p>
                     <p>{{nomi.brief_desc}} ...</p>
-                    <a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}"
-                       class="btn btn-sm read-more-button btn-danger">Read More</a>
+                    <div class="col-lg-2">
+                        <a href="{% url 'nomi_detail' nomi_pk=nomi.pk %}"
+                           class="btn btn-sm read-more-button btn-primary">Read More</a>
+                    </div>
+
                     {% if admin %}
                         {% if group_nomi.status == 'created' %}
+                            <div class="col-lg-3">
                              <a href="{% url 'remove_from_group' nomi_pk=nomi.pk  gr_pk=group_nomi.pk %}"
                                 class="btn btn-sm read-more-button btn-danger">Remove</a>
+                            </div>
                         {% endif %}
                     {% endif %}
                 </div>

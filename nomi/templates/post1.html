@@ -79,12 +79,16 @@
 
                     <div class="row">
                         <div class="col-lg-6">
-                            <p class="profile-post-name"><a href="{% url 'child_post' pk=ch_post.pk %}">
-                                <span>Post: </span>{{ch_post.post_name}}</a></p>
+                            <p class="profile-post-name"><a style="text-decoration: none" href="{% url 'child_post' pk=ch_post.pk %}">
+                                <span style="color: black;">Post: </span>{{ch_post.post_name}}</a></p>
                         </div>
-                        <div class="col-lg-6">
-                            <p><a href="{% url 'post_holder_form' pk=ch_post.pk %}">Add a Post Holder</a></p>
-                        </div>
+                        {% if post.perms == 'can ratify the post' %}
+                            <div class="col-lg-6">
+                                <a href="{% url 'post_holder_form' pk=ch_post.pk %}">
+                                    <div class="btn btn-primary">Add a Post Holder</div>
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="row">
                         {% if ch_post.status == "Post created" %}
