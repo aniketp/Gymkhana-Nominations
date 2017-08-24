@@ -198,7 +198,7 @@ def post_view(request, pk):
 
 
 @login_required
-def post_holder_form(request, pk):   # pk of the Post
+def add_post_holder(request, pk):   # pk of the Post
     post = Post.objects.get(pk=pk)
 
     if request.method == 'POST':
@@ -211,8 +211,14 @@ def post_holder_form(request, pk):   # pk of the Post
                 name = User.objects.get(username=email)
                 post.post_holders.add(name)
                 session = Session.objects.filter(start_year=start_year).first()
-                PostHistory.objects.create(post=post, user=name, post_session=session,
-                                           end=session_end_date(session.start_year))
+                if session is None:
+                    session = Session.objects.create(start_year=start_year)
+
+                previous_history = PostHistory.objects.filter(post = post).filter(user = name).filter(post_session = session)
+
+                if not previous_history:
+                    PostHistory.objects.create(post=post, user=name, post_session=session,
+                                             end=session_end_date(session.start_year))
 
                 return HttpResponseRedirect(reverse('child_post', kwargs={'pk': pk}))
 

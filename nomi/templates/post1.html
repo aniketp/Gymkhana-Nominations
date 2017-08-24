@@ -84,7 +84,7 @@
                         </div>
                         {% if post.perms == 'can ratify the post' %}
                             <div class="col-lg-6">
-                                <a href="{% url 'post_holder_form' pk=ch_post.pk %}">
+                                <a href="{% url 'add_post_holder' pk=ch_post.pk %}">
                                     <div class="btn btn-primary">Add a Post Holder</div>
                                 </a>
                             </div>

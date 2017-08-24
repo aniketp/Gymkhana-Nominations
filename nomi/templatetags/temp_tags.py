@@ -28,7 +28,7 @@ def give_session(st_year):
 @register.filter
 def check_deratificaton(user,post):
     out = False
-    derati = Deratification.objects.filter(post = post).filter(name = user)
+    derati = Deratification.objects.filter(post = post).filter(name = user).filter(status = 'requested')
     if derati:
         out = True
 
