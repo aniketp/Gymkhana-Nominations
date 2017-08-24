@@ -119,7 +119,7 @@ class Nomination(models.Model):
         self.save()
         for each in selected:
             PostHistory.objects.create(post=self.nomi_post, user=each.user, end=session_end_date(session.start_year),
-                                       post_session = session)
+                                       post_session=session)
             self.nomi_post.post_holders.add(each.user)
 
         return self.nomi_post.post_holders

@@ -3,7 +3,7 @@
 
 {% block content %}
     <br><br><br>
-    <form action=" " method="post" style="display: inline">
+    <form action="" method="post" style="display: inline">
          {% csrf_token %}
          <p>{{form|bootstrap}}</p>
          <input class="btn btn-success btn-block" type="submit" value="submit" />

@@ -160,11 +160,13 @@ def post_view(request, pk):
     entity_by_me = ClubCreate.objects.filter(requested_by=post)
 
     nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
-    re_nomi_approval = ReopenNomination.objects.filter(approvals = post).filter(nomi__status='Interview period and Reopening initiated')
+    re_nomi_approval = ReopenNomination.objects.filter(approvals=post).\
+        filter(nomi__status='Interview period and Reopening initiated')
     group_nomi_approvals = GroupNomination.objects.filter(status='created').filter(approvals=post)
     count = nomi_approvals.count() + group_nomi_approvals.count() + re_nomi_approval.count()
 
-    result_approvals = Nomination.objects.filter(result_approvals=post).exclude(status='Work done').exclude(status='Nomination created').exclude(status='Nomination out')
+    result_approvals = Nomination.objects.filter(result_approvals=post).exclude(status='Work done').\
+        exclude(status='Nomination created').exclude(status='Nomination out')
     to_deratify = Deratification.objects.filter(deratify_approval = post).filter(status = 'requested')
 
     if request.method == 'POST':
@@ -203,13 +205,14 @@ def post_holder_form(request, pk):   # pk of the Post
         post_holder_Form = PostHolderForm(request.POST)
         if post_holder_Form.is_valid():
             email = post_holder_Form.cleaned_data['email']
-            st_year = post_holder_Form.cleaned_data['session']
+            start_year = post_holder_Form.cleaned_data['session']
 
             try:
                 name = User.objects.get(username=email)
                 post.post_holders.add(name)
-                session = Session.objects.filter(start_year=st_year).first()
-                PostHistory.objects.create(post=post, user=name, post_session=session)
+                session = Session.objects.filter(start_year=start_year).first()
+                PostHistory.objects.create(post=post, user=name, post_session=session,
+                                           end=session_end_date(session.start_year))
 
                 return HttpResponseRedirect(reverse('child_post', kwargs={'pk': pk}))
 
