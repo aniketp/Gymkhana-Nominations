@@ -196,45 +196,32 @@ def post_view(request, pk):
 
 
 @login_required
-def add_post_holder(request, post_pk):
-    post = Post.objects.get(pk=post_pk)
-
-    return render(request, 'add_post_holder.html', context={'post': post})
-
-
-@login_required
-def post_holder_form(request, post_pk):   # pk of the Post
-    users = UserProfile.objects.all()
-    post = Post.objects.get(pk=post_pk)
-
-    user_email = []
-
-    for user in users:
-        user_email.append(user + '@iitk.ac.in')
+def post_holder_form(request, pk):   # pk of the Post
+    post = Post.objects.get(pk=pk)
 
     if request.method == 'POST':
         post_holder_Form = PostHolderForm(request.POST)
         if post_holder_Form.is_valid():
             email = post_holder_Form.cleaned_data['email']
-            session = post_holder_Form.cleaned_data['session']
+            st_year = post_holder_Form.cleaned_data['session']
 
             try:
-                if email in user_email:
-                    username = email[:-11]
-                    name = User.objects.get(username=username)
-                    post.post_holders.add(name)
+                name = User.objects.get(username=email)
+                post.post_holders.add(name)
+                session = Session.objects.filter(start_year=st_year).first()
+                PostHistory.objects.create(post=post, user=name, post_session=session)
 
-                    PostHistory.objects.create(post=post, user=username, session=session)
+                return HttpResponseRedirect(reverse('child_post', kwargs={'pk': pk}))
 
-                    return True
+
 
             except ObjectDoesNotExist:
-                return render(request, 'add_post_holder.html', context={'form': post_holder_Form})
+                return render(request, 'add_post_holder.html', context={'post': post, 'form': post_holder_Form})
 
-        else:
-            return render(request, 'add_post_holder.html', context={'form': post_holder_Form})
+    else:
+        post_holder_Form = PostHolderForm
+        return render(request, 'add_post_holder.html', context={'post': post, 'form': post_holder_Form})
 
-    return HttpResponseRedirect(reverse('post_view', kwargs={'pk': post_pk}))
 
 
 # view to create a new post, a child post for a post can be created only by the post holders of that post...

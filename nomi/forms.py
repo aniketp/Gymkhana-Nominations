@@ -123,5 +123,5 @@ class PostHolderForm(forms.Form):
         get_next_session(),
     )
 
-    email = forms.CharField(label='Email Address')
-    session = forms.ChoiceField(choices=SESSION_CHOICE, widget=forms.ChoiceField, label='Session')
+    email = forms.CharField(label='Username', help_text='Exclude @iitk.ac.in')
+    session = forms.ChoiceField(choices=SESSION_CHOICE, widget=forms.Select, label='Session')
