@@ -61,13 +61,9 @@ urlpatterns = [
     url(r'^append/fdybdjhhvjdk5878fkjjgj521/(?P<pk>\d+)$', views.append_user, name='append_user'),
 
     # nominations/create
-    url(r'^create/(?P<pk>\d+)/$', views.nomination_create, name='nomi_create'),
+    url(r'^nomi_create/(?P<pk>\d+)/$', views.nomination_create, name='nomi_create'),
 
-    # nominations/2/update
-    url(r'^(?P<pk>\d+)/update/$', views.NominationUpdate.as_view(), name='nomi_update'),
-
-    # nominations/2/delete
-    url(r'^(?P<pk>\d+)/delete/$', views.NominationDelete.as_view(), name='nomi_delete'),
+    url(r'^nomi_replicate/(?P<nomi_pk>\d+)/$', views.nomi_replicate, name='nomi_replicate'),
 
     # nominations/post/2
     url(r'^post/(?P<pk>\d+)/$', views.post_view, name='post_view'),

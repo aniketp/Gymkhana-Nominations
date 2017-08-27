@@ -14,6 +14,7 @@ from django.shortcuts import render,HttpResponse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from forms.models import Questionnaire
+from forms.views import replicate
 from gymkhana.settings import DOMAIN_NAME
 from .forms import *
 from .models import *
@@ -477,6 +478,35 @@ class NominationDelete(DeleteView):
     model = Nomination
     success_url = reverse_lazy('index')
 
+
+def nomi_replicate(request,nomi_pk):
+    nomi_to_replicate = Nomination.objects.get(pk = nomi_pk)
+    post = nomi_to_replicate.nomi_post
+    if request.user in post.parent.post_holders.all():
+        if request.method == 'POST':
+            title_form = NominationReplicationForm(request.POST)
+            if title_form.is_valid():
+                questionnaire = replicate(nomi_to_replicate.nomi_form.pk)
+                questionnaire.name = title_form.cleaned_data['title']
+                questionnaire.save()
+
+                nomination = Nomination.objects.create(name=title_form.cleaned_data['title'],
+                                                       description=nomi_to_replicate.description,
+                                                       deadline=title_form.cleaned_data['deadline'],
+                                                       nomi_session=title_form.cleaned_data['nomi_session'],
+                                                       nomi_form=questionnaire, nomi_post=post,
+                                                       )
+
+                pk = questionnaire.pk
+                return HttpResponseRedirect(reverse('forms:creator_form', kwargs={'pk': questionnaire.pk}))
+
+        else:
+            title_form = NominationReplicationForm()
+
+            return render(request, 'nomi/nomination_form.html', context={'form': title_form, 'post': post})
+
+    else:
+        return render(request, 'no_access.html')
 
 
 # ****** in use...

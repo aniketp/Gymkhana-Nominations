@@ -16,6 +16,12 @@
             <a href="{% url 're_nomi_reject' nomi.reopennomination.pk %}" class="btn btn-danger">Collapse Reopening</a>
 
             {% endif %}
+            {% if  user in nomi.nomi_post.parent.post_holders.all %}
+                {% if status.6 or status.3 %}
+                     <a href="{% url 'nomi_replicate' nomi.pk %}" class="btn btn-danger">Replicate Nomination</a>
+                {% endif %}
+            {% endif %}
+
         </h3>
     </div>
     <hr>

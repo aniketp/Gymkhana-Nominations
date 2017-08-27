@@ -55,3 +55,16 @@ class QuestionUpdate(UpdateView):
 
 
 
+def replicate(pk):
+    questionnaire = Questionnaire.objects.get(pk=pk)
+    new_questionnaire = Questionnaire.objects.create()
+    for question in questionnaire.question_set.all():
+        Question.objects.create(questionnaire=new_questionnaire, question_type=question.question_type,
+                                question=question.question,
+                                question_choices=question.question_choices)
+
+    return new_questionnaire
+
+
+
+

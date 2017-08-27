@@ -32,6 +32,17 @@ class NominationForm(forms.Form):
                                      widget=forms.Select(), help_text="Current session " + get_current_session()[1])
 
 
+class NominationReplicationForm(forms.Form):
+    SESSION_CHOICE= (
+        get_current_session(),
+        get_next_session(),
+    )
+    title = forms.CharField()
+    deadline = forms.DateField(required=True, initial=datetime.now(), help_text="Format YYYY-MM-DD")
+    nomi_session = forms.ChoiceField(choices=SESSION_CHOICE, label="Session",
+                                     widget=forms.Select(), help_text="Current session " + get_current_session()[1])
+
+
 class PostForm(forms.Form):
     def __init__(self, parent, *args, **kwargs):
         super(PostForm, self).__init__(*args, **kwargs)

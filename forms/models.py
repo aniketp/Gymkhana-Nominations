@@ -87,7 +87,7 @@ class Question(models.Model):
 
 
 class FilledForm(models.Model):
-    questionnaire = models.ForeignKey(Questionnaire, null=True)
+    questionnaire = models.ForeignKey(Questionnaire,on_delete=models.CASCADE, null=True)
     applicant = models.ForeignKey(User, null=True)
     data = models.CharField(max_length=30000, null=True, blank=True)
 
