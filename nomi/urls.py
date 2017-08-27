@@ -159,4 +159,7 @@ urlpatterns = [
 
     # nominations/post_holder_form/2
     url(r'^add_post_holder/(?P<pk>\d+)/$', views.add_post_holder, name='add_post_holder'),
+
+    url(r'^see_nomi_form/(?P<pk>\d+)/$', views.see_nomi_form, name='see_nomi_form'),
+
 ]

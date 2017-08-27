@@ -616,6 +616,18 @@ def nomi_detail(request, nomi_pk):
         else:
             return render(request, 'no_access.html')
 
+@login_required
+def see_nomi_form(request, pk):
+    nomi = Nomination.objects.get(pk=pk)
+    if nomi.nomi_form and nomi.nomi_form.question_set.all():
+        questionnaire = nomi.nomi_form
+        form = questionnaire.get_form
+        return render(request, 'see_nomi_form.html', context={'form': form, 'nomi':nomi })
+    else:
+        info = "There is not any form for this nomi"
+
+        return render(request, 'nomi_done.html', context={'info': info})
+
 
 @login_required
 def remove_panelist(request, nomi_pk, user_pk):
@@ -1100,7 +1112,6 @@ def group_nominations(request, pk):
                             to_add = post.parent
                             nomi.nomi_approvals.add(to_add)
                         nomi.save()
-                        nomi.open_to_users()
                     return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
 
         else:
@@ -1124,6 +1135,8 @@ def group_nomi_detail(request, pk):
 
     form_confirm = ConfirmApplication(request.POST or None)
     if form_confirm.is_valid():
+        for nomi in group_nomi.nominations.all():
+            nomi.open_to_users()
         group_nomi.status = 'out'
         group_nomi.save()
 

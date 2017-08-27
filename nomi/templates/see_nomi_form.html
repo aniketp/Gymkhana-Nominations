@@ -1,0 +1,28 @@
+{% extends "base2.html" %}
+{% block title %}
+form view
+{% endblock %}
+
+{% load bootstrap %}
+{% load staticfiles %}
+
+
+{% block content %}
+
+<div class="profile-content ">
+
+            <h2 class="intro-text text-center">
+                <strong>{{ nomi.name }}</strong>
+            </h2>
+                <hr>
+            <div style="margin:25px">
+                    <form >
+                        {% csrf_token %}
+                        <p>
+                            {{form|bootstrap}}
+                        </p>
+                    </form>
+            </div>
+</div>
+
+{% endblock content %}

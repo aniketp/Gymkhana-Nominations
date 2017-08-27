@@ -80,8 +80,10 @@ form view
 
         <div>
             <form  action="" method="post">
+                <fieldset disabled="disabled">
                 {% csrf_token %}
                 {{form|bootstrap}}
+                </fieldset>
             </form>
         </div>
 

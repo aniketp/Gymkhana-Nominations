@@ -7,15 +7,16 @@
 
 <div class="profile-content">
     <div class="jumbotron">
-          <p style="font-weight: bold; color: #19294b">Group of Nominations</p>
         <div class="jumbotron-title">
             <h1 style="text-align: center">{{group_nomi.name}}</h1>
         </div>
     </div>
 
+
+    {% if admin %}
+    {% if group_nomi.status == 'created' %}
     <div class="well" style="margin-top: -1em">
-        {% if admin %}
-        {% if group_nomi.status == 'created' %}
+
             <div class="container-fluid text-center">
                 <div class="row">
                     <div class="col-lg-6"><a href="{% url 'add_to_group' pk=admin.pk gr_pk=group_nomi.pk %}">
@@ -24,10 +25,11 @@
                     </div>
 
                     <div class="col-lg-6" style="margin-top: 0.6em">
-                        <div class="dropdown show">
+                        <div class="btn-group">
                              <button class="btn btn-secondary btn-danger dropdown-toggle" type="button"
                                      id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                  Open to Users
+                                 <i class="fa fa-caret-down  fa-lg" aria-hidden="true"></i>
                             </button>
 
                             <div class="dropdown-menu" role="menu">
@@ -41,9 +43,22 @@
                     </div>
                 </div>
             </div>
-        {% endif %}
-        {% endif %}
     </div>
+    {% endif %}
+    {% endif %}
+
+    <hr>
+
+    <div class="well well-lg">
+
+        <p style="text-align: justify" class="text-center" >
+            {% autoescape off %}
+            {{group_nomi.description|linebreaks}}
+            {% endautoescape %}
+        </p>
+    </div>
+
+
 
      <div>
          {% for nomi in group_nomi.nominations.all %}
