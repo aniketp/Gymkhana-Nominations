@@ -34,7 +34,7 @@ def add_ques(request, pk):
         if form.is_valid():
             Question.objects.create(questionnaire=questionnaire, question_type=form.cleaned_data['question_type'],
                                     question=form.cleaned_data['question'],
-                                    question_choices=form.cleaned_data['question_choices'])
+                                    question_choices=form.cleaned_data['question_choices'],required = form.cleaned_data['required'])
 
             return HttpResponseRedirect(reverse('forms:creator_form', kwargs={'pk': pk}))
     else:
@@ -45,7 +45,7 @@ def add_ques(request, pk):
 
 class QuestionUpdate(UpdateView):
     model = Question
-    fields = ['question', 'question_type', 'question_choices']
+    fields = ['question', 'question_type', 'question_choices','required']
     template_name = 'forms/ques_update.html'
 
     def get_success_url(self):

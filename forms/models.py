@@ -20,6 +20,9 @@ class Questionnaire(models.Model):
             field = question._get_formfield_class()
             label = question.question
 
+            if question.required:
+                label = question.question + " *"
+
             field_args = question._get_field_args()
 
             ques_id = question.id
@@ -59,6 +62,7 @@ class Question(models.Model):
     question_type = models.CharField(max_length=50, choices=QUES_TYPES, null=True)
     question = models.CharField(max_length=1000, null=True)
     question_choices = models.TextField(max_length=600, null=True, blank=True, help_text='make new line for new option')
+    required = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.question
@@ -82,7 +86,11 @@ class Question(models.Model):
         if self.question_type == 'Paragraph':
             args['widget'] =forms.Textarea
 
-        args.update({'required': True})
+        if self.required:
+            args['label_suffix'] = " *"
+
+        args.update({'required': self.required})
+
         return args
 
 
