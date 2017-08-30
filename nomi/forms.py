@@ -100,7 +100,11 @@ class ConfirmApplication(forms.Form):
 class RatifyApplication(forms.Form):
     Tick_the_box_for_confirmation = forms.CharField(max_length=100, widget=forms.CheckboxInput())
 
-class SaveComfirm(form.F)
+class SaveConfirm(forms.Form):
+    save_or_submit  = forms.ChoiceField(choices=[("only save","only save"),("save and submit","save and submit")] ,widget=forms.RadioSelect)
+
+
+
 
 class CommentForm(forms.Form):
     comment = forms.CharField(widget=forms.Textarea)

@@ -818,14 +818,22 @@ def nomi_apply(request, pk):
         if nomination.nomi_form:
             questionnaire = nomination.nomi_form
             form = questionnaire.get_form(request.POST or None)
-            form_confirm = ConfirmApplication(request.POST or None)
+            form_confirm = SaveConfirm(request.POST or None)
 
             if form_confirm.is_valid():
                 if form.is_valid():
                     filled_form = questionnaire.add_answer(request.user, form.cleaned_data)
-                    NominationInstance.objects.create(user=request.user, nomination=nomination, filled_form=filled_form,
+                    if form_confirm.cleaned_data["save_or_submit"] == "only save":
+                        NominationInstance.objects.create(user=request.user, nomination=nomination,
+                                                          filled_form=filled_form,
+                                                          submission_status=False, timestamp=date.today())
+                        info = "Your application has been saved. It has not been submited. So make sure you submit it after further edits through your profile module"
+
+                    else:
+                        NominationInstance.objects.create(user=request.user, nomination=nomination, filled_form=filled_form,
                                                       submission_status = True,timestamp = date.today())
-                    info = "Your application has been recorded. You can edit it through profile module."
+                        info = "Your application has been recorded. You can edit it through profile module."
+
                     return render(request, 'nomi_done.html', context={'info': info})
 
             return render(request, 'forms/show_form.html', context={'form': form, 'form_confirm': form_confirm,
@@ -844,6 +852,60 @@ def nomi_apply(request, pk):
         if not (nomination.status == "Nomination out" or nomination.status =="Interview period and Nomination reopened"):
             info =  "Nomination has been closed"
         return render(request, 'nomi_done.html', context={'info': info})
+
+
+
+
+def nomi_answer_edit(request, pk):
+    application = NominationInstance.objects.get(pk=pk)
+    nomination = application.nomination
+
+    if application.user == request.user and (nomination.status == "Nomination out" or nomination.status =="Interview period and Nomination reopened") :
+        ans_form = application.filled_form
+        data = json.loads(ans_form.data)
+        applicant = application.user.userprofile
+        questionnaire = application.nomination.nomi_form
+        form = questionnaire.get_form(request.POST or data)
+
+        if nomination.nomi_form and application.submission_status== False:
+            form_confirm = SaveConfirm(request.POST or None)
+            if form_confirm.is_valid():
+                if form.is_valid():
+                    info = "Your application has been edited and saved locally. Don't forget to submit it before deadline "
+                    if form_confirm.cleaned_data["save_or_submit"] == "save and submit":
+                        application.submission_status = True
+                        application.timestamp = date.today()
+                        application.save()
+                        info = "Your application has been edited and finally submitted."
+
+                    json_data = json.dumps(form.cleaned_data)
+                    ans_form.data = json_data
+                    ans_form.save()
+                    application.edit_time = date.today()
+                    application.save()
+
+                    return render(request, 'nomi_done.html', context={'info': info})
+
+
+        else:
+            form_confirm = ConfirmApplication(request.POST or None)
+
+
+        if form_confirm.is_valid():
+            if form.is_valid():
+                json_data = json.dumps(form.cleaned_data)
+                ans_form.data = json_data
+                ans_form.save()
+                application.edit_time = date.today()
+                application.save()
+
+                info = "Your application has been edited"
+                return render(request, 'nomi_done.html', context={'info': info})
+
+        return render(request, 'nomi_answer_edit.html', context={'form': form, 'form_confirm': form_confirm,
+                                                                 'nomi': application, 'nomi_user': applicant})
+    else:
+        return render(request, 'no_access.html')
 
 
 def get_mails(query_users):
@@ -904,10 +966,10 @@ def get_accepted_csv(request,nomi_pk):
 @login_required
 def applications(request, pk):
     nomination = Nomination.objects.get(pk=pk)
-    applicants = NominationInstance.objects.filter(nomination=nomination)
-    accepted = NominationInstance.objects.filter(nomination=nomination).filter(status='Accepted')
-    rejected = NominationInstance.objects.filter(nomination=nomination).filter(status='Rejected')
-    pending = NominationInstance.objects.filter(nomination=nomination).filter(status=None)
+    applicants = NominationInstance.objects.filter(nomination=nomination).filter(submission_status = True)
+    accepted = NominationInstance.objects.filter(nomination=nomination).filter(submission_status = True).filter(status='Accepted')
+    rejected = NominationInstance.objects.filter(nomination=nomination).filter(submission_status = True).filter(status='Rejected')
+    pending = NominationInstance.objects.filter(nomination=nomination).filter(submission_status = True).filter(status=None)
 
     mail_ids = [get_mails(applicants),get_mails(accepted),get_mails(rejected),get_mails(pending)]
 
@@ -1065,34 +1127,6 @@ def nomination_answer(request, pk):
         return render(request, 'no_access.html')
 
 
-def nomi_answer_edit(request, pk):
-    application = NominationInstance.objects.get(pk=pk)
-    nomination = application.nomination
-
-    if application.user == request.user and (nomination.status == "Nomination out" or nomination.status =="Interview period and Nomination reopened") :
-        ans_form = application.filled_form
-        data = json.loads(ans_form.data)
-        applicant = application.user.userprofile
-        questionnaire = application.nomination.nomi_form
-        form = questionnaire.get_form(request.POST or data)
-
-        form_confirm = ConfirmApplication(request.POST or None)
-
-        if form_confirm.is_valid():
-            if form.is_valid():
-                json_data = json.dumps(form.cleaned_data)
-                ans_form.data = json_data
-                ans_form.save()
-                application.edit_time = date.today()
-                application.save()
-
-                info = "Your application has been edited"
-                return render(request, 'nomi_done.html', context={'info': info})
-
-        return render(request, 'nomi_answer_edit.html', context={'form': form, 'form_confirm': form_confirm,
-                                                                 'nomi': application, 'nomi_user': applicant})
-    else:
-        return render(request, 'no_access.html')
 
 
 
@@ -1478,12 +1512,13 @@ def profile_view(request):
         filter(nomination__status='Interview period and Nomination reopened')
     pending_nomi = pending_nomi | pending_re_nomi
 
-    interview_re_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Interview period and Reopening initiated')
-    interview_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Interview period')
+    # show the instances that user finally submitted.. not the saved one
+    interview_re_nomi = NominationInstance.objects.filter(user=request.user).filter(submission_status = True).filter(nomination__status='Interview period and Reopening initiated')
+    interview_nomi = NominationInstance.objects.filter(user=request.user).filter(submission_status = True).filter(nomination__status='Interview period')
 
     interview_nomi = interview_nomi | interview_re_nomi
 
-    declared_nomi = NominationInstance.objects.filter(user=request.user).filter(nomination__status='Sent for ratification')
+    declared_nomi = NominationInstance.objects.filter(user=request.user).filter(submission_status = True).filter(nomination__status='Sent for ratification')
 
 
     try:

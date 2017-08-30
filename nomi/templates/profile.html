@@ -127,7 +127,7 @@
                                 <h3 class="panel-title">{{p_nomi.nomination.name.upper}}</h3>
                             </div>
                             <div class="panel-body">
-                                <p class="col-lg-6"><span>Status: </span>Application Submitted</p>
+                                <p class="col-lg-6"><span>Submission Status: </span>{{ p_nomi.submission_status }}</p>
                                 <a href="{% url 'nomi_answer' p_nomi.pk %}" class="btn btn-info col-lg-4"
                                    style="width: auto">View Your Application</a>
 
