@@ -1,6 +1,7 @@
 from django import forms
 from .models import *
 from datetime import date
+from info.forms import make_club_choice
 
 
 def get_current_session():
@@ -99,6 +100,8 @@ class ConfirmApplication(forms.Form):
 class RatifyApplication(forms.Form):
     Tick_the_box_for_confirmation = forms.CharField(max_length=100, widget=forms.CheckboxInput())
 
+class SaveComfirm(form.F)
+
 class CommentForm(forms.Form):
     comment = forms.CharField(widget=forms.Textarea)
 
@@ -124,8 +127,7 @@ class GroupNominationForm(forms.Form):
 class ClubFilter(forms.Form):
     def __init__(self, *args, **kwargs):
         super(ClubFilter, self).__init__(*args, **kwargs)
-        self.fields["club"] = forms.ChoiceField( choices=[('', '------------')] + [(o.id, o) for o in Club.objects.all()],
-                                                 widget=forms.Select)
+        self.fields["club"] = forms.ChoiceField( choices = make_club_choice(None,-2),widget=forms.Select,required= False)
 
 
 class PostHolderForm(forms.Form):

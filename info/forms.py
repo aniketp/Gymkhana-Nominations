@@ -28,7 +28,10 @@ def make_club_choice(parent,i):
     if parent is None:
         GLOBAL_CHOICE = [('NA', 'ALL')]
     else:
-        GLOBAL_CHOICE = GLOBAL_CHOICE + [(parent.id , '. ' *2*  i + '' + ' ' + str(parent))]
+        if parent.club_parent is None:
+            pass
+        else:
+            GLOBAL_CHOICE = GLOBAL_CHOICE + [(parent.id , '. ' *2*  i + '' + ' ' + str(parent))]
 
 
     if child_clubs:
@@ -44,7 +47,7 @@ def make_club_choice(parent,i):
 class ClubForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(ClubForm, self).__init__(*args, **kwargs)
-        self.fields["club"] = forms.ChoiceField( choices=make_club_choice(None,0),  widget=forms.Select,required= False )
+        self.fields["club"] = forms.ChoiceField( choices=make_club_choice(None,-2),  widget=forms.Select,required= False )
 
 
 class PostForm(forms.Form):

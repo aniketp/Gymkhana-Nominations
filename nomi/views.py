@@ -37,6 +37,22 @@ def index(request):
             username = UserProfile.objects.get(user=request.user)
             club_filter = ClubFilter(request.POST or None)
             if club_filter.is_valid():
+                if club_filter.cleaned_data['club'] == 'NA':
+                    club_filter = ClubFilter
+                    grouped_nomi = GroupNomination.objects.filter(status='out')
+                    nomi = Nomination.objects.filter(group_status='normal').filter(status='Nomination out')
+                    re_nomi = Nomination.objects.filter(group_status='normal'). \
+                        filter(status='Interview period and Nomination reopened')
+                    nomi = nomi | re_nomi
+
+                    result_query = sorted(chain(nomi, grouped_nomi), key=attrgetter('opening_date'), reverse=True)
+
+                    return render(request, 'index1.html', context={'posts': posts, 'username': username,
+                                                                   'club_filter': club_filter, 'today': today,
+                                                                   'result_query': result_query})
+
+
+
                 club = Club.objects.get(pk=club_filter.cleaned_data['club'])
                 grouped_nomi = club.club_group.all().filter(status='out')
                 nomi = club.club_nomi.all().filter(group_status='normal').filter(status='Nomination out')
@@ -798,7 +814,7 @@ def nomi_apply(request, pk):
     nomination = Nomination.objects.get(pk=pk)
     count = NominationInstance.objects.filter(nomination=nomination).filter(user=request.user).count()
 
-    if not count or (nomination.status == "Nomination out" or nomination.status =="Interview period and Nomination reopened"):
+    if not count and (nomination.status == "Nomination out" or nomination.status =="Interview period and Nomination reopened"):
         if nomination.nomi_form:
             questionnaire = nomination.nomi_form
             form = questionnaire.get_form(request.POST or None)
@@ -807,8 +823,9 @@ def nomi_apply(request, pk):
             if form_confirm.is_valid():
                 if form.is_valid():
                     filled_form = questionnaire.add_answer(request.user, form.cleaned_data)
-                    NominationInstance.objects.create(user=request.user, nomination=nomination, filled_form=filled_form)
-                    info = "Your application has been recorded"
+                    NominationInstance.objects.create(user=request.user, nomination=nomination, filled_form=filled_form,
+                                                      submission_status = True,timestamp = date.today())
+                    info = "Your application has been recorded. You can edit it through profile module."
                     return render(request, 'nomi_done.html', context={'info': info})
 
             return render(request, 'forms/show_form.html', context={'form': form, 'form_confirm': form_confirm,
@@ -817,8 +834,8 @@ def nomi_apply(request, pk):
             form_confirm = ConfirmApplication(request.POST or None)
 
             if form_confirm.is_valid():
-                NominationInstance.objects.create(user=request.user, nomination=nomination)
-                info = "Your application has been recorded"
+                NominationInstance.objects.create(user=request.user, nomination=nomination,submission_status = True,timestamp = date.today())
+                info = "Your application has been recorded."
                 return render(request, 'nomi_done.html', context={'info': info})
 
     else:

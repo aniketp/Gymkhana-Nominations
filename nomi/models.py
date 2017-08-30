@@ -174,7 +174,8 @@ class NominationInstance(models.Model):
     interview_status = models.CharField(max_length=20, choices=INTERVIEW_STATUS,  null=True, blank=True,
                                         default='Interview Not Done')
     filled_form = models.OneToOneField('forms.FilledForm', null=True, blank=True)
-    timestamp = models.DateField(auto_now_add=True)
+    submission_status = models.BooleanField(default= False)
+    timestamp = models.DateField(default=timezone.now)
     edit_time = models.DateField(null=True, default=timezone.now)
 
     def __str__(self):
