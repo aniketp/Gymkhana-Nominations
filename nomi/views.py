@@ -18,6 +18,7 @@ from forms.views import replicate
 from gymkhana.settings import DOMAIN_NAME
 from .forms import *
 from .models import *
+from .scraper import getRecord
 
 
 ## ------------------------------------------------------------------------------------------------------------------ ##
@@ -80,9 +81,26 @@ def index(request):
                                                            'result_query': result_query})
 
         except ObjectDoesNotExist:
-            profile = UserProfile.objects.create(user=request.user)
-            pk = profile.pk
-            return HttpResponseRedirect(reverse('profile_update', kwargs={'pk': pk}))
+            form = UserId(request.POST or None)
+            if form.is_valid():
+                data = getRecord(form.cleaned_data['user_roll'])
+                email = str(request.user) + '@iitk.ac.in'
+                if email == data['email']:
+                    profile = UserProfile.objects.create(user=request.user,name = data['name'],roll_no = data['roll'],
+                                                     programme = data["program"],department = data['department'],
+                                                     contact = data['mobile'], room_no = data['room'])
+
+                    pk = profile.pk
+                    return HttpResponseRedirect(reverse('profile_update', kwargs={'pk': pk}))
+
+                else:
+                    info = "Please give correct roll no"
+                    return render(request, 'nomi_done.html', context={'info': info})
+
+            return render(request, 'register.html', context={'form': form})
+
+
+
 
     else:
         return HttpResponseRedirect(reverse('login'))
@@ -1146,11 +1164,10 @@ def group_nominations(request, pk):
     if request.user in post.post_holders.all():
         if request.method == 'POST':
             groupform = SelectNomiForm(post, request.POST)
-            title_form = GroupNominationForm(request.POST)
-            if title_form.is_valid():
+            group_detail = GroupDetail(request.POST)
+            if group_detail.is_valid():
                 if groupform.is_valid():
-                    group = GroupNomination.objects.create(name=title_form.cleaned_data['title'],
-                                                           description=title_form.cleaned_data['description'])
+                    group = group_detail.save()
                     group.approvals.add(post)
                     for nomi_pk in groupform.cleaned_data['group']:
                         # tasks to be performed on nomination
@@ -1159,19 +1176,21 @@ def group_nominations(request, pk):
                         for tag in nomi.tags.all():
                             group.tags.add(tag)
                         nomi.group_status = 'grouped'
-                        if post.parent:
-                            to_add = post.parent
+                        if post.elder_brother:
+                            to_add = post.elder_brother
                             nomi.nomi_approvals.add(to_add)
+                        if group.deadline:
+                            nomi.deadline = group.deadline
                         nomi.save()
                     return HttpResponseRedirect(reverse('post_view', kwargs={'pk': pk}))
 
         else:
-            title_form = GroupNominationForm
+            group_detail= GroupDetail
             groupform = SelectNomiForm(post)
 
         return render(request, 'nomi_group.html', context={'post': post, 'child_posts': child_posts_reverse,
                                                            'post_approval': post_approvals, 'nomi_approval': nomi_approvals,
-                                                           'form': groupform, 'title_form': title_form})
+                                                           'form': groupform, 'title_form': group_detail})
     else:
         return render(request, 'no_access.html')
 
@@ -1196,39 +1215,42 @@ def group_nomi_detail(request, pk):
 
 
 @login_required
-def add_to_group(request, pk, gr_pk):
+def edit_or_add_to_group(request, pk, gr_pk):
     post = Post.objects.get(pk=pk)
-    child_posts = Post.objects.filter(parent=post)
-    child_posts_reverse = child_posts[::-1]
-    post_approvals = Post.objects.filter(post_approvals=post).filter(status='Post created')
-    nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
+    group = GroupNomination.objects.get(pk=gr_pk)
 
-    if request.method == 'POST':
-        groupform = SelectNomiForm(post, request.POST)
-        if groupform.is_valid():
-            group = GroupNomination.objects.get(pk=gr_pk)
+    if request.user in post.post_holders.all() and post in group.approvals.all():
+        group_detail = GroupDetail(request.POST or None, instance=group)
+        if group_detail.is_valid():
+            group_detail.save()
+        if request.method == 'POST':
+            groupform = SelectNomiForm(post, request.POST)
 
-            for nomi_pk in groupform.cleaned_data['group']:
-                # things to be performed on nomination
-                nomi = Nomination.objects.get(pk=nomi_pk)
-                group.nominations.add(nomi)
-                for tag in nomi.tags.all():
-                    group.tags.add(tag)
-                nomi.group_status = 'grouped'
-                if post.parent:
-                    to_add = post.parent
-                    nomi.nomi_approvals.add(to_add)
-                nomi.save()
-                nomi.open_to_users()
-            return HttpResponseRedirect(reverse('group_nomi_detail', kwargs={'pk': gr_pk}))
+            if groupform.is_valid():
 
+                for nomi_pk in groupform.cleaned_data['group']:
+                    # things to be performed on nomination
+                    nomi = Nomination.objects.get(pk=nomi_pk)
+                    group.nominations.add(nomi)
+                    for tag in nomi.tags.all():
+                        group.tags.add(tag)
+                    nomi.group_status = 'grouped'
+                    if post.elder_brother:
+                        to_add = post.elder_brother
+                        nomi.nomi_approvals.add(to_add)
+                    if group.deadline:
+                        nomi.deadline = group.deadline
+
+                    nomi.save()
+                return HttpResponseRedirect(reverse('group_nomi_detail', kwargs={'pk': gr_pk}))
+
+        else:
+            groupform = SelectNomiForm(post)
+
+        return render(request, 'nomi_group.html', context={'post': post,'form': groupform, 'title_form': group_detail})
     else:
-        title_form = None
-        groupform = SelectNomiForm(post)
+        return render(request, 'no_access.html')
 
-    return render(request, 'nomi_group.html', context={'post': post, 'child_posts': child_posts_reverse,
-                                                       'post_approval': post_approvals, 'nomi_approval': nomi_approvals,
-                                                       'form': groupform, 'title_form': title_form})
 
 
 @login_required
@@ -1553,15 +1575,10 @@ def public_profile(request, pk):
                                                            'my_posts': my_posts})
 
 
-class UserProfileCreate(CreateView):
-    model = UserProfile
-    fields = ['name', 'roll_no', 'programme', 'department', 'user_img', 'hall', 'room_no', 'contact']
-    success_url = reverse_lazy('index')
-
 
 class UserProfileUpdate(UpdateView):
     model = UserProfile
-    fields = ['name', 'roll_no', 'programme', 'department', 'user_img', 'hall', 'room_no', 'contact']
+    fields = ['user_img', 'hall', 'room_no', 'contact']
     success_url = reverse_lazy('index')
 
 

@@ -1,0 +1,33 @@
+{% extends "base2.html" %}
+{% block title %}
+form view
+{% endblock %}
+
+{% load bootstrap %}
+{% load staticfiles %}
+{% block profile %}
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="profile-content ">
+
+            <h2 class="intro-text text-center">
+                <strong>You are New. Give your Roll no. for verification and profile creation.</strong>
+            </h2>
+                <hr>
+            <div style="margin:25px">
+                    <form action="" method="post" >
+                        {% csrf_token %}
+                        <p>
+                            {{form|bootstrap}}
+                        </p>
+                        <input  class="btn btn-primary btn-large" type="submit" value="Submit" />
+
+                    </form>
+            </div>
+</div>
+
+{% endblock content %}

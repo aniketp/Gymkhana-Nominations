@@ -118,14 +118,24 @@ class SelectNomiForm(forms.Form):
     def __init__(self, post, *args, **kwargs):
         super(SelectNomiForm, self).__init__(*args, **kwargs)
         self.fields['group'] = forms.MultipleChoiceField(
-            choices=[(o.id, o) for o in Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')],
-            widget=forms.CheckboxSelectMultiple
+            choices=[(o.id, o) for o in Nomination.objects.filter(nomi_approvals=post).filter(group_status = "normal").filter(status='Nomination created')],
+            widget=forms.CheckboxSelectMultiple,label="To be grouped ",required=False
         )
 
 
-class GroupNominationForm(forms.Form):
-    title = forms.CharField()
-    description = forms.CharField(widget=forms.Textarea)
+class GroupDetail(forms.ModelForm):
+    class Meta:
+        model = GroupNomination
+        labels = {
+            "name": "Title *",
+            "deadline" : "Common deadline"
+        }
+        help_texts = {
+            'deadline': 'Format:YYYY-MM-DD',
+        }
+
+        fields = ('name','description','deadline')
+
 
 
 class ClubFilter(forms.Form):
@@ -142,3 +152,6 @@ class PostHolderForm(forms.Form):
 
     email = forms.CharField(label='Username', help_text='Exclude @iitk.ac.in')
     session = forms.ChoiceField(choices=SESSION_CHOICE, widget=forms.Select, label='Session')
+
+
+

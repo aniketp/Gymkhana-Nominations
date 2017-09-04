@@ -64,25 +64,22 @@
                         <div class="row">
                             {% if power_to_send %}
 
-                            <div class="col-lg-3 text-center">
+                            <div class="col-lg-4 text-center">
                                 <a href="{% url 'final_nomi_approval' nomi_pk=nomi.pk %}"
                                    style="width: auto" class="btn btn-success">Approve And Send To User</a>
                             </div>
                                 {% if not user in nomi.nomi_post.parent.post_holders.all %}
-                                <div class="col-lg-3 text-center">
+                                <div class="col-lg-4 text-center">
                                 <a href="{% url 'nomi_reject' nomi_pk=nomi.pk %}"
                                    style="width: auto" class="btn btn-success">Reject</a>
                                 </div>
                                 {% endif %}
 
-                            <div class="col-lg-3 text-center">
+                            <div class="col-lg-4 text-center">
                                 <a href="{% url 'forms:creator_form' nomi.nomi_form.pk %}"
                                    class="btn btn-primary">Edit Nomination</a>
                             </div>
 
-                            <div class="col-lg-3 text-center">
-                                <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
-                            </div>
 
                             {% else %}
                                 {% if sent_to_parent %}
@@ -90,44 +87,39 @@
                                         <div class=" btn btn-success disabled" style="width: auto">
                                             Approval request sent to parent</div>
                                     </div>
-
                                     <div class="col-lg-6 text-center">
-                                        <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
+                                            <a href="{% url 'see_nomi_form' nomi.pk %}"
+                                            class="btn btn-primary">See Form</a>
                                     </div>
+
+
                                 {% else %}
                                     {% if user in nomi.nomi_post.parent.post_holders.all %}
-                                    <div class="col-lg-4 text-center">
+                                    <div class="col-lg-6 text-center">
                                         <a class="btn btn-success" style="width: auto"
                                        href="{% url 'nomi_approval' nomi_pk=nomi.pk %}">Send to parent for approval</a>
                                     </div>
 
-                                    <div class="col-lg-4 text-center">
+                                    <div class="col-lg-6 text-center">
                                         <a href="{% url 'forms:creator_form' nomi.nomi_form.pk %}"
                                            class="btn btn-primary">Edit Nomination</a>
                                     </div>
 
-                                    <div class="col-lg-4 text-center">
-                                        <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
-                                    </div>
+
                                     {% else %}
-                                    <div class="col-lg-3 text-center">
+                                    <div class="col-lg-4 text-center">
                                         <a class="btn btn-success" style="width: auto"
                                        href="{% url 'nomi_approval' nomi_pk=nomi.pk %}">Send to parent for approval</a>
                                     </div>
-                                     <div class="col-lg-3 text-center">
+                                     <div class="col-lg-4 text-center">
                                         <a class="btn btn-success" style="width: auto"
                                        href="{% url 'nomi_reject' nomi_pk=nomi.pk %}">Reject</a>
                                     </div>
 
-                                    <div class="col-lg-3 text-center">
+                                    <div class="col-lg-4 text-center">
                                         <a href="{% url 'forms:creator_form' nomi.nomi_form.pk %}"
                                            class="btn btn-primary">Edit Nomination</a>
                                     </div>
-
-                                    <div class="col-lg-3 text-center">
-                                        <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
-                                    </div>
-
 
                                     {% endif %}
 
@@ -142,16 +134,14 @@
 
                          {% if status.1 %}
                          <div class="row">
-                            <div class="col-lg-4 text-center">
+                            <div class="col-lg-6 text-center">
                                 <a href="{% url 'applicants' nomi.pk %}" class="btn btn-success">View Applicants</a>
                             </div>
-                             <div class="col-lg-4 text-center">
+                             <div class="col-lg-6 text-center">
                                 <a href="{% url 'see_nomi_form' nomi.pk %}"
                                    class="btn btn-primary">See Form</a>
                             </div>
-                            <div class="col-lg-4 text-center">
-                                <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
-                            </div>
+
                         </div>
                          {% endif %}
 
@@ -159,17 +149,14 @@
 
                          {% if status.2 %}
                          <div class="row">
-                            <div class="col-lg-4 text-center">
+                            <div class="col-lg-6 text-center">
                                 <a href="{% url 'applicants' nomi.pk %}" class="btn btn-success">View Applicants</a>
                             </div>
-                              <div class="col-lg-4 text-center">
+                              <div class="col-lg-6 text-center">
                                 <a href="{% url 'see_nomi_form' nomi.pk %}"
                                    class="btn btn-primary">See Form</a>
                             </div>
 
-                            <div class="col-lg-4 text-center">
-                                <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
-                            </div>
                         </div>
                          {% endif %}
 
@@ -177,16 +164,14 @@
 
                          {% if status.3 %}
                          <div class="row">
-                            <div class="col-lg-4 text-center">
+                            <div class="col-lg-6 text-center">
                                 <a href="{% url 'applicants' nomi.pk %}" class="btn btn-success">View Results</a>
                             </div>
-                              <div class="col-lg-4 text-center">
+                              <div class="col-lg-6 text-center">
                                 <a href="{% url 'see_nomi_form' nomi.pk %}"
                                    class="btn btn-primary">See Form</a>
                             </div>
-                            <div class="col-lg-4 text-center">
-                                <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
-                            </div>
+
                         </div>
                          {% endif %}
 <!-- ----------------------------------------------------interview and reopen initiation----------------------------------------------------------  -->
@@ -197,16 +182,13 @@
                             </div>
                             {% if renomi %}
                                 {% if p_in_rn %}
-                                    <div class="col-lg-6 text-center">
+                                    <div class="col-lg-4 text-center">
                                         <div class="btn btn-warning disabled" style="width: auto">
                                         Sent to parent for reopening approval
                                         </div>
                                     </div>
                                 {% else %}
-                                    <div class="col-lg-4 text-center">
-                                        <a href="{% url 'forms:creator_form' nomi.nomi_form.pk %}"
-                                        class="btn btn-primary">Edit Nomination</a>
-                                    </div>
+
                                     {% if power_to_send %}
                                         <div class="col-lg-4 text-center">
                                             <a href="{% url 're_nomi_approval' nomi.reopennomination.pk %}" class="btn btn-info">Reopen to user</a>
@@ -219,6 +201,11 @@
                                 {% endif %}
                             {% endif %}
 
+                              <div class="col-lg-4 text-center">
+                                <a href="{% url 'see_nomi_form' nomi.pk %}"
+                                   class="btn btn-primary">See Form</a>
+                            </div>
+
                         </div>
                    {% endif %}
 
@@ -226,31 +213,26 @@
 <!-- -----------------------------------------interview and reopen---------------------------------------------------------------------  -->
                    {% if status.5 %}
                         <div class="row">
-                            <div class="col-lg-4 text-center">
+                            <div class="col-lg-6 text-center">
                                 <a href="{% url 'applicants' nomi.pk %}" class="btn btn-success">View Applicants</a>
                             </div>
-                          <div class="col-lg-4 text-center">
+                          <div class="col-lg-6 text-center">
                                 <a href="{% url 'see_nomi_form' nomi.pk %}"
                                    class="btn btn-primary">See Form</a>
                             </div>
-                            <div class="col-lg-4 text-center">
-                                <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
-                            </div>
+
                         </div>
                    {% endif %}
 <!-- --------------------------------------------------------------------------------------------------------------  -->
         {% if status.6 %}
 
                         <div class="row">
-                            <div class="col-lg-4 text-center">
+                            <div class="col-lg-6 text-center">
                                 <a href="{% url 'applicants' nomi.pk %}" class="btn btn-success">View Applicants</a>
                             </div>
-                             <div class="col-lg-4 text-center">
+                             <div class="col-lg-6 text-center">
                                 <a href="{% url 'see_nomi_form' nomi.pk %}"
                                    class="btn btn-primary">See Form</a>
-                            </div>
-                            <div class="col-lg-4 text-center">
-                                <a href="{% url 'admin_portal' %}" class="btn btn-info">Go Back</a>
                             </div>
                         </div>
 

@@ -82,7 +82,6 @@ class PostHistory(models.Model):
 class Nomination(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(max_length=20000, null=True, blank=True)
-    brief_desc = models.TextField(max_length=300, null=True, blank=True)
     nomi_post = models.ForeignKey(Post, null=True)
     nomi_form = models.OneToOneField('forms.Questionnaire', null=True, blank=True)
     nomi_session = models.IntegerField(null=True)
@@ -107,7 +106,7 @@ class Nomination(models.Model):
         return self.name
 
     def append(self):
-        selected = NominationInstance.objects.filter(nomination=self, status='Accepted')
+        selected = NominationInstance.objects.filter(submission_status = True).filter(nomination=self, status='Accepted')
         st_year = self.nomi_session
 
 
@@ -156,10 +155,12 @@ class ReopenNomination(models.Model):
 
 class GroupNomination(models.Model):
     name = models.CharField(max_length=2000, null=True)
-    description = models.CharField(max_length=5000, null=True, blank=True)
+    description = models.TextField(max_length=5000, null=True, blank=True)
     nominations = models.ManyToManyField(Nomination, symmetrical=False, blank=True)
     status = models.CharField(max_length=50, choices=G_STATUS, default='created')
     opening_date = models.DateField(null=True, blank=True, default=timezone.now)
+    deadline = models.DateField(null=True, blank=True)
+
     approvals = models.ManyToManyField(Post, related_name='group_approvals', symmetrical=False, blank=True)
     tags = models.ManyToManyField(Club, related_name='club_group', symmetrical=False, blank=True)
 
@@ -206,7 +207,7 @@ class UserProfile(models.Model):
     name = models.CharField(max_length=40, blank=True)
     roll_no = models.IntegerField(null=True)
     programme = models.CharField(max_length=7, choices=PROGRAMME, default='B.Tech')
-    department = models.CharField(max_length=200, choices=DEPT, default='AE')
+    department = models.CharField(max_length=200, default='AE')
     hall = models.CharField(max_length=10, choices=HALL, default=1)
     room_no = models.CharField(max_length=10, null=True, blank=True)
     contact = models.CharField(max_length=10, null=True, blank=True)
@@ -233,10 +234,6 @@ def ensure_parent_in_approvals(sender, **kwargs):
         nomi.tags.add(parent.club)
 
 
-    if nomi.description:
-        if not nomi.brief_desc:
-            nomi.brief_desc = nomi.description[:280]
-            nomi.save()
 
 
 @receiver(post_save, sender=Post)

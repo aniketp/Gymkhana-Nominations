@@ -22,4 +22,7 @@ class BuildForm(forms.Form):
 class DesForm(forms.ModelForm):
     class Meta:
         model = Nomination
-        fields = ('description',)
+        labels = {
+            "name": "Title"}
+
+        fields = ('name','description','deadline')

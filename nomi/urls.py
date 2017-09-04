@@ -34,8 +34,6 @@ urlpatterns = [
     # nominations/public_profile/2
     url(r'^public_profile/(?P<pk>\d+)/$', views.public_profile, name='public_profile'),
 
-    # nominations/profile/create
-    url(r'profile/create/$', views.UserProfileCreate.as_view(), name='profile_create'),
 
     # nominations/profile/update/2
     url(r'^profile/update/(?P<pk>\d+)/$', views.UserProfileUpdate.as_view(), name='profile_update'),
@@ -138,7 +136,7 @@ urlpatterns = [
     url(r'^group_nomi_detail/(?P<pk>\d+)/$', views.group_nomi_detail, name='group_nomi_detail'),
 
     # nominations/add_to_group/2/42
-    url(r'^add_to_group/(?P<pk>\d+)/(?P<gr_pk>\d+)/$', views.add_to_group, name='add_to_group'),
+    url(r'^edit_group/(?P<pk>\d+)/(?P<gr_pk>\d+)/$', views.edit_or_add_to_group, name='add_to_group'),
 
     # nominations/remove_from_group/2/42
     url(r'^remove_from_group/(?P<nomi_pk>\d+)/(?P<gr_pk>\d+)/$', views.remove_from_group, name='remove_from_group'),
