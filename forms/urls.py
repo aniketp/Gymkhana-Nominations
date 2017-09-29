@@ -13,7 +13,7 @@ urlpatterns = [
     url(r'^create/ques/(?P<pk>\d+)/$', views.add_ques, name='add_ques'),
 
     # forms/update/ques/12/34 ---in use
-    url(r'^update/ques/(?P<pk>\d+)/(?P<qk>\d+)/$',views.QuestionUpdate.as_view(),name='ques_update'),
+    url(r'^update/ques/(?P<pk>\d+)/(?P<qk>\d+)/$',views.edit_ques,name='ques_update'),
 
 
 ]

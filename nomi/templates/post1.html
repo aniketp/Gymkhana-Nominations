@@ -2,6 +2,8 @@
 
 {% load staticfiles %}
 {% load bootstrap %}
+{% load temp_tags %}
+
 
 {% block title %} Gymkhana Nominations {% endblock %}
 
@@ -337,7 +339,15 @@
                 </div>
                 <div class="panel-body">
                     <p class="profile-post-name">
-                        <span>Name: </span>{{each.name.userprofile.name}} (Requested for Deratification)</p>
+                        <span>Name: </span>{{each.name.userprofile.name}}
+                        {% if each.name|check_end_tenure:each.post %}
+                            (Tenure ending requested)
+                        {% elif each.name|check_remove_from_post:each.post %}
+                            (Requested to be removed from post)
+                        {% else %}
+                            (Dratification requested)
+                        {% endif %}
+                    </p>
                     <div class="row">
                         <div class="col-lg-4">
                             <p><span>club : </span>{{each.post.club}}</p>

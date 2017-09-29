@@ -36,7 +36,7 @@ urlpatterns = [
 
 
     # nominations/profile/update/2
-    url(r'^profile/update/(?P<pk>\d+)/$', views.UserProfileUpdate.as_view(), name='profile_update'),
+    url(r'^profile/update/(?P<pk>\d+)/$', views.UserProfileUpdate, name='profile_update'),
 
     # nominations/applicants/2
     url(r'^applicants/(?P<pk>\d+)/$', views.applications, name='applicants'),
@@ -148,7 +148,7 @@ urlpatterns = [
     url(r'^renew/$', views.end_tenure, name='end_tenure'),
 
     # nominations/ratify/2
-    url(r'^request_deratify/(?P<post_pk>\d+)/(?P<user_pk>\d+)/$', views.create_deratification_request, name='request_deratify'),
+    url(r'^request_deratify/(?P<post_pk>\d+)/(?P<user_pk>\d+)/(?P<type>.+)/$', views.create_deratification_request, name='request_deratify'),
 
     url(r'^approve_deratify/(?P<pk>\d+)/$', views.approve_deratification_request, name='approve_deratify'),
 

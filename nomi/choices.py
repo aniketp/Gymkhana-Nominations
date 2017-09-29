@@ -153,7 +153,9 @@ SESSION_CHOICES = (
 )
 
 DERATIFICATION = (
-    ('safe', 'safe'),
-    ('requested', 'requested'),
+    ('end tenure', 'end tenure'),
+    ('remove from post', 'remove from post'),
     ('deratified', 'deratified'),
+    ('removed', 'removed'),
+
 )

@@ -26,9 +26,18 @@ def give_session(st_year):
 
 
 @register.filter
-def check_deratificaton(user,post):
+def check_end_tenure(user,post):
     out = False
-    derati = Deratification.objects.filter(post = post).filter(name = user).filter(status = 'requested')
+    derati = Deratification.objects.filter(post = post).filter(name = user).filter(status = 'end tenure')
+    if derati:
+        out = True
+
+    return out
+
+@register.filter
+def check_remove_from_post(user,post):
+    out = False
+    derati = Deratification.objects.filter(post = post).filter(name = user).filter(status = 'remove from post')
     if derati:
         out = True
 

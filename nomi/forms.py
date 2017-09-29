@@ -111,7 +111,7 @@ class CommentForm(forms.Form):
 
 
 class UserId(forms.Form):
-    user_roll = forms.IntegerField()
+    user_roll = forms.IntegerField(label="Roll NO.")
 
 
 class SelectNomiForm(forms.Form):
@@ -135,6 +135,17 @@ class GroupDetail(forms.ModelForm):
         }
 
         fields = ('name','description','deadline')
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        labels = {
+            "name": "Title *",
+            "deadline" : "Common deadline"
+        }
+
+        fields = ('user_img','hall','room_no','contact')
 
 
 

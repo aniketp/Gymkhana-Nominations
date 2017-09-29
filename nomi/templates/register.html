@@ -1,33 +1,87 @@
-{% extends "base2.html" %}
-{% block title %}
-form view
-{% endblock %}
-
-{% load bootstrap %}
+<!DOCTYPE html>
+<html lang="en">
 {% load staticfiles %}
-{% block profile %}
+{% load bootstrap %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-zF4BRsG/fLiTGfR9QL82DrilZxrwgY/+du4p/c7J72zZj+FLYq4zY00RylP9ZjiT" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'nomi/css/main.css' %}" type="text/css">
 
+    <title>{% block title %} Gymkhana Nominations {% endblock %}</title>
+</head>
+<body>
+
+{% block navigation %}
+<nav class="navbar navbar-default" id="navbar">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="#">
+                <div>
+                    <img src="{% static 'nomi/img/gym.jpg' %}" width="50" height="50">
+                </div>
+            </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="{% url 'index' %} " id="brand">Gymkhana Nominations</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li id="navbar-links"><a href="{% url 'logout' %}?next={% url 'login' %}" class="btn btn-md center-block btn-primary btn-block">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
 {% endblock %}
 
+<div class="container">
+    <div class="col-md-2"></div>
+    <div class="col-md-8 profile-content">
+        <div style="padding-top:50px">
+            <h1 class="form-signin-heading text-center"><a href="{% url 'index' %}" >Welcome to the Portal</a></h1>
+            <br>
+        </div>
+        {% if error %}
+        <h2 class="text-center" style="color:red">
+         Please give correct Roll No.
+        </h2>
 
-{% block content %}
+        {% else %}
+         <h2 class="text-center">
+            Give your Roll no. for Verification !!
+        </h2>
+        {% endif %}
+         <hr>
+        <div style="margin:25px">
+                <form action="" method="post" >
+                    {% csrf_token %}
+                    <p>
+                        {{form|bootstrap}}
+                    </p>
+                    <input  class="btn btn-primary btn-large" type="submit" value="Submit" />
 
-<div class="profile-content ">
+                </form>
+        </div>
 
-            <h2 class="intro-text text-center">
-                <strong>You are New. Give your Roll no. for verification and profile creation.</strong>
-            </h2>
-                <hr>
-            <div style="margin:25px">
-                    <form action="" method="post" >
-                        {% csrf_token %}
-                        <p>
-                            {{form|bootstrap}}
-                        </p>
-                        <input  class="btn btn-primary btn-large" type="submit" value="Submit" />
+    </div>
+    <div class="col-md-2"></div>
+</div> <!-- /container -->
+</body>
+</html>
 
-                    </form>
-            </div>
-</div>
 
-{% endblock content %}
+
+
+

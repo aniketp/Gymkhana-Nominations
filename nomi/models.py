@@ -83,7 +83,7 @@ class Nomination(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(max_length=20000, null=True, blank=True)
     nomi_post = models.ForeignKey(Post, null=True)
-    nomi_form = models.OneToOneField('forms.Questionnaire', null=True, blank=True)
+    nomi_form = models.OneToOneField('forms.Questionnaire', null=True)
     nomi_session = models.IntegerField(null=True)
 
     status = models.CharField(max_length=50, choices=STATUS, default='Nomination created')
@@ -204,11 +204,11 @@ def user_directory_path(instance, filename):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_img = models.ImageField(upload_to=user_directory_path, null=True, blank=True)
-    name = models.CharField(max_length=40, blank=True)
+    name = models.CharField(max_length=100, blank=True)
     roll_no = models.IntegerField(null=True)
-    programme = models.CharField(max_length=7, choices=PROGRAMME, default='B.Tech')
+    programme = models.CharField(max_length=100, choices=PROGRAMME, default='B.Tech')
     department = models.CharField(max_length=200, default='AE')
-    hall = models.CharField(max_length=10, choices=HALL, default=1)
+    hall = models.CharField(max_length=10,default=1)
     room_no = models.CharField(max_length=10, null=True, blank=True)
     contact = models.CharField(max_length=10, null=True, blank=True)
 

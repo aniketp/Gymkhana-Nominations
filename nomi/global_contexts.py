@@ -7,7 +7,7 @@ def context(request):
         try:
             my_profile = UserProfile.objects.get(user=request.user)
             my_posts = Post.objects.filter(post_holders=request.user)
-            interviews = Nomination.objects.filter(interview_panel=request.user)
+            interviews = Nomination.objects.filter(interview_panel=request.user).exclude(status = "Work done")
 
             length = len(my_posts)
             senate = False

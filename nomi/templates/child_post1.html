@@ -44,17 +44,19 @@
                                         {{post_holder}}
                                   {% endif %}
                                   --->
-                                    {% if post_holder|check_deratificaton:post %}
-                                        Deratification Requested
-                                    {% else %}
+                                  {% if post_holder|check_end_tenure:post %}
+                                        Tenure ending requested
+                                  {% elif  post_holder|check_remove_from_post:post%}
+                                        Requested to be removed from post
+                                  {% else %}
                                         <span style="text-align: right">
-                                                <a href="{% url 'request_deratify' post_pk=post.pk user_pk=post_holder.pk %}"
+                                                <a href="{% url 'request_deratify' post_pk=post.pk user_pk=post_holder.pk type='remove from post'  %}"
                                                    style="text-align: right"
                                                 data-toggle="tooltip" data-placement="top" title="Remove from Post">
                                                     <i class="fa fa-trash" aria-hidden="true"></i></a>
                                         </span>
                                         <span style="text-align: right">
-                                                <a href="{% url 'request_deratify' post_pk=post.pk user_pk=post_holder.pk %}"
+                                                <a href="{% url 'request_deratify' post_pk=post.pk user_pk=post_holder.pk type='end tenure' %}"
                                                    style="text-align: right"
                                                 data-toggle="tooltip" data-placement="top" title="End tenure">
                                                     <i class="fa fa-reply" aria-hidden="true"></i></a>

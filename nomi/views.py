@@ -83,21 +83,27 @@ def index(request):
         except ObjectDoesNotExist:
             form = UserId(request.POST or None)
             if form.is_valid():
-                data = getRecord(form.cleaned_data['user_roll'])
+                try:
+                    data = getRecord(form.cleaned_data['user_roll'])
+                except:
+                    error = True
+                    return render(request, 'register.html', context={'form': form, 'error': error})
+
                 email = str(request.user) + '@iitk.ac.in'
                 if email == data['email']:
                     profile = UserProfile.objects.create(user=request.user,name = data['name'],roll_no = data['roll'],
                                                      programme = data["program"],department = data['department'],
-                                                     contact = data['mobile'], room_no = data['room'])
+                                                     contact = data['mobile'], room_no = data['room'],hall = data['hall'])
 
                     pk = profile.pk
                     return HttpResponseRedirect(reverse('profile_update', kwargs={'pk': pk}))
 
                 else:
-                    info = "Please give correct roll no"
-                    return render(request, 'nomi_done.html', context={'info': info})
+                    error = True
+                    return render(request, 'register.html', context={'form': form, 'error': error})
 
-            return render(request, 'register.html', context={'form': form})
+            error = False
+            return render(request, 'register.html', context={'form': form ,'error':error})
 
 
 
@@ -194,7 +200,7 @@ def post_view(request, pk):
     entity_approvals = ClubCreate.objects.filter(take_approval=post)
     entity_by_me = ClubCreate.objects.filter(requested_by=post)
 
-    nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created')
+    nomi_approvals = Nomination.objects.filter(nomi_approvals=post).filter(status='Nomination created').filter(group_status= 'normal')
     re_nomi_approval = ReopenNomination.objects.filter(approvals=post).\
         filter(nomi__status='Interview period and Reopening initiated')
     group_nomi_approvals = GroupNomination.objects.filter(status='created').filter(approvals=post)
@@ -202,7 +208,7 @@ def post_view(request, pk):
 
     result_approvals = Nomination.objects.filter(result_approvals=post).exclude(status='Work done').\
         exclude(status='Nomination created').exclude(status='Nomination out')
-    to_deratify = Deratification.objects.filter(deratify_approval = post).filter(status = 'requested')
+    to_deratify = Deratification.objects.filter(deratify_approval = post).exclude(status = 'deratified')
 
     if request.method == 'POST':
         tag_form = ClubForm(request.POST)
@@ -831,9 +837,14 @@ def final_re_nomi_approval(request, re_nomi_pk):
 def nomi_apply(request, pk):
     nomination = Nomination.objects.get(pk=pk)
     count = NominationInstance.objects.filter(nomination=nomination).filter(user=request.user).count()
+    tick = True
+    if nomination.nomi_form:
+        ct = nomination.nomi_form.question_set.count()
+        tick = not ct
+
 
     if not count and (nomination.status == "Nomination out" or nomination.status =="Interview period and Nomination reopened"):
-        if nomination.nomi_form:
+        if  not tick:
             questionnaire = nomination.nomi_form
             form = questionnaire.get_form(request.POST or None)
             form_confirm = SaveConfirm(request.POST or None)
@@ -857,12 +868,16 @@ def nomi_apply(request, pk):
             return render(request, 'forms/show_form.html', context={'form': form, 'form_confirm': form_confirm,
                                                                     'questionnaire': questionnaire, 'pk': pk})
         else:
+            questionnaire = nomination.nomi_form
             form_confirm = ConfirmApplication(request.POST or None)
-
+            form = questionnaire.get_form(request.POST or None)
             if form_confirm.is_valid():
                 NominationInstance.objects.create(user=request.user, nomination=nomination,submission_status = True,timestamp = date.today())
                 info = "Your application has been recorded."
                 return render(request, 'nomi_done.html', context={'info': info})
+
+            return render(request, 'forms/show_form.html', context={'form': form,'form_confirm': form_confirm, 'pk': pk,'questionnaire': questionnaire})
+
 
     else:
         info = "You have applied for it already.You can edit it through profile module."
@@ -1355,12 +1370,12 @@ def result_approval(request, nomi_pk):
         return render(request, 'no_access.html')
 
 @login_required
-def create_deratification_request(request, post_pk, user_pk):
+def create_deratification_request(request, post_pk, user_pk ,type):
     post = Post.objects.get(pk=post_pk)
     user =User.objects.get(pk=user_pk)
 
     if request.user in post.parent.post_holders.all():
-        Deratification.objects.create(name=user, post=post,status = 'requested', deratify_approval=post.parent)
+        Deratification.objects.create(name=user, post=post,status = type, deratify_approval=post.parent)
 
 
     return HttpResponseRedirect(reverse('child_post', kwargs={'pk': post_pk}))
@@ -1373,9 +1388,16 @@ def approve_deratification_request(request,pk):
     if request.user in view.post_holders.all():
         if view.perms == "can ratify the post":
              to_deratify.post.post_holders.remove(to_deratify.name)
-             history=PostHistory.objects.filter(user=to_deratify.name).filter(post = to_deratify.post)
-             history.delete()
-             to_deratify.status = 'deratified'
+             history=PostHistory.objects.filter(user=to_deratify.name).filter(post = to_deratify.post).first()
+             if to_deratify.status=='remove from post':
+                 history.delete()
+                 to_deratify.status = 'removed'
+
+             else:
+                 history.end = date.today()
+                 history.save()
+                 to_deratify.status = 'deratified'
+
              to_deratify.save()
 
         else:
@@ -1497,20 +1519,29 @@ def append_user(request, pk):
 
 @login_required
 def end_tenure(request):
-    posts = Post.objects.all()
-
+    posts = request.user.posts.all()
+    access = False
     for post in posts:
-        for holder in post.post_holders.all():
-            try:
-                history = PostHistory.objects.get(post=post, user=holder)
+        if post.perms == "can ratify the post":
+            access = True
+            break
+    if access:
+        posts = Post.objects.all()
+        for post in posts:
+            for holder in post.post_holders.all():
+                try:
+                    history = PostHistory.objects.get(post=post, user=holder)
+                    if history.end:
+                        if date.today() >= history.end:
+                            post.post_holders.remove(holder)
 
-                if datetime.now() > history.end:
-                    post.post_holders.remove(holder)
+                except ObjectDoesNotExist:
+                    pass
 
-            except ObjectDoesNotExist:
-                return HttpResponseRedirect(reverse('index'))
+        return HttpResponseRedirect(reverse('index'))
+    else:
+        return render(request, 'no_access.html')
 
-    return HttpResponseRedirect(reverse('index'))
 
     # Import all posts of all clubs
     # Check if their session has expired (31-3-2018 has passed)
@@ -1576,10 +1607,19 @@ def public_profile(request, pk):
 
 
 
-class UserProfileUpdate(UpdateView):
-    model = UserProfile
-    fields = ['user_img', 'hall', 'room_no', 'contact']
-    success_url = reverse_lazy('index')
+def UserProfileUpdate(request,pk):
+    profile = UserProfile.objects.get(pk = pk)
+    if profile.user == request.user:
+
+        form = ProfileForm(request.POST or None, instance=profile)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('profile'))
+
+        return render(request, 'nomi/userprofile_form.html', context={'form': form})
+    else:
+        return render(request, 'no_access.html')
+
 
 
 class CommentUpdate(UpdateView):
