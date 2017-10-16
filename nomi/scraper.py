@@ -13,7 +13,7 @@ def getRecord(rollNo):
 
     record['roll'] = roll
 
-    image = 'http://oa.cc.iitk.ac.in:8181/Oa/Jsp/Photo/' + roll + '_0.jpg'
+    image = 'http://oa.cc.iitk.ac.in/Oa/Jsp/Photo/' + roll + '_0.jpg'
     record['image'] = image
 
     data = soup.findChildren('p')
